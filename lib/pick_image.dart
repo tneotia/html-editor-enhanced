@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-/**
+/*
  * Created by riyadi rb on 2/5/2020.
  * email : riyadi.rb@gmail.com
  * web   : ercode.id

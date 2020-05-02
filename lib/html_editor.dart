@@ -7,10 +7,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_editor/pick_image.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as p;
 import 'package:webview_flutter/webview_flutter.dart';
 
-/**
+/*
  * Created by riyadi rb on 2/5/2020.
  * email : riyadi.rb@gmail.com
  * web   : ercode.id
@@ -247,7 +247,7 @@ class HtmlEditorState extends State<HtmlEditor> {
               child: PickImage(
                   color: Colors.black45,
                   callbackFile: (file) async {
-                    String filename = basename(file.path);
+                    String filename = p.basename(file.path);
                     List<int> imageBytes = await file.readAsBytes();
                     String base64Image =
                         "<img width=\"100%\" src=\"data:image/png;base64, "
@@ -276,7 +276,7 @@ class HtmlEditorState extends State<HtmlEditor> {
               height: 140,
               width: double.infinity,
               child: PickImage(callbackFile: (file) async {
-                String filename = basename(file.path);
+                String filename = p.basename(file.path);
                 List<int> imageBytes = await file.readAsBytes();
                 String base64Image = "<img width=\"${widget.widthImage}\" "
                     "src=\"data:image/png;base64, "
