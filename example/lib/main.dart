@@ -3,8 +3,6 @@ import 'package:html_editor/html_editor.dart';
 
 /**
  * Created by riyadi rb on 2/5/2020.
- * email : riyadi.rb@gmail.com
- * web   : ercode.id
  * link  : https://github.com/xrb21/flutter-html-editor
  */
 

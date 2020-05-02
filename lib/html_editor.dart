@@ -12,8 +12,6 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 /*
  * Created by riyadi rb on 2/5/2020.
- * email : riyadi.rb@gmail.com
- * web   : ercode.id
  * link  : https://github.com/xrb21/flutter-html-editor
  */
 
