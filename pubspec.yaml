@@ -1,8 +1,8 @@
 name: html_editor
-description: Summernote Text HTML Editor
-version: 0.0.1
+description: Flutter HTML Editor
+version: 0.0.2
 author: xrb21<riyadi.rb@gmail.com>
-homepage: http://ercode.id
+homepage: https://github.com/xrb21/flutter-html-editor.git
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
