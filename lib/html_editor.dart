@@ -1,11 +1,13 @@
 library html_editor;
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:html_editor/local_server.dart';
 import 'package:html_editor/pick_image.dart';
 import 'package:path/path.dart' as p;
 import 'package:webview_flutter/webview_flutter.dart';
@@ -46,12 +48,46 @@ class HtmlEditorState extends State<HtmlEditor> {
   String text = "";
   final Key _mapKey = UniqueKey();
 
+  int port = 5321;
+  LocalServer localServer;
+
+  @override
+  void initState() {
+    if (!Platform.isAndroid) {
+      initServer();
+    }
+    super.initState();
+  }
+
+  initServer() {
+    localServer = LocalServer(port);
+    localServer.start(handleRequest);
+  }
+
+  void handleRequest(HttpRequest request) {
+    try {
+      if (request.method == 'GET' &&
+          request.uri.queryParameters['query'] == "getRawTeXHTML") {
+      } else {}
+    } catch (e) {
+      print('Exception in handleRequest: $e');
+    }
+  }
+
   @override
   void dispose() {
     if (_controller != null) {
       _controller = null;
     }
+    if (!Platform.isAndroid) {
+      localServer.close();
+    }
     super.dispose();
+  }
+
+  _loadHtmlFromAssets() async {
+    final filePath = 'packages/html_editor/summernote/summernote.html';
+    _controller.loadUrl("http://localhost:$port/$filePath");
   }
 
   @override
@@ -68,12 +104,20 @@ class HtmlEditorState extends State<HtmlEditor> {
           Expanded(
             child: WebView(
               key: _mapKey,
+              onWebResourceError: (e) {
+                print("error ${e.description}");
+              },
               onWebViewCreated: (webViewController) {
                 _controller = webViewController;
-                final filename =
-                    'packages/html_editor/summernote/summernote.html';
-                _controller.loadUrl(
-                    "file:///android_asset/flutter_assets/" + filename);
+
+                if (Platform.isAndroid) {
+                  final filename =
+                      'packages/html_editor/summernote/summernote.html';
+                  _controller.loadUrl(
+                      "file:///android_asset/flutter_assets/" + filename);
+                } else {
+                  _loadHtmlFromAssets();
+                }
               },
               javascriptMode: JavascriptMode.unrestricted,
               gestureNavigationEnabled: true,
@@ -85,9 +129,13 @@ class HtmlEditorState extends State<HtmlEditor> {
                 getTextJavascriptChannel(context)
               ].toSet(),
               onPageFinished: (String url) {
-                setHint();
-                setFullContainer();
+                if (widget.hint != null) {
+                  setHint(widget.hint);
+                } else {
+                  setHint("");
+                }
 
+                setFullContainer();
                 if (widget.value != null) {
                   setText(widget.value);
                 }
@@ -149,7 +197,10 @@ class HtmlEditorState extends State<HtmlEditor> {
         name: 'GetTextSummernote',
         onMessageReceived: (JavascriptMessage message) {
           String isi = message.message;
-          if (isi.isEmpty || isi == "<p></p>" || isi == "<p><br></p>" || isi == "<p><br/></p>") {
+          if (isi.isEmpty ||
+              isi == "<p></p>" ||
+              isi == "<p><br></p>" ||
+              isi == "<p><br/></p>") {
             isi = "";
           }
           setState(() {
@@ -194,9 +245,8 @@ class HtmlEditorState extends State<HtmlEditor> {
     _controller.evaluateJavascript("\$('#summernote').summernote('reset');");
   }
 
-  setHint() {
-    String hint = "document.getElementsByClassName('note-placeholder')[0].innerHTML = '" +
-        widget.hint + "';";
+  setHint(String text) {
+    String hint = '\$(".note-placeholder").html("$text");';
     _controller.evaluateJavascript(hint);
   }
 
@@ -248,7 +298,7 @@ class HtmlEditorState extends State<HtmlEditor> {
                     String filename = p.basename(file.path);
                     List<int> imageBytes = await file.readAsBytes();
                     String base64Image =
-                        "<img width=\"100%\" src=\"data:image/png;base64, "
+                        "<img width=\"${widget.widthImage}\" src=\"data:image/png;base64, "
                         "${base64Encode(imageBytes)}\" data-filename=\"$filename\">";
 
                     String txt =

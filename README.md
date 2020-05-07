@@ -1,17 +1,37 @@
 # Flutter Html Editor
 
-Flutter HTML Editor is a text editor to help write WYSIWYG HTML code based on the Summernote javascript wrapper. with this library you can insert images into the text editor
+Flutter HTML Editor is a text editor for android and iOS to help write WYSIWYG HTML code based on the Summernote javascript wrapper. with this library you can insert images into the text editor
 
-![demo example](https://github.com/xrb21/flutter-html-editor/blob/master/screenshoot/flutter_html_editor.gif)  ![demo example](https://github.com/xrb21/flutter-html-editor/blob/master/screenshoot/sc.jpeg)
+![demo example](https://github.com/xrb21/flutter-html-editor/blob/master/screenshoot/flutter_html_editor.gif)  ![demo android](https://github.com/xrb21/flutter-html-editor/blob/master/screenshoot/sc.jpeg)   ![demo ios](https://github.com/xrb21/flutter-html-editor/blob/master/screenshoot/sc_iphone.png)
 
 
 ## Setup
 
-add ```html_editor``` as deppendecy to pubspec.yaml
+add ```html_editor ^1.0.0``` as deppendecy to pubspec.yaml
 
 ### iOS
 
-Opt-in to the embedded views preview by adding a boolean property to the app's ```Info.plist``` file with the key ```io.flutter.embedded_views_preview``` and the value ```YES```.
+Add the following keys to your Info.plist file, located in <project root>/ios/Runner/Info.plist:
+
+- Opt-in to the embedded views preview :
+    ```
+        <key>io.flutter.embedded_views_preview</key>
+        <true/>
+    ```
+- Add following code:
+    ```
+        <dict>
+            <key>NSAllowsArbitraryLoads</key>
+             <true/>
+        </dict>
+
+        <key>io.flutter.embedded_views_preview</key>
+        <true/>
+    ```
+- NSPhotoLibraryUsageDescription - describe why your app needs permission for the photo library. This is called Privacy - Photo Library Usage Description in the visual editor.
+- NSCameraUsageDescription - describe why your app needs access to the camera. This is called Privacy - Camera Usage Description in the visual editor.
+- NSMicrophoneUsageDescription - describe why your app needs access to the microphone, if you intend to record videos. This is called Privacy - Microphone Usage Description in the visual editor.
+
 
 ### Usage
 
@@ -57,7 +77,9 @@ Parameter | Type | Default | Description
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+`#MajalengkaExoticSundaland`
 
 
 
