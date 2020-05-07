@@ -24,9 +24,6 @@ Add the following keys to your Info.plist file, located in <project root>/ios/Ru
             <key>NSAllowsArbitraryLoads</key>
              <true/>
         </dict>
-
-        <key>io.flutter.embedded_views_preview</key>
-        <true/>
     ```
 - NSPhotoLibraryUsageDescription - describe why your app needs permission for the photo library. This is called Privacy - Photo Library Usage Description in the visual editor.
 - NSCameraUsageDescription - describe why your app needs access to the camera. This is called Privacy - Camera Usage Description in the visual editor.
