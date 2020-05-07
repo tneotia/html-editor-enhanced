@@ -25,9 +25,21 @@ Add the following keys to your Info.plist file, located in <project root>/ios/Ru
              <true/>
         </dict>
     ```
-- NSPhotoLibraryUsageDescription - describe why your app needs permission for the photo library. This is called Privacy - Photo Library Usage Description in the visual editor.
-- NSCameraUsageDescription - describe why your app needs access to the camera. This is called Privacy - Camera Usage Description in the visual editor.
-- NSMicrophoneUsageDescription - describe why your app needs access to the microphone, if you intend to record videos. This is called Privacy - Microphone Usage Description in the visual editor.
+- NSPhotoLibraryUsageDescription - describe why your app needs permission for the photo library:
+    ```
+        <key>NSPhotoLibraryUsageDescription</key>
+        <string>Used to demonstrate image picker plugin</string>
+    ```
+- NSCameraUsageDescription - describe why your app needs access to the camera:
+    ```
+        <key>NSCameraUsageDescription</key>
+        <string>Used to demonstrate image picker plugin</string>
+    ```
+- NSMicrophoneUsageDescription - describe why your app needs access to the microphone:
+    ```
+        <key>NSMicrophoneUsageDescription</key>
+        <string>Used to capture audio for image picker plugin</string>
+    ```
 
 
 ### Usage
