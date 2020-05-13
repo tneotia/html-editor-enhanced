@@ -7,40 +7,29 @@ Flutter HTML Editor is a text editor for android and iOS to help write WYSIWYG H
 
 ## Setup
 
-add ```html_editor: ^1.0.0``` as deppendecy to pubspec.yaml
+add ```html_editor: ^1.0.1``` as deppendecy to pubspec.yaml
 
 ### iOS
 
 Add the following keys to your Info.plist file, located in <project root>/ios/Runner/Info.plist:
 
-- Opt-in to the embedded views preview :
-    ```
-        <key>io.flutter.embedded_views_preview</key>
-        <true/>
-    ```
-- Add following code:
-    ```
-        <dict>
-            <key>NSAllowsArbitraryLoads</key>
-             <true/>
-        </dict>
-    ```
-- NSPhotoLibraryUsageDescription - describe why your app needs permission for the photo library:
-    ```
-        <key>NSPhotoLibraryUsageDescription</key>
-        <string>Used to demonstrate image picker plugin</string>
-    ```
-- NSCameraUsageDescription - describe why your app needs access to the camera:
-    ```
-        <key>NSCameraUsageDescription</key>
-        <string>Used to demonstrate image picker plugin</string>
-    ```
-- NSMicrophoneUsageDescription - describe why your app needs access to the microphone:
-    ```
-        <key>NSMicrophoneUsageDescription</key>
-        <string>Used to capture audio for image picker plugin</string>
-    ```
+```
+    <key>io.flutter.embedded_views_preview</key>
+    <true/>
 
+    <key>NSCameraUsageDescription</key>
+    <string>Used to demonstrate image picker plugin</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Used to capture audio for image picker plugin</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Used to demonstrate image picker plugin</string>
+
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+         <true/>
+    </dict>
+```
 
 ### Usage
 

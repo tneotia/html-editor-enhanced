@@ -51,8 +51,8 @@
     <string>Used to capture audio for image picker plugin</string>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>Used to demonstrate image picker plugin</string>
-    <key>NSAppTransportSecurity</key>
 
+    <key>NSAppTransportSecurity</key>
     <dict>
         <key>NSAllowsArbitraryLoads</key>
          <true/>

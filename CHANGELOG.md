@@ -1,3 +1,6 @@
+## [1.0.1] - 2020-05-07
+* Update Readme usage for iOS
+
 ## [1.0.0] - 2020-05-07
 * fixing iOS blank screen
 * fixing text hint
