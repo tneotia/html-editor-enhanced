@@ -76,7 +76,7 @@ class PickImage extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            "Galery",
+                            "Gallery",
                             style: TextStyle(color: color ?? Colors.black45),
                           ),
                         ],
