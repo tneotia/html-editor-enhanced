@@ -59,6 +59,10 @@ class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
   /// editor).
   final String hint;
 
+  /// Allows the [InAppWebViewController] for the Html editor to be accessed
+  /// outside of the package itself for endless control and customization.
+  static InAppWebViewController get editorController => controller;
+
   /// Gets the text from the editor and returns it as a [String].
   static Future<String> getText() async {
     await controller.evaluateJavascript(source:
