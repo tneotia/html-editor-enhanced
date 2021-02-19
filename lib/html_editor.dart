@@ -65,7 +65,7 @@ class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
 
   /// Gets the text from the editor and returns it as a [String].
   static Future<String> getText() async {
-    await controller.evaluateJavascript(source:
+    await evaluateJavascript(source:
     "console.log(document.getElementsByClassName('note-editable')[0].innerHTML);");
     return text;
   }
@@ -86,34 +86,33 @@ class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
         "document.getElementsByClassName('note-editable')[0].innerHTML = '" +
             txtIsi +
             "';";
-    controller.evaluateJavascript(source: txt);
+    evaluateJavascript(source: txt);
   }
 
   /// Sets the editor to full-screen mode.
   static void setFullScreen() {
-    controller.evaluateJavascript(source:
-    '\$("#summernote").summernote("fullscreen.toggle");');
+    evaluateJavascript(source: '\$("#summernote").summernote("fullscreen.toggle");');
   }
 
   /// Sets the focus to the editor.
   static void setFocus() {
-    controller.evaluateJavascript(source: "\$('#summernote').summernote('focus');");
+    evaluateJavascript(source: "\$('#summernote').summernote('focus');");
   }
 
   /// Clears the editor of any text.
   static void clear() {
-    controller.evaluateJavascript(source: "\$('#summernote').summernote('reset');");
+    evaluateJavascript(source: "\$('#summernote').summernote('reset');");
   }
 
   /// Sets the hint for the editor.
   static void setHint(String text) {
     String hint = '\$(".note-placeholder").html("$text");';
-    controller.evaluateJavascript(source: hint);
+    evaluateJavascript(source: hint);
   }
 
   /// toggles the codeview in the Html editor
   static void toggleCodeView() {
-    controller.evaluateJavascript(source: "\$('#summernote').summernote('codeview.toggle');");
+    evaluateJavascript(source: "\$('#summernote').summernote('codeview.toggle');");
   }
 
   @override
@@ -135,5 +134,11 @@ class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
         hint: hint
       ),
     );
+  }
+
+  static Future evaluateJavascript({source}) async {
+    if (controller == null || await controller.isLoading())
+      throw Exception("HTML editor is still loading, please wait before evaluating this JS: $source!");
+    await controller.evaluateJavascript(source: source);
   }
 }
