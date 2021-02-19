@@ -125,6 +125,16 @@ class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
     evaluateJavascript(source: "\$('#summernote').summernote('enable');");
   }
 
+  /// Undoes the last action
+  static void undo() {
+    evaluateJavascript(source: "\$('#summernote').summernote('undo');");
+  }
+
+  /// Redoes the last action
+  static void redo() {
+    evaluateJavascript(source: "\$('#summernote').summernote('redo');");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -146,7 +156,7 @@ class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
     );
   }
 
-  static Future evaluateJavascript({source}) async {
+  static Future evaluateJavascript({@required source}) async {
     if (controller == null || await controller.isLoading())
       throw Exception("HTML editor is still loading, please wait before evaluating this JS: $source!");
     await controller.evaluateJavascript(source: source);
