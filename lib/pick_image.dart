@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-/*
- * Created by riyadi rb on 2/5/2020.
- * link  : https://github.com/xrb21/flutter-html-editor
- */
-
 typedef void CallbackValue(dynamic value);
+
 class PickImage extends StatelessWidget {
   final CallbackValue callbackFile;
   final Color color;

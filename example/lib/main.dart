@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:html_editor/html_editor.dart';
-
-/**
- * Created by riyadi rb on 2/5/2020.
- * link  : https://github.com/xrb21/flutter-html-editor
- */
+import 'package:html_editor_enhanced/html_editor.dart';
 
 void main() => runApp(MyApp());
 

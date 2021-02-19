@@ -1,6 +1,6 @@
-# example
+# html_editor_enhanced_example
 
-example text editor
+Demonstrates how to use the html_editor_enhanced plugin.
 
 ## Getting Started
 
