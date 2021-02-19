@@ -1,3 +1,6 @@
+## [1.1.1] - 2021-02-19
+* Minor update to add documentation to code and completely refactor/reorganize code
+
 ## [1.1.0] - 2021-02-19
 * Switch webview dependency to `flutter_inappwebview`
 * Remove localserver, instead get Summernote HTML directly from assets (improves performance and loading speeds)
