@@ -115,6 +115,16 @@ class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
     evaluateJavascript(source: "\$('#summernote').summernote('codeview.toggle');");
   }
 
+  /// disables the Html editor
+  static void disable() {
+    evaluateJavascript(source: "\$('#summernote').summernote('disable');");
+  }
+
+  /// enables the Html editor
+  static void enable() {
+    evaluateJavascript(source: "\$('#summernote').summernote('enable');");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
