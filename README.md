@@ -29,7 +29,7 @@ Add `android:requestLegacyExternalStorage="true"` as an attribute to the `<appli
 
 </details>
 
-### Usage
+## Usage
 
 ```dart
 import 'package:html_editor/html_editor.dart';
@@ -38,26 +38,25 @@ import 'package:html_editor/html_editor.dart';
     return HtmlEditor(
             hint: "Your text here...",
             //value: "text content initial, if any",
-            key: keyEditor,
             height: 400,
     );
 }
 ```
 
 When you want to get text from the editor:
-```
-    final txt = await HtmlEditor.getText();
+```dart
+final txt = await HtmlEditor.getText();
 ```
 
 
-### Available option parameters
+### Parameters
 
 Parameter | Type | Default | Description
 ------------ | ------------- | ------------- | -------------
 **value** | String | empty | initial text content for text editor
 **height** | double | 380 | height of text editor
 **decoration** | BoxDecoration |  | Decoration editor
-**useBottomSheet** | bool | true | if true, open a bottom sheet (OneUI style) to pick an image, otherwise use a dialog
+**useBottomSheet** | bool | true | if true, open a bottom sheet (Android intent style) to pick an image, otherwise use a dialog
 **widthImage** | String | 100% | width of image picker
 **showBottomToolbar** | bool | true | show or hide bottom toolbar
 **hint** | String | empty | Placeholder hint text

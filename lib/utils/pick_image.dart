@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+/// Widget for the toolbar icon
 Widget toolbarIcon(IconData icon, String title, {Function() onTap}) {
   return InkWell(
     onTap: onTap,
@@ -27,6 +28,7 @@ Widget toolbarIcon(IconData icon, String title, {Function() onTap}) {
   );
 }
 
+/// Function that opens a dialog to pick an image
 Future<PickedFile> dialogPickImage(BuildContext context) async {
   PickedFile file = await showDialog<PickedFile>(
     context: context,
@@ -50,6 +52,7 @@ Future<PickedFile> dialogPickImage(BuildContext context) async {
   return file;
 }
 
+/// Function that opens a bottom sheet to pick an image
 Future<PickedFile> bottomSheetPickImage(BuildContext context) async {
   PickedFile file = await showModalBottomSheet<PickedFile>(
     shape: RoundedRectangleBorder(
@@ -70,6 +73,7 @@ Future<PickedFile> bottomSheetPickImage(BuildContext context) async {
   return file;
 }
 
+/// Widget for the buttons to pick an image
 class PickImageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -142,6 +146,8 @@ class PickImageWidget extends StatelessWidget {
     );
   }
 
+  /// Gets an image either from the camera or from the gallery. Once complete,
+  /// the [Navigator] is popped and the picked image (if any) is returned.
   Future getImage(bool fromCamera, BuildContext context) async {
     try {
       final picker = ImagePicker();

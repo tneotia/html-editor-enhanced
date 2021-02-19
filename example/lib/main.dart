@@ -12,13 +12,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Demo Flutter HTML Editor'),
+      home: MyHomePage(title: 'Flutter HTML Editor Example'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
+
   final String title;
 
   @override
@@ -55,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     TextButton(
                       style: TextButton.styleFrom(backgroundColor: Colors.blueGrey),
                       onPressed: (){
-                        HtmlEditor.setEmpty();
+                        HtmlEditor.clear();
                       },
                       child: Text("Reset", style: TextStyle(color: Colors.white)),
                     ),
@@ -81,7 +82,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

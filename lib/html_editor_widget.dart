@@ -14,19 +14,17 @@ class HtmlEditorWidget extends StatelessWidget with WidgetsBindingObserver {
   HtmlEditorWidget({
     Key key,
     this.value,
-    this.height = 380,
-    this.decoration,
-    this.useBottomSheet = true,
-    this.imageWidth = "100%",
-    this.showBottomToolbar = true,
+    this.height,
+    this.useBottomSheet,
+    this.imageWidth,
+    this.showBottomToolbar,
     this.hint
   }) : super(key: key);
 
   final String value;
   final double height;
-  final BoxDecoration decoration;
   final bool useBottomSheet;
-  final String imageWidth;
+  final double imageWidth;
   final bool showBottomToolbar;
   final String hint;
   final UniqueKey webViewKey = UniqueKey();
@@ -56,17 +54,19 @@ class HtmlEditorWidget extends StatelessWidget with WidgetsBindingObserver {
             gestureRecognizers: {
               Factory<VerticalDragGestureRecognizer>(() => VerticalDragGestureRecognizer())
             },
-            onConsoleMessage: (controller, message) {
-              String isi = message.message;
-              if (isi.isEmpty ||
-                  isi == "<p></p>" ||
-                  isi == "<p><br></p>" ||
-                  isi == "<p><br/></p>") {
-                isi = "";
+            onConsoleMessage: (controller, consoleMessage) {
+              String message = consoleMessage.message;
+              //todo determine whether this processing is necessary
+              if (message.isEmpty ||
+                  message == "<p></p>" ||
+                  message == "<p><br></p>" ||
+                  message == "<p><br/></p>") {
+                message = "";
               }
-              text = isi;
+              text = message;
             },
             onLoadStop: (InAppWebViewController controller, String url) {
+              //set the hint once the editor is loaded
               if (hint != null) {
                 HtmlEditor.setHint(hint);
               } else {
@@ -74,6 +74,7 @@ class HtmlEditorWidget extends StatelessWidget with WidgetsBindingObserver {
               }
 
               HtmlEditor.setFullScreen();
+              //set the text once the editor is loaded
               if (value != null) {
                 HtmlEditor.setText(value);
               }
@@ -102,7 +103,7 @@ class HtmlEditorWidget extends StatelessWidget with WidgetsBindingObserver {
                       String filename = p.basename(file.path);
                       List<int> imageBytes = await file.readAsBytes();
                       String base64Image =
-                          "<img width=\"$imageWidth\" src=\"data:image/png;base64, "
+                          "<img width=\"$imageWidth%\" src=\"data:image/png;base64, "
                           "${base64Encode(imageBytes)}\" data-filename=\"$filename\">";
 
                       String txt =
