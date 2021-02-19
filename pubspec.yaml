@@ -31,8 +31,6 @@ flutter:
 
   assets:
     - packages/html_editor_enhanced/summernote.html
-    - assets/summernote.txt
-    - packages/html_editor_enhanced/online_training.png
     - packages/html_editor_enhanced/summernote-lite.min.css
     - packages/html_editor_enhanced/summernote-lite.min.js
     - packages/html_editor_enhanced/summernote-lite.min.js.map

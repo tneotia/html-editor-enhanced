@@ -26,8 +26,8 @@ class PickImage extends StatelessWidget {
                 children: [
                   SizedBox(
                     width: 80,
-                    child: FlatButton(
-                      padding: const EdgeInsets.all(10),
+                    child: TextButton(
+                      style: TextButton.styleFrom(backgroundColor: Colors.white, padding: const EdgeInsets.all(10)),
                       onPressed: () {
                         getImage(true);
                         Navigator.pop(context);
@@ -49,13 +49,12 @@ class PickImage extends StatelessWidget {
                           ),
                         ],
                       ),
-                      color: Colors.white,
                     ),
                   ),
                   SizedBox(
                     width: 80,
-                    child: FlatButton(
-                      padding: const EdgeInsets.all(10),
+                    child: TextButton(
+                      style: TextButton.styleFrom(backgroundColor: Colors.white, padding: const EdgeInsets.all(10)),
                       onPressed: () {
                         getImage(false);
                         Navigator.pop(context);
@@ -77,7 +76,6 @@ class PickImage extends StatelessWidget {
                           ),
                         ],
                       ),
-                      color: Colors.white,
                     ),
                   ),
                 ],
@@ -90,7 +88,8 @@ class PickImage extends StatelessWidget {
   }
 
   Future getImage(bool isKamera) async {
-    var image = await ImagePicker.pickImage(
+    final picker = ImagePicker();
+    var image = await picker.getImage(
       source: isKamera ? ImageSource.camera : ImageSource.gallery,
       maxWidth: 800.0,
       maxHeight: 600.0,

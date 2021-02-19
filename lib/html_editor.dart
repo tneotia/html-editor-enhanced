@@ -11,8 +11,10 @@ import 'package:html_editor_enhanced/pick_image.dart';
 import 'package:path/path.dart' as p;
 
 typedef void OnClik();
+InAppWebViewController controller;
+String text = "";
 
-class HtmlEditor extends StatefulWidget {
+class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
   final String value;
   final double height;
   final BoxDecoration decoration;
@@ -20,31 +22,22 @@ class HtmlEditor extends StatefulWidget {
   final String widthImage;
   final bool showBottomToolbar;
   final String hint;
+  final UniqueKey webViewKey = UniqueKey();
 
-  HtmlEditor(
-      {Key key,
+  HtmlEditor({Key key,
         this.value,
         this.height = 380,
         this.decoration,
         this.useBottomSheet = true,
         this.widthImage = "100%",
         this.showBottomToolbar = true,
-        this.hint})
-      : super(key: key);
-
-  @override
-  HtmlEditorState createState() => HtmlEditorState();
-}
-
-class HtmlEditorState extends State<HtmlEditor> with WidgetsBindingObserver {
-  InAppWebViewController controller;
-  String text = "";
+        this.hint}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: widget.height,
-      decoration: widget.decoration ??
+      height: height,
+      decoration: decoration ??
           BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(4)),
             border: Border.all(color: Color(0xffececec), width: 1),
@@ -53,12 +46,11 @@ class HtmlEditorState extends State<HtmlEditor> with WidgetsBindingObserver {
         children: <Widget>[
           Expanded(
             child: InAppWebView(
-              key: UniqueKey(),
               initialFile: 'packages/html_editor_enhanced/assets/summernote.html',
-              onWebViewCreated: (webviewController) {
+              onWebViewCreated: (webViewController) {
                 WidgetsBinding.instance.addObserver(this);
                 WidgetsBinding.instance.addPostFrameCallback((_) {
-                  controller = webviewController;
+                  controller = webViewController;
                 });
               },
               initialOptions: InAppWebViewGroupOptions(
@@ -81,28 +73,26 @@ class HtmlEditorState extends State<HtmlEditor> with WidgetsBindingObserver {
                     isi == "<p><br/></p>") {
                   isi = "";
                 }
-                setState(() {
-                  text = isi;
-                });
+                text = isi;
               },
               onLoadStop: (controller, String url) {
-                if (widget.hint != null) {
-                  setHint(widget.hint);
+                if (hint != null) {
+                  setHint(hint);
                 } else {
                   setHint("");
                 }
 
                 setFullContainer();
-                if (widget.value != null) {
-                  setText(widget.value);
+                if (value != null) {
+                  setText(value);
                 }
               },
             ),
           ),
-          widget.showBottomToolbar
+          showBottomToolbar
               ? Divider()
               : Container(height: 0, width: 0),
-          widget.showBottomToolbar
+          showBottomToolbar
               ? Padding(
             padding: const EdgeInsets.only(
                 left: 4.0, right: 4, bottom: 8, top: 2),
@@ -110,7 +100,7 @@ class HtmlEditorState extends State<HtmlEditor> with WidgetsBindingObserver {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 widgetIcon(Icons.image, "Image", onKlik: () {
-                  widget.useBottomSheet
+                  useBottomSheet
                       ? bottomSheetPickImage(context)
                       : dialogPickImage(context);
                 }),
@@ -147,13 +137,13 @@ class HtmlEditorState extends State<HtmlEditor> with WidgetsBindingObserver {
     );
   }
 
-  Future<String> getText() async {
+  static Future<String> getText() async {
     await controller.evaluateJavascript(source:
     "console.log(document.getElementsByClassName('note-editable')[0].innerHTML);");
     return text;
   }
 
-  setText(String v) async {
+  static void setText(String v) {
     String txtIsi = v
         .replaceAll("'", '\\"')
         .replaceAll('"', '\\"')
@@ -170,20 +160,20 @@ class HtmlEditorState extends State<HtmlEditor> with WidgetsBindingObserver {
     controller.evaluateJavascript(source: txt);
   }
 
-  setFullContainer() {
+  static void setFullContainer() {
     controller.evaluateJavascript(source:
     '\$("#summernote").summernote("fullscreen.toggle");');
   }
 
-  setFocus() {
+  static void setFocus() {
     controller.evaluateJavascript(source: "\$('#summernote').summernote('focus');");
   }
 
-  setEmpty() {
+  static void setEmpty() {
     controller.evaluateJavascript(source: "\$('#summernote').summernote('reset');");
   }
 
-  setHint(String text) {
+  static void setHint(String text) {
     String hint = '\$(".note-placeholder").html("$text");';
     controller.evaluateJavascript(source: hint);
   }
@@ -236,7 +226,7 @@ class HtmlEditorState extends State<HtmlEditor> with WidgetsBindingObserver {
                     String filename = p.basename(file.path);
                     List<int> imageBytes = await file.readAsBytes();
                     String base64Image =
-                        "<img width=\"${widget.widthImage}\" src=\"data:image/png;base64, "
+                        "<img width=\"$widthImage\" src=\"data:image/png;base64, "
                         "${base64Encode(imageBytes)}\" data-filename=\"$filename\">";
 
                     String txt =
@@ -264,7 +254,7 @@ class HtmlEditorState extends State<HtmlEditor> with WidgetsBindingObserver {
                   child: PickImage(callbackFile: (file) async {
                     String filename = p.basename(file.path);
                     List<int> imageBytes = await file.readAsBytes();
-                    String base64Image = "<img width=\"${widget.widthImage}\" "
+                    String base64Image = "<img width=\"$widthImage\" "
                         "src=\"data:image/png;base64, "
                         "${base64Encode(imageBytes)}\" data-filename=\"$filename\">";
                     String txt =

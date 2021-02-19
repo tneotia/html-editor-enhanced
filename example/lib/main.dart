@@ -26,7 +26,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  GlobalKey<HtmlEditorState> keyEditor = GlobalKey();
   String result = "";
 
   @override
@@ -46,7 +45,6 @@ class _MyHomePageState extends State<MyHomePage> {
               HtmlEditor(
                 hint: "Your text here...",
                 //value: "text content initial, if any",
-                key: keyEditor,
                 height: 400,
               ),
               Padding(
@@ -54,20 +52,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    FlatButton(
-                      color: Colors.blueGrey,
+                    TextButton(
+                      style: TextButton.styleFrom(backgroundColor: Colors.blueGrey),
                       onPressed: (){
-                        setState(() {
-                          keyEditor.currentState.setEmpty();
-                        });
+                        HtmlEditor.setEmpty();
                       },
                       child: Text("Reset", style: TextStyle(color: Colors.white)),
                     ),
                     SizedBox(width: 16,),
-                    FlatButton(
-                      color: Colors.blue,
+                    TextButton(
+                      style: TextButton.styleFrom(backgroundColor: Colors.blue),
                       onPressed: () async {
-                        final txt = await keyEditor.currentState.getText();
+                        final txt = await HtmlEditor.getText();
                         setState(() {
                           result = txt;
                         });
