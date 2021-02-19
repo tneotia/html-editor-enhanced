@@ -43,27 +43,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.15.0"
+  convert:
+    dependency: transitive
+    description:
+      name: convert
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.1"
   crypto:
     dependency: transitive
     description:
       name: crypto
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0"
-  device_info:
-    dependency: transitive
-    description:
-      name: device_info
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0-nullsafety.2"
-  device_info_platform_interface:
-    dependency: transitive
-    description:
-      name: device_info_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0-nullsafety.2"
+    version: "2.1.5"
   fake_async:
     dependency: transitive
     description:
@@ -79,12 +72,10 @@ packages:
   flutter_inappwebview:
     dependency: "direct main"
     description:
-      path: "."
-      ref: master
-      resolved-ref: de9d081af2ebea0dcfb3180255335c29e4cfd8e5
-      url: "https://github.com/pichillilorenzo/flutter_inappwebview.git"
-    source: git
-    version: "5.0.0-nullsafety.0"
+      name: flutter_inappwebview
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.0+4"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -125,13 +116,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.6"
-  intl:
-    dependency: transitive
-    description:
-      name: intl
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.17.0"
   matcher:
     dependency: transitive
     description:
@@ -152,7 +136,7 @@ packages:
       name: mime
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0"
+    version: "0.9.7"
   path:
     dependency: "direct main"
     description:
@@ -234,7 +218,7 @@ packages:
       name: uuid
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0-nullsafety.1"
+    version: "2.2.2"
   vector_math:
     dependency: transitive
     description:
@@ -244,4 +228,4 @@ packages:
     version: "2.1.0"
 sdks:
   dart: ">=2.12.0-0.0 <3.0.0"
-  flutter: ">=1.22.2"
+  flutter: ">=1.20.0"

@@ -57,14 +57,14 @@ class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
                   crossPlatform: InAppWebViewOptions(
                     javaScriptEnabled: true,
                   ),
-                  android: AndroidInAppWebViewOptions(
+                  //todo flutter_inappwebview 5.0.0
+                  /*android: AndroidInAppWebViewOptions(
                     useHybridComposition: true,
-                  )
+                  )*/
               ),
-              gestureRecognizers: [
-                Factory(
-                        () => VerticalDragGestureRecognizer()..onUpdate = (_) {}),
-              ].toSet(),
+              gestureRecognizers: {
+                Factory<VerticalDragGestureRecognizer>(() => VerticalDragGestureRecognizer())
+              },
               onConsoleMessage: (controller, message) {
                 String isi = message.message;
                 if (isi.isEmpty ||
