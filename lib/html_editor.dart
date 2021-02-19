@@ -111,6 +111,11 @@ class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
     controller.evaluateJavascript(source: hint);
   }
 
+  /// toggles the codeview in the Html editor
+  static void toggleCodeView() {
+    controller.evaluateJavascript(source: "\$('#summernote').summernote('codeview.toggle');");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(

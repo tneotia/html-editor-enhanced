@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 
@@ -37,6 +38,12 @@ class _MyHomePageState extends State<MyHomePage> {
         elevation: 0,
       ),
       backgroundColor: Colors.white,
+      floatingActionButton: FloatingActionButton(
+        child: Text("\<\\\>", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        onPressed: () {
+          HtmlEditor.toggleCodeView();
+        },
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: SingleChildScrollView(
