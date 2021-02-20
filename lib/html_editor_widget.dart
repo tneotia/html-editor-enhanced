@@ -12,7 +12,7 @@ import 'package:path/path.dart' as p;
 
 bool callbacksInitialized = false;
 
-class HtmlEditorWidget extends StatelessWidget with WidgetsBindingObserver {
+class HtmlEditorWidget extends StatelessWidget {
   HtmlEditorWidget({
     Key key,
     this.value,
@@ -41,10 +41,7 @@ class HtmlEditorWidget extends StatelessWidget with WidgetsBindingObserver {
           child: InAppWebView(
             initialFile: 'packages/html_editor_enhanced/assets/summernote.html',
             onWebViewCreated: (webViewController) {
-              WidgetsBinding.instance.addObserver(this);
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                controller = webViewController;
-              });
+              controller = webViewController;
             },
             initialOptions: InAppWebViewGroupOptions(
               crossPlatform: InAppWebViewOptions(
