@@ -29,6 +29,20 @@ Add `android:requestLegacyExternalStorage="true"` as an attribute to the `<appli
 
 </details>
 
+Additional setup is required to allow the user to pick images via `<input type="file">`, add the following to your app's AndroidManifest.xml inside the `<application>` tag:
+
+```xml
+<provider
+   android:name="com.pichillilorenzo.flutter_inappwebview.InAppWebViewFileProvider"
+   android:authorities="${applicationId}.flutter_inappwebview.fileprovider"
+   android:exported="false"
+   android:grantUriPermissions="true">
+   <meta-data
+       android:name="android.support.FILE_PROVIDER_PATHS"
+       android:resource="@xml/provider_paths" />
+</provider>
+```
+
 ## Usage
 
 ```dart
