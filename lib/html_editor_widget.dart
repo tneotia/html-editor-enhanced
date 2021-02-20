@@ -201,6 +201,24 @@ class HtmlEditorWidget extends StatelessWidget {
         """
       );
     }
+    if (callbacks.onKeyDown != null) {
+      controller.evaluateJavascript(
+          source: """
+          \$('#summernote').on('summernote.keydown', function(_, e) {
+            window.flutter_inappwebview.callHandler('onKeyDown', e.keyCode);
+          });
+        """
+      );
+    }
+    if (callbacks.onKeyUp != null) {
+      controller.evaluateJavascript(
+          source: """
+          \$('#summernote').on('summernote.keyup', function(_, e) {
+            window.flutter_inappwebview.callHandler('onKeyUp', e.keyCode);
+          });
+        """
+      );
+    }
   }
 
   void addJSHandlers() {
@@ -227,6 +245,16 @@ class HtmlEditorWidget extends StatelessWidget {
     if (callbacks.onBlurCodeview != null) {
       controller.addJavaScriptHandler(handlerName: 'onBlurCodeview', callback: (_) {
         callbacks.onBlurCodeview.call();
+      });
+    }
+    if (callbacks.onKeyDown != null) {
+      controller.addJavaScriptHandler(handlerName: 'onKeyDown', callback: (keyCode) {
+        callbacks.onKeyDown.call(keyCode.first);
+      });
+    }
+    if (callbacks.onKeyUp != null) {
+      controller.addJavaScriptHandler(handlerName: 'onKeyUp', callback: (keyCode) {
+        callbacks.onKeyUp.call(keyCode.first);
       });
     }
   }
