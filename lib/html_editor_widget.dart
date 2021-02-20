@@ -219,6 +219,15 @@ class HtmlEditorWidget extends StatelessWidget {
         """
       );
     }
+    if (callbacks.onPaste != null) {
+      controller.evaluateJavascript(
+          source: """
+          \$('#summernote').on('summernote.paste', function(_) {
+            window.flutter_inappwebview.callHandler('onPaste', 'fired');
+          });
+        """
+      );
+    }
   }
 
   void addJSHandlers() {
@@ -255,6 +264,11 @@ class HtmlEditorWidget extends StatelessWidget {
     if (callbacks.onKeyUp != null) {
       controller.addJavaScriptHandler(handlerName: 'onKeyUp', callback: (keyCode) {
         callbacks.onKeyUp.call(keyCode.first);
+      });
+    }
+    if (callbacks.onPaste != null) {
+      controller.addJavaScriptHandler(handlerName: 'onPaste', callback: (_) {
+        callbacks.onPaste.call();
       });
     }
   }

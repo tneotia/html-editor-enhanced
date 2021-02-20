@@ -8,6 +8,7 @@ class Callbacks {
     this.onBlurCodeview,
     this.onKeyUp,
     this.onKeyDown,
+    this.onPaste,
   });
 
   /// Called whenever the HTML content of the editor is changed and the editor
@@ -69,4 +70,8 @@ class Callbacks {
   /// as a keycode. 8 and 13 only seem to be returned when the editor is empty
   /// and those keys are released.
   Function(int) onKeyDown;
+
+  /// Called whenever text is pasted into the rich text field. This will not be
+  /// called when text is pasted into the code view editor.
+  Function() onPaste;
 }
