@@ -131,8 +131,15 @@ class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
   }
   
   /// Insert text at the end of the current HTML content in the editor
+  /// Note: This method should only be used for plaintext strings
   static void insertText(String text) {
     evaluateJavascript(source: "\$('#summernote').summernote('insertText', '$text');");
+  }
+  
+  /// Insert HTML at the end of the current HTML content in the editor
+  /// Note: This method should not be used for plaintext strings
+  static void insertHtml(String html) {
+    evaluateJavascript(source: "\$('#summernote').summernote('pasteHTML', '$html');");
   }
 
   @override
