@@ -165,12 +165,26 @@ class HtmlEditorWidget extends StatelessWidget {
         """
       );
     }
+    if (callbacks.onEnter != null) {
+      controller.evaluateJavascript(
+          source: """
+          \$('#summernote').on('summernote.enter', function() {
+            window.flutter_inappwebview.callHandler('onEnter', 'fired');
+          });
+        """
+      );
+    }
   }
 
   void addJSHandlers() {
     if (callbacks.onChange != null) {
-      controller.addJavaScriptHandler(handlerName: 'onChange', callback: (src) {
-        callbacks.onChange.call(src.first.toString());
+      controller.addJavaScriptHandler(handlerName: 'onChange', callback: (contents) {
+        callbacks.onChange.call(contents.first.toString());
+      });
+    }
+    if (callbacks.onEnter != null) {
+      controller.addJavaScriptHandler(handlerName: 'onEnter', callback: (_) {
+        callbacks.onEnter.call();
       });
     }
   }
