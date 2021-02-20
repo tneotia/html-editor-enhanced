@@ -8,7 +8,7 @@ Flutter HTML Editor Enhanced is a text editor for Android and iOS to help write 
     <td align="center">Video Example</td>
   </tr>
   <tr>
-    <td><img alt="GIF example" src="https://github.com/tneotia/html-editor-enhanced/blob/master/screenshots/html_editor_enhanced.gif" width="250"/></td>
+    <td><img alt="GIF example" src="https://raw.githubusercontent.com/tneotia/html-editor-enhanced/master/screenshots/html_editor_enhanced.gif" width="250"/></td>
   </tr>
 </table>
 
