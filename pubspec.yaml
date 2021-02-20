@@ -1,6 +1,6 @@
 name: html_editor_enhanced
 description: HTML Editor Enhanced is a text editor for Android and iOS to help write WYSIWYG HTML code using Summernote. Initially created by @xrb21, enhanced version maintained by @tneotia.
-version: 1.1.1
+version: 1.2.0
 homepage: https://github.com/tneotia/html-editor-enhanced
 
 environment:

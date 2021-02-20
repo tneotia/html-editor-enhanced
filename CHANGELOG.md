@@ -1,3 +1,20 @@
+## [1.2.0] - 2021-02-20
+* Add support for accessing `InAppWebViewController` via a getter
+* Add support for inserting files via the editor dialog itself
+* Add methods:
+   * toggle code view
+   * enable/disable editor
+   * undo/redo
+   * inserting plaintext/HTML/images/links
+* Add callbacks:
+   * onChange
+   * onEnter
+   * onFocus/onBlur/onBlurCodeview
+   * onKeyUp/onKeyDown
+   * onPaste
+* Downgraded dependencies to non-nullsafety to prevent errors
+* Updated docs and example app to showcase new features, refer to those for info on the above changes
+
 ## [1.1.1] - 2021-02-19
 * Minor update to add documentation to code and completely refactor/reorganize code
 
