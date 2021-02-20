@@ -48,6 +48,21 @@ When you want to get text from the editor:
 final txt = await HtmlEditor.getText();
 ```
 
+### In what ways is this package "enhanced"?
+
+1. It uses a heavily optimized [WebView](https://github.com/pichillilorenzo/flutter_inappwebview) to deliver the best possible experience when using the editor
+
+2. It doesn't use a local server to load the HTML code containing the editor. Instead, this package simply loads the HTML file, which improves performance and the editor's startup time.
+
+3. It uses a `StatelessWidget`. You don't have to fiddle around with `GlobalKey`s to access methods, instead you can simply call `HtmlEditor.<method name>` anywhere you want.
+
+4. It has support for many of Summernote's methods
+
+5. It has support for some of Summernote's callbacks
+
+6. It exposes the `InAppWebViewController` so you can customize the WebView however you like - you can even load your own HTML code and inject your own JavaScript for your use cases.
+
+More is on the way! File a feature request or contribute to the project if you'd like to see other features added.
 
 ### Parameters
 
@@ -60,7 +75,7 @@ Parameter | Type | Default | Description
 **widthImage** | String | 100% | width of image picker
 **showBottomToolbar** | bool | true | show or hide bottom toolbar
 **hint** | String | empty | Placeholder hint text
-
+**callbacks** | Callbacks | empty | Customize the callbacks for various events
 
 ## License
 
