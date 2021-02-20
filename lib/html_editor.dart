@@ -65,8 +65,7 @@ class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
 
   /// Gets the text from the editor and returns it as a [String].
   static Future<String> getText() async {
-    await evaluateJavascript(source:
-    "console.log(document.getElementsByClassName('note-editable')[0].innerHTML);");
+    await evaluateJavascript(source: "var str = \$('#summernote').summernote('code'); console.log(str);");
     return text;
   }
 
@@ -82,11 +81,7 @@ class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
         .replaceAll("\n\n", "<br/>")
         .replaceAll("\r", " ")
         .replaceAll('\r\n', " ");
-    String txt =
-        "document.getElementsByClassName('note-editable')[0].innerHTML = '" +
-            txtIsi +
-            "';";
-    evaluateJavascript(source: txt);
+    evaluateJavascript(source: "\$('#summernote').summernote('code', '$txtIsi');");
   }
 
   /// Sets the editor to full-screen mode.
