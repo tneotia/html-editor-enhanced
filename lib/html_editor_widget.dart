@@ -10,6 +10,8 @@ import 'package:html_editor_enhanced/utils/pick_image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
 
+bool callbacksInitialized = false;
+
 class HtmlEditorWidget extends StatelessWidget with WidgetsBindingObserver {
   HtmlEditorWidget({
     Key key,
@@ -18,7 +20,8 @@ class HtmlEditorWidget extends StatelessWidget with WidgetsBindingObserver {
     this.useBottomSheet,
     this.imageWidth,
     this.showBottomToolbar,
-    this.hint
+    this.hint,
+    this.callbacks,
   }) : super(key: key);
 
   final String value;
@@ -28,6 +31,7 @@ class HtmlEditorWidget extends StatelessWidget with WidgetsBindingObserver {
   final bool showBottomToolbar;
   final String hint;
   final UniqueKey webViewKey = UniqueKey();
+  final Callbacks callbacks;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +49,7 @@ class HtmlEditorWidget extends StatelessWidget with WidgetsBindingObserver {
             initialOptions: InAppWebViewGroupOptions(
               crossPlatform: InAppWebViewOptions(
                 javaScriptEnabled: true,
+                debuggingEnabled: true,
               ),
               //todo flutter_inappwebview 5.0.0
               /*android: AndroidInAppWebViewOptions(
@@ -65,7 +70,7 @@ class HtmlEditorWidget extends StatelessWidget with WidgetsBindingObserver {
               }
               text = message;
             },
-            onLoadStop: (InAppWebViewController controller, String url) {
+            onLoadStop: (InAppWebViewController controller, String url) async {
               //set the hint once the editor is loaded
               if (hint != null) {
                 HtmlEditor.setHint(hint);
@@ -77,6 +82,12 @@ class HtmlEditorWidget extends StatelessWidget with WidgetsBindingObserver {
               //set the text once the editor is loaded
               if (value != null) {
                 HtmlEditor.setText(value);
+              }
+              //initialize callbacks
+              if (callbacks != null && !callbacksInitialized) {
+                addJSCallbacks();
+                addJSHandlers();
+                callbacksInitialized = true;
               }
             },
           ),
@@ -145,5 +156,25 @@ class HtmlEditorWidget extends StatelessWidget with WidgetsBindingObserver {
         ) : Container(height: 0, width: 0),
       ],
     );
+  }
+
+  void addJSCallbacks() {
+    if (callbacks.onChange != null) {
+      controller.evaluateJavascript(
+        source: """
+          \$('#summernote').on('summernote.change', function(_, contents, \$editable) {
+            window.flutter_inappwebview.callHandler('onChange', contents);
+          });
+        """
+      );
+    }
+  }
+
+  void addJSHandlers() {
+    if (callbacks.onChange != null) {
+      controller.addJavaScriptHandler(handlerName: 'onChange', callback: (src) {
+        callbacks.onChange.call(src.first.toString());
+      });
+    }
   }
 }

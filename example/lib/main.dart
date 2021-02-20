@@ -54,6 +54,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 hint: "Your text here...",
                 //value: "text content initial, if any",
                 height: 400,
+                callbacks: Callbacks(
+                  onChange: (String changed) {
+                    print("content changed to $changed");
+                  },
+                )
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),

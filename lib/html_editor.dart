@@ -1,9 +1,12 @@
 library html_editor;
 
+export 'package:html_editor_enhanced/utils/callbacks.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor_widget.dart';
+import 'package:html_editor_enhanced/utils/callbacks.dart';
 
 /// Global variable used to get the [InAppWebViewController] of the Html editor
 InAppWebViewController controller;
@@ -20,7 +23,8 @@ class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
     this.useBottomSheet = true,
     this.imageWidth = 100,
     this.showBottomToolbar = true,
-    this.hint
+    this.hint,
+    this.callbacks,
   }) :  assert(imageWidth > 0 && imageWidth <= 100),
         super(key: key);
 
@@ -58,6 +62,8 @@ class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
   /// Sets the Html editor's hint (text displayed when there is no text in the
   /// editor).
   final String hint;
+
+  final Callbacks callbacks;
 
   /// Allows the [InAppWebViewController] for the Html editor to be accessed
   /// outside of the package itself for endless control and customization.
@@ -158,7 +164,8 @@ class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
         useBottomSheet: useBottomSheet,
         imageWidth: imageWidth,
         showBottomToolbar: showBottomToolbar,
-        hint: hint
+        hint: hint,
+        callbacks: callbacks,
       ),
     );
   }
