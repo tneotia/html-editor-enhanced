@@ -174,6 +174,33 @@ class HtmlEditorWidget extends StatelessWidget {
         """
       );
     }
+    if (callbacks.onFocus != null) {
+      controller.evaluateJavascript(
+          source: """
+          \$('#summernote').on('summernote.focus', function() {
+            window.flutter_inappwebview.callHandler('onFocus', 'fired');
+          });
+        """
+      );
+    }
+    if (callbacks.onBlur != null) {
+      controller.evaluateJavascript(
+          source: """
+          \$('#summernote').on('summernote.blur', function() {
+            window.flutter_inappwebview.callHandler('onBlur', 'fired');
+          });
+        """
+      );
+    }
+    if (callbacks.onBlurCodeview != null) {
+      controller.evaluateJavascript(
+          source: """
+          \$('#summernote').on('summernote.blur.codeview', function() {
+            window.flutter_inappwebview.callHandler('onBlurCodeview', 'fired');
+          });
+        """
+      );
+    }
   }
 
   void addJSHandlers() {
@@ -185,6 +212,21 @@ class HtmlEditorWidget extends StatelessWidget {
     if (callbacks.onEnter != null) {
       controller.addJavaScriptHandler(handlerName: 'onEnter', callback: (_) {
         callbacks.onEnter.call();
+      });
+    }
+    if (callbacks.onFocus != null) {
+      controller.addJavaScriptHandler(handlerName: 'onFocus', callback: (_) {
+        callbacks.onFocus.call();
+      });
+    }
+    if (callbacks.onBlur != null) {
+      controller.addJavaScriptHandler(handlerName: 'onBlur', callback: (_) {
+        callbacks.onBlur.call();
+      });
+    }
+    if (callbacks.onBlurCodeview != null) {
+      controller.addJavaScriptHandler(handlerName: 'onBlurCodeview', callback: (_) {
+        callbacks.onBlurCodeview.call();
       });
     }
   }

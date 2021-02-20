@@ -3,6 +3,9 @@ class Callbacks {
   Callbacks({
     this.onChange,
     this.onEnter,
+    this.onFocus,
+    this.onBlur,
+    this.onBlurCodeview
   });
 
   /// Called whenever the HTML content of the editor is changed and the editor
@@ -21,4 +24,28 @@ class Callbacks {
   /// Note: The onChange callback will also be triggered at the same time as
   /// this callback, please design your implementation accordingly.
   Function() onEnter;
+
+  /// Called whenever the rich text field gains focus. This will not be called
+  /// when the code view editor gains focus, instead use [onBlurCodeview] for
+  /// that.
+  Function() onFocus;
+
+  /// Called whenever either the rich text field or the codeview field loses
+  /// focus. This will also be triggered when switching from the rich text editor
+  /// to the code view editor.
+  /// Note: Due to the current state of webviews in Flutter, tapping outside
+  /// the webview or dismissing the keyboard does not trigger this callback.
+  /// This callback will only be triggered if the user taps on an empty space
+  /// in the toolbar or switches the view mode of the editor.
+  Function() onBlur;
+
+  /// Called whenever the code view either gains or loses focus (the Summernote
+  /// docs say this will only be called when the code view loses focus but
+  /// in my testing this is not the case). This will also be triggered when
+  /// switching between the rich text editor and the code view editor.
+  /// Note: Due to the current state of webviews in Flutter, tapping outside
+  /// the webview or dismissing the keyboard does not trigger this callback.
+  /// This callback will only be triggered if the user taps on an empty space
+  /// in the toolbar or switches the view mode of the editor.
+  Function() onBlurCodeview;
 }
