@@ -72,7 +72,7 @@ final txt = await HtmlEditor.getText();
 
 4. It has support for many of Summernote's methods
 
-5. It has support for some of Summernote's callbacks
+5. It has support for many of Summernote's callbacks
 
 6. It exposes the `InAppWebViewController` so you can customize the WebView however you like - you can even load your own HTML code and inject your own JavaScript for your use cases.
 
