@@ -142,10 +142,25 @@ class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
     evaluateJavascript(source: "\$('#summernote').summernote('insertText', '$text');");
   }
   
-  /// Insert HTML at the end of the current HTML content in the editor
+  /// Insert HTML at the position of the cursor in the editor
   /// Note: This method should not be used for plaintext strings
   static void insertHtml(String html) {
     evaluateJavascript(source: "\$('#summernote').summernote('pasteHTML', '$html');");
+  }
+
+  /// Insert a network image at the position of the cursor in the editor
+  static void insertNetworkImage(String url, {String filename = ""}) {
+    evaluateJavascript(source: "\$('#summernote').summernote('insertImage', '$url', '$filename');");
+  }
+
+  static void insertLink(String text, String url, bool isNewWindow) {
+    evaluateJavascript(source: """
+    \$('#summernote').summernote('createLink', {
+        text: "$text",
+        url: '$url',
+        isNewWindow: $isNewWindow
+      });
+    """);
   }
 
   @override

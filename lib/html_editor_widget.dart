@@ -113,10 +113,7 @@ class HtmlEditorWidget extends StatelessWidget {
                       String base64Image =
                           "<img width=\"$imageWidth%\" src=\"data:image/png;base64, "
                           "${base64Encode(imageBytes)}\" data-filename=\"$filename\">";
-
-                      String txt =
-                          "\$('.note-editable').append( '" + base64Image + "');";
-                      controller.evaluateJavascript(source: txt);
+                      HtmlEditor.insertHtml(base64Image);
                     }
                   }
               ),
@@ -143,9 +140,7 @@ class HtmlEditorWidget extends StatelessWidget {
                         .replaceAll("\n\n", "<br/>")
                         .replaceAll("\r", " ")
                         .replaceAll('\r\n', " ");
-                    String txt =
-                        "\$('.note-editable').append( '" + txtIsi + "');";
-                    controller.evaluateJavascript(source: txt);
+                    HtmlEditor.insertHtml(txtIsi);
                   }
               ),
             ],

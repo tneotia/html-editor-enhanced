@@ -73,5 +73,7 @@ class Callbacks {
 
   /// Called whenever text is pasted into the rich text field. This will not be
   /// called when text is pasted into the code view editor.
+  /// Note: This will not be called when programmatically inserting HTML into
+  /// the editor with [HtmlEditor.insertHtml].
   Function() onPaste;
 }
