@@ -129,6 +129,11 @@ class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
   static void redo() {
     evaluateJavascript(source: "\$('#summernote').summernote('redo');");
   }
+  
+  /// Insert text at the end of the current HTML content in the editor
+  static void insertText(String text) {
+    evaluateJavascript(source: "\$('#summernote').summernote('insertText', '$text');");
+  }
 
   @override
   Widget build(BuildContext context) {
