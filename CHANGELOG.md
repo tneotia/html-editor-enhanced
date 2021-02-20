@@ -1,4 +1,4 @@
-## [1.2.0] - 2021-02-20
+## [1.2.0+1] - 2021-02-20
 * Add support for accessing `InAppWebViewController` via a getter
 * Add support for inserting files via the editor dialog itself
 * Add methods:

@@ -56,7 +56,7 @@ More is on the way! File a feature request or contribute to the project if you'd
 
 ## Setup
 
-Add `html_editor_enhanced: ^1.2.0` as dependency to your pubspec.yaml
+Add `html_editor_enhanced: ^1.2.0+1` as dependency to your pubspec.yaml
 
 <details><summary>Follow the setup instructions for the image_picker plugin</summary>
 
