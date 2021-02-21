@@ -63,6 +63,8 @@ class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
   /// editor).
   final String hint;
 
+  /// Sets & activates Summernote's callbacks. See the functions available in
+  /// [Callbacks] for more details.
   final Callbacks callbacks;
 
   /// Allows the [InAppWebViewController] for the Html editor to be accessed
@@ -71,7 +73,7 @@ class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
 
   /// Gets the text from the editor and returns it as a [String].
   static Future<String> getText() async {
-    await evaluateJavascript(source: "var str = \$('#summernote').summernote('code'); console.log(str);");
+    await evaluateJavascript(source: "var str = \$('#summernote-2').summernote('code'); console.log(str);");
     return text;
   }
 
@@ -87,22 +89,22 @@ class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
         .replaceAll("\n\n", "<br/>")
         .replaceAll("\r", " ")
         .replaceAll('\r\n', " ");
-    evaluateJavascript(source: "\$('#summernote').summernote('code', '$txtIsi');");
+    evaluateJavascript(source: "\$('#summernote-2').summernote('code', '$txtIsi');");
   }
 
   /// Sets the editor to full-screen mode.
   static void setFullScreen() {
-    evaluateJavascript(source: '\$("#summernote").summernote("fullscreen.toggle");');
+    evaluateJavascript(source: '\$("#summernote-2").summernote("fullscreen.toggle");');
   }
 
   /// Sets the focus to the editor.
   static void setFocus() {
-    evaluateJavascript(source: "\$('#summernote').summernote('focus');");
+    evaluateJavascript(source: "\$('#summernote-2').summernote('focus');");
   }
 
   /// Clears the editor of any text.
   static void clear() {
-    evaluateJavascript(source: "\$('#summernote').summernote('reset');");
+    evaluateJavascript(source: "\$('#summernote-2').summernote('reset');");
   }
 
   /// Sets the hint for the editor.
@@ -113,49 +115,49 @@ class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
 
   /// toggles the codeview in the Html editor
   static void toggleCodeView() {
-    evaluateJavascript(source: "\$('#summernote').summernote('codeview.toggle');");
+    evaluateJavascript(source: "\$('#summernote-2').summernote('codeview.toggle');");
   }
 
   /// disables the Html editor
   static void disable() {
-    evaluateJavascript(source: "\$('#summernote').summernote('disable');");
+    evaluateJavascript(source: "\$('#summernote-2').summernote('disable');");
   }
 
   /// enables the Html editor
   static void enable() {
-    evaluateJavascript(source: "\$('#summernote').summernote('enable');");
+    evaluateJavascript(source: "\$('#summernote-2').summernote('enable');");
   }
 
   /// Undoes the last action
   static void undo() {
-    evaluateJavascript(source: "\$('#summernote').summernote('undo');");
+    evaluateJavascript(source: "\$('#summernote-2').summernote('undo');");
   }
 
   /// Redoes the last action
   static void redo() {
-    evaluateJavascript(source: "\$('#summernote').summernote('redo');");
+    evaluateJavascript(source: "\$('#summernote-2').summernote('redo');");
   }
   
   /// Insert text at the end of the current HTML content in the editor
   /// Note: This method should only be used for plaintext strings
   static void insertText(String text) {
-    evaluateJavascript(source: "\$('#summernote').summernote('insertText', '$text');");
+    evaluateJavascript(source: "\$('#summernote-2').summernote('insertText', '$text');");
   }
   
   /// Insert HTML at the position of the cursor in the editor
   /// Note: This method should not be used for plaintext strings
   static void insertHtml(String html) {
-    evaluateJavascript(source: "\$('#summernote').summernote('pasteHTML', '$html');");
+    evaluateJavascript(source: "\$('#summernote-2').summernote('pasteHTML', '$html');");
   }
 
   /// Insert a network image at the position of the cursor in the editor
   static void insertNetworkImage(String url, {String filename = ""}) {
-    evaluateJavascript(source: "\$('#summernote').summernote('insertImage', '$url', '$filename');");
+    evaluateJavascript(source: "\$('#summernote-2').summernote('insertImage', '$url', '$filename');");
   }
 
   static void insertLink(String text, String url, bool isNewWindow) {
     evaluateJavascript(source: """
-    \$('#summernote').summernote('createLink', {
+    \$('#summernote-2').summernote('createLink', {
         text: "$text",
         url: '$url',
         isNewWindow: $isNewWindow

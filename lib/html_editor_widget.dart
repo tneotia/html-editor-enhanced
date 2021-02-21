@@ -68,28 +68,42 @@ class HtmlEditorWidget extends StatelessWidget {
               text = message;
             },
             onLoadStop: (InAppWebViewController controller, String url) async {
-              //set the hint once the editor is loaded
-              if (hint != null) {
-                HtmlEditor.setHint(hint);
-              } else {
-                HtmlEditor.setHint("");
-              }
-
-              HtmlEditor.setFullScreen();
-              //set the text once the editor is loaded
-              if (value != null) {
-                HtmlEditor.setText(value);
-              }
-              //initialize callbacks
-              if (callbacks != null && !callbacksInitialized) {
-                addJSCallbacks();
-                addJSHandlers();
-                callbacksInitialized = true;
+              if (url.contains("summernote.html")) {
+                controller.evaluateJavascript(source: """
+                   \$('#summernote-2').summernote({
+                      placeholder: "$hint",
+                      tabsize: 2,
+                      height: ${height - 125},
+                      maxHeight: ${height - 125},
+                      toolbar: [
+                        ['style', ['style']],
+                        ['font', ['bold', 'underline', 'clear']],
+                        ['color', ['color']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['table', ['table']],
+                        ['insert', ['link', 'picture', 'video']],
+                        ['view', ['fullscreen', 'codeview', 'help']]
+                      ],
+                      disableGrammar: false,
+                      spellCheck: false
+                    });
+                """);
+                HtmlEditor.setFullScreen();
+                //set the text once the editor is loaded
+                if (value != null) {
+                  HtmlEditor.setText(value);
+                }
+                //initialize callbacks
+                if (callbacks != null && !callbacksInitialized) {
+                  addJSCallbacks();
+                  addJSHandlers();
+                  callbacksInitialized = true;
+                }
               }
             },
           ),
         ),
-        showBottomToolbar ? Divider() : Container(height: 0, width: 0),
+        showBottomToolbar ? Divider(height: 0) : Container(height: 0, width: 0),
         showBottomToolbar ? Padding(
           padding: const EdgeInsets.only(
               left: 4.0, right: 4, bottom: 8, top: 2),
@@ -154,7 +168,7 @@ class HtmlEditorWidget extends StatelessWidget {
     if (callbacks.onChange != null) {
       controller.evaluateJavascript(
         source: """
-          \$('#summernote').on('summernote.change', function(_, contents, \$editable) {
+          \$('#summernote-2').on('summernote.change', function(_, contents, \$editable) {
             window.flutter_inappwebview.callHandler('onChange', contents);
           });
         """
@@ -163,7 +177,7 @@ class HtmlEditorWidget extends StatelessWidget {
     if (callbacks.onEnter != null) {
       controller.evaluateJavascript(
           source: """
-          \$('#summernote').on('summernote.enter', function() {
+          \$('#summernote-2').on('summernote.enter', function() {
             window.flutter_inappwebview.callHandler('onEnter', 'fired');
           });
         """
@@ -172,7 +186,7 @@ class HtmlEditorWidget extends StatelessWidget {
     if (callbacks.onFocus != null) {
       controller.evaluateJavascript(
           source: """
-          \$('#summernote').on('summernote.focus', function() {
+          \$('#summernote-2').on('summernote.focus', function() {
             window.flutter_inappwebview.callHandler('onFocus', 'fired');
           });
         """
@@ -181,7 +195,7 @@ class HtmlEditorWidget extends StatelessWidget {
     if (callbacks.onBlur != null) {
       controller.evaluateJavascript(
           source: """
-          \$('#summernote').on('summernote.blur', function() {
+          \$('#summernote-2').on('summernote.blur', function() {
             window.flutter_inappwebview.callHandler('onBlur', 'fired');
           });
         """
@@ -190,7 +204,7 @@ class HtmlEditorWidget extends StatelessWidget {
     if (callbacks.onBlurCodeview != null) {
       controller.evaluateJavascript(
           source: """
-          \$('#summernote').on('summernote.blur.codeview', function() {
+          \$('#summernote-2').on('summernote.blur.codeview', function() {
             window.flutter_inappwebview.callHandler('onBlurCodeview', 'fired');
           });
         """
@@ -199,7 +213,7 @@ class HtmlEditorWidget extends StatelessWidget {
     if (callbacks.onKeyDown != null) {
       controller.evaluateJavascript(
           source: """
-          \$('#summernote').on('summernote.keydown', function(_, e) {
+          \$('#summernote-2').on('summernote.keydown', function(_, e) {
             window.flutter_inappwebview.callHandler('onKeyDown', e.keyCode);
           });
         """
@@ -208,7 +222,7 @@ class HtmlEditorWidget extends StatelessWidget {
     if (callbacks.onKeyUp != null) {
       controller.evaluateJavascript(
           source: """
-          \$('#summernote').on('summernote.keyup', function(_, e) {
+          \$('#summernote-2').on('summernote.keyup', function(_, e) {
             window.flutter_inappwebview.callHandler('onKeyUp', e.keyCode);
           });
         """
@@ -217,7 +231,7 @@ class HtmlEditorWidget extends StatelessWidget {
     if (callbacks.onPaste != null) {
       controller.evaluateJavascript(
           source: """
-          \$('#summernote').on('summernote.paste', function(_) {
+          \$('#summernote-2').on('summernote.paste', function(_) {
             window.flutter_inappwebview.callHandler('onPaste', 'fired');
           });
         """
