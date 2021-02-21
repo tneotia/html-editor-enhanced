@@ -220,6 +220,7 @@ Parameter | Type | Default | Description
 **showBottomToolbar** | `bool` | true | Show or hide bottom toolbar
 **hint** | `String` | empty | Placeholder hint text
 **callbacks** | `Callbacks` | empty | Customize the callbacks for various events
+**darkMode** | `bool` | `null` | Sets the status of dark mode - `false`: always light, `null`: follow system, `true`: always dark 
 
 ### Methods
 
