@@ -10,9 +10,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(),
+      darkTheme: ThemeData.dark(),
       home: MyHomePage(title: 'Flutter HTML Editor Example'),
     );
   }
@@ -36,8 +35,15 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
         elevation: 0,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: () {
+              HtmlEditor.editorController.reload();
+            }
+          )
+        ],
       ),
-      backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton(
         child: Text("\<\\\>", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         onPressed: () {
@@ -101,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   SizedBox(width: 16,),
                   TextButton(
-                    style: TextButton.styleFrom(backgroundColor: Colors.blue),
+                    style: TextButton.styleFrom(backgroundColor: Theme.of(context).accentColor),
                     onPressed: () async {
                       final txt = await HtmlEditor.getText();
                       setState(() {
@@ -112,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   SizedBox(width: 16,),
                   TextButton(
-                    style: TextButton.styleFrom(backgroundColor: Colors.blue),
+                    style: TextButton.styleFrom(backgroundColor: Theme.of(context).accentColor),
                     onPressed: () {
                       HtmlEditor.redo();
                     },
@@ -139,7 +145,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   SizedBox(width: 16,),
                   TextButton(
-                    style: TextButton.styleFrom(backgroundColor: Colors.blue),
+                    style: TextButton.styleFrom(backgroundColor: Theme.of(context).accentColor),
                     onPressed: () async {
                       HtmlEditor.enable();
                     },
@@ -155,7 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   TextButton(
-                    style: TextButton.styleFrom(backgroundColor: Colors.blue),
+                    style: TextButton.styleFrom(backgroundColor: Theme.of(context).accentColor),
                     onPressed: () {
                       HtmlEditor.insertText("Google");
                     },
@@ -163,7 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   SizedBox(width: 16,),
                   TextButton(
-                    style: TextButton.styleFrom(backgroundColor: Colors.blue),
+                    style: TextButton.styleFrom(backgroundColor: Theme.of(context).accentColor),
                     onPressed: () {
                       HtmlEditor.insertHtml("<p style=\"color: blue \">Google in blue</p>");
                     },
@@ -178,7 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   TextButton(
-                    style: TextButton.styleFrom(backgroundColor: Colors.blue),
+                    style: TextButton.styleFrom(backgroundColor: Theme.of(context).accentColor),
                     onPressed: () async {
                       HtmlEditor.insertLink("Google linked", "https://google.com", true);
                     },
@@ -186,7 +192,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   SizedBox(width: 16,),
                   TextButton(
-                    style: TextButton.styleFrom(backgroundColor: Colors.blue),
+                    style: TextButton.styleFrom(backgroundColor: Theme.of(context).accentColor),
                     onPressed: () {
                       HtmlEditor.insertNetworkImage("https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png", filename: "Google network image");
                     },

@@ -22,6 +22,7 @@ class HtmlEditorWidget extends StatelessWidget {
     this.showBottomToolbar,
     this.hint,
     this.callbacks,
+    this.darkMode
   }) : super(key: key);
 
   final String value;
@@ -32,6 +33,7 @@ class HtmlEditorWidget extends StatelessWidget {
   final String hint;
   final UniqueKey webViewKey = UniqueKey();
   final Callbacks callbacks;
+  final bool darkMode;
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +90,20 @@ class HtmlEditorWidget extends StatelessWidget {
                       spellCheck: false
                     });
                 """);
-                HtmlEditor.setFullScreen();
+                if ((Theme.of(context).brightness == Brightness.dark || darkMode == true) && darkMode != false) {
+                  String darkCSS = await rootBundle.loadString('packages/html_editor_enhanced/assets/summernote-lite-dark.css');
+                  var bytes = utf8.encode(darkCSS);
+                  var base64Str = base64.encode(bytes);
+                  controller.evaluateJavascript(
+                      source: "javascript:(function() {" +
+                          "var parent = document.getElementsByTagName('head').item(0);" +
+                          "var style = document.createElement('style');" +
+                          "style.type = 'text/css';" +
+                          "style.innerHTML = window.atob('" +
+                          base64Str + "');" +
+                          "parent.appendChild(style)" +
+                          "})()");
+                }
                 //set the text once the editor is loaded
                 if (value != null) {
                   HtmlEditor.setText(value);
@@ -106,11 +121,12 @@ class HtmlEditorWidget extends StatelessWidget {
         showBottomToolbar ? Divider(height: 0) : Container(height: 0, width: 0),
         showBottomToolbar ? Padding(
           padding: const EdgeInsets.only(
-              left: 4.0, right: 4, bottom: 8, top: 2),
+              left: 4, right: 4, bottom: 8, top: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               toolbarIcon(
+                  context,
                   Icons.image,
                   "Image",
                   onTap: () async {
@@ -132,6 +148,7 @@ class HtmlEditorWidget extends StatelessWidget {
                   }
               ),
               toolbarIcon(
+                  context,
                   Icons.content_copy,
                   "Copy",
                   onTap: () async {
@@ -140,6 +157,7 @@ class HtmlEditorWidget extends StatelessWidget {
                   }
               ),
               toolbarIcon(
+                  context,
                   Icons.content_paste,
                   "Paste",
                   onTap: () async {

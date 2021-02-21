@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 /// Widget for the toolbar icon
-Widget toolbarIcon(IconData icon, String title, {Function() onTap}) {
+Widget toolbarIcon(BuildContext context, IconData icon, String title, {Function() onTap}) {
   return InkWell(
     onTap: onTap,
     child: Row(
       children: <Widget>[
         Icon(
           icon,
-          color: Colors.black38,
+          color: Theme.of(context).iconTheme.color,
           size: 20,
         ),
         Padding(
@@ -17,7 +17,6 @@ Widget toolbarIcon(IconData icon, String title, {Function() onTap}) {
           child: Text(
             title,
             style: TextStyle(
-                color: Colors.black54,
                 fontSize: 16,
                 fontWeight: FontWeight.w400
             ),
@@ -39,7 +38,7 @@ Future<PickedFile> dialogPickImage(BuildContext context) async {
         backgroundColor: Colors.transparent,
         content: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).scaffoldBackgroundColor,
             borderRadius: BorderRadius.all(Radius.circular(8)),
           ),
           padding: const EdgeInsets.all(12),
@@ -58,7 +57,6 @@ Future<PickedFile> bottomSheetPickImage(BuildContext context) async {
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
     ),
-    backgroundColor: Colors.white,
     context: context,
     builder: (BuildContext context) {
       return SingleChildScrollView(
@@ -90,7 +88,7 @@ class PickImageWidget extends StatelessWidget {
               SizedBox(
                 width: 80,
                 child: TextButton(
-                  style: TextButton.styleFrom(backgroundColor: Colors.white, padding: const EdgeInsets.all(10)),
+                  style: TextButton.styleFrom(padding: const EdgeInsets.all(10)),
                   onPressed: () {
                     getImage(true, context);
                   },
@@ -101,13 +99,11 @@ class PickImageWidget extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 8),
                         child: Icon(
                           Icons.linked_camera,
-                          color: Colors.black45,
                           size: 44,
                         ),
                       ),
                       Text(
                         "Camera",
-                        style: TextStyle(color: Colors.black45),
                       ),
                     ],
                   ),
@@ -116,7 +112,7 @@ class PickImageWidget extends StatelessWidget {
               SizedBox(
                 width: 80,
                 child: TextButton(
-                  style: TextButton.styleFrom(backgroundColor: Colors.white, padding: const EdgeInsets.all(10)),
+                  style: TextButton.styleFrom(padding: const EdgeInsets.all(10)),
                   onPressed: () {
                     getImage(false, context);
                   },
@@ -127,13 +123,11 @@ class PickImageWidget extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 8),
                         child: Icon(
                           Icons.image,
-                          color: Colors.black45,
                           size: 44,
                         ),
                       ),
                       Text(
                         "Gallery",
-                        style: TextStyle(color: Colors.black45),
                       ),
                     ],
                   ),

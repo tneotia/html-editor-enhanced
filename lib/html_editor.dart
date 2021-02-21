@@ -25,6 +25,7 @@ class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
     this.showBottomToolbar = true,
     this.hint,
     this.callbacks,
+    this.darkMode,
   }) :  assert(imageWidth > 0 && imageWidth <= 100),
         super(key: key);
 
@@ -66,6 +67,9 @@ class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
   /// Sets & activates Summernote's callbacks. See the functions available in
   /// [Callbacks] for more details.
   final Callbacks callbacks;
+
+  /// Sets the editor to dark mode
+  final bool darkMode;
 
   /// Allows the [InAppWebViewController] for the Html editor to be accessed
   /// outside of the package itself for endless control and customization.
@@ -183,6 +187,7 @@ class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
         showBottomToolbar: showBottomToolbar,
         hint: hint,
         callbacks: callbacks,
+        darkMode: darkMode,
       ),
     );
   }

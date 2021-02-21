@@ -6,9 +6,13 @@ Flutter HTML Editor Enhanced is a text editor for Android and iOS to help write 
 <table>
   <tr>
     <td align="center">Video Example</td>
+    <td align="center">Light Mode</td>
+    <td align="center">Dark Mode</td>
   </tr>
   <tr>
     <td><img alt="GIF example" src="https://raw.githubusercontent.com/tneotia/html-editor-enhanced/master/screenshots/html_editor_enhanced.gif" width="250"/></td>
+    <td><img alt="Light" src="https://raw.githubusercontent.com/tneotia/html-editor-enhanced/master/screenshots/html_editor_light.png" width="250"/></td>
+    <td><img alt="Dark" src="https://raw.githubusercontent.com/tneotia/html-editor-enhanced/master/screenshots/html_editor_dark.png" width="250"/></td>
   </tr>
 </table>
 
@@ -51,6 +55,8 @@ Flutter HTML Editor Enhanced is a text editor for Android and iOS to help write 
 5. It has support for many of Summernote's callbacks
 
 6. It exposes the `InAppWebViewController` so you can customize the WebView however you like - you can even load your own HTML code and inject your own JavaScript for your use cases.
+
+7. It has support for dark mode
 
 More is on the way! File a feature request or contribute to the project if you'd like to see other features added.
 
@@ -254,7 +260,7 @@ Callback | Parameter(s) | Description
 
 ### Getters
 
-Currently, the package has one getter: `HtmlEditor.controller`. This returns the `InAppWebViewController`, which manages the webview that displays the editor.
+Currently, the package has one getter: `HtmlEditor.editorController`. This returns the `InAppWebViewController`, which manages the webview that displays the editor.
 
 This is extremely powerful, as it allows you to create your own custom methods and implementations directly in your app. See [`flutter_inappwebview`](https://github.com/pichillilorenzo/flutter_inappwebview) for documentation on the controller.
 
@@ -269,6 +275,8 @@ This section will be updated later with more specialized and specific examples a
 Due to this package depending on a webview for rendering the HTML editor, there will be some general weirdness in how the editor behaves. Unfortunately, these are not things I can fix, they are inherent problems with how webviews function on Flutter.
 
 If you do find any issues, please report them in the Issues tab and I will see if a fix is possible, but if I close the issue it is likely due to the above fact.
+
+1. When switching between dark and light mode, a reload is required for the HTML editor to switch to the correct color scheme. You can implement this programmatically: `HtmlEditor.editorController.reload()`. This will reset the editor! You can save the current text, reload, and then set the text if you'd like to maintain the state.
 
 ## License
 
