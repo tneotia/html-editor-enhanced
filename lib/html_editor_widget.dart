@@ -51,6 +51,7 @@ class HtmlEditorWidget extends StatelessWidget {
               crossPlatform: InAppWebViewOptions(
                 javaScriptEnabled: true,
                 debuggingEnabled: true,
+                transparentBackground: true
               ),
               //todo flutter_inappwebview 5.0.0
               /*android: AndroidInAppWebViewOptions(
