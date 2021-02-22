@@ -33,6 +33,8 @@ Flutter HTML Editor Enhanced is a text editor for Android and iOS to help write 
   - [Callbacks Table](#callbacks)
   
   - [Getters](#getters)
+  
+  - [Toolbar](#toolbar)
 
   - [Examples](#examples)
 
@@ -57,6 +59,8 @@ Flutter HTML Editor Enhanced is a text editor for Android and iOS to help write 
 6. It exposes the `InAppWebViewController` so you can customize the WebView however you like - you can even load your own HTML code and inject your own JavaScript for your use cases.
 
 7. It has support for dark mode
+
+8. It has support for low-level customization, such as setting what buttons are shown on the toolbar
 
 More is on the way! File a feature request or contribute to the project if you'd like to see other features added.
 
@@ -220,6 +224,7 @@ Parameter | Type | Default | Description
 **showBottomToolbar** | `bool` | true | Show or hide bottom toolbar
 **hint** | `String` | empty | Placeholder hint text
 **callbacks** | `Callbacks` | empty | Customize the callbacks for various events
+**toolbar** | `List<Toolbar>` | See the widget's constructor | Customize what buttons are shown on the toolbar, and in which order. See [below](#toolbar) for more details.
 **darkMode** | `bool` | `null` | Sets the status of dark mode - `false`: always light, `null`: follow system, `true`: always dark 
 
 ### Methods
@@ -264,6 +269,47 @@ Callback | Parameter(s) | Description
 Currently, the package has one getter: `HtmlEditor.editorController`. This returns the `InAppWebViewController`, which manages the webview that displays the editor.
 
 This is extremely powerful, as it allows you to create your own custom methods and implementations directly in your app. See [`flutter_inappwebview`](https://github.com/pichillilorenzo/flutter_inappwebview) for documentation on the controller.
+
+### Toolbar
+
+This API allows you to customize Summernote's toolbar in a nice, readable format (you don't have to mess around with strings!).
+
+By default, the toolbar will be set to:
+
+```text
+toolbar: [
+  ['style', ['style']],
+  ['font', ['bold', 'underline', 'clear']],
+  ['color', ['color']],
+  ['para', ['ul', 'ol', 'paragraph']],
+  ['insert', ['link', 'picture', 'video', 'table']],
+  ['view', ['fullscreen', 'codeview', 'help']],
+],
+```
+
+This is pretty close to Summernote's [default options](https://summernote.org/deep-dive/#custom-toolbar-popover). Setting `toolbar` to null or empty will initialize the editor with these options.
+
+Well, what if you want to customize it? Don't worry, it's a nice and neat API:
+
+```dart
+Widget htmlEditor = HtmlEditor(
+  //other options
+  toolbar: [
+    Style(),
+    Font(buttons: [FontButtons.bold, FontButtons.underline, FontButtons.italic])
+  ]
+);
+```
+
+In the above example, the editor will only be initialized with the 'style', 'bold', 'underline', and 'italic' buttons.
+
+If you leave the `Toolbar` constructor blank (like `Style()` above), then the package interprets that you want the default buttons for `Style` to be visible.
+
+You can specify a list of buttons that are visible for each `Toolbar` constructor. Each constructor accepts a different type of enum in its button list, so you'll always put the right buttons in the right places.
+
+If you don't want to show an entire group of buttons, simply don't include their constructor in the `Toolbar` list!
+
+Note: Setting `buttons: []` will also be interpreted as wanting the default buttons for the constructor rather than not showing the group of buttons.
 
 ### Examples
 

@@ -1,12 +1,14 @@
 library html_editor;
 
 export 'package:html_editor_enhanced/utils/callbacks.dart';
+export 'package:html_editor_enhanced/utils/toolbar.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor_widget.dart';
 import 'package:html_editor_enhanced/utils/callbacks.dart';
+import 'package:html_editor_enhanced/utils/toolbar.dart';
 
 /// Global variable used to get the [InAppWebViewController] of the Html editor
 InAppWebViewController controller;
@@ -14,7 +16,7 @@ InAppWebViewController controller;
 /// Global variable used to get the text from the Html editor
 String text = "";
 
-class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
+class HtmlEditor extends StatelessWidget {
   HtmlEditor({
     Key key,
     this.initialText,
@@ -25,6 +27,14 @@ class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
     this.showBottomToolbar = true,
     this.hint,
     this.callbacks,
+    this.toolbar = const [
+      Style(),
+      Font(buttons: [FontButtons.bold, FontButtons.underline, FontButtons.clear]),
+      ColorBar(buttons: [ColorButtons.color]),
+      Paragraph(buttons: [ParagraphButtons.ul, ParagraphButtons.ol, ParagraphButtons.paragraph]),
+      Insert(buttons: [InsertButtons.link, InsertButtons.picture, InsertButtons.video, InsertButtons.table]),
+      Misc(buttons: [MiscButtons.fullscreen, MiscButtons.codeview, MiscButtons.help])
+    ],
     this.darkMode,
   }) :  assert(imageWidth > 0 && imageWidth <= 100),
         super(key: key);
@@ -68,7 +78,13 @@ class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
   /// [Callbacks] for more details.
   final Callbacks callbacks;
 
-  /// Sets the editor to dark mode
+  /// Sets which options are visible in the toolbar for the editor.
+  final List<Toolbar> toolbar;
+
+  /// Sets the editor to dark mode. `null` - switches with system, `false` -
+  /// always light, `true` - always dark.
+  ///
+  /// The default value is null (switches with system).
   final bool darkMode;
 
   /// Allows the [InAppWebViewController] for the Html editor to be accessed
@@ -187,6 +203,14 @@ class HtmlEditor extends StatelessWidget with WidgetsBindingObserver {
         showBottomToolbar: showBottomToolbar,
         hint: hint,
         callbacks: callbacks,
+        toolbar: toolbar.isEmpty ? [
+          Style(),
+          Font(buttons: [FontButtons.bold, FontButtons.underline, FontButtons.clear]),
+          ColorBar(buttons: [ColorButtons.color]),
+          Paragraph(buttons: [ParagraphButtons.ul, ParagraphButtons.ol, ParagraphButtons.paragraph]),
+          Insert(buttons: [InsertButtons.link, InsertButtons.picture, InsertButtons.video, InsertButtons.table]),
+          Misc(buttons: [MiscButtons.fullscreen, MiscButtons.codeview, MiscButtons.help])
+        ] : toolbar,
         darkMode: darkMode,
       ),
     );

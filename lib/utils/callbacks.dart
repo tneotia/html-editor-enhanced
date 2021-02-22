@@ -53,15 +53,6 @@ class Callbacks {
   Function() onBlurCodeview;
   //todo image callbacks & init callback
 
-  /// Called whenever a key is downed and the editor is in rich text view.
-  ///
-  /// This function will return the keycode for the downed key as an argument.
-  /// Note: The keycode [is broken](https://stackoverflow.com/questions/36753548/keycode-on-android-is-always-229)
-  /// on Android, you will only ever receive 229, 8 (backspace), or 13 (enter)
-  /// as a keycode. 8 and 13 only seem to be returned when the editor is empty
-  /// and those keys are downed.
-  Function(int) onKeyUp;
-
   /// Called whenever a key is released and the editor is in rich text view.
   ///
   /// This function will return the keycode for the released key as an argument.
@@ -69,6 +60,15 @@ class Callbacks {
   /// on Android, you will only ever receive 229, 8 (backspace), or 13 (enter)
   /// as a keycode. 8 and 13 only seem to be returned when the editor is empty
   /// and those keys are released.
+  Function(int) onKeyUp;
+
+  /// Called whenever a key is downed and the editor is in rich text view.
+  ///
+  /// This function will return the keycode for the downed key as an argument.
+  /// Note: The keycode [is broken](https://stackoverflow.com/questions/36753548/keycode-on-android-is-always-229)
+  /// on Android, you will only ever receive 229, 8 (backspace), or 13 (enter)
+  /// as a keycode. 8 and 13 only seem to be returned when the editor is empty
+  /// and those keys are downed.
   Function(int) onKeyDown;
 
   /// Called whenever text is pasted into the rich text field. This will not be

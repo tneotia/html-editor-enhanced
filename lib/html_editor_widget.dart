@@ -22,6 +22,7 @@ class HtmlEditorWidget extends StatelessWidget {
     this.showBottomToolbar,
     this.hint,
     this.callbacks,
+    this.toolbar,
     this.darkMode
   }) : super(key: key);
 
@@ -33,6 +34,7 @@ class HtmlEditorWidget extends StatelessWidget {
   final String hint;
   final UniqueKey webViewKey = UniqueKey();
   final Callbacks callbacks;
+  final List<Toolbar> toolbar;
   final bool darkMode;
 
   @override
@@ -71,21 +73,19 @@ class HtmlEditorWidget extends StatelessWidget {
             },
             onLoadStop: (InAppWebViewController controller, String url) async {
               if (url.contains("summernote.html")) {
+                String summernoteToolbar = "[\n";
+                for (Toolbar t in toolbar) {
+                  summernoteToolbar = summernoteToolbar +
+                      "['${t.getGroupName()}', ${t.getButtons()}],\n";
+                }
+                summernoteToolbar = summernoteToolbar + "],";
                 controller.evaluateJavascript(source: """
                    \$('#summernote-2').summernote({
                       placeholder: "$hint",
                       tabsize: 2,
                       height: ${height - 125},
                       maxHeight: ${height - 125},
-                      toolbar: [
-                        ['style', ['style']],
-                        ['font', ['bold', 'underline', 'clear']],
-                        ['color', ['color']],
-                        ['para', ['ul', 'ol', 'paragraph']],
-                        ['table', ['table']],
-                        ['insert', ['link', 'picture', 'video']],
-                        ['view', ['fullscreen', 'codeview', 'help']]
-                      ],
+                      toolbar: $summernoteToolbar
                       disableGrammar: false,
                       spellCheck: false
                     });
