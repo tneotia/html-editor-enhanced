@@ -1,3 +1,10 @@
+## [1.3.0] - 2021-02-23
+* Add official support for Flutter Web
+* Add support for modifying the toolbar options. See the README for details on the API.
+* Add support for a native dark mode
+* Removed image_picker plugin and image button in toolbar because users can insert images via the image button in Summernote
+    * [BREAKING] Removed the `imageWidth` and `useBottomSheet` params due to the above change
+
 ## [1.2.0+1] - 2021-02-20
 * Add support for accessing `InAppWebViewController` via a getter
 * Add support for inserting files via the editor dialog itself

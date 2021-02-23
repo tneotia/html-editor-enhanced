@@ -83,13 +83,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0+4"
-  flutter_plugin_android_lifecycle:
-    dependency: transitive
-    description:
-      name: flutter_plugin_android_lifecycle
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.11"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -102,34 +95,13 @@ packages:
       relative: true
     source: path
     version: "1.2.0+1"
-  http:
+  js:
     dependency: transitive
     description:
-      name: http
+      name: js
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.2"
-  http_parser:
-    dependency: transitive
-    description:
-      name: http_parser
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.1.4"
-  image_picker:
-    dependency: transitive
-    description:
-      name: image_picker
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.6.7+22"
-  image_picker_platform_interface:
-    dependency: transitive
-    description:
-      name: image_picker_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.6"
+    version: "0.6.3"
   matcher:
     dependency: transitive
     description:
@@ -158,20 +130,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0"
-  pedantic:
-    dependency: transitive
-    description:
-      name: pedantic
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.10.0"
-  plugin_platform_interface:
-    dependency: transitive
-    description:
-      name: plugin_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.0-nullsafety.2"
   sky_engine:
     dependency: transitive
     description: flutter

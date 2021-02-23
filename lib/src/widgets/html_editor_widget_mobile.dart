@@ -6,9 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:html_editor_enhanced/utils/pick_image.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as p;
+import 'package:html_editor_enhanced/utils/toolbar_icon.dart';
 
 bool callbacksInitialized = false;
 
@@ -17,8 +15,6 @@ class HtmlEditorWidget extends StatelessWidget {
     Key key,
     this.value,
     this.height,
-    this.useBottomSheet,
-    this.imageWidth,
     this.showBottomToolbar,
     this.hint,
     this.callbacks,
@@ -28,8 +24,6 @@ class HtmlEditorWidget extends StatelessWidget {
 
   final String value;
   final double height;
-  final bool useBottomSheet;
-  final double imageWidth;
   final bool showBottomToolbar;
   final String hint;
   final UniqueKey webViewKey = UniqueKey();
@@ -126,28 +120,6 @@ class HtmlEditorWidget extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              toolbarIcon(
-                  context,
-                  Icons.image,
-                  "Image",
-                  onTap: () async {
-                    PickedFile file;
-                    if (useBottomSheet) {
-                      file = await bottomSheetPickImage(context);
-
-                    } else {
-                      file = await dialogPickImage(context);
-                    }
-                    if (file != null) {
-                      String filename = p.basename(file.path);
-                      List<int> imageBytes = await file.readAsBytes();
-                      String base64Image =
-                          "<img width=\"$imageWidth%\" src=\"data:image/png;base64, "
-                          "${base64Encode(imageBytes)}\" data-filename=\"$filename\">";
-                      HtmlEditor.insertHtml(base64Image);
-                    }
-                  }
-              ),
               toolbarIcon(
                   context,
                   Icons.content_copy,

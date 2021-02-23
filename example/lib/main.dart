@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 
@@ -39,7 +40,11 @@ class _MyHomePageState extends State<MyHomePage> {
           IconButton(
             icon: Icon(Icons.refresh),
             onPressed: () {
-              HtmlEditor.editorController.reload();
+              if (kIsWeb) {
+                HtmlEditor.reloadWeb();
+              } else {
+                HtmlEditor.editorController.reload();
+              }
             }
           )
         ],
@@ -109,7 +114,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   TextButton(
                     style: TextButton.styleFrom(backgroundColor: Theme.of(context).accentColor),
                     onPressed: () async {
-                      final txt = await HtmlEditor.getText();
+                      String txt = await HtmlEditor.getText();
+                      if (txt.contains("<img src=\"data:image")) {
+                        txt = "<text removed due to base-64 image data, displaying the text could cause the app to crash>";
+                      }
                       setState(() {
                         result = txt;
                       });

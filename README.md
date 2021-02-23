@@ -16,6 +16,15 @@ Flutter HTML Editor Enhanced is a text editor for Android and iOS to help write 
   </tr>
 </table>
 
+<table>
+  <tr>
+    <td align="center">Flutter Web</td>
+  </tr>
+  <tr>
+    <td><img alt="Flutter Web" src="https://raw.githubusercontent.com/tneotia/html-editor-enhanced/master/screenshots/html_editor_web.png" width="750"/></td>
+  </tr>
+</table>
+
 ## Table of Contents:
 
 - ["Enhanced"? In what ways?](#in-what-ways-is-this-package-enhanced)
@@ -46,49 +55,29 @@ Flutter HTML Editor Enhanced is a text editor for Android and iOS to help write 
  
 ## In what ways is this package "enhanced"?
 
-1. It uses a heavily optimized [WebView](https://github.com/pichillilorenzo/flutter_inappwebview) to deliver the best possible experience when using the editor
+1. It has official support for Flutter Web, with nearly all mobile features supported. Keyboard shortcuts like Ctrl+B for bold work as well!
 
-2. It doesn't use a local server to load the HTML code containing the editor. Instead, this package simply loads the HTML file, which improves performance and the editor's startup time.
+2. It uses a heavily optimized [WebView](https://github.com/pichillilorenzo/flutter_inappwebview) to deliver the best possible experience when using the editor
 
-3. It uses a `StatelessWidget`. You don't have to fiddle around with `GlobalKey`s to access methods, instead you can simply call `HtmlEditor.<method name>` anywhere you want.
+3. It doesn't use a local server to load the HTML code containing the editor. Instead, this package simply loads the HTML file, which improves performance and the editor's startup time.
 
-4. It has support for many of Summernote's methods
+4. It uses a `StatelessWidget`. You don't have to fiddle around with `GlobalKey`s to access methods, instead you can simply call `HtmlEditor.<method name>` anywhere you want.
 
-5. It has support for many of Summernote's callbacks
+5. It has support for many of Summernote's methods
 
-6. It exposes the `InAppWebViewController` so you can customize the WebView however you like - you can even load your own HTML code and inject your own JavaScript for your use cases.
+6. It has support for many of Summernote's callbacks
 
-7. It has support for dark mode
+7. It exposes the `InAppWebViewController` so you can customize the WebView however you like - you can even load your own HTML code and inject your own JavaScript for your use cases.
 
-8. It has support for low-level customization, such as setting what buttons are shown on the toolbar
+8. It has support for dark mode
+
+9. It has support for low-level customization, such as setting what buttons are shown on the toolbar
 
 More is on the way! File a feature request or contribute to the project if you'd like to see other features added.
 
 ## Setup
 
-Add `html_editor_enhanced: ^1.2.0+1` as dependency to your pubspec.yaml
-
-<details><summary>Follow the setup instructions for the image_picker plugin</summary>
-
-### iOS
-
-Add the following keys to your _Info.plist_ file, located in `<project root>/ios/Runner/Info.plist`:
-
-* `NSPhotoLibraryUsageDescription` - describe why your app needs permission for the photo library. This is called _Privacy - Photo Library Usage Description_ in the visual editor.
-* `NSCameraUsageDescription` - describe why your app needs access to the camera. This is called _Privacy - Camera Usage Description_ in the visual editor.
-* `NSMicrophoneUsageDescription` - describe why your app needs access to the microphone, if you intend to record videos. This is called _Privacy - Microphone Usage Description_ in the visual editor.
-
-### Android
-
-#### API < 29
-
-No configuration required - the plugin should work out of the box.
-
-#### API 29+
-
-Add `android:requestLegacyExternalStorage="true"` as an attribute to the `<application>` tag in AndroidManifest.xml. The [attribute](https://developer.android.com/training/data-storage/compatibility) is `false` by default on apps targeting Android Q. 
-
-</details>
+Add `html_editor_enhanced: ^1.3.0` as dependency to your pubspec.yaml
 
 Additional setup is required to allow the user to pick images via `<input type="file">`:
 
@@ -111,6 +100,7 @@ Add the following to your app's AndroidManifest.xml inside the `<application>` t
 And add the following above the `<application>` tag:
 
 ```xml
+<uses-permission android:name="android.permission.INTERNET"/>
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 ```
@@ -219,8 +209,6 @@ Parameter | Type | Default | Description
 **initialText** | `String` | empty | Initial text content for text editor
 **height** | `double` | 380 | Height of text editor (does not set the height in HTML yet, only the height of the WebView widget)
 **decoration** | `BoxDecoration` |  | `BoxDecoration` that surrounds the widget
-**useBottomSheet** | `bool` | true | If true, open a bottom sheet (Android intent style) to pick an image, otherwise use a dialog
-**imageWidth** | `double` | 100 | Width of image once inserted. Must be between 0 and 100.
 **showBottomToolbar** | `bool` | true | Show or hide bottom toolbar
 **hint** | `String` | empty | Placeholder hint text
 **callbacks** | `Callbacks` | empty | Customize the callbacks for various events
@@ -248,6 +236,7 @@ Method | Argument(s) | Returned Value(s) | Description
 **insertHtml()** | `String` | N/A | Inserts the provided HTML string into the editor at the current cursor position. Do *not* use this method for plaintext strings.
 **insertNetworkImage()** | `String` url, `String` filename (optional) | N/A | Inserts an image using the provided url and optional filename into the editor at the current cursor position. The image must be accessible via a URL.
 **insertLink()** | `String` text, `String` url, `bool` isNewWindow | N/A | Inserts a hyperlink using the provided text and url into the editor at the current cursor position. `isNewWindow` defines whether a new browser window is launched if the link is tapped.
+**reloadWeb()** | N/A | N/A | Reloads the webpage in Flutter Web. This is mainly provided to refresh the text editor theme when the theme is changed. Do *not* use this method in Flutter Mobile.
 
 ### Callbacks
 
@@ -269,6 +258,8 @@ Callback | Parameter(s) | Description
 Currently, the package has one getter: `HtmlEditor.editorController`. This returns the `InAppWebViewController`, which manages the webview that displays the editor.
 
 This is extremely powerful, as it allows you to create your own custom methods and implementations directly in your app. See [`flutter_inappwebview`](https://github.com/pichillilorenzo/flutter_inappwebview) for documentation on the controller.
+
+This callback *should not* be used in Flutter Web. If you are making a cross platform implementation, please use `kIsWeb` to check the current platform in your code.
 
 ### Toolbar
 
@@ -323,7 +314,9 @@ Due to this package depending on a webview for rendering the HTML editor, there 
 
 If you do find any issues, please report them in the Issues tab and I will see if a fix is possible, but if I close the issue it is likely due to the above fact.
 
-1. When switching between dark and light mode, a reload is required for the HTML editor to switch to the correct color scheme. You can implement this programmatically: `HtmlEditor.editorController.reload()`. This will reset the editor! You can save the current text, reload, and then set the text if you'd like to maintain the state.
+1. When switching between dark and light mode, a reload is required for the HTML editor to switch to the correct color scheme. You can implement this programmatically in Flutter Mobile: `HtmlEditor.editorController.reload()`, or in Flutter Web: `HtmlEditor.reloadWeb()`. This will reset the editor! You can save the current text, reload, and then set the text if you'd like to maintain the state.
+
+2. If you are making a cross platform implementation and are using either the `controller` getter or the `reloadWeb()` method, use `kIsWeb` in your app to ensure you are calling these in the correct platform.
 
 ## License
 
