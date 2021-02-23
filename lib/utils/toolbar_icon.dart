@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 /// Widget for the toolbar icon
-Widget toolbarIcon(BuildContext context, IconData icon, String title, {Function() onTap}) {
+Widget toolbarIcon(BuildContext context, IconData icon, String title,
+    {Function() onTap}) {
   return InkWell(
     onTap: onTap,
     child: Row(
@@ -15,10 +16,7 @@ Widget toolbarIcon(BuildContext context, IconData icon, String title, {Function(
           padding: const EdgeInsets.only(left: 4),
           child: Text(
             title,
-            style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w400
-            ),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
           ),
         )
       ],

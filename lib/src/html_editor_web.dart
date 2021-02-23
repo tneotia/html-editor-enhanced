@@ -22,11 +22,28 @@ class HtmlEditor extends StatelessWidget implements HtmlEditorImpl {
     this.callbacks,
     this.toolbar = const [
       Style(),
-      Font(buttons: [FontButtons.bold, FontButtons.underline, FontButtons.clear]),
+      Font(buttons: [
+        FontButtons.bold,
+        FontButtons.underline,
+        FontButtons.clear
+      ]),
       ColorBar(buttons: [ColorButtons.color]),
-      Paragraph(buttons: [ParagraphButtons.ul, ParagraphButtons.ol, ParagraphButtons.paragraph]),
-      Insert(buttons: [InsertButtons.link, InsertButtons.picture, InsertButtons.video, InsertButtons.table]),
-      Misc(buttons: [MiscButtons.fullscreen, MiscButtons.codeview, MiscButtons.help])
+      Paragraph(buttons: [
+        ParagraphButtons.ul,
+        ParagraphButtons.ol,
+        ParagraphButtons.paragraph
+      ]),
+      Insert(buttons: [
+        InsertButtons.link,
+        InsertButtons.picture,
+        InsertButtons.video,
+        InsertButtons.table
+      ]),
+      Misc(buttons: [
+        MiscButtons.fullscreen,
+        MiscButtons.codeview,
+        MiscButtons.help
+      ])
     ],
     this.darkMode,
   }) : super(key: key);
@@ -77,13 +94,15 @@ class HtmlEditor extends StatelessWidget implements HtmlEditorImpl {
 
   /// Allows the [InAppWebViewController] for the Html editor to be accessed
   /// outside of the package itself for endless control and customization.
-  static InAppWebViewController get editorController => throw Exception("Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart and check kIsWeb before accessing this getter");
+  static InAppWebViewController get editorController => throw Exception(
+      "Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart and check kIsWeb before accessing this getter");
 
   /// Gets the text from the editor and returns it as a [String].
   static Future<String> getText() async {
     html.window.onMessage.drain();
     evaluateJavascriptWeb(data: {"type": "toIframe: getText"});
-    html.MessageEvent e = await html.window.onMessage.firstWhere((element) => json.decode(element.data)["type"] == "toDart: getText");
+    html.MessageEvent e = await html.window.onMessage.firstWhere(
+        (element) => json.decode(element.data)["type"] == "toDart: getText");
     text = json.decode(e.data)["text"];
     if (text.isEmpty ||
         text == "<p></p>" ||
@@ -166,12 +185,21 @@ class HtmlEditor extends StatelessWidget implements HtmlEditorImpl {
 
   /// Insert a network image at the position of the cursor in the editor
   static void insertNetworkImage(String url, {String filename = ""}) {
-    evaluateJavascriptWeb(data: {"type": "toIframe: insertNetworkImage", "url": url, "filename": filename});
+    evaluateJavascriptWeb(data: {
+      "type": "toIframe: insertNetworkImage",
+      "url": url,
+      "filename": filename
+    });
   }
 
   /// Insert a link at the position of the cursor in the editor
   static void insertLink(String text, String url, bool isNewWindow) {
-    evaluateJavascriptWeb(data: {"type": "toIframe: insertLink", "text": text, "url": url, "isNewWindow": isNewWindow});
+    evaluateJavascriptWeb(data: {
+      "type": "toIframe: insertLink",
+      "text": text,
+      "url": url,
+      "isNewWindow": isNewWindow
+    });
   }
 
   /// Refresh the page
@@ -198,30 +226,52 @@ class HtmlEditor extends StatelessWidget implements HtmlEditorImpl {
           showBottomToolbar: showBottomToolbar,
           hint: hint,
           callbacks: callbacks,
-          toolbar: toolbar.isEmpty ? [
-            Style(),
-            Font(buttons: [FontButtons.bold, FontButtons.underline, FontButtons.clear]),
-            ColorBar(buttons: [ColorButtons.color]),
-            Paragraph(buttons: [ParagraphButtons.ul, ParagraphButtons.ol, ParagraphButtons.paragraph]),
-            Insert(buttons: [InsertButtons.link, InsertButtons.picture, InsertButtons.video, InsertButtons.table]),
-            Misc(buttons: [MiscButtons.fullscreen, MiscButtons.codeview, MiscButtons.help])
-          ] : toolbar,
+          toolbar: toolbar.isEmpty
+              ? [
+                  Style(),
+                  Font(buttons: [
+                    FontButtons.bold,
+                    FontButtons.underline,
+                    FontButtons.clear
+                  ]),
+                  ColorBar(buttons: [ColorButtons.color]),
+                  Paragraph(buttons: [
+                    ParagraphButtons.ul,
+                    ParagraphButtons.ol,
+                    ParagraphButtons.paragraph
+                  ]),
+                  Insert(buttons: [
+                    InsertButtons.link,
+                    InsertButtons.picture,
+                    InsertButtons.video,
+                    InsertButtons.table
+                  ]),
+                  Misc(buttons: [
+                    MiscButtons.fullscreen,
+                    MiscButtons.codeview,
+                    MiscButtons.help
+                  ])
+                ]
+              : toolbar,
           darkMode: darkMode,
           initBC: context,
         ),
       );
     } else {
-      return Text("Non-Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart");
+      return Text(
+          "Non-Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart");
     }
   }
 
-  static void evaluateJavascriptWeb({@required Map<String, Object> data}) async {
+  static void evaluateJavascriptWeb(
+      {@required Map<String, Object> data}) async {
     if (kIsWeb) {
       final jsonEncoder = JsonEncoder();
       var json = jsonEncoder.convert(data);
       html.window.postMessage(json, "*");
     } else {
-      throw Exception("Non-Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart");
+      throw Exception(
+          "Non-Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart");
     }
   }
 }

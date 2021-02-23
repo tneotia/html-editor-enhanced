@@ -40,19 +40,22 @@ class HtmlEditorWidget extends StatefulWidget {
 
 class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   final String createdViewId = 'html_editor_web';
-  
+
   @override
   void initState() {
     super.initState();
     String summernoteToolbar = "[\n";
     for (Toolbar t in widget.toolbar) {
-      summernoteToolbar = summernoteToolbar +
-          "['${t.getGroupName()}', ${t.getButtons()}],\n";
+      summernoteToolbar =
+          summernoteToolbar + "['${t.getGroupName()}', ${t.getButtons()}],\n";
     }
     summernoteToolbar = summernoteToolbar + "],";
     String darkCSS = "";
-    if ((Theme.of(widget.initBC).brightness == Brightness.dark || widget.darkMode == true) && widget.darkMode != false) {
-      darkCSS = "<link href=\"assets/packages/html_editor_enhanced/assets/summernote-lite-dark.css\" rel=\"stylesheet\">";
+    if ((Theme.of(widget.initBC).brightness == Brightness.dark ||
+            widget.darkMode == true) &&
+        widget.darkMode != false) {
+      darkCSS =
+          "<link href=\"assets/packages/html_editor_enhanced/assets/summernote-lite-dark.css\" rel=\"stylesheet\">";
     }
     String jsCallbacks = getJsCallbacks();
     String htmlString = """
@@ -170,7 +173,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         }
       });
     addJSListener();
-    ui.platformViewRegistry.registerViewFactory(createdViewId, (int viewId) => iframe);
+    ui.platformViewRegistry
+        .registerViewFactory(createdViewId, (int viewId) => iframe);
   }
 
   @override
@@ -182,47 +186,41 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                 textDirection: TextDirection.ltr,
                 child: HtmlElementView(
                   viewType: createdViewId,
-                )
-            )
-        ),
-        widget.showBottomToolbar ? Divider(height: 0) : Container(height: 0, width: 0),
-        widget.showBottomToolbar ? Padding(
-          padding: const EdgeInsets.only(
-              left: 4, right: 4, bottom: 8, top: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              toolbarIcon(
-                  context,
-                  Icons.content_copy,
-                  "Copy",
-                  onTap: () async {
-                    String data = await HtmlEditor.getText();
-                    Clipboard.setData(new ClipboardData(text: data));
-                  }
-              ),
-              toolbarIcon(
-                  context,
-                  Icons.content_paste,
-                  "Paste",
-                  onTap: () async {
-                    ClipboardData data =
-                    await Clipboard.getData(Clipboard.kTextPlain);
-                    String txtIsi = data.text
-                        .replaceAll("'", '\\"')
-                        .replaceAll('"', '\\"')
-                        .replaceAll("[", "\\[")
-                        .replaceAll("]", "\\]")
-                        .replaceAll("\n", "<br/>")
-                        .replaceAll("\n\n", "<br/>")
-                        .replaceAll("\r", " ")
-                        .replaceAll('\r\n', " ");
-                    HtmlEditor.insertHtml(txtIsi);
-                  }
-              ),
-            ],
-          ),
-        ) : Container(height: 0, width: 0),
+                ))),
+        widget.showBottomToolbar
+            ? Divider(height: 0)
+            : Container(height: 0, width: 0),
+        widget.showBottomToolbar
+            ? Padding(
+                padding:
+                    const EdgeInsets.only(left: 4, right: 4, bottom: 8, top: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    toolbarIcon(context, Icons.content_copy, "Copy",
+                        onTap: () async {
+                      String data = await HtmlEditor.getText();
+                      Clipboard.setData(new ClipboardData(text: data));
+                    }),
+                    toolbarIcon(context, Icons.content_paste, "Paste",
+                        onTap: () async {
+                      ClipboardData data =
+                          await Clipboard.getData(Clipboard.kTextPlain);
+                      String txtIsi = data.text
+                          .replaceAll("'", '\\"')
+                          .replaceAll('"', '\\"')
+                          .replaceAll("[", "\\[")
+                          .replaceAll("]", "\\]")
+                          .replaceAll("\n", "<br/>")
+                          .replaceAll("\n\n", "<br/>")
+                          .replaceAll("\r", " ")
+                          .replaceAll('\r\n', " ");
+                      HtmlEditor.insertHtml(txtIsi);
+                    }),
+                  ],
+                ),
+              )
+            : Container(height: 0, width: 0),
       ],
     );
   }
@@ -230,56 +228,64 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   String getJsCallbacks() {
     String callbacks = "";
     if (widget.callbacks.onChange != null) {
-      callbacks = callbacks + """
+      callbacks = callbacks +
+          """
           \$('#summernote-2').on('summernote.change', function(_, contents, \$editable) {
             window.parent.postMessage(JSON.stringify({"type": "toDart: onChange", "contents": contents}), "*");
           });\n
         """;
     }
     if (widget.callbacks.onEnter != null) {
-      callbacks = callbacks + """
+      callbacks = callbacks +
+          """
           \$('#summernote-2').on('summernote.enter', function() {
             window.parent.postMessage(JSON.stringify({"type": "toDart: onEnter"}), "*");
           });\n
         """;
     }
     if (widget.callbacks.onFocus != null) {
-      callbacks = callbacks + """
+      callbacks = callbacks +
+          """
           \$('#summernote-2').on('summernote.focus', function() {
             window.parent.postMessage(JSON.stringify({"type": "toDart: onFocus"}), "*");
           });\n
         """;
     }
     if (widget.callbacks.onBlur != null) {
-      callbacks = callbacks + """
+      callbacks = callbacks +
+          """
           \$('#summernote-2').on('summernote.blur', function() {
             window.parent.postMessage(JSON.stringify({"type": "toDart: onBlur"}), "*");
           });\n
         """;
     }
     if (widget.callbacks.onBlurCodeview != null) {
-      callbacks = callbacks + """
+      callbacks = callbacks +
+          """
           \$('#summernote-2').on('summernote.blur.codeview', function() {
             window.parent.postMessage(JSON.stringify({"type": "toDart: onBlurCodeview"}), "*");
           });\n
         """;
     }
     if (widget.callbacks.onKeyDown != null) {
-      callbacks = callbacks + """
+      callbacks = callbacks +
+          """
           \$('#summernote-2').on('summernote.keydown', function(_, e) {
             window.parent.postMessage(JSON.stringify({"type": "toDart: onKeyDown", "keyCode": e.keyCode}), "*");
           });\n
         """;
     }
     if (widget.callbacks.onKeyUp != null) {
-      callbacks = callbacks + """
+      callbacks = callbacks +
+          """
           \$('#summernote-2').on('summernote.keyup', function(_, e) {
             window.parent.postMessage(JSON.stringify({"type": "toDart: onKeyUp", "keyCode": e.keyCode}), "*");
           });\n
         """;
     }
     if (widget.callbacks.onPaste != null) {
-      callbacks = callbacks + """
+      callbacks = callbacks +
+          """
           \$('#summernote-2').on('summernote.paste', function(_) {
             window.parent.postMessage(JSON.stringify({"type": "toDart: onPaste"}), "*");
           });\n

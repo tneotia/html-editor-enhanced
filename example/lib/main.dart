@@ -38,19 +38,19 @@ class _MyHomePageState extends State<MyHomePage> {
         elevation: 0,
         actions: [
           IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () {
-              if (kIsWeb) {
-                HtmlEditor.reloadWeb();
-              } else {
-                HtmlEditor.editorController.reload();
-              }
-            }
-          )
+              icon: Icon(Icons.refresh),
+              onPressed: () {
+                if (kIsWeb) {
+                  HtmlEditor.reloadWeb();
+                } else {
+                  HtmlEditor.editorController.reload();
+                }
+              })
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("\<\\\>", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        child: Text("\<\\\>",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         onPressed: () {
           HtmlEditor.toggleCodeView();
         },
@@ -60,77 +60,93 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             HtmlEditor(
-              hint: "Your text here...",
-              //value: "text content initial, if any",
-              height: 400,
-              callbacks: Callbacks(
-                onChange: (String changed) {
-                  print("content changed to $changed");
-                },
-                onEnter: () {
-                  print("enter/return pressed");
-                },
-                onFocus: () {
-                  print("editor focused");
-                },
-                onBlur: () {
-                  print("editor unfocused");
-                },
-                onBlurCodeview: () {
-                  print("codeview either focused or unfocused");
-                },
-                onKeyDown: (keyCode) {
-                  print("$keyCode key downed");
-                },
-                onKeyUp: (keyCode) {
-                  print("$keyCode key released");
-                },
-                onPaste: () {
-                  print("pasted into editor");
-                },
-              )
-            ),
+                hint: "Your text here...",
+                //value: "text content initial, if any",
+                height: 400,
+                callbacks: Callbacks(
+                  onChange: (String changed) {
+                    print("content changed to $changed");
+                  },
+                  onEnter: () {
+                    print("enter/return pressed");
+                  },
+                  onFocus: () {
+                    print("editor focused");
+                  },
+                  onBlur: () {
+                    print("editor unfocused");
+                  },
+                  onBlurCodeview: () {
+                    print("codeview either focused or unfocused");
+                  },
+                  onKeyDown: (keyCode) {
+                    print("$keyCode key downed");
+                  },
+                  onKeyUp: (keyCode) {
+                    print("$keyCode key released");
+                  },
+                  onPaste: () {
+                    print("pasted into editor");
+                  },
+                )),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   TextButton(
-                    style: TextButton.styleFrom(backgroundColor: Colors.blueGrey),
+                    style:
+                        TextButton.styleFrom(backgroundColor: Colors.blueGrey),
                     onPressed: () {
                       HtmlEditor.undo();
                     },
                     child: Text("Undo", style: TextStyle(color: Colors.white)),
                   ),
-                  SizedBox(width: 16,),
+                  SizedBox(
+                    width: 16,
+                  ),
                   TextButton(
-                    style: TextButton.styleFrom(backgroundColor: Colors.blueGrey),
+                    style:
+                        TextButton.styleFrom(backgroundColor: Colors.blueGrey),
                     onPressed: () {
                       HtmlEditor.clear();
                     },
                     child: Text("Reset", style: TextStyle(color: Colors.white)),
                   ),
-                  SizedBox(width: 16,),
+                  SizedBox(
+                    width: 16,
+                  ),
                   TextButton(
-                    style: TextButton.styleFrom(backgroundColor: Theme.of(context).accentColor),
+                    style: TextButton.styleFrom(
+                        backgroundColor: Theme.of(context).accentColor),
                     onPressed: () async {
                       String txt = await HtmlEditor.getText();
                       if (txt.contains("<img src=\"data:image")) {
-                        txt = "<text removed due to base-64 image data, displaying the text could cause the app to crash>";
+                        txt =
+                            "<text removed due to base-64 image data, displaying the text could cause the app to crash>";
                       }
                       setState(() {
                         result = txt;
                       });
                     },
-                    child: Text("Submit", style: TextStyle(color: Colors.white),),
+                    child: Text(
+                      "Submit",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
-                  SizedBox(width: 16,),
+                  SizedBox(
+                    width: 16,
+                  ),
                   TextButton(
-                    style: TextButton.styleFrom(backgroundColor: Theme.of(context).accentColor),
+                    style: TextButton.styleFrom(
+                        backgroundColor: Theme.of(context).accentColor),
                     onPressed: () {
                       HtmlEditor.redo();
                     },
-                    child: Text("Redo", style: TextStyle(color: Colors.white),),
+                    child: Text(
+                      "Redo",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ],
               ),
@@ -145,19 +161,27 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   TextButton(
-                    style: TextButton.styleFrom(backgroundColor: Colors.blueGrey),
-                    onPressed: (){
+                    style:
+                        TextButton.styleFrom(backgroundColor: Colors.blueGrey),
+                    onPressed: () {
                       HtmlEditor.disable();
                     },
-                    child: Text("Disable", style: TextStyle(color: Colors.white)),
+                    child:
+                        Text("Disable", style: TextStyle(color: Colors.white)),
                   ),
-                  SizedBox(width: 16,),
+                  SizedBox(
+                    width: 16,
+                  ),
                   TextButton(
-                    style: TextButton.styleFrom(backgroundColor: Theme.of(context).accentColor),
+                    style: TextButton.styleFrom(
+                        backgroundColor: Theme.of(context).accentColor),
                     onPressed: () async {
                       HtmlEditor.enable();
                     },
-                    child: Text("Enable", style: TextStyle(color: Colors.white),),
+                    child: Text(
+                      "Enable",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ],
               ),
@@ -169,19 +193,26 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   TextButton(
-                    style: TextButton.styleFrom(backgroundColor: Theme.of(context).accentColor),
+                    style: TextButton.styleFrom(
+                        backgroundColor: Theme.of(context).accentColor),
                     onPressed: () {
                       HtmlEditor.insertText("Google");
                     },
-                    child: Text("Insert Text", style: TextStyle(color: Colors.white)),
+                    child: Text("Insert Text",
+                        style: TextStyle(color: Colors.white)),
                   ),
-                  SizedBox(width: 16,),
+                  SizedBox(
+                    width: 16,
+                  ),
                   TextButton(
-                    style: TextButton.styleFrom(backgroundColor: Theme.of(context).accentColor),
+                    style: TextButton.styleFrom(
+                        backgroundColor: Theme.of(context).accentColor),
                     onPressed: () {
-                      HtmlEditor.insertHtml("<p style=\"color: blue \">Google in blue</p>");
+                      HtmlEditor.insertHtml(
+                          "<p style=\"color: blue \">Google in blue</p>");
                     },
-                    child: Text("Insert HTML", style: TextStyle(color: Colors.white)),
+                    child: Text("Insert HTML",
+                        style: TextStyle(color: Colors.white)),
                   ),
                 ],
               ),
@@ -192,19 +223,32 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   TextButton(
-                    style: TextButton.styleFrom(backgroundColor: Theme.of(context).accentColor),
+                    style: TextButton.styleFrom(
+                        backgroundColor: Theme.of(context).accentColor),
                     onPressed: () async {
-                      HtmlEditor.insertLink("Google linked", "https://google.com", true);
+                      HtmlEditor.insertLink(
+                          "Google linked", "https://google.com", true);
                     },
-                    child: Text("Insert Link", style: TextStyle(color: Colors.white),),
+                    child: Text(
+                      "Insert Link",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
-                  SizedBox(width: 16,),
+                  SizedBox(
+                    width: 16,
+                  ),
                   TextButton(
-                    style: TextButton.styleFrom(backgroundColor: Theme.of(context).accentColor),
+                    style: TextButton.styleFrom(
+                        backgroundColor: Theme.of(context).accentColor),
                     onPressed: () {
-                      HtmlEditor.insertNetworkImage("https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png", filename: "Google network image");
+                      HtmlEditor.insertNetworkImage(
+                          "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png",
+                          filename: "Google network image");
                     },
-                    child: Text("Insert network image", style: TextStyle(color: Colors.white),),
+                    child: Text(
+                      "Insert network image",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ],
               ),

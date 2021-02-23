@@ -16,11 +16,28 @@ class HtmlEditor extends StatelessWidget implements HtmlEditorImpl {
     this.callbacks,
     this.toolbar = const [
       Style(),
-      Font(buttons: [FontButtons.bold, FontButtons.underline, FontButtons.clear]),
+      Font(buttons: [
+        FontButtons.bold,
+        FontButtons.underline,
+        FontButtons.clear
+      ]),
       ColorBar(buttons: [ColorButtons.color]),
-      Paragraph(buttons: [ParagraphButtons.ul, ParagraphButtons.ol, ParagraphButtons.paragraph]),
-      Insert(buttons: [InsertButtons.link, InsertButtons.picture, InsertButtons.video, InsertButtons.table]),
-      Misc(buttons: [MiscButtons.fullscreen, MiscButtons.codeview, MiscButtons.help])
+      Paragraph(buttons: [
+        ParagraphButtons.ul,
+        ParagraphButtons.ol,
+        ParagraphButtons.paragraph
+      ]),
+      Insert(buttons: [
+        InsertButtons.link,
+        InsertButtons.picture,
+        InsertButtons.video,
+        InsertButtons.table
+      ]),
+      Misc(buttons: [
+        MiscButtons.fullscreen,
+        MiscButtons.codeview,
+        MiscButtons.help
+      ])
     ],
     this.darkMode,
   }) : super(key: key);
@@ -74,7 +91,9 @@ class HtmlEditor extends StatelessWidget implements HtmlEditorImpl {
   static InAppWebViewController get editorController => null;
 
   /// Gets the text from the editor and returns it as a [String].
-  static Future<String> getText() async {return Future.value("impl");}
+  static Future<String> getText() async {
+    return Future.value("impl");
+  }
 
   /// Sets the text of the editor. Some pre-processing is applied to convert
   /// [String] elements like "\n" to HTML elements.
@@ -128,7 +147,8 @@ class HtmlEditor extends StatelessWidget implements HtmlEditorImpl {
 
   static Future evaluateJavascript({@required source}) async {}
 
-  static void evaluateJavascriptWeb({@required Map<String, Object> data}) async {}
+  static void evaluateJavascriptWeb(
+      {@required Map<String, Object> data}) async {}
 
   @override
   Widget build(BuildContext context) {

@@ -32,9 +32,7 @@ class Style extends Toolbar {
   }
 }
 
-enum StyleButtons {
-  style
-}
+enum StyleButtons { style }
 
 class FontSetting extends Toolbar {
   final List<FontSettingButtons> buttons;
@@ -90,12 +88,7 @@ class Font extends Toolbar {
   }
 }
 
-enum FontButtons {
-  bold,
-  italic,
-  underline,
-  clear
-}
+enum FontButtons { bold, italic, underline, clear }
 
 class MiscFont extends Toolbar {
   final List<MiscFontButtons> buttons;
@@ -121,11 +114,7 @@ class MiscFont extends Toolbar {
   }
 }
 
-enum MiscFontButtons {
-  strikethrough,
-  superscript,
-  subscript
-}
+enum MiscFontButtons { strikethrough, superscript, subscript }
 
 class ColorBar extends Toolbar {
   final List<ColorButtons> buttons;
@@ -151,11 +140,7 @@ class ColorBar extends Toolbar {
   }
 }
 
-enum ColorButtons {
-  color,
-  forecolor,
-  backcolor
-}
+enum ColorButtons { color, forecolor, backcolor }
 
 class Paragraph extends Toolbar {
   final List<ParagraphButtons> buttons;
@@ -181,12 +166,7 @@ class Paragraph extends Toolbar {
   }
 }
 
-enum ParagraphButtons {
-  ul,
-  ol,
-  paragraph,
-  height
-}
+enum ParagraphButtons { ul, ol, paragraph, height }
 
 class Insert extends Toolbar {
   final List<InsertButtons> buttons;
@@ -212,13 +192,7 @@ class Insert extends Toolbar {
   }
 }
 
-enum InsertButtons {
-  link,
-  picture,
-  video,
-  table,
-  hr
-}
+enum InsertButtons { link, picture, video, table, hr }
 
 class Misc extends Toolbar {
   final List<MiscButtons> buttons;
@@ -244,10 +218,4 @@ class Misc extends Toolbar {
   }
 }
 
-enum MiscButtons {
-  fullscreen,
-  codeview,
-  undo,
-  redo,
-  help
-}
+enum MiscButtons { fullscreen, codeview, undo, redo, help }
