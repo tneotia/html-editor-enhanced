@@ -44,12 +44,11 @@ class HtmlEditorWidget extends StatelessWidget {
             initialOptions: InAppWebViewGroupOptions(
               crossPlatform: InAppWebViewOptions(
                   javaScriptEnabled: true,
-                  debuggingEnabled: true,
-                  transparentBackground: true),
-              //todo flutter_inappwebview 5.0.0
-              /*android: AndroidInAppWebViewOptions(
-                    useHybridComposition: true,
-                  )*/
+                  transparentBackground: true
+              ),
+              android: AndroidInAppWebViewOptions(
+                  useHybridComposition: true,
+              )
             ),
             gestureRecognizers: {
               Factory<VerticalDragGestureRecognizer>(
@@ -66,7 +65,8 @@ class HtmlEditorWidget extends StatelessWidget {
               }
               text = message;
             },
-            onLoadStop: (InAppWebViewController controller, String url) async {
+            onLoadStop: (InAppWebViewController controller, Uri uri) async {
+              String url = uri.toString();
               if (url.contains("summernote.html")) {
                 String summernoteToolbar = "[\n";
                 for (Toolbar t in toolbar) {
