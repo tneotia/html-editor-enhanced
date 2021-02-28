@@ -61,7 +61,7 @@ Flutter HTML Editor Enhanced is a text editor for Android and iOS to help write 
 
 3. It doesn't use a local server to load the HTML code containing the editor. Instead, this package simply loads the HTML file, which improves performance and the editor's startup time.
 
-4. It uses a `StatelessWidget`. You don't have to fiddle around with `GlobalKey`s to access methods, instead you can simply call `HtmlEditor.<method name>` anywhere you want.
+4. It uses a `StatelessWidget`. You don't have to fiddle around with `GlobalKey`s to access methods, instead you can simply call `<controller name>.<method name>` anywhere you want.
 
 5. It has support for many of Summernote's methods
 
@@ -180,8 +180,10 @@ If you decide to allow images directly from the camera, you will need to comment
 ```dart
 import 'package:html_editor/html_editor.dart';
 // other code here
+HtmlEditorController controller = HtmlEditorController();
 @override Widget build(BuildContext context) {
     return HtmlEditor(
+            controller: controller, //required
             hint: "Your text here...",
             //value: "text content initial, if any",
             height: 400,
@@ -191,7 +193,7 @@ import 'package:html_editor/html_editor.dart';
 
 When you want to get text from the editor:
 ```dart
-final txt = await HtmlEditor.getText();
+final txt = await controller.getText();
 ```
 
 ## API Reference
@@ -206,6 +208,7 @@ Below, you will find brief descriptions of the parameters the`HtmlEditor` widget
 
 Parameter | Type | Default | Description
 ------------ | ------------- | ------------- | -------------
+**controller** | `HtmlEditorController` | empty | Required param. Create a controller instance and pass it to the widget. This ensures that any methods called work only on their `HtmlEditor` instance, allowing you to use multiple HTML widgets on one page.
 **initialText** | `String` | empty | Initial text content for text editor
 **height** | `double` | 380 | Height of text editor (does not set the height in HTML yet, only the height of the WebView widget)
 **decoration** | `BoxDecoration` |  | `BoxDecoration` that surrounds the widget
@@ -217,7 +220,7 @@ Parameter | Type | Default | Description
 
 ### Methods
 
-Access these methods like this: `HtmlEditor.<method name>`
+Access these methods like this: `<controller name>.<method name>`
 
 Method | Argument(s) | Returned Value(s) | Description
 ------------ | ------------- | ------------- | -------------
@@ -255,11 +258,11 @@ Callback | Parameter(s) | Description
 
 ### Getters
 
-Currently, the package has one getter: `HtmlEditor.editorController`. This returns the `InAppWebViewController`, which manages the webview that displays the editor.
+Currently, the package has one getter: `<controller name>.editorController`. This returns the `InAppWebViewController`, which manages the webview that displays the editor.
 
 This is extremely powerful, as it allows you to create your own custom methods and implementations directly in your app. See [`flutter_inappwebview`](https://github.com/pichillilorenzo/flutter_inappwebview) for documentation on the controller.
 
-This callback *should not* be used in Flutter Web. If you are making a cross platform implementation, please use `kIsWeb` to check the current platform in your code.
+This getter *should not* be used in Flutter Web. If you are making a cross platform implementation, please use `kIsWeb` to check the current platform in your code.
 
 ### Toolbar
 
@@ -283,7 +286,9 @@ This is pretty close to Summernote's [default options](https://summernote.org/de
 Well, what if you want to customize it? Don't worry, it's a nice and neat API:
 
 ```dart
+HtmlEditorController controller = HtmlEditorController();
 Widget htmlEditor = HtmlEditor(
+  controller: controller, //required
   //other options
   toolbar: [
     Style(),
@@ -314,7 +319,7 @@ Due to this package depending on a webview for rendering the HTML editor, there 
 
 If you do find any issues, please report them in the Issues tab and I will see if a fix is possible, but if I close the issue it is likely due to the above fact.
 
-1. When switching between dark and light mode, a reload is required for the HTML editor to switch to the correct color scheme. You can implement this programmatically in Flutter Mobile: `HtmlEditor.editorController.reload()`, or in Flutter Web: `HtmlEditor.reloadWeb()`. This will reset the editor! You can save the current text, reload, and then set the text if you'd like to maintain the state.
+1. When switching between dark and light mode, a reload is required for the HTML editor to switch to the correct color scheme. You can implement this programmatically in Flutter Mobile: `<controller name>.editorController.reload()`, or in Flutter Web: `<controller name>.reloadWeb()`. This will reset the editor! You can save the current text, reload, and then set the text if you'd like to maintain the state.
 
 2. If you are making a cross platform implementation and are using either the `controller` getter or the `reloadWeb()` method, use `kIsWeb` in your app to ensure you are calling these in the correct platform.
 

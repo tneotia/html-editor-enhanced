@@ -1,13 +1,14 @@
 export 'dart:html';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart';
 import 'package:html_editor_enhanced/src/html_editor_impl.dart';
 
 class HtmlEditor extends StatelessWidget implements HtmlEditorImpl {
   HtmlEditor({
     Key key,
+    @required this.controller,
     this.initialText,
     this.height = 380,
     this.decoration,
@@ -41,6 +42,10 @@ class HtmlEditor extends StatelessWidget implements HtmlEditorImpl {
     ],
     this.darkMode,
   }) : super(key: key);
+
+  /// The controller that is passed to the widget, which allows multiple [HtmlEditor]
+  /// widgets to be used on the same page independently.
+  final HtmlEditorController controller;
 
   /// The initial text that is be supplied to the Html editor.
   @override
@@ -85,70 +90,6 @@ class HtmlEditor extends StatelessWidget implements HtmlEditorImpl {
   /// The default value is null (switches with system).
   @override
   final bool darkMode;
-
-  /// Allows the [InAppWebViewController] for the Html editor to be accessed
-  /// outside of the package itself for endless control and customization.
-  static InAppWebViewController get editorController => null;
-
-  /// Gets the text from the editor and returns it as a [String].
-  static Future<String> getText() async {
-    return Future.value("impl");
-  }
-
-  /// Sets the text of the editor. Some pre-processing is applied to convert
-  /// [String] elements like "\n" to HTML elements.
-  static void setText(String text) {}
-
-  /// Sets the editor to full-screen mode.
-  static void setFullScreen() {}
-
-  /// Sets the focus to the editor.
-  static void setFocus() {}
-
-  /// Clears the editor of any text.
-  static void clear() {}
-
-  /// Sets the hint for the editor.
-  static void setHint(String text) {}
-
-  /// toggles the codeview in the Html editor
-  static void toggleCodeView() {}
-
-  /// disables the Html editor
-  static void disable() {}
-
-  /// enables the Html editor
-  static void enable() {}
-
-  /// Undoes the last action
-  static void undo() {}
-
-  /// Redoes the last action
-  static void redo() {}
-
-  /// Insert text at the end of the current HTML content in the editor
-  /// Note: This method should only be used for plaintext strings
-  static void insertText(String text) {}
-
-  /// Insert HTML at the position of the cursor in the editor
-  /// Note: This method should not be used for plaintext strings
-  static void insertHtml(String html) {}
-
-  /// Insert a network image at the position of the cursor in the editor
-  static void insertNetworkImage(String url, {String filename = ""}) {}
-
-  /// Insert a link at the position of the cursor in the editor
-  static void insertLink(String text, String url, bool isNewWindow) {}
-
-  /// Refresh the page
-  ///
-  /// Note: This should only be used in Flutter Web!!!
-  static void reloadWeb() {}
-
-  static Future evaluateJavascript({@required source}) async {}
-
-  static void evaluateJavascriptWeb(
-      {@required Map<String, Object> data}) async {}
 
   @override
   Widget build(BuildContext context) {

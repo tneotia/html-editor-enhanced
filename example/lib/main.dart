@@ -29,6 +29,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String result = "";
+  final HtmlEditorController controller = HtmlEditorController();
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +42,9 @@ class _MyHomePageState extends State<MyHomePage> {
               icon: Icon(Icons.refresh),
               onPressed: () {
                 if (kIsWeb) {
-                  HtmlEditor.reloadWeb();
+                  controller.reloadWeb();
                 } else {
-                  HtmlEditor.editorController.reload();
+                  controller.editorController.reload();
                 }
               })
         ],
@@ -52,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Text("\<\\\>",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         onPressed: () {
-          HtmlEditor.toggleCodeView();
+          controller.toggleCodeView();
         },
       ),
       body: SingleChildScrollView(
@@ -60,6 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             HtmlEditor(
+                controller: controller,
                 hint: "Your text here...",
                 //value: "text content initial, if any",
                 height: 400,
@@ -98,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     style:
                         TextButton.styleFrom(backgroundColor: Colors.blueGrey),
                     onPressed: () {
-                      HtmlEditor.undo();
+                      controller.undo();
                     },
                     child: Text("Undo", style: TextStyle(color: Colors.white)),
                   ),
@@ -109,7 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     style:
                         TextButton.styleFrom(backgroundColor: Colors.blueGrey),
                     onPressed: () {
-                      HtmlEditor.clear();
+                      controller.clear();
                     },
                     child: Text("Reset", style: TextStyle(color: Colors.white)),
                   ),
@@ -120,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     style: TextButton.styleFrom(
                         backgroundColor: Theme.of(context).accentColor),
                     onPressed: () async {
-                      String txt = await HtmlEditor.getText();
+                      String txt = await controller.getText();
                       if (txt.contains("<img src=\"data:image")) {
                         txt =
                             "<text removed due to base-64 image data, displaying the text could cause the app to crash>";
@@ -141,7 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     style: TextButton.styleFrom(
                         backgroundColor: Theme.of(context).accentColor),
                     onPressed: () {
-                      HtmlEditor.redo();
+                      controller.redo();
                     },
                     child: Text(
                       "Redo",
@@ -164,7 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     style:
                         TextButton.styleFrom(backgroundColor: Colors.blueGrey),
                     onPressed: () {
-                      HtmlEditor.disable();
+                      controller.disable();
                     },
                     child:
                         Text("Disable", style: TextStyle(color: Colors.white)),
@@ -176,7 +178,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     style: TextButton.styleFrom(
                         backgroundColor: Theme.of(context).accentColor),
                     onPressed: () async {
-                      HtmlEditor.enable();
+                      controller.enable();
                     },
                     child: Text(
                       "Enable",
@@ -196,7 +198,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     style: TextButton.styleFrom(
                         backgroundColor: Theme.of(context).accentColor),
                     onPressed: () {
-                      HtmlEditor.insertText("Google");
+                      controller.insertText("Google");
                     },
                     child: Text("Insert Text",
                         style: TextStyle(color: Colors.white)),
@@ -208,7 +210,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     style: TextButton.styleFrom(
                         backgroundColor: Theme.of(context).accentColor),
                     onPressed: () {
-                      HtmlEditor.insertHtml(
+                      controller.insertHtml(
                           "<p style=\"color: blue \">Google in blue</p>");
                     },
                     child: Text("Insert HTML",
@@ -226,7 +228,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     style: TextButton.styleFrom(
                         backgroundColor: Theme.of(context).accentColor),
                     onPressed: () async {
-                      HtmlEditor.insertLink(
+                      controller.insertLink(
                           "Google linked", "https://google.com", true);
                     },
                     child: Text(
@@ -241,7 +243,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     style: TextButton.styleFrom(
                         backgroundColor: Theme.of(context).accentColor),
                     onPressed: () {
-                      HtmlEditor.insertNetworkImage(
+                      controller.insertNetworkImage(
                           "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png",
                           filename: "Google network image");
                     },
