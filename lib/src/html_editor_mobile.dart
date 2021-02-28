@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced/utils/callbacks.dart';
 import 'package:html_editor_enhanced/utils/toolbar.dart';
 
+/// HtmlEditor class for mobile
 class HtmlEditor extends StatelessWidget implements HtmlEditorImpl {
   HtmlEditor({
     Key key,

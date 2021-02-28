@@ -1,13 +1,17 @@
 import 'package:flutter/foundation.dart';
 
+/// Abstract class that all the toolbar classes extend
 abstract class Toolbar {
   const Toolbar();
 
+  /// Gives the name for the group of buttons
   String getGroupName();
 
+  /// Gives the string for the button names
   String getButtons();
 }
 
+/// Style group
 class Style extends Toolbar {
   final List<StyleButtons> buttons;
 
@@ -32,8 +36,10 @@ class Style extends Toolbar {
   }
 }
 
+/// Enum for style group buttons
 enum StyleButtons { style }
 
+/// Font setting group
 class FontSetting extends Toolbar {
   final List<FontSettingButtons> buttons;
 
@@ -58,12 +64,14 @@ class FontSetting extends Toolbar {
   }
 }
 
+/// Enum for font setting group buttons
 enum FontSettingButtons {
   fontname,
   fontsize,
   fontsizeunit,
 }
 
+/// Font group
 class Font extends Toolbar {
   final List<FontButtons> buttons;
 
@@ -88,8 +96,10 @@ class Font extends Toolbar {
   }
 }
 
+/// Enum for font group buttons
 enum FontButtons { bold, italic, underline, clear }
 
+/// Miscellaneous font group
 class MiscFont extends Toolbar {
   final List<MiscFontButtons> buttons;
 
@@ -114,8 +124,10 @@ class MiscFont extends Toolbar {
   }
 }
 
+/// Enum for miscellaneous font buttons
 enum MiscFontButtons { strikethrough, superscript, subscript }
 
+/// Color bar group
 class ColorBar extends Toolbar {
   final List<ColorButtons> buttons;
 
@@ -140,8 +152,10 @@ class ColorBar extends Toolbar {
   }
 }
 
+/// Enum for color bar group buttons
 enum ColorButtons { color, forecolor, backcolor }
 
+/// Paragraph group
 class Paragraph extends Toolbar {
   final List<ParagraphButtons> buttons;
 
@@ -166,8 +180,10 @@ class Paragraph extends Toolbar {
   }
 }
 
+/// Enum for paragraph group buttons
 enum ParagraphButtons { ul, ol, paragraph, height }
 
+/// Insert group
 class Insert extends Toolbar {
   final List<InsertButtons> buttons;
 
@@ -192,8 +208,10 @@ class Insert extends Toolbar {
   }
 }
 
+/// Enum for insert group buttons
 enum InsertButtons { link, picture, video, table, hr }
 
+/// Miscellaneous group
 class Misc extends Toolbar {
   final List<MiscButtons> buttons;
 
@@ -218,4 +236,5 @@ class Misc extends Toolbar {
   }
 }
 
+/// Enum for miscellaneous group buttons
 enum MiscButtons { fullscreen, codeview, undo, redo, help }

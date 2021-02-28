@@ -11,6 +11,7 @@ import 'package:html_editor_enhanced/utils/toolbar_icon.dart';
 import 'dart:html' as html;
 import 'dart:ui' as ui;
 
+/// The HTML Editor widget itself, for web (uses IFrameElement)
 class HtmlEditorWidget extends StatefulWidget {
   HtmlEditorWidget({
     Key key,
@@ -39,7 +40,12 @@ class HtmlEditorWidget extends StatefulWidget {
   _HtmlEditorWidgetWebState createState() => _HtmlEditorWidgetWebState();
 }
 
+/// State for the web Html editor widget
+///
+/// A stateful widget is necessary here, otherwise the IFrameElement will be
+/// rebuilt excessively, hurting performance
 class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
+  /// The view ID for the IFrameElement. Must be unique.
   String createdViewId;
 
   @override
@@ -230,6 +236,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     );
   }
 
+  /// Adds the callbacks the user set into JavaScript
   String getJsCallbacks() {
     String callbacks = "";
     if (widget.callbacks.onChange != null) {
@@ -299,6 +306,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     return callbacks;
   }
 
+  /// Adds an event listener to check when a callback is fired
   void addJSListener() {
     html.window.onMessage.listen((event) {
       var data = json.decode(event.data);
@@ -331,6 +339,10 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     });
   }
 
+  /// Generates a random string to be used as the view ID. Technically this
+  /// limits the number of editors to a finite length, but nobody will be
+  /// embedding enough editors to reach the theoretical limit (yes, this
+  /// is a challenge ;-) )
   String getRandString(int len) {
     var random = Random.secure();
     var values = List<int>.generate(len, (i) =>  random.nextInt(255));

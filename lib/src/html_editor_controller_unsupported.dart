@@ -1,5 +1,6 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
+/// Fallback controller (should never be used)
 class HtmlEditorController {
   /// Allows the [InAppWebViewController] for the Html editor to be accessed
   /// outside of the package itself for endless control and customization.

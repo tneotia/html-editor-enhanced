@@ -10,6 +10,7 @@ import 'package:html_editor_enhanced/utils/toolbar_icon.dart';
 
 bool callbacksInitialized = false;
 
+/// The HTML Editor widget itself, for mobile (uses flutter_inappwebview)
 class HtmlEditorWidget extends StatelessWidget {
   HtmlEditorWidget(
       {Key key,
@@ -155,6 +156,7 @@ class HtmlEditorWidget extends StatelessWidget {
     );
   }
 
+  /// adds the callbacks set by the user into the scripts
   void addJSCallbacks() {
     if (callbacks.onChange != null) {
       controllerMap[widgetController].evaluateJavascript(source: """
@@ -214,6 +216,8 @@ class HtmlEditorWidget extends StatelessWidget {
     }
   }
 
+  /// creates flutter_inappwebview JavaScript Handlers to handle any callbacks the
+  /// user has defined
   void addJSHandlers() {
     if (callbacks.onChange != null) {
       controllerMap[widgetController].addJavaScriptHandler(

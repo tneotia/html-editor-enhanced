@@ -7,6 +7,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart' as unsupported;
 
+/// Controller for web
 class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Allows the [InAppWebViewController] for the Html editor to be accessed
   /// outside of the package itself for endless control and customization.
@@ -125,6 +126,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     _evaluateJavascriptWeb(data: {"type": "toIframe: reload"});
   }
 
+  /// Helper function to run javascript and check current environment
   void _evaluateJavascriptWeb(
       {@required Map<String, Object> data}) async {
     if (kIsWeb) {

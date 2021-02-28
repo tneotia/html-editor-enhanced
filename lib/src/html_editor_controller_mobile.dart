@@ -3,6 +3,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart' as unsupported;
 
+/// Controller for mobile
 class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Allows the [InAppWebViewController] for the Html editor to be accessed
   /// outside of the package itself for endless control and customization.
@@ -111,12 +112,14 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
       });
     """);
   }
-  
+
+  /// Reloads the IFrameElement, throws an exception on mobile
   reloadWeb() {
     throw Exception(
         "Non-Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart and check kIsWeb before calling this function");
   }
 
+  /// Helper function to evaluate JS and check the current environment
   Future _evaluateJavascript({@required source}) async {
     if (!kIsWeb) {
       if (controllerMap[this] == null || await editorController.isLoading())
