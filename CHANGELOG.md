@@ -1,3 +1,9 @@
+## [1.4.0] - 2021-03-01
+* [BREAKING] removed `HtmlParser` for calling methods, instead you now must pass an `HtmlEditorController` to the plugin (like a `TextField`). All methods are accessible from that controller. See the usage section in the README for an example.
+   * This allows you to have multiple independent editors on a page, whereas earlier the package would not know which editor the method should be called on.
+* Add support for certain Summernote plugins from [Summernote Awesome](https://github.com/summernote/awesome-summernote). See the README for details on the API and the currently supported plugins.
+* Nullsafety pre-release coming soon.
+
 ## [1.3.0] - 2021-02-23
 * Add official support for Flutter Web
 * Add support for modifying the toolbar options. See the README for details on the API.
