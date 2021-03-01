@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 /// Abstract class that all the plguin classes extend
 abstract class Plugins {
   const Plugins();
