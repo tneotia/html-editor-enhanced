@@ -50,9 +50,10 @@ class HtmlEditorWidget extends StatelessWidget {
                   javaScriptEnabled: true,
                   transparentBackground: true
               ),
-              android: AndroidInAppWebViewOptions(
+              //todo inappwebview 5.0.0+
+              /*android: AndroidInAppWebViewOptions(
                   useHybridComposition: true,
-              )
+              )*/
             ),
             gestureRecognizers: {
               Factory<VerticalDragGestureRecognizer>(
@@ -69,8 +70,8 @@ class HtmlEditorWidget extends StatelessWidget {
               }
               text = message;
             },
-            onLoadStop: (InAppWebViewController controller, Uri uri) async {
-              String url = uri.toString();
+            onLoadStop: (InAppWebViewController controller, String url) async {
+              /*String url = uri.toString();*/
               if (url.contains("summernote.html")) {
                 String summernoteToolbar = "[\n";
                 for (Toolbar t in toolbar) {
