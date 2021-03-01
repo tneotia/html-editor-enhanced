@@ -9,8 +9,8 @@ import 'package:html_editor_enhanced/utils/plugins.dart';
 /// Fallback HtmlEditor class (should never be called)
 class HtmlEditor extends StatelessWidget implements HtmlEditorImpl {
   HtmlEditor({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
     this.initialText,
     this.height = 380,
     this.decoration,
@@ -52,7 +52,7 @@ class HtmlEditor extends StatelessWidget implements HtmlEditorImpl {
 
   /// The initial text that is be supplied to the Html editor.
   @override
-  final String initialText;
+  final String? initialText;
 
   /// Sets the height of the Html editor. If you decide to show the bottom toolbar,
   /// this height will be inclusive of the space the toolbar takes up.
@@ -64,7 +64,7 @@ class HtmlEditor extends StatelessWidget implements HtmlEditorImpl {
   /// The BoxDecoration to use around the Html editor. By default, the widget
   /// uses a thin, dark, rounded rectangle border around the widget.
   @override
-  final BoxDecoration decoration;
+  final BoxDecoration? decoration;
 
   /// Specifies whether the bottom toolbar for picking an image or copy/pasting
   /// is shown on the widget.
@@ -76,12 +76,12 @@ class HtmlEditor extends StatelessWidget implements HtmlEditorImpl {
   /// Sets the Html editor's hint (text displayed when there is no text in the
   /// editor).
   @override
-  final String hint;
+  final String? hint;
 
   /// Sets & activates Summernote's callbacks. See the functions available in
   /// [Callbacks] for more details.
   @override
-  final Callbacks callbacks;
+  final Callbacks? callbacks;
 
   /// Sets which options are visible in the toolbar for the editor.
   @override
@@ -96,7 +96,7 @@ class HtmlEditor extends StatelessWidget implements HtmlEditorImpl {
   ///
   /// The default value is null (switches with system).
   @override
-  final bool darkMode;
+  final bool? darkMode;
 
   @override
   Widget build(BuildContext context) {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 /// Widget for the toolbar icon
 Widget toolbarIcon(BuildContext context, IconData icon, String title,
-    {Function() onTap}) {
+    {required Function() onTap}) {
   return InkWell(
     onTap: onTap,
     child: Row(

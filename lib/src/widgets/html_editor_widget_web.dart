@@ -1,4 +1,5 @@
 export 'dart:html';
+
 import 'dart:convert';
 import 'dart:math';
 
@@ -14,29 +15,29 @@ import 'dart:ui' as ui;
 /// The HTML Editor widget itself, for web (uses IFrameElement)
 class HtmlEditorWidget extends StatefulWidget {
   HtmlEditorWidget({
-    Key key,
-    @required this.widgetController,
+    Key? key,
+    required this.widgetController,
     this.value,
-    this.height,
-    this.showBottomToolbar,
+    required this.height,
+    required this.showBottomToolbar,
     this.hint,
     this.callbacks,
-    this.toolbar,
-    this.plugins,
+    required this.toolbar,
+    required this.plugins,
     this.darkMode,
-    this.initBC,
+    required this.initBC,
   }) : super(key: key);
 
   final HtmlEditorController widgetController;
-  final String value;
+  final String? value;
   final double height;
   final bool showBottomToolbar;
-  final String hint;
+  final String? hint;
   final UniqueKey webViewKey = UniqueKey();
-  final Callbacks callbacks;
+  final Callbacks? callbacks;
   final List<Toolbar> toolbar;
   final List<Plugins> plugins;
-  final bool darkMode;
+  final bool? darkMode;
   final BuildContext initBC;
 
   _HtmlEditorWidgetWebState createState() => _HtmlEditorWidgetWebState();
@@ -48,7 +49,7 @@ class HtmlEditorWidget extends StatefulWidget {
 /// rebuilt excessively, hurting performance
 class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   /// The view ID for the IFrameElement. Must be unique.
-  String createdViewId;
+  late String createdViewId;
 
   @override
   void initState() {
@@ -77,7 +78,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
       darkCSS =
           "<link href=\"assets/packages/html_editor_enhanced/assets/summernote-lite-dark.css\" rel=\"stylesheet\">";
     }
-    String jsCallbacks = getJsCallbacks();
+    String jsCallbacks = "";
+    if (widget.callbacks != null) jsCallbacks = getJsCallbacks(widget.callbacks!);
     String htmlString = """
       <html lang="en">
       <head>
@@ -194,10 +196,10 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
       ..style.border = 'none'
       ..onLoad.listen((event) async {
         if (widget.value != null) {
-          widget.widgetController.setText(widget.value);
+          widget.widgetController.setText(widget.value!);
         }
       });
-    addJSListener();
+    if (widget.callbacks != null) addJSListener(widget.callbacks!);
     ui.platformViewRegistry
         .registerViewFactory(createdViewId, (int viewId) => iframe);
   }
@@ -224,23 +226,25 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                   children: <Widget>[
                     toolbarIcon(context, Icons.content_copy, "Copy",
                         onTap: () async {
-                      String data = await widget.widgetController.getText();
+                      String? data = await widget.widgetController.getText();
                       Clipboard.setData(new ClipboardData(text: data));
                     }),
                     toolbarIcon(context, Icons.content_paste, "Paste",
                         onTap: () async {
-                      ClipboardData data =
+                      ClipboardData? data =
                           await Clipboard.getData(Clipboard.kTextPlain);
-                      String txtIsi = data.text
-                          .replaceAll("'", '\\"')
-                          .replaceAll('"', '\\"')
-                          .replaceAll("[", "\\[")
-                          .replaceAll("]", "\\]")
-                          .replaceAll("\n", "<br/>")
-                          .replaceAll("\n\n", "<br/>")
-                          .replaceAll("\r", " ")
-                          .replaceAll('\r\n', " ");
-                      widget.widgetController.insertHtml(txtIsi);
+                      if (data != null) {
+                        String txtIsi = data.text!
+                            .replaceAll("'", '\\"')
+                            .replaceAll('"', '\\"')
+                            .replaceAll("[", "\\[")
+                            .replaceAll("]", "\\]")
+                            .replaceAll("\n", "<br/>")
+                            .replaceAll("\n\n", "<br/>")
+                            .replaceAll("\r", " ")
+                            .replaceAll('\r\n', " ");
+                        widget.widgetController.insertHtml(txtIsi);
+                      }
                     }),
                   ],
                 ),
@@ -251,9 +255,9 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   }
 
   /// Adds the callbacks the user set into JavaScript
-  String getJsCallbacks() {
+  String getJsCallbacks(Callbacks c) {
     String callbacks = "";
-    if (widget.callbacks.onChange != null) {
+    if (c.onChange != null) {
       callbacks = callbacks +
           """
           \$('#summernote-2').on('summernote.change', function(_, contents, \$editable) {
@@ -261,7 +265,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           });\n
         """;
     }
-    if (widget.callbacks.onEnter != null) {
+    if (c.onEnter != null) {
       callbacks = callbacks +
           """
           \$('#summernote-2').on('summernote.enter', function() {
@@ -269,7 +273,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           });\n
         """;
     }
-    if (widget.callbacks.onFocus != null) {
+    if (c.onFocus != null) {
       callbacks = callbacks +
           """
           \$('#summernote-2').on('summernote.focus', function() {
@@ -277,7 +281,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           });\n
         """;
     }
-    if (widget.callbacks.onBlur != null) {
+    if (c.onBlur != null) {
       callbacks = callbacks +
           """
           \$('#summernote-2').on('summernote.blur', function() {
@@ -285,7 +289,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           });\n
         """;
     }
-    if (widget.callbacks.onBlurCodeview != null) {
+    if (c.onBlurCodeview != null) {
       callbacks = callbacks +
           """
           \$('#summernote-2').on('summernote.blur.codeview', function() {
@@ -293,7 +297,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           });\n
         """;
     }
-    if (widget.callbacks.onKeyDown != null) {
+    if (c.onKeyDown != null) {
       callbacks = callbacks +
           """
           \$('#summernote-2').on('summernote.keydown', function(_, e) {
@@ -301,7 +305,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           });\n
         """;
     }
-    if (widget.callbacks.onKeyUp != null) {
+    if (c.onKeyUp != null) {
       callbacks = callbacks +
           """
           \$('#summernote-2').on('summernote.keyup', function(_, e) {
@@ -309,7 +313,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           });\n
         """;
     }
-    if (widget.callbacks.onPaste != null) {
+    if (c.onPaste != null) {
       callbacks = callbacks +
           """
           \$('#summernote-2').on('summernote.paste', function(_) {
@@ -321,33 +325,33 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   }
 
   /// Adds an event listener to check when a callback is fired
-  void addJSListener() {
+  void addJSListener(Callbacks c) {
     html.window.onMessage.listen((event) {
       var data = json.decode(event.data);
       if (data["type"].contains("toDart:") && data["view"] == createdViewId) {
         if (data["type"].contains("onChange")) {
-          widget.callbacks.onChange.call(data["contents"]);
+          c.onChange!.call(data["contents"]);
         }
         if (data["type"].contains("onEnter")) {
-          widget.callbacks.onEnter.call();
+          c.onEnter!.call();
         }
         if (data["type"].contains("onFocus")) {
-          widget.callbacks.onFocus.call();
+          c.onFocus!.call();
         }
         if (data["type"].contains("onBlur")) {
-          widget.callbacks.onBlur.call();
+          c.onBlur!.call();
         }
         if (data["type"].contains("onBlurCodeview")) {
-          widget.callbacks.onBlurCodeview.call();
+          c.onBlurCodeview!.call();
         }
         if (data["type"].contains("onKeyDown")) {
-          widget.callbacks.onKeyDown.call(data["keyCode"]);
+          c.onKeyDown!.call(data["keyCode"]);
         }
         if (data["type"].contains("onKeyUp")) {
-          widget.callbacks.onKeyUp.call(data["keyCode"]);
+          c.onKeyUp!.call(data["keyCode"]);
         }
         if (data["type"].contains("onPaste")) {
-          widget.callbacks.onPaste.call();
+          c.onPaste!.call();
         }
       }
     });

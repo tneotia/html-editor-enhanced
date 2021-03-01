@@ -15,13 +15,13 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
       "Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart and check kIsWeb before accessing this getter");
   
   /// Gets the text from the editor and returns it as a [String].
-  Future<String> getText() async {
+  Future<String?> getText() async {
     html.window.onMessage.drain();
     _evaluateJavascriptWeb(data: {"type": "toIframe: getText"});
     html.MessageEvent e = await html.window.onMessage.firstWhere(
             (element) => json.decode(element.data)["type"] == "toDart: getText");
     text = json.decode(e.data)["text"];
-    if (text.isEmpty ||
+    if (text!.isEmpty ||
         text == "<p></p>" ||
         text == "<p><br></p>" ||
         text == "<p><br/></p>") text = "";
@@ -128,7 +128,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
   /// Helper function to run javascript and check current environment
   void _evaluateJavascriptWeb(
-      {@required Map<String, Object> data}) async {
+      {required Map<String, Object?> data}) async {
     if (kIsWeb) {
       data["view"] = controllerMap[this];
       final jsonEncoder = JsonEncoder();

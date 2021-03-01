@@ -4,10 +4,10 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 class HtmlEditorController {
   /// Allows the [InAppWebViewController] for the Html editor to be accessed
   /// outside of the package itself for endless control and customization.
-  InAppWebViewController get editorController => null;
+  InAppWebViewController? get editorController => null;
 
   /// Gets the text from the editor and returns it as a [String].
-  Future<String> getText() async => null;
+  Future<String?> getText() => Future.value(null);
 
   /// Sets the text of the editor. Some pre-processing is applied to convert
   /// [String] elements like "\n" to HTML elements.

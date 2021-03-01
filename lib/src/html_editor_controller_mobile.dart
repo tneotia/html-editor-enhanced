@@ -7,10 +7,10 @@ import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart
 class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Allows the [InAppWebViewController] for the Html editor to be accessed
   /// outside of the package itself for endless control and customization.
-  InAppWebViewController get editorController => controllerMap[this];
+  InAppWebViewController? get editorController => controllerMap[this];
 
   /// Gets the text from the editor and returns it as a [String].
-  Future<String> getText() async {
+  Future<String?> getText() async {
     await _evaluateJavascript(
         source:
         "var str = \$('#summernote-2').summernote('code'); console.log(str);");
@@ -120,12 +120,12 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   }
 
   /// Helper function to evaluate JS and check the current environment
-  Future _evaluateJavascript({@required source}) async {
+  Future _evaluateJavascript({required source}) async {
     if (!kIsWeb) {
-      if (controllerMap[this] == null || await editorController.isLoading())
+      if (controllerMap[this] == null || await editorController!.isLoading())
         throw Exception(
             "HTML editor is still loading, please wait before evaluating this JS: $source!");
-      await editorController.evaluateJavascript(source: source);
+      await editorController!.evaluateJavascript(source: source);
     } else {
       throw Exception(
           "Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart");
