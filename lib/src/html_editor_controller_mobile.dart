@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart' as unsupported;
+import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart'
+    as unsupported;
 
 /// Controller for mobile
 class HtmlEditorController extends unsupported.HtmlEditorController {
@@ -13,7 +14,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   Future<String?> getText() async {
     await _evaluateJavascript(
         source:
-        "var str = \$('#summernote-2').summernote('code'); console.log(str);");
+            "var str = \$('#summernote-2').summernote('code'); console.log(str);");
     return text;
   }
 
@@ -99,7 +100,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   void insertNetworkImage(String url, {String filename = ""}) {
     _evaluateJavascript(
         source:
-        "\$('#summernote-2').summernote('insertImage', '$url', '$filename');");
+            "\$('#summernote-2').summernote('insertImage', '$url', '$filename');");
   }
 
   /// Insert a link at the position of the cursor in the editor

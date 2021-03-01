@@ -65,8 +65,9 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     if (widget.plugins.isNotEmpty) {
       summernoteToolbar = summernoteToolbar + "['plugins', [";
       for (Plugins p in widget.plugins) {
-        summernoteToolbar = summernoteToolbar + "'${p
-            .getToolbarString()}'" + (p == widget.plugins.last ? "]]\n" : ", ");
+        summernoteToolbar = summernoteToolbar +
+            "'${p.getToolbarString()}'" +
+            (p == widget.plugins.last ? "]]\n" : ", ");
         headString = headString + p.getHeadString() + "\n";
       }
     }
@@ -79,7 +80,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           "<link href=\"assets/packages/html_editor_enhanced/assets/summernote-lite-dark.css\" rel=\"stylesheet\">";
     }
     String jsCallbacks = "";
-    if (widget.callbacks != null) jsCallbacks = getJsCallbacks(widget.callbacks!);
+    if (widget.callbacks != null)
+      jsCallbacks = getJsCallbacks(widget.callbacks!);
     String htmlString = """
       <html lang="en">
       <head>
@@ -363,7 +365,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   /// is a challenge ;-) )
   String getRandString(int len) {
     var random = Random.secure();
-    var values = List<int>.generate(len, (i) =>  random.nextInt(255));
+    var values = List<int>.generate(len, (i) => random.nextInt(255));
     return base64UrlEncode(values);
   }
 }

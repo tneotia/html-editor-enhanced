@@ -61,41 +61,41 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             HtmlEditor(
-                controller: controller,
-                hint: "Your text here...",
-                //value: "text content initial, if any",
-                height: 400,
-                callbacks: Callbacks(
-                  onChange: (String? changed) {
-                    print("content changed to $changed");
-                  },
-                  onEnter: () {
-                    print("enter/return pressed");
-                  },
-                  onFocus: () {
-                    print("editor focused");
-                  },
-                  onBlur: () {
-                    print("editor unfocused");
-                  },
-                  onBlurCodeview: () {
-                    print("codeview either focused or unfocused");
-                  },
-                  onKeyDown: (keyCode) {
-                    print("$keyCode key downed");
-                  },
-                  onKeyUp: (keyCode) {
-                    print("$keyCode key released");
-                  },
-                  onPaste: () {
-                    print("pasted into editor");
-                  },
-                ),
-                plugins: [
-                  SummernoteEmoji(),
-                  AdditionalTextTags(),
-                  SummernoteClasses(),
-                ],
+              controller: controller,
+              hint: "Your text here...",
+              //value: "text content initial, if any",
+              height: 400,
+              callbacks: Callbacks(
+                onChange: (String? changed) {
+                  print("content changed to $changed");
+                },
+                onEnter: () {
+                  print("enter/return pressed");
+                },
+                onFocus: () {
+                  print("editor focused");
+                },
+                onBlur: () {
+                  print("editor unfocused");
+                },
+                onBlurCodeview: () {
+                  print("codeview either focused or unfocused");
+                },
+                onKeyDown: (keyCode) {
+                  print("$keyCode key downed");
+                },
+                onKeyUp: (keyCode) {
+                  print("$keyCode key released");
+                },
+                onPaste: () {
+                  print("pasted into editor");
+                },
+              ),
+              plugins: [
+                SummernoteEmoji(),
+                AdditionalTextTags(),
+                SummernoteClasses(),
+              ],
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -132,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       if (txt != null) {
                         if (txt.contains("<img src=\"data:image")) {
                           txt =
-                          "<text removed due to base-64 image data, displaying the text could cause the app to crash>";
+                              "<text removed due to base-64 image data, displaying the text could cause the app to crash>";
                         }
                         setState(() {
                           result = txt!;

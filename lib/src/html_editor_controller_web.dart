@@ -5,7 +5,8 @@ import 'dart:html' as html;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart' as unsupported;
+import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart'
+    as unsupported;
 
 /// Controller for web
 class HtmlEditorController extends unsupported.HtmlEditorController {
@@ -13,13 +14,13 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// outside of the package itself for endless control and customization.
   InAppWebViewController get editorController => throw Exception(
       "Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart and check kIsWeb before accessing this getter");
-  
+
   /// Gets the text from the editor and returns it as a [String].
   Future<String?> getText() async {
     html.window.onMessage.drain();
     _evaluateJavascriptWeb(data: {"type": "toIframe: getText"});
     html.MessageEvent e = await html.window.onMessage.firstWhere(
-            (element) => json.decode(element.data)["type"] == "toDart: getText");
+        (element) => json.decode(element.data)["type"] == "toDart: getText");
     text = json.decode(e.data)["text"];
     if (text!.isEmpty ||
         text == "<p></p>" ||
@@ -91,13 +92,15 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Insert text at the end of the current HTML content in the editor
   /// Note: This method should only be used for plaintext strings
   void insertText(String text) {
-    _evaluateJavascriptWeb(data: {"type": "toIframe: insertText", "text": text});
+    _evaluateJavascriptWeb(
+        data: {"type": "toIframe: insertText", "text": text});
   }
 
   /// Insert HTML at the position of the cursor in the editor
   /// Note: This method should not be used for plaintext strings
   void insertHtml(String html) {
-    _evaluateJavascriptWeb(data: {"type": "toIframe: insertHtml", "html": html});
+    _evaluateJavascriptWeb(
+        data: {"type": "toIframe: insertHtml", "html": html});
   }
 
   /// Insert a network image at the position of the cursor in the editor
@@ -127,8 +130,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   }
 
   /// Helper function to run javascript and check current environment
-  void _evaluateJavascriptWeb(
-      {required Map<String, Object?> data}) async {
+  void _evaluateJavascriptWeb({required Map<String, Object?> data}) async {
     if (kIsWeb) {
       data["view"] = controllerMap[this];
       final jsonEncoder = JsonEncoder();

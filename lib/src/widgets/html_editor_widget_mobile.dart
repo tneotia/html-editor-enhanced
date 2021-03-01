@@ -46,14 +46,11 @@ class HtmlEditorWidget extends StatelessWidget {
               controllerMap[widgetController] = webViewController;
             },
             initialOptions: InAppWebViewGroupOptions(
-              crossPlatform: InAppWebViewOptions(
-                  javaScriptEnabled: true,
-                  transparentBackground: true
-              ),
-              android: AndroidInAppWebViewOptions(
+                crossPlatform: InAppWebViewOptions(
+                    javaScriptEnabled: true, transparentBackground: true),
+                android: AndroidInAppWebViewOptions(
                   useHybridComposition: true,
-              )
-            ),
+                )),
             gestureRecognizers: {
               Factory<VerticalDragGestureRecognizer>(
                   () => VerticalDragGestureRecognizer())
@@ -80,8 +77,9 @@ class HtmlEditorWidget extends StatelessWidget {
                 if (plugins.isNotEmpty) {
                   summernoteToolbar = summernoteToolbar + "['plugins', [";
                   for (Plugins p in plugins) {
-                    summernoteToolbar = summernoteToolbar + "'${p
-                        .getToolbarString()}'" + (p == plugins.last ? "]]\n" : ", ");
+                    summernoteToolbar = summernoteToolbar +
+                        "'${p.getToolbarString()}'" +
+                        (p == plugins.last ? "]]\n" : ", ");
                   }
                 }
                 summernoteToolbar = summernoteToolbar + "],";
@@ -101,7 +99,8 @@ class HtmlEditorWidget extends StatelessWidget {
                     darkMode != false) {
                   String darkCSS =
                       "<link href=\"summernote-lite-dark.css\" rel=\"stylesheet\">";
-                  await controller.evaluateJavascript(source: "\$('head').append('${darkCSS}');");
+                  await controller.evaluateJavascript(
+                      source: "\$('head').append('${darkCSS}');");
                 }
                 //set the text once the editor is loaded
                 if (value != null) {
