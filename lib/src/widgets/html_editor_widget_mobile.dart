@@ -1,11 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:html_editor_enhanced/utils/plugins.dart';
 import 'package:html_editor_enhanced/utils/toolbar_icon.dart';
 
 bool callbacksInitialized = false;
@@ -21,6 +20,7 @@ class HtmlEditorWidget extends StatelessWidget {
       this.hint,
       this.callbacks,
       this.toolbar,
+      this.plugins,
       this.darkMode})
       : super(key: key);
 
@@ -32,6 +32,7 @@ class HtmlEditorWidget extends StatelessWidget {
   final UniqueKey webViewKey = UniqueKey();
   final Callbacks callbacks;
   final List<Toolbar> toolbar;
+  final List<Plugins> plugins;
   final bool darkMode;
 
   @override
@@ -76,6 +77,13 @@ class HtmlEditorWidget extends StatelessWidget {
                   summernoteToolbar = summernoteToolbar +
                       "['${t.getGroupName()}', ${t.getButtons()}],\n";
                 }
+                if (plugins.isNotEmpty) {
+                  summernoteToolbar = summernoteToolbar + "['plugins', [";
+                  for (Plugins p in plugins) {
+                    summernoteToolbar = summernoteToolbar + "'${p
+                        .getToolbarString()}'" + (p == plugins.last ? "]]\n" : ", ");
+                  }
+                }
                 summernoteToolbar = summernoteToolbar + "],";
                 controller.evaluateJavascript(source: """
                    \$('#summernote-2').summernote({
@@ -91,20 +99,9 @@ class HtmlEditorWidget extends StatelessWidget {
                 if ((Theme.of(context).brightness == Brightness.dark ||
                         darkMode == true) &&
                     darkMode != false) {
-                  String darkCSS = await rootBundle.loadString(
-                      'packages/html_editor_enhanced/assets/summernote-lite-dark.css');
-                  var bytes = utf8.encode(darkCSS);
-                  var base64Str = base64.encode(bytes);
-                  controller.evaluateJavascript(
-                      source: "javascript:(function() {" +
-                          "var parent = document.getElementsByTagName('head').item(0);" +
-                          "var style = document.createElement('style');" +
-                          "style.type = 'text/css';" +
-                          "style.innerHTML = window.atob('" +
-                          base64Str +
-                          "');" +
-                          "parent.appendChild(style)" +
-                          "})()");
+                  String darkCSS =
+                      "<link href=\"summernote-lite-dark.css\" rel=\"stylesheet\">";
+                  await controller.evaluateJavascript(source: "\$('head').append('${darkCSS}');");
                 }
                 //set the text once the editor is loaded
                 if (value != null) {

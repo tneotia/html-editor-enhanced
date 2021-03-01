@@ -90,7 +90,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPaste: () {
                     print("pasted into editor");
                   },
-                )),
+                ),
+                plugins: [
+                  SummernoteEmoji(),
+                  AdditionalTextTags(),
+                  SummernoteClasses(),
+                ],
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(

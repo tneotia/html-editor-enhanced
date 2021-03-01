@@ -1,0 +1,21 @@
+/* Basic formatting for the dropdown */
+.emoji-list {
+    min-width: 255px !important;
+    height: 292px;
+    padding: 5px;
+    overflow: scroll;
+}
+
+/* Styles for the clickable images */
+.emoji-list * {
+    margin: 1px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+/* Add more space around images so they're easier to select on small devices. */
+@media (max-width:600px) {
+    .emoji-list * {
+        margin: 3px;
+    }
+}

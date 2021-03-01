@@ -1,0 +1,29 @@
+.note-ext-emoji-list {
+	width: 180px;
+	height: 200px;
+	overflow: auto;
+	padding-left: 5px;
+}
+
+.note-ext-emoji-list button {
+    margin-top: 5px;
+    margin-right: 5px;
+    padding: 0px;
+}
+
+.note-ext-emoji-list .note-emoji-btn img {
+    width: 20px;
+}
+
+img.emoji-img-inline {
+    display: inline-block;
+    margin-top:-0.3em;
+    height: 1.2em;
+    width: auto;
+}
+
+.note-ext-emoji-search {
+	margin-right: 5px;
+    margin-left: 5px;
+    margin-bottom: 5px;
+}

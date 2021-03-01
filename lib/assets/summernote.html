@@ -5,12 +5,22 @@
   <meta name="description" content="Flutter Summernote HTML Editor">
   <meta name="author" content="xrb21">
   <title>Summernote Text Editor HTML</title>
-  <script src="jquery-3.4.1.slim.min.js"></script>
+  <script src="jquery.min.js"></script>
+  <!--summernote js and css-->
   <link href="summernote-lite.min.css" rel="stylesheet">
   <script src="summernote-lite.min.js"></script>
 </head>
 <body>
 <div id="summernote-2"></div>
+<!--summernote emoji plugin-->
+<link href="plugins/summernote-emoji/summernote-ext-emoji-ajax.css" rel="stylesheet">
+<script src="plugins/summernote-emoji/summernote-ext-emoji-ajax.js"></script>
+<!--add text tags plugin-->
+<link href="plugins/additional-text-tags/summernote-add-text-tags.css" rel="stylesheet">
+<script src="plugins/additional-text-tags/summernote-add-text-tags.js"></script>
+<!--summernote classes plugin-->
+<script src="plugins/summernote-classes/summernote-classes.js"></script>
+<!--minor styling to improve editor design-->
 <style>
   body {
       display: block;

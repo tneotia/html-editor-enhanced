@@ -22,6 +22,7 @@ class HtmlEditorWidget extends StatefulWidget {
     this.hint,
     this.callbacks,
     this.toolbar,
+    this.plugins,
     this.darkMode,
     this.initBC,
   }) : super(key: key);
@@ -34,6 +35,7 @@ class HtmlEditorWidget extends StatefulWidget {
   final UniqueKey webViewKey = UniqueKey();
   final Callbacks callbacks;
   final List<Toolbar> toolbar;
+  final List<Plugins> plugins;
   final bool darkMode;
   final BuildContext initBC;
 
@@ -54,9 +56,18 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     controllerMap[widget.widgetController] = createdViewId;
     super.initState();
     String summernoteToolbar = "[\n";
+    String headString = "";
     for (Toolbar t in widget.toolbar) {
       summernoteToolbar =
           summernoteToolbar + "['${t.getGroupName()}', ${t.getButtons()}],\n";
+    }
+    if (widget.plugins.isNotEmpty) {
+      summernoteToolbar = summernoteToolbar + "['plugins', [";
+      for (Plugins p in widget.plugins) {
+        summernoteToolbar = summernoteToolbar + "'${p
+            .getToolbarString()}'" + (p == widget.plugins.last ? "]]\n" : ", ");
+        headString = headString + p.getHeadString() + "\n";
+      }
     }
     summernoteToolbar = summernoteToolbar + "],";
     String darkCSS = "";
@@ -75,22 +86,25 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         <meta name="description" content="Flutter Summernote HTML Editor">
         <meta name="author" content="tneotia">
         <title>Summernote Text Editor HTML</title>
-        <script src="assets/packages/html_editor_enhanced/assets/jquery-3.4.1.slim.min.js" type="application/javascript"></script>
+        <script src="assets/packages/html_editor_enhanced/assets/jquery.min.js" type="application/javascript"></script>
         <link href="assets/packages/html_editor_enhanced/assets/summernote-lite.min.css" rel="stylesheet">
         <script src="assets/packages/html_editor_enhanced/assets/summernote-lite.min.js" type="application/javascript"></script>
         $darkCSS
       </head>
       <body>
       <div id="summernote-2"></div>
+      $headString
       <script type="text/javascript">
-        \$('#summernote-2').summernote({
-          placeholder: "${widget.hint}",
-          tabsize: 2,
-          height: ${widget.height - 125},
-          maxHeight: ${widget.height - 125},
-          toolbar: $summernoteToolbar
-          disableGrammar: false,
-          spellCheck: false
+        \$(document).ready(function () {
+          \$('#summernote-2').summernote({
+            placeholder: "${widget.hint}",
+            tabsize: 2,
+            height: ${widget.height - 125},
+            maxHeight: ${widget.height - 125},
+            toolbar: $summernoteToolbar
+            disableGrammar: false,
+            spellCheck: false
+          });
         });
        
         window.parent.addEventListener('message', handleMessage, false);

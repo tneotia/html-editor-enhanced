@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart';
 import 'package:html_editor_enhanced/src/html_editor_impl.dart';
+import 'package:html_editor_enhanced/utils/plugins.dart';
 
 /// Fallback HtmlEditor class (should never be called)
 class HtmlEditor extends StatelessWidget implements HtmlEditorImpl {
@@ -41,6 +42,7 @@ class HtmlEditor extends StatelessWidget implements HtmlEditorImpl {
         MiscButtons.help
       ])
     ],
+    this.plugins = const [],
     this.darkMode,
   }) : super(key: key);
 
@@ -84,6 +86,10 @@ class HtmlEditor extends StatelessWidget implements HtmlEditorImpl {
   /// Sets which options are visible in the toolbar for the editor.
   @override
   final List<Toolbar> toolbar;
+
+  /// Sets the list of Summernote plugins enabled in the editor.
+  @override
+  final List<Plugins> plugins;
 
   /// Sets the editor to dark mode. `null` - switches with system, `false` -
   /// always light, `true` - always dark.

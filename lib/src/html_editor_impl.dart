@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:html_editor_enhanced/utils/plugins.dart';
 
 /// HtmlEditor's implementation class
 class HtmlEditorImpl {
@@ -38,6 +39,7 @@ class HtmlEditorImpl {
         MiscButtons.help
       ])
     ],
+    this.plugins = const [],
     this.darkMode,
   });
 
@@ -74,6 +76,9 @@ class HtmlEditorImpl {
 
   /// Sets which options are visible in the toolbar for the editor.
   final List<Toolbar> toolbar;
+
+  /// Sets the list of Summernote plugins enabled in the editor.
+  final List<Plugins> plugins;
 
   /// Sets the editor to dark mode. `null` - switches with system, `false` -
   /// always light, `true` - always dark.

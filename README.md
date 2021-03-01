@@ -21,7 +21,7 @@ Flutter HTML Editor Enhanced is a text editor for Android and iOS to help write 
     <td align="center">Flutter Web</td>
   </tr>
   <tr>
-    <td><img alt="Flutter Web" src="https://raw.githubusercontent.com/tneotia/html-editor-enhanced/master/screenshots/html_editor_web.png" width="750"/></td>
+    <td><img alt="Flutter Web" src="https://raw.githubusercontent.com/tneotia/html-editor-enhanced/master/screenshots/html_editor_web.png" width="800"/></td>
   </tr>
 </table>
 
@@ -44,6 +44,8 @@ Flutter HTML Editor Enhanced is a text editor for Android and iOS to help write 
   - [Getters](#getters)
   
   - [Toolbar](#toolbar)
+  
+  - [Plugins](#plugins)
 
   - [Examples](#examples)
 
@@ -67,11 +69,13 @@ Flutter HTML Editor Enhanced is a text editor for Android and iOS to help write 
 
 6. It has support for many of Summernote's callbacks
 
-7. It exposes the `InAppWebViewController` so you can customize the WebView however you like - you can even load your own HTML code and inject your own JavaScript for your use cases.
+7. It has support for some of Summernote's 3rd party plugins, found [here](https://github.com/summernote/awesome-summernote)
 
-8. It has support for dark mode
+8. It exposes the `InAppWebViewController` so you can customize the WebView however you like - you can even load your own HTML code and inject your own JavaScript for your use cases.
 
-9. It has support for low-level customization, such as setting what buttons are shown on the toolbar
+9. It has support for dark mode
+
+10. It has support for low-level customization, such as setting what buttons are shown on the toolbar
 
 More is on the way! File a feature request or contribute to the project if you'd like to see other features added.
 
@@ -216,6 +220,7 @@ Parameter | Type | Default | Description
 **hint** | `String` | empty | Placeholder hint text
 **callbacks** | `Callbacks` | empty | Customize the callbacks for various events
 **toolbar** | `List<Toolbar>` | See the widget's constructor | Customize what buttons are shown on the toolbar, and in which order. See [below](#toolbar) for more details.
+**plugins** | `List<Plugins>` | empty | Customize what plugins are activated. See [below](#plugins) for more details.
 **darkMode** | `bool` | `null` | Sets the status of dark mode - `false`: always light, `null`: follow system, `true`: always dark 
 
 ### Methods
@@ -306,6 +311,40 @@ You can specify a list of buttons that are visible for each `Toolbar` constructo
 If you don't want to show an entire group of buttons, simply don't include their constructor in the `Toolbar` list!
 
 Note: Setting `buttons: []` will also be interpreted as wanting the default buttons for the constructor rather than not showing the group of buttons.
+
+### Plugins
+
+This API allows you to add certain Summernote plugins from the [Summernote Awesome library](https://github.com/summernote/awesome-summernote).
+
+Currently the following plugins are supported:
+
+1. [Summernote Emoji from Ajax](https://github.com/tylerecouture/summernote-ext-emoji-ajax/)
+
+2. [Summernote Add Text Tags](https://github.com/tylerecouture/summernote-add-text-tags)
+
+3. [Summernote Classes](https://github.com/DiemenDesign/summernote-classes)
+
+This list is not final, more will be added. If there's a specific plugin you'd like to see support for, please file a feature request!
+
+By default, no plugins will be activated. What if you want to activate some? Don't worry, it's a nice and neat API:
+
+```dart
+HtmlEditorController controller = HtmlEditorController();
+Widget htmlEditor = HtmlEditor(
+  controller: controller, //required
+  //other options
+  plugins: [
+    SummernoteEmoji(),
+    SummernoteClasses()
+  ]
+);
+```
+
+In the above example, only those two plugins will be activated in the editor. Order matters here - whatever order you define the plugins is the order their buttons will be displayed in the toolbar.
+
+All plugin buttons will be displayed in one section in the toolbar. Overriding the toolbar using the `toolbar` parameter does not affect how the plugin buttons are displayed. 
+
+Please see the `plugins.dart` file for more specific details on each plugin, including some important notes to consider when deciding whether or not to use them in your implementation.
 
 ### Examples
 

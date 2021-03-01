@@ -1,0 +1,17 @@
+.panel-heading.note-toolbar .note-style .dropdown-menu,
+.panel-heading.note-toolbar .note-font .dropdown-menu {
+    min-width: 245px;
+    padding: 5px;
+}
+
+.panel-heading.note-toolbar .note-style .dropdown-menu > div:first-child,
+.panel-heading.note-toolbar .note-font .dropdown-menu > div:first-child {
+
+    margin-right: 5px;
+
+}
+
+.note-add-text-tags-btn {
+    font-family: "Times New Roman", serif;
+    min-width: 30px;
+}
