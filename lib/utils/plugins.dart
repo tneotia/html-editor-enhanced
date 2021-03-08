@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 /// Abstract class that all the plguin classes extend
 abstract class Plugins {
   const Plugins();
@@ -51,10 +49,9 @@ class AdditionalTextTags extends Plugins {
   @override
   String getHeadString() {
     return """
-      <link href="plugins/additional-text-tags/summernote-add-text-tags.css" rel="stylesheet">
-      <script src="plugins/additional-text-tags/summernote-add-text-tags.js"></script>
-    """.replaceAll("src=\"", kIsWeb ? "src=\"assets/packages/html_editor_enhanced/assets/" : "src=\"")
-        .replaceAll("href=\"", kIsWeb ? "href=\"assets/packages/html_editor_enhanced/assets/" : "href=\"");
+      <link href="assets/packages/html_editor_enhanced/assets/plugins/additional-text-tags/summernote-add-text-tags.css" rel="stylesheet">
+      <script src="assets/packages/html_editor_enhanced/assets/plugins/additional-text-tags/summernote-add-text-tags.js"></script>
+    """;
   }
 
   @override
@@ -74,9 +71,7 @@ class SummernoteClasses extends Plugins {
 
   @override
   String getHeadString() {
-    return "<script src=\"plugins/summernote-classes/summernote-classes.js\"></script>"
-        .replaceAll("src=\"", kIsWeb ? "src=\"assets/packages/html_editor_enhanced/assets/" : "src=\"")
-        .replaceAll("href=\"", kIsWeb ? "href=\"assets/packages/html_editor_enhanced/assets/" : "href=\"");
+    return "<script src=\"assets/packages/html_editor_enhanced/assets/plugins/summernote-classes/summernote-classes.js\"></script>";
   }
 
   @override

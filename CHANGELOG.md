@@ -1,3 +1,7 @@
+## [1.5.0] - 2021-03-01
+* Nullsafety preview
+* Added Flutter's Hybrid Composition to the HTML Editor. This significantly improves the keyboard experience on Android.
+
 ## [1.4.0] - 2021-03-01
 * [BREAKING] removed `HtmlParser` for calling methods, instead you now must pass an `HtmlEditorController` to the plugin (like a `TextField`). All methods are accessible from that controller. See the usage section in the README for an example.
    * This allows you to have multiple independent editors on a page, whereas earlier the package would not know which editor the method should be called on.
