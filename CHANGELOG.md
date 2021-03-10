@@ -1,3 +1,6 @@
+## [1.5.0+1] - 2021-03-10
+* Fixed getText() returning null on mobile for any device
+
 ## [1.5.0] - 2021-03-01
 * Nullsafety preview
 * Added Flutter's Hybrid Composition to the HTML Editor. This significantly improves the keyboard experience on Android.

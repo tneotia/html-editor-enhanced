@@ -20,10 +20,11 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Gets the text from the editor and returns it as a [String].
   Future<String?> getText() async {
     getTextStream!.stream.drain();
-    await _evaluateJavascript(
+    _evaluateJavascript(
         source:
             "var str = \$('#summernote-2').summernote('code'); console.log(str);");
-    return await getTextStream!.stream.first;
+    String text = await getTextStream!.stream.first;
+    return text;
   }
 
   /// Sets the text of the editor. Some pre-processing is applied to convert
