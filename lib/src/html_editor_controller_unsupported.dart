@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 /// Fallback controller (should never be used)
@@ -5,6 +7,11 @@ class HtmlEditorController {
   /// Allows the [InAppWebViewController] for the Html editor to be accessed
   /// outside of the package itself for endless control and customization.
   InAppWebViewController? get editorController => null;
+
+  /// Stream to get the text once the javascript execution is complete.
+  /// It is *not* recommended to modify or use this property in your code, this
+  /// is only exposed so the [InAppWebView] can access it.
+  StreamController<String>? getTextStream = null;
 
   /// Gets the text from the editor and returns it as a [String].
   Future<String?> getText() => Future.value(null);

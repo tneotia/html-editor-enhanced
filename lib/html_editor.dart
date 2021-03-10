@@ -18,8 +18,5 @@ export 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart
     if (dart.library.html) 'package:html_editor_enhanced/src/html_editor_controller_web.dart'
     if (dart.library.io) 'package:html_editor_enhanced/src/html_editor_controller_mobile.dart';
 
-/// Global variable used to get the text from the Html editor
-String? text = "";
-
 /// Global variable used to get the [InAppWebViewController] of the Html editor
 Map<HtmlEditorController, dynamic> controllerMap = {};
