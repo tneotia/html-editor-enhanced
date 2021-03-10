@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
@@ -10,11 +12,18 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// outside of the package itself for endless control and customization.
   InAppWebViewController? get editorController => controllerMap[this];
 
+  /// Stream to get the text once the javascript execution is complete.
+  /// It is *not* recommended to modify or use this property in your code, this
+  /// is only exposed so the [InAppWebView] can access it.
+  StreamController<String>? getTextStream = StreamController<String>.broadcast();
+
   /// Gets the text from the editor and returns it as a [String].
   Future<String?> getText() async {
-    await _evaluateJavascript(
+    getTextStream!.stream.drain();
+    _evaluateJavascript(
         source:
             "var str = \$('#summernote-2').summernote('code'); console.log(str);");
+    String text = await getTextStream!.stream.first;
     return text;
   }
 

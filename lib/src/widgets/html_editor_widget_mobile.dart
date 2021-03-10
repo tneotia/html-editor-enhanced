@@ -64,7 +64,7 @@ class HtmlEditorWidget extends StatelessWidget {
                   message == "<p><br/></p>") {
                 message = "";
               }
-              text = message;
+              widgetController.getTextStream!.add(message);
             },
             onLoadStop: (InAppWebViewController controller, Uri? uri) async {
               String url = uri.toString();
@@ -100,7 +100,7 @@ class HtmlEditorWidget extends StatelessWidget {
                   String darkCSS =
                       "<link href=\"summernote-lite-dark.css\" rel=\"stylesheet\">";
                   await controller.evaluateJavascript(
-                      source: "\$('head').append('${darkCSS}');");
+                      source: "\$('head').append('$darkCSS');");
                 }
                 //set the text once the editor is loaded
                 if (value != null) {

@@ -21,8 +21,8 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     _evaluateJavascriptWeb(data: {"type": "toIframe: getText"});
     html.MessageEvent e = await html.window.onMessage.firstWhere(
         (element) => json.decode(element.data)["type"] == "toDart: getText");
-    text = json.decode(e.data)["text"];
-    if (text!.isEmpty ||
+    String text = json.decode(e.data)["text"];
+    if (text.isEmpty ||
         text == "<p></p>" ||
         text == "<p><br></p>" ||
         text == "<p><br/></p>") text = "";
