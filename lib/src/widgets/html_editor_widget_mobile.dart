@@ -112,6 +112,9 @@ class HtmlEditorWidget extends StatelessWidget {
                   addJSHandlers(callbacks!);
                   callbacksInitialized = true;
                 }
+                //call onInit callback
+                if (callbacks != null && callbacks!.onInit != null)
+                  callbacks!.onInit!.call();
               }
             },
           ),

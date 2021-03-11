@@ -32,6 +32,12 @@ class _MyHomePageState extends State<MyHomePage> {
   final HtmlEditorController controller = HtmlEditorController();
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -80,6 +86,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 onBlurCodeview: () {
                   print("codeview either focused or unfocused");
+                },
+                onInit: () {
+                  print("init");
                 },
                 onKeyDown: (keyCode) {
                   print("$keyCode key downed");

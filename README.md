@@ -183,8 +183,16 @@ If you decide to allow images directly from the camera, you will need to comment
 
 ```dart
 import 'package:html_editor/html_editor.dart';
-// other code here
+
 HtmlEditorController controller = HtmlEditorController();
+
+@override
+void dispose() {
+    //it is highly recommended to dispose on mobile to properly close the stream it uses to get text
+    controller.dispose();
+    super.dispose();
+}
+
 @override Widget build(BuildContext context) {
     return HtmlEditor(
             controller: controller, //required
@@ -229,6 +237,7 @@ Access these methods like this: `<controller name>.<method name>`
 
 Method | Argument(s) | Returned Value(s) | Description
 ------------ | ------------- | ------------- | -------------
+**dispose()** | N/A | N/A | Disposes the stream used to get the editor's contents on mobile. Do *not* use this method in Flutter Web.
 **getText()** | N/A | `Future<String>` | Returns the current HTML in the editor
 **setText()** | `String` | N/A | Sets the current text in the HTML to the input HTML string
 **setFullScreen()** | N/A | N/A | Sets the editor to take up the entire size of the webview
@@ -257,6 +266,7 @@ Callback | Parameter(s) | Description
 **onFocus** | N/A | Called when the rich text field gains focus
 **onBlur** | N/A | Called when the rich text field or the codeview loses focus
 **onBlurCodeview** | N/A | Called when the codeview either gains or loses focus
+**onInit** | N/A | Called when the rich text field is initialized and JavaScript methods can be called
 **onKeyDown** | `int` | Called when a key is downed, passes the keycode of the downed key
 **onKeyUp** | `int` | Called when a key is released, passes the keycode of the released key
 **onPaste** | N/A | Called when content is pasted into the editor

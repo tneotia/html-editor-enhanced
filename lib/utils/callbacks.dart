@@ -6,6 +6,7 @@ class Callbacks {
     this.onFocus,
     this.onBlur,
     this.onBlurCodeview,
+    this.onInit,
     this.onKeyUp,
     this.onKeyDown,
     this.onPaste,
@@ -51,7 +52,16 @@ class Callbacks {
   /// This callback will only be triggered if the user taps on an empty space
   /// in the toolbar or switches the view mode of the editor.
   Function()? onBlurCodeview;
-  //todo image callbacks & init callback
+
+  //todo image callbacks callback
+
+  /// Called whenever [InAppWebViewController.onLoadStop] is fired on mobile
+  /// or when the [IFrameElement.onLoad] stream is fired on web. Note that this
+  /// method will also be called on refresh on both platforms.
+  ///
+  /// You can use this method to set certain properties - e.g. set the editor
+  /// to fullscreen mode - as soon as the editor is ready to accept these commands.
+  Function()? onInit;
 
   /// Called whenever a key is released and the editor is in rich text view.
   ///
