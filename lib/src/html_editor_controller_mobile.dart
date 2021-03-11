@@ -17,6 +17,12 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// is only exposed so the [InAppWebView] can access it.
   StreamController<String>? getTextStream = StreamController<String>.broadcast();
 
+  /// Method to dispose the stream that gets text from the editor. It is
+  /// highly recommended to use this method in your [dispose] for your [StatefulWidget].
+  void dispose() {
+    getTextStream!.close();
+  }
+
   /// Gets the text from the editor and returns it as a [String].
   Future<String?> getText() async {
     getTextStream!.stream.drain();
