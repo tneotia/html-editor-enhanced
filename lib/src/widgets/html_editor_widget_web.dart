@@ -10,7 +10,7 @@ import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/utils/toolbar_icon.dart';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
-import 'dart:ui' as ui;
+import 'package:html_editor_enhanced/utils/shims/dart_ui.dart' as ui;
 
 /// The HTML Editor widget itself, for web (uses IFrameElement)
 class HtmlEditorWidget extends StatefulWidget {

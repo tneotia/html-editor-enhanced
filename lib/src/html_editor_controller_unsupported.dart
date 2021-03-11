@@ -11,14 +11,16 @@ class HtmlEditorController {
   /// Stream to get the text once the javascript execution is complete.
   /// It is *not* recommended to modify or use this property in your code, this
   /// is only exposed so the [InAppWebView] can access it.
-  StreamController<String>? getTextStream = null;
+  StreamController<String>? getTextStream;
 
   /// Method to dispose the stream that gets text from the editor. It is
   /// highly recommended to use this method in your [dispose] for your [StatefulWidget].
   ///
   /// Note: This should only be used in Flutter Mobile, Flutter Web does not
   /// use a stream and therefore nothing needs to be disposed.
-  void dispose() {}
+  void dispose() {
+    if (getTextStream != null) getTextStream?.close();
+  }
 
   /// Gets the text from the editor and returns it as a [String].
   Future<String?> getText() => Future.value(null);

@@ -20,7 +20,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Method to dispose the stream that gets text from the editor. It is
   /// highly recommended to use this method in your [dispose] for your [StatefulWidget].
   void dispose() {
-    getTextStream!.close();
+    if (getTextStream != null) getTextStream?.close();
   }
 
   /// Gets the text from the editor and returns it as a [String].
