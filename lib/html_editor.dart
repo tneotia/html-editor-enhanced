@@ -1,7 +1,5 @@
 library html_editor;
 
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-
 import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart'
     if (dart.library.html) 'package:html_editor_enhanced/src/html_editor_controller_web.dart'
     if (dart.library.io) 'package:html_editor_enhanced/src/html_editor_controller_mobile.dart';

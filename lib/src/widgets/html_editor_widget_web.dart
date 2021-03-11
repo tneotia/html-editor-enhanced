@@ -198,7 +198,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
       ..style.border = 'none'
       ..onLoad.listen((event) async {
         if (widget.callbacks?.onInit != null) widget.callbacks!.onInit!.call();
-        if (widget.value != null) widget.widgetController.setText(widget.value!);
+        if (widget.value != null)
+          widget.widgetController.setText(widget.value!);
       });
     if (widget.callbacks != null) addJSListener(widget.callbacks!);
     ui.platformViewRegistry
