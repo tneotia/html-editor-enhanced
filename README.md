@@ -346,6 +346,9 @@ Adds a button to the toolbar to customize the ul and ol list style.
 6. [Summernote RTL](https://github.com/virtser/summernote-rtl-plugin)
 Adds two buttons to the toolbar that switch the currently selected text between LTR and RTL format.
 
+7. [Summernote At Mention](https://github.com/team-loxo/summernote-at-mention)
+Shows a dropdown of available mentions when the '@' character is typed into the editor. The implementation requires that you pass a list of available mentions, and you can also provide a function to call when a mention is inserted into the editor.
+
 This list is not final, more will be added. If there's a specific plugin you'd like to see support for, please file a feature request!
 
 By default, no plugins will be activated. What if you want to activate some? Don't worry, it's a nice and neat API:

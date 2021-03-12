@@ -70,6 +70,7 @@ class HtmlEditorWidget extends StatelessWidget {
               String url = uri.toString();
               if (url.contains("summernote.html")) {
                 String summernoteToolbar = "[\n";
+                String summernoteCallbacks = "";
                 for (Toolbar t in toolbar) {
                   summernoteToolbar = summernoteToolbar +
                       "['${t.getGroupName()}', ${t.getButtons(listStyles: plugins.whereType<SummernoteListStyles>().isNotEmpty)}],\n";
@@ -80,9 +81,29 @@ class HtmlEditorWidget extends StatelessWidget {
                     summernoteToolbar = summernoteToolbar +
                         (p.getToolbarString().isNotEmpty ? "'${p.getToolbarString()}'" : "") +
                         (p == plugins.last ? "]]\n" : p.getToolbarString().isNotEmpty ? ", " : "");
+                    if (p is SummernoteAtMention) {
+                      summernoteCallbacks = """
+                        callbacks: {
+                          summernoteAtMention: {
+                            getSuggestions: (value) => ${p.getMentions()},
+                            onSelect: (value) => {
+                              window.flutter_inappwebview.callHandler('onSelectMention', value);
+                            },
+                          }
+                        }
+                      """;
+                      if (p.onSelect != null) {
+                        controllerMap[widgetController].addJavaScriptHandler(
+                            handlerName: 'onSelectMention',
+                            callback: (value) {
+                              p.onSelect!.call(value.first.toString());
+                            });
+                      }
+                    }
                   }
                 }
                 summernoteToolbar = summernoteToolbar + "],";
+                print(summernoteCallbacks);
                 controller.evaluateJavascript(source: """
                    \$(document).ready(function () {
                       \$('#summernote-2').summernote({
@@ -92,7 +113,8 @@ class HtmlEditorWidget extends StatelessWidget {
                         maxHeight: ${height - 125},
                         toolbar: $summernoteToolbar
                         disableGrammar: false,
-                        spellCheck: false
+                        spellCheck: false,
+                        $summernoteCallbacks
                       });
                     });
                 """);

@@ -43,6 +43,7 @@ flutter:
     - packages/html_editor_enhanced/assets/plugins/summernote-list-styles/summernote-list-styles.js
     - packages/html_editor_enhanced/assets/plugins/summernote-list-styles/summernote-list-styles.css
     - packages/html_editor_enhanced/assets/plugins/summernote-rtl/summernote-ext-rtl.js
+    - packages/html_editor_enhanced/assets/plugins/summernote-at-mention/bundle.js
   # This section identifies this Flutter project as a plugin project.
   # The 'pluginClass' and Android 'package' identifiers should not ordinarily
   # be modified. They are used by the tooling to maintain consistency when

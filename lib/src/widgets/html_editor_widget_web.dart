@@ -58,6 +58,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     super.initState();
     String summernoteToolbar = "[\n";
     String headString = "";
+    String summernoteCallbacks = "";
     for (Toolbar t in widget.toolbar) {
       summernoteToolbar =
           summernoteToolbar + "['${t.getGroupName()}', ${t.getButtons(listStyles: widget.plugins.whereType<SummernoteListStyles>().isNotEmpty)}],\n";
@@ -69,6 +70,28 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             (p.getToolbarString().isNotEmpty ? "'${p.getToolbarString()}'" : "") +
             (p == widget.plugins.last ? "]]\n" : p.getToolbarString().isNotEmpty ? ", " : "");
         headString = headString + p.getHeadString() + "\n";
+        if (p is SummernoteAtMention) {
+          summernoteCallbacks = """
+            callbacks: {
+              summernoteAtMention: {
+                getSuggestions: (value) => ${p.getMentions()},
+                onSelect: (value) => {
+                  window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onSelectMention", "value": value}), "*");
+                },
+              }
+            }
+          """;
+          if (p.onSelect != null) {
+            html.window.onMessage.listen((event) {
+              var data = json.decode(event.data);
+              if (data["type"].contains("toDart:") && data["view"] == createdViewId) {
+                if (data["type"].contains("onSelectMention")) {
+                  p.onSelect!.call(data["value"]);
+                }
+              }
+            });
+          }
+        }
       }
     }
     summernoteToolbar = summernoteToolbar + "],";
@@ -107,7 +130,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             maxHeight: ${widget.height - 125},
             toolbar: $summernoteToolbar
             disableGrammar: false,
-            spellCheck: false
+            spellCheck: false,
+            $summernoteCallbacks
           });
         });
        

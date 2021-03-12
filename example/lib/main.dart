@@ -107,6 +107,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 SummernoteCaseConverter(),
                 SummernoteListStyles(),
                 SummernoteRTL(),
+                SummernoteAtMention(
+                  mentions: ['test1', 'test2', 'test3'],
+                  onSelect: (String value) {
+                    print(value);
+                  }
+                ),
               ],
             ),
             Padding(

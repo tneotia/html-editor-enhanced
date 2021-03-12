@@ -138,3 +138,34 @@ class SummernoteRTL extends Plugins {
     return "ltr', 'rtl";
   }
 }
+
+/// Summernote @ Mention plugin - adds a dropdown to select the person to mention whenever
+/// the '@' character is typed into the editor. The list of people to mention is
+/// drawn from the [mentions] parameter. You can detect who was mentioned using the
+/// [onSelect] parameter.
+///
+/// README available [here](https://github.com/team-loxo/summernote-at-mention)
+class SummernoteAtMention extends Plugins {
+  final List<String> mentions;
+  final Function(String)? onSelect;
+
+  const SummernoteAtMention({required this.mentions, this.onSelect});
+
+  @override
+  String getHeadString() {
+    return "<script src=\"assets/packages/html_editor_enhanced/assets/plugins/summernote-at-mention/bundle.js\"></script>";
+  }
+
+  @override
+  String getToolbarString() {
+    return "";
+  }
+
+  String getMentions() {
+    String mentionsString = "[";
+    for (String e in mentions) {
+      mentionsString = mentionsString + "'$e'" + (e != mentions.last ? ", " : "");
+    }
+    return mentionsString + "]";
+  }
+}
