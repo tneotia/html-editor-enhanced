@@ -8,7 +8,7 @@ abstract class Toolbar {
   String getGroupName();
 
   /// Gives the string for the button names
-  String getButtons();
+  String getButtons({bool listStyles = false});
 }
 
 /// Style group
@@ -23,7 +23,7 @@ class Style extends Toolbar {
   }
 
   @override
-  String getButtons() {
+  String getButtons({bool listStyles = false}) {
     if (buttons.isEmpty) {
       return "['style']";
     } else {
@@ -51,7 +51,7 @@ class FontSetting extends Toolbar {
   }
 
   @override
-  String getButtons() {
+  String getButtons({bool listStyles = false}) {
     if (buttons.isEmpty) {
       return "['fontname', 'fontsize', 'fontsizeunit']";
     } else {
@@ -83,7 +83,7 @@ class Font extends Toolbar {
   }
 
   @override
-  String getButtons() {
+  String getButtons({bool listStyles = false}) {
     if (buttons.isEmpty) {
       return "['bold', 'italic', 'underline', 'clear']";
     } else {
@@ -111,7 +111,7 @@ class MiscFont extends Toolbar {
   }
 
   @override
-  String getButtons() {
+  String getButtons({bool listStyles = false}) {
     if (buttons.isEmpty) {
       return "['strikethrough', 'superscript', 'subscript']";
     } else {
@@ -139,7 +139,7 @@ class ColorBar extends Toolbar {
   }
 
   @override
-  String getButtons() {
+  String getButtons({bool listStyles = false}) {
     if (buttons.isEmpty) {
       return "['color', 'forecolor', 'backcolor']";
     } else {
@@ -167,16 +167,33 @@ class Paragraph extends Toolbar {
   }
 
   @override
-  String getButtons() {
+  String getButtons({bool listStyles = false}) {
     if (buttons.isEmpty) {
-      return "['ul', 'ol', 'paragraph', 'height']";
+      return "['ul', 'ol', ${listStyles ? "'listStyles', " : ""}'paragraph', 'height']";
     } else {
       String list = "[";
       for (ParagraphButtons e in buttons) {
-        list = list + "'${describeEnum(e)}'" + (buttons.last != e ? ", " : "");
+        list = list + "'${describeEnum(e)}'" + getListStyle(e) + (buttons.last != e ? ", " : "");
       }
       return list + "]";
     }
+  }
+
+  /// Determines where to place the 'listStyles' toolbar item if the summernote
+  /// list styles plugin is enabled.
+  String getListStyle(ParagraphButtons pb) {
+    bool hasUlOl = false;
+    bool hasBoth = false;
+    if (buttons.contains(ParagraphButtons.ul) || buttons.contains(ParagraphButtons.ol))
+      hasUlOl = true;
+    if (buttons.contains(ParagraphButtons.ul) && buttons.contains(ParagraphButtons.ol))
+      hasBoth = true;
+    if (hasUlOl && !hasBoth && (pb == ParagraphButtons.ul || pb == ParagraphButtons.ol))
+      return ", 'listStyles'";
+    else if (hasUlOl && hasBoth && pb == ParagraphButtons.ol)
+      return ", 'listStyles'";
+    else
+      return "";
   }
 }
 
@@ -195,7 +212,7 @@ class Insert extends Toolbar {
   }
 
   @override
-  String getButtons() {
+  String getButtons({bool listStyles = false}) {
     if (buttons.isEmpty) {
       return "['link', 'picture', 'video', 'table', 'hr']";
     } else {
@@ -223,7 +240,7 @@ class Misc extends Toolbar {
   }
 
   @override
-  String getButtons() {
+  String getButtons({bool listStyles = false}) {
     if (buttons.isEmpty) {
       return "['fullscreen', 'codeview', 'undo', 'redo', 'help']";
     } else {

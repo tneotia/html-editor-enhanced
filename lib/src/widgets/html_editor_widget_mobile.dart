@@ -72,26 +72,28 @@ class HtmlEditorWidget extends StatelessWidget {
                 String summernoteToolbar = "[\n";
                 for (Toolbar t in toolbar) {
                   summernoteToolbar = summernoteToolbar +
-                      "['${t.getGroupName()}', ${t.getButtons()}],\n";
+                      "['${t.getGroupName()}', ${t.getButtons(listStyles: plugins.whereType<SummernoteListStyles>().isNotEmpty)}],\n";
                 }
                 if (plugins.isNotEmpty) {
                   summernoteToolbar = summernoteToolbar + "['plugins', [";
                   for (Plugins p in plugins) {
                     summernoteToolbar = summernoteToolbar +
-                        "'${p.getToolbarString()}'" +
-                        (p == plugins.last ? "]]\n" : ", ");
+                        (p.getToolbarString().isNotEmpty ? "'${p.getToolbarString()}'" : "") +
+                        (p == plugins.last ? "]]\n" : p.getToolbarString().isNotEmpty ? ", " : "");
                   }
                 }
                 summernoteToolbar = summernoteToolbar + "],";
                 controller.evaluateJavascript(source: """
-                   \$('#summernote-2').summernote({
-                      placeholder: "$hint",
-                      tabsize: 2,
-                      height: ${height - 125},
-                      maxHeight: ${height - 125},
-                      toolbar: $summernoteToolbar
-                      disableGrammar: false,
-                      spellCheck: false
+                   \$(document).ready(function () {
+                      \$('#summernote-2').summernote({
+                        placeholder: "$hint",
+                        tabsize: 2,
+                        height: ${height - 125},
+                        maxHeight: ${height - 125},
+                        toolbar: $summernoteToolbar
+                        disableGrammar: false,
+                        spellCheck: false
+                      });
                     });
                 """);
                 if ((Theme.of(context).brightness == Brightness.dark ||

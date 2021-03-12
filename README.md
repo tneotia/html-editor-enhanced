@@ -329,10 +329,22 @@ This API allows you to add certain Summernote plugins from the [Summernote Aweso
 Currently the following plugins are supported:
 
 1. [Summernote Emoji from Ajax](https://github.com/tylerecouture/summernote-ext-emoji-ajax/)
+Adds a button to the toolbar to allow the user to insert emojis. These are loaded via Ajax.
 
 2. [Summernote Add Text Tags](https://github.com/tylerecouture/summernote-add-text-tags)
+Adds a button to the toolbar to support tags like var, code, samp, and more.
 
 3. [Summernote Classes](https://github.com/DiemenDesign/summernote-classes)
+Adds a hotbar at the bottom of the editor to quickly and easily add common tags for the specific HTML node. This should only be used by advanced users, ideally.
+
+4. [Summernote Case Converter](https://github.com/piranga8/summernote-case-converter)
+Adds a button to the toolbar to convert the selected text to all lowercase, all uppercase, sentence case, or title case.
+
+5. [Summernote List Styles](https://github.com/tylerecouture/summernote-list-styles)
+Adds a button to the toolbar to customize the ul and ol list style.
+
+6. [Summernote RTL](https://github.com/virtser/summernote-rtl-plugin)
+Adds two buttons to the toolbar that switch the currently selected text between LTR and RTL format.
 
 This list is not final, more will be added. If there's a specific plugin you'd like to see support for, please file a feature request!
 

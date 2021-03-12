@@ -56,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("\<\\\>",
+        child: Text(r"<\>",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         onPressed: () {
           controller.toggleCodeView();
@@ -90,10 +90,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 onInit: () {
                   print("init");
                 },
-                onKeyDown: (keyCode) {
+                onKeyDown: (int? keyCode) {
                   print("$keyCode key downed");
                 },
-                onKeyUp: (keyCode) {
+                onKeyUp: (int? keyCode) {
                   print("$keyCode key released");
                 },
                 onPaste: () {
@@ -104,6 +104,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 SummernoteEmoji(),
                 AdditionalTextTags(),
                 SummernoteClasses(),
+                SummernoteCaseConverter(),
+                SummernoteListStyles(),
+                SummernoteRTL(),
               ],
             ),
             Padding(

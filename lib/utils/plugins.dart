@@ -65,7 +65,7 @@ class AdditionalTextTags extends Plugins {
 /// tags are fairly obscure and advanced, so I would not recommend this plugin
 /// for the average user.
 ///
-/// ReaREADME available [here](https://github.com/DiemenDesign/summernote-classes)
+/// README available [here](https://github.com/DiemenDesign/summernote-classes)
 class SummernoteClasses extends Plugins {
   const SummernoteClasses();
 
@@ -77,5 +77,64 @@ class SummernoteClasses extends Plugins {
   @override
   String getToolbarString() {
     return "classes";
+  }
+}
+
+/// Summernote case converter plugin - adds a toolbar item that can convert any text
+/// between cases. The supported cases are upper, lower, sentence, and title.
+///
+/// README available [here](https://github.com/piranga8/summernote-case-converter)
+class SummernoteCaseConverter extends Plugins {
+  const SummernoteCaseConverter();
+
+  @override
+  String getHeadString() {
+    return "<script src=\"assets/packages/html_editor_enhanced/assets/plugins/summernote-case-converter/summernote-case-converter.js\"></script>";
+  }
+
+  @override
+  String getToolbarString() {
+    return "caseConverter";
+  }
+}
+
+/// Summernote list styles plugin - adds a toolbar item that allows the user to
+/// change the bulleted list style.
+/// Available styles: numbered, lowered alpha, upper alpha, lower roman, upper
+/// roman, disc, circle, and square.
+///
+/// README available [here](https://github.com/tylerecouture/summernote-list-styles)
+class SummernoteListStyles extends Plugins {
+  const SummernoteListStyles();
+
+  @override
+  String getHeadString() {
+    return """
+      <link href="assets/packages/html_editor_enhanced/assets/plugins/summernote-list-styles/summernote-list-styles.css" rel="stylesheet">
+      <script src="assets/packages/html_editor_enhanced/assets/plugins/summernote-list-styles/summernote-list-styles.js"></script>
+    """;
+  }
+
+  @override
+  String getToolbarString() {
+    return "";
+  }
+}
+
+/// Summernote RTL plugin - adds two toolbar items that let you switch between
+/// LTR and RTL format, useful for languages like Hebrew and Arabic.
+///
+/// README available [here](https://github.com/virtser/summernote-rtl-plugin)
+class SummernoteRTL extends Plugins {
+  const SummernoteRTL();
+
+  @override
+  String getHeadString() {
+    return "<script src=\"assets/packages/html_editor_enhanced/assets/plugins/summernote-rtl/summernote-ext-rtl.js\"></script>";
+  }
+
+  @override
+  String getToolbarString() {
+    return "ltr', 'rtl";
   }
 }

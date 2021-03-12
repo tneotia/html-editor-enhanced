@@ -60,14 +60,14 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     String headString = "";
     for (Toolbar t in widget.toolbar) {
       summernoteToolbar =
-          summernoteToolbar + "['${t.getGroupName()}', ${t.getButtons()}],\n";
+          summernoteToolbar + "['${t.getGroupName()}', ${t.getButtons(listStyles: widget.plugins.whereType<SummernoteListStyles>().isNotEmpty)}],\n";
     }
     if (widget.plugins.isNotEmpty) {
       summernoteToolbar = summernoteToolbar + "['plugins', [";
       for (Plugins p in widget.plugins) {
         summernoteToolbar = summernoteToolbar +
-            "'${p.getToolbarString()}'" +
-            (p == widget.plugins.last ? "]]\n" : ", ");
+            (p.getToolbarString().isNotEmpty ? "'${p.getToolbarString()}'" : "") +
+            (p == widget.plugins.last ? "]]\n" : p.getToolbarString().isNotEmpty ? ", " : "");
         headString = headString + p.getHeadString() + "\n";
       }
     }
