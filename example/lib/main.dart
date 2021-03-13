@@ -32,12 +32,6 @@ class _MyHomePageState extends State<MyHomePage> {
   final HtmlEditorController controller = HtmlEditorController();
 
   @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

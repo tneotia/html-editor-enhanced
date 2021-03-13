@@ -50,21 +50,14 @@ class HtmlEditorWidget extends StatelessWidget {
                     javaScriptEnabled: true, transparentBackground: true),
                 android: AndroidInAppWebViewOptions(
                   useHybridComposition: true,
+                  loadWithOverviewMode: true,
                 )),
             gestureRecognizers: {
               Factory<VerticalDragGestureRecognizer>(
                   () => VerticalDragGestureRecognizer())
             },
             onConsoleMessage: (controller, consoleMessage) {
-              String message = consoleMessage.message;
-              //todo determine whether this processing is necessary
-              if (message.isEmpty ||
-                  message == "<p></p>" ||
-                  message == "<p><br></p>" ||
-                  message == "<p><br/></p>") {
-                message = "";
-              }
-              widgetController.getTextStream!.add(message);
+              print(consoleMessage.message);
             },
             onLoadStop: (InAppWebViewController controller, Uri? uri) async {
               String url = uri.toString();

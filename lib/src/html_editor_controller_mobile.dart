@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
@@ -12,25 +10,11 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// outside of the package itself for endless control and customization.
   InAppWebViewController? get editorController => controllerMap[this];
 
-  /// Stream to get the text once the javascript execution is complete.
-  /// It is *not* recommended to modify or use this property in your code, this
-  /// is only exposed so the [InAppWebView] can access it.
-  StreamController<String>? getTextStream =
-      StreamController<String>.broadcast();
-
-  /// Method to dispose the stream that gets text from the editor. It is
-  /// highly recommended to use this method in your [dispose] for your [StatefulWidget].
-  void dispose() {
-    if (getTextStream != null) getTextStream?.close();
-  }
-
   /// Gets the text from the editor and returns it as a [String].
   Future<String?> getText() async {
-    getTextStream!.stream.drain();
-    _evaluateJavascript(
+    String? text = await _evaluateJavascript(
         source:
-            "var str = \$('#summernote-2').summernote('code'); console.log(str);");
-    String text = await getTextStream!.stream.first;
+            "\$('#summernote-2').summernote('code');") as String?;
     return text;
   }
 
@@ -137,12 +121,13 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   }
 
   /// Helper function to evaluate JS and check the current environment
-  Future _evaluateJavascript({required source}) async {
+  dynamic _evaluateJavascript({required source}) async {
     if (!kIsWeb) {
       if (controllerMap[this] == null || await editorController!.isLoading())
         throw Exception(
             "HTML editor is still loading, please wait before evaluating this JS: $source!");
-      await editorController!.evaluateJavascript(source: source);
+      var result = await editorController!.evaluateJavascript(source: source);
+      return result;
     } else {
       throw Exception(
           "Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart");
