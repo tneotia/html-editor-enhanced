@@ -42,7 +42,10 @@ class HtmlEditorWidget extends StatefulWidget {
 
 /// The HTML Editor widget itself, for mobile (uses flutter_inappwebview)
 class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
+  /// Tracks whether the callbacks were initialized or not to prevent re-initializing them
   bool callbacksInitialized = false;
+
+  /// The actual height of the editor, used to automatically set the height
   late double actualHeight;
 
   @override
@@ -170,11 +173,11 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                     widget.controller.setText(widget.value!);
                   //adjusts the height of the editor when it is loaded
                   if (widget.autoAdjustHeight) {
-                    final docWidth = await controller.evaluateJavascript(
+                    final docHeight = await controller.evaluateJavascript(
                         source: 'document.body.scrollHeight') as int?;
-                    if ((docWidth != null) && mounted) {
+                    if ((docHeight != null) && mounted) {
                       setState(() {
-                        actualHeight = docWidth + 40.0;
+                        actualHeight = docHeight + 40.0;
                       });
                     }
                   }

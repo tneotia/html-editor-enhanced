@@ -55,8 +55,12 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   /// The view ID for the IFrameElement. Must be unique.
   late String createdViewId;
 
+  /// The actual height of the editor, used to automatically set the height
+  late double actualHeight;
+
   @override
   void initState() {
+    actualHeight = widget.height + 125;
     createdViewId = getRandString(10);
     controllerMap[widget.controller] = createdViewId;
     super.initState();
@@ -77,8 +81,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             (p == widget.plugins.last
                 ? "]]\n"
                 : p.getToolbarString().isNotEmpty
-                    ? ", "
-                    : "");
+                ? ", "
+                : "");
         headString = headString + p.getHeadString() + "\n";
         if (p is SummernoteAtMention) {
           summernoteCallbacks = summernoteCallbacks +
@@ -93,7 +97,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           if (p.onSelect != null) {
             html.window.onMessage.listen((event) {
               var data = json.decode(event.data);
-              if (data["type"].contains("toDart:") &&
+              if (data["type"] != null &&
+                  data["type"].contains("toDart:") &&
                   data["view"] == createdViewId &&
                   data["type"].contains("onSelectMention")) {
                 p.onSelect!.call(data["value"]);
@@ -111,7 +116,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             """;
             html.window.onMessage.listen((event) {
               var data = json.decode(event.data);
-              if (data["messageType"].contains("toDart:") &&
+              if (data["messageType"] != null &&
+                  data["messageType"].contains("toDart:") &&
                   data["view"] == createdViewId &&
                   data["messageType"].contains("onFileUpload")) {
                 Map<String, dynamic> map = {
@@ -134,10 +140,10 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     summernoteCallbacks = summernoteCallbacks + "}";
     String darkCSS = "";
     if ((Theme.of(widget.initBC).brightness == Brightness.dark ||
-            widget.darkMode == true) &&
+        widget.darkMode == true) &&
         widget.darkMode != false) {
       darkCSS =
-          "<link href=\"assets/packages/html_editor_enhanced/assets/summernote-lite-dark.css\" rel=\"stylesheet\">";
+      "<link href=\"assets/packages/html_editor_enhanced/assets/summernote-lite-dark.css\" rel=\"stylesheet\">";
     }
     String jsCallbacks = "";
     if (widget.callbacks != null)
@@ -163,8 +169,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           \$('#summernote-2').summernote({
             placeholder: "${widget.hint}",
             tabsize: 2,
-            height: ${widget.height - 125},
-            maxHeight: ${widget.height - 125},
+            height: ${widget.height},
             toolbar: $summernoteToolbar
             disableGrammar: false,
             spellCheck: false,
@@ -181,6 +186,10 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
               if (data["type"].includes("getText")) {
                 var str = \$('#summernote-2').summernote('code');
                 window.parent.postMessage(JSON.stringify({"type": "toDart: getText", "text": str}), "*");
+              }
+              if (data["type"].includes("getHeight")) {
+                var height = document.body.scrollHeight;
+                window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: htmlHeight", "height": height}), "*");
               }
               if (data["type"].includes("setText")) {
                 \$('#summernote-2').summernote('code', data["text"]);
@@ -252,49 +261,56 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
       </body>
       </html>
     """;
+    if (widget.callbacks != null) addJSListener(widget.callbacks!);
     final html.IFrameElement iframe = html.IFrameElement()
       ..width = MediaQuery.of(widget.initBC).size.width.toString() //'800'
-      ..height = widget.height.toString()
+      ..height = widget.autoAdjustHeight ? actualHeight.toString() : widget.height.toString()
       ..srcdoc = htmlString
       ..style.border = 'none'
       ..onLoad.listen((event) async {
         if (widget.callbacks?.onInit != null) widget.callbacks!.onInit!.call();
         if (widget.value != null) widget.controller.setText(widget.value!);
+        Map<String, Object> data = {"type": "toIframe: getHeight"};
+        data["view"] = createdViewId;
+        final jsonEncoder = JsonEncoder();
+        var json = jsonEncoder.convert(data);
+        html.window.postMessage(json, "*");
       });
-    if (widget.callbacks != null) addJSListener(widget.callbacks!);
     ui.platformViewRegistry
         .registerViewFactory(createdViewId, (int viewId) => iframe);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Expanded(
-            child: Directionality(
-                textDirection: TextDirection.ltr,
-                child: HtmlElementView(
-                  viewType: createdViewId,
-                ))),
-        widget.showBottomToolbar
-            ? Divider(height: 0)
-            : Container(height: 0, width: 0),
-        widget.showBottomToolbar
-            ? Padding(
-                padding:
-                    const EdgeInsets.only(left: 4, right: 4, bottom: 8, top: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    toolbarIcon(context, Icons.content_copy, "Copy",
-                        onTap: () async {
+    return Container(
+      height: widget.autoAdjustHeight ? actualHeight : widget.height,
+      child: Column(
+        children: <Widget>[
+          Expanded(
+              child: Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: HtmlElementView(
+                    viewType: createdViewId,
+                  ))),
+          widget.showBottomToolbar
+              ? Divider(height: 0)
+              : Container(height: 0, width: 0),
+          widget.showBottomToolbar
+              ? Padding(
+            padding:
+            const EdgeInsets.only(left: 4, right: 4, bottom: 8, top: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                toolbarIcon(context, Icons.content_copy, "Copy",
+                    onTap: () async {
                       String? data = await widget.controller.getText();
                       Clipboard.setData(new ClipboardData(text: data));
                     }),
-                    toolbarIcon(context, Icons.content_paste, "Paste",
-                        onTap: () async {
+                toolbarIcon(context, Icons.content_paste, "Paste",
+                    onTap: () async {
                       ClipboardData? data =
-                          await Clipboard.getData(Clipboard.kTextPlain);
+                      await Clipboard.getData(Clipboard.kTextPlain);
                       if (data != null) {
                         String text = data.text!;
                         if (widget.controller.processInputHtml) {
@@ -311,11 +327,12 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                         widget.controller.insertHtml(text);
                       }
                     }),
-                  ],
-                ),
-              )
-            : Container(height: 0, width: 0),
-      ],
+              ],
+            ),
+          )
+              : Container(height: 0, width: 0),
+        ],
+      ),
     );
   }
 
@@ -394,6 +411,14 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     html.window.onMessage.listen((event) {
       var data = json.decode(event.data);
       if (data["type"].contains("toDart:") && data["view"] == createdViewId) {
+        if (data["type"].contains("htmlHeight") && widget.autoAdjustHeight) {
+          final docHeight = data["height"] ?? actualHeight;
+          if ((docHeight != null && docHeight != actualHeight) && mounted) {
+            setState(() {
+              actualHeight = docHeight + 40.0;
+            });
+          }
+        }
         if (data["type"].contains("onChange")) {
           c.onChange!.call(data["contents"]);
         }
