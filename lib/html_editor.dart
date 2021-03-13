@@ -7,6 +7,7 @@ import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart
 export 'package:html_editor_enhanced/utils/callbacks.dart';
 export 'package:html_editor_enhanced/utils/toolbar.dart';
 export 'package:html_editor_enhanced/utils/plugins.dart';
+export 'package:html_editor_enhanced/utils/file_upload_model.dart';
 
 export 'package:html_editor_enhanced/src/html_editor_unsupported.dart'
     if (dart.library.html) 'package:html_editor_enhanced/src/html_editor_web.dart'

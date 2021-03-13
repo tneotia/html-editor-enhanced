@@ -70,7 +70,7 @@ class HtmlEditorWidget extends StatelessWidget {
               String url = uri.toString();
               if (url.contains("summernote.html")) {
                 String summernoteToolbar = "[\n";
-                String summernoteCallbacks = "";
+                String summernoteCallbacks = "callbacks: {";
                 for (Toolbar t in toolbar) {
                   summernoteToolbar = summernoteToolbar +
                       "['${t.getGroupName()}', ${t.getButtons(listStyles: plugins.whereType<SummernoteListStyles>().isNotEmpty)}],\n";
@@ -82,15 +82,13 @@ class HtmlEditorWidget extends StatelessWidget {
                         (p.getToolbarString().isNotEmpty ? "'${p.getToolbarString()}'" : "") +
                         (p == plugins.last ? "]]\n" : p.getToolbarString().isNotEmpty ? ", " : "");
                     if (p is SummernoteAtMention) {
-                      summernoteCallbacks = """
-                        callbacks: {
-                          summernoteAtMention: {
-                            getSuggestions: (value) => ${p.getMentions()},
-                            onSelect: (value) => {
-                              window.flutter_inappwebview.callHandler('onSelectMention', value);
-                            },
-                          }
-                        }
+                      summernoteCallbacks = summernoteCallbacks + """
+                        \nsummernoteAtMention: {
+                          getSuggestions: (value) => ${p.getMentions()},
+                          onSelect: (value) => {
+                            window.flutter_inappwebview.callHandler('onSelectMention', value);
+                          },
+                        },
                       """;
                       if (p.onSelect != null) {
                         controllerMap[widgetController].addJavaScriptHandler(
@@ -100,10 +98,32 @@ class HtmlEditorWidget extends StatelessWidget {
                             });
                       }
                     }
+                    if (p is SummernoteFile) {
+                      if (p.onFileUpload != null) {
+                        summernoteCallbacks = summernoteCallbacks + """
+                          onFileUpload: function(files) {
+                            var newObject  = {
+                               'lastModified': files[0].lastModified,
+                               'lastModifiedDate': files[0].lastModifiedDate,
+                               'name': files[0].name,
+                               'size': files[0].size,
+                               'type': files[0].type
+                            };
+                            window.flutter_inappwebview.callHandler('onFileUpload', JSON.stringify(newObject));
+                          }
+                      """;
+                        controllerMap[widgetController].addJavaScriptHandler(
+                            handlerName: 'onFileUpload',
+                            callback: (files) {
+                              FileUpload file = fileUploadFromJson(files.first);
+                              p.onFileUpload!.call(file);
+                            });
+                      }
+                    }
                   }
                 }
                 summernoteToolbar = summernoteToolbar + "],";
-                print(summernoteCallbacks);
+                summernoteCallbacks = summernoteCallbacks + "}";
                 controller.evaluateJavascript(source: """
                    \$(document).ready(function () {
                       \$('#summernote-2').summernote({

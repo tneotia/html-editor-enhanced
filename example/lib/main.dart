@@ -113,6 +113,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     print(value);
                   }
                 ),
+                SummernoteCodewrapper(),
+                SummernoteFile(
+                  onFileUpload: (file) {
+                    print(file.name);
+                    print(file.size);
+                    print(file.type);
+                  }
+                ),
               ],
             ),
             Padding(
@@ -148,9 +156,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     onPressed: () async {
                       String? txt = await controller.getText();
                       if (txt != null) {
-                        if (txt.contains("<img src=\"data:image")) {
+                        if (txt.contains("src=\"data:")) {
                           txt =
-                              "<text removed due to base-64 image data, displaying the text could cause the app to crash>";
+                              "<text removed due to base-64 data, displaying the text could cause the app to crash>";
                         }
                         setState(() {
                           result = txt!;

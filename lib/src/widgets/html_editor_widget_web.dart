@@ -58,7 +58,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     super.initState();
     String summernoteToolbar = "[\n";
     String headString = "";
-    String summernoteCallbacks = "";
+    String summernoteCallbacks = "callbacks: {";
     for (Toolbar t in widget.toolbar) {
       summernoteToolbar =
           summernoteToolbar + "['${t.getGroupName()}', ${t.getButtons(listStyles: widget.plugins.whereType<SummernoteListStyles>().isNotEmpty)}],\n";
@@ -71,23 +71,45 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             (p == widget.plugins.last ? "]]\n" : p.getToolbarString().isNotEmpty ? ", " : "");
         headString = headString + p.getHeadString() + "\n";
         if (p is SummernoteAtMention) {
-          summernoteCallbacks = """
-            callbacks: {
-              summernoteAtMention: {
-                getSuggestions: (value) => ${p.getMentions()},
-                onSelect: (value) => {
-                  window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onSelectMention", "value": value}), "*");
-                },
-              }
-            }
+          summernoteCallbacks = summernoteCallbacks + """
+            \nsummernoteAtMention: {
+              getSuggestions: (value) => ${p.getMentions()},
+              onSelect: (value) => {
+                window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onSelectMention", "value": value}), "*");
+              },
+            },
           """;
           if (p.onSelect != null) {
             html.window.onMessage.listen((event) {
               var data = json.decode(event.data);
-              if (data["type"].contains("toDart:") && data["view"] == createdViewId) {
-                if (data["type"].contains("onSelectMention")) {
-                  p.onSelect!.call(data["value"]);
+              if (data["type"].contains("toDart:") && data["view"] == createdViewId
+                  && data["type"].contains("onSelectMention")) {
+                p.onSelect!.call(data["value"]);
+              }
+            });
+          }
+        }
+        if (p is SummernoteFile) {
+          if (p.onFileUpload != null) {
+            summernoteCallbacks = summernoteCallbacks + """
+                onFileUpload: function(files) {
+                  window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "messageType": "toDart: onFileUpload", "lastModified": files[0].lastModified, "lastModifiedDate": files[0].lastModifiedDate, "name": files[0].name, "size": files[0].size, "type": files[0].type}), "*");
                 }
+            """;
+            html.window.onMessage.listen((event) {
+              var data = json.decode(event.data);
+              if (data["messageType"].contains("toDart:") && data["view"] == createdViewId
+                  && data["messageType"].contains("onFileUpload")) {
+                Map<String, dynamic> map = {
+                  'lastModified': data["lastModified"],
+                  'lastModifiedDate': data["lastModifiedDate"],
+                  'name': data["name"],
+                  'size': data["size"],
+                  'type': data["type"]
+                };
+                String jsonStr = json.encode(map);
+                FileUpload file = fileUploadFromJson(jsonStr);
+                p.onFileUpload!.call(file);
               }
             });
           }
@@ -95,6 +117,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
       }
     }
     summernoteToolbar = summernoteToolbar + "],";
+    summernoteCallbacks = summernoteCallbacks + "}";
     String darkCSS = "";
     if ((Theme.of(widget.initBC).brightness == Brightness.dark ||
             widget.darkMode == true) &&

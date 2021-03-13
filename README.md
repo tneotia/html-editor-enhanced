@@ -328,26 +328,33 @@ This API allows you to add certain Summernote plugins from the [Summernote Aweso
 
 Currently the following plugins are supported:
 
-1. [Summernote Emoji from Ajax](https://github.com/tylerecouture/summernote-ext-emoji-ajax/)
+1. [Summernote Emoji from Ajax](https://github.com/tylerecouture/summernote-ext-emoji-ajax/) -
 Adds a button to the toolbar to allow the user to insert emojis. These are loaded via Ajax.
 
-2. [Summernote Add Text Tags](https://github.com/tylerecouture/summernote-add-text-tags)
+2. [Summernote Add Text Tags](https://github.com/tylerecouture/summernote-add-text-tags) -
 Adds a button to the toolbar to support tags like var, code, samp, and more.
 
-3. [Summernote Classes](https://github.com/DiemenDesign/summernote-classes)
+3. [Summernote Classes](https://github.com/DiemenDesign/summernote-classes) -
 Adds a hotbar at the bottom of the editor to quickly and easily add common tags for the specific HTML node. This should only be used by advanced users, ideally.
 
-4. [Summernote Case Converter](https://github.com/piranga8/summernote-case-converter)
+4. [Summernote Case Converter](https://github.com/piranga8/summernote-case-converter) -
 Adds a button to the toolbar to convert the selected text to all lowercase, all uppercase, sentence case, or title case.
 
-5. [Summernote List Styles](https://github.com/tylerecouture/summernote-list-styles)
+5. [Summernote List Styles](https://github.com/tylerecouture/summernote-list-styles) -
 Adds a button to the toolbar to customize the ul and ol list style.
 
-6. [Summernote RTL](https://github.com/virtser/summernote-rtl-plugin)
+6. [Summernote RTL](https://github.com/virtser/summernote-rtl-plugin) -
 Adds two buttons to the toolbar that switch the currently selected text between LTR and RTL format.
 
-7. [Summernote At Mention](https://github.com/team-loxo/summernote-at-mention)
+7. [Summernote At Mention](https://github.com/team-loxo/summernote-at-mention) -
 Shows a dropdown of available mentions when the '@' character is typed into the editor. The implementation requires that you pass a list of available mentions, and you can also provide a function to call when a mention is inserted into the editor.
+
+8. [Summernote Codewrapper](https://github.com/semplon/summernote-ext-codewrapper) -
+Adds a button to the toolbar that wraps the selected text in a code block.
+
+9. [Summernote File](https://github.com/mathieu-coingt/summernote-file) -
+Adds a button to the toolbar that allows the user to upload any type of file. It supports picture files (jpg, png, gif, wvg, webp), audio files (mp3, ogg, oga), and video files (mp4, ogv, webm) in base64. For all other formats, you must use the onFileUpload callback to upload the files to a server and then insert an HTML node into the editor.
+Note: Setting the onFileUpload callback removes the base64 functionality - instead you will also have to provide a solution to upload the picture, audio, and video files in your Dart code. Then, you can use the `<controller name>.insertHtml(<html string>)` method to insert the relevant HTML element at the current cursor position.
 
 This list is not final, more will be added. If there's a specific plugin you'd like to see support for, please file a feature request!
 

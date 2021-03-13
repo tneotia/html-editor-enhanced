@@ -1,3 +1,5 @@
+import 'package:html_editor_enhanced/html_editor.dart';
+
 /// Abstract class that all the plguin classes extend
 abstract class Plugins {
   const Plugins();
@@ -167,5 +169,46 @@ class SummernoteAtMention extends Plugins {
       mentionsString = mentionsString + "'$e'" + (e != mentions.last ? ", " : "");
     }
     return mentionsString + "]";
+  }
+}
+
+/// Summernote codewrapper plugin - adds a button to the toolbar to wrap the selected
+/// text in a code box.
+///
+/// README available [here](https://github.com/semplon/summernote-ext-codewrapper)
+class SummernoteCodewrapper extends Plugins {
+  const SummernoteCodewrapper();
+
+  @override
+  String getHeadString() {
+    return "<script src=\"assets/packages/html_editor_enhanced/assets/plugins/summernote-codewrapper/summernote-ext-codewrapper.min.js\"></script>";
+  }
+
+  @override
+  String getToolbarString() {
+    return "gxcode";
+  }
+}
+
+/// Summernote file plugin - adds a button to the toolbar to upload any type of file.
+/// By default it can handle picture files (jpg, png, gif, wvg, webp),
+/// audio files (mp3, ogg, oga), and video files (mp4, ogv, webm) without any
+/// upload in base64. If you want to handle other files, you must upload them
+/// into a server and insert it into the editor using the onFileUpload function.
+///
+/// README available [here](https://github.com/mathieu-coingt/summernote-file)
+class SummernoteFile extends Plugins {
+  final Function(FileUpload)? onFileUpload;
+
+  const SummernoteFile({this.onFileUpload});
+
+  @override
+  String getHeadString() {
+    return "<script src=\"assets/packages/html_editor_enhanced/assets/plugins/summernote-file/summernote-file.js\"></script>";
+  }
+
+  @override
+  String getToolbarString() {
+    return "file";
   }
 }
