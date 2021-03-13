@@ -26,6 +26,8 @@ class HtmlEditorWidget extends StatefulWidget {
     required this.plugins,
     this.darkMode,
     required this.initBC,
+    required this.decoration,
+    required this.autoAdjustHeight,
   }) : super(key: key);
 
   final HtmlEditorController widgetController;
@@ -39,6 +41,8 @@ class HtmlEditorWidget extends StatefulWidget {
   final List<Plugins> plugins;
   final bool? darkMode;
   final BuildContext initBC;
+  final BoxDecoration decoration;
+  final bool autoAdjustHeight;
 
   _HtmlEditorWidgetWebState createState() => _HtmlEditorWidgetWebState();
 }

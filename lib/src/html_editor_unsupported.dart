@@ -11,6 +11,7 @@ class HtmlEditor extends StatelessWidget {
     required this.controller,
     this.initialText,
     this.height = 380,
+    this.autoAdjustHeight = true,
     this.decoration,
     this.showBottomToolbar = true,
     this.hint,
@@ -51,11 +52,18 @@ class HtmlEditor extends StatelessWidget {
   /// The initial text that is be supplied to the Html editor.
   final String? initialText;
 
-  /// Sets the height of the Html editor. If you decide to show the bottom toolbar,
-  /// this height will be inclusive of the space the toolbar takes up.
+  /// Sets the height of the Html editor space. It does not take the toolbar
+  /// for the editor into account.
   ///
   /// The default value is 380.
   final double height;
+
+  /// The editor will automatically adjust its height once the page is loaded to
+  /// ensure there is no vertical scrolling or empty space. It will only perform
+  /// the adjustment when the summernote editor is the loaded page.
+  ///
+  /// The default value is true.
+  final bool autoAdjustHeight;
 
   /// The BoxDecoration to use around the Html editor. By default, the widget
   /// uses a thin, dark, rounded rectangle border around the widget.

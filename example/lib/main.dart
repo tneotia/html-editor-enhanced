@@ -63,8 +63,8 @@ class _MyHomePageState extends State<MyHomePage> {
             HtmlEditor(
               controller: controller,
               hint: "Your text here...",
-              //value: "text content initial, if any",
-              height: 400,
+              //initialText: "<p>text content initial, if any</p>",
+              height: 250,
               callbacks: Callbacks(
                 onChange: (String? changed) {
                   print("content changed to $changed");

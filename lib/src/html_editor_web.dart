@@ -13,6 +13,7 @@ class HtmlEditor extends StatelessWidget {
     required this.controller,
     this.initialText,
     this.height = 380,
+    this.autoAdjustHeight = true,
     this.decoration,
     this.showBottomToolbar = true,
     this.hint,
@@ -53,11 +54,18 @@ class HtmlEditor extends StatelessWidget {
   /// The initial text that is be supplied to the Html editor.
   final String? initialText;
 
-  /// Sets the height of the Html editor. If you decide to show the bottom toolbar,
-  /// this height will be inclusive of the space the toolbar takes up.
+  /// Sets the height of the Html editor space. It does not take the toolbar
+  /// for the editor into account.
   ///
   /// The default value is 380.
   final double height;
+
+  /// The editor will automatically adjust its height once the page is loaded to
+  /// ensure there is no vertical scrolling or empty space. It will only perform
+  /// the adjustment when the summernote editor is the loaded page.
+  ///
+  /// The default value is true.
+  final bool autoAdjustHeight;
 
   /// The BoxDecoration to use around the Html editor. By default, the widget
   /// uses a thin, dark, rounded rectangle border around the widget.
@@ -92,52 +100,50 @@ class HtmlEditor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (kIsWeb) {
-      return Container(
+      return HtmlEditorWidget(
+        key: key,
+        widgetController: controller,
+        value: initialText,
         height: height,
+        autoAdjustHeight: autoAdjustHeight,
+        showBottomToolbar: showBottomToolbar,
+        hint: hint,
+        callbacks: callbacks,
+        toolbar: toolbar.isEmpty
+            ? [
+                Style(),
+                Font(buttons: [
+                  FontButtons.bold,
+                  FontButtons.underline,
+                  FontButtons.clear
+                ]),
+                ColorBar(buttons: [ColorButtons.color]),
+                Paragraph(buttons: [
+                  ParagraphButtons.ul,
+                  ParagraphButtons.ol,
+                  ParagraphButtons.paragraph
+                ]),
+                Insert(buttons: [
+                  InsertButtons.link,
+                  InsertButtons.picture,
+                  InsertButtons.video,
+                  InsertButtons.table
+                ]),
+                Misc(buttons: [
+                  MiscButtons.fullscreen,
+                  MiscButtons.codeview,
+                  MiscButtons.help
+                ])
+              ]
+            : toolbar,
+        plugins: plugins,
+        darkMode: darkMode,
+        initBC: context,
         decoration: decoration ??
             BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(4)),
               border: Border.all(color: Color(0xffececec), width: 1),
             ),
-        child: HtmlEditorWidget(
-          key: key,
-          widgetController: controller,
-          value: initialText,
-          height: height,
-          showBottomToolbar: showBottomToolbar,
-          hint: hint,
-          callbacks: callbacks,
-          toolbar: toolbar.isEmpty
-              ? [
-                  Style(),
-                  Font(buttons: [
-                    FontButtons.bold,
-                    FontButtons.underline,
-                    FontButtons.clear
-                  ]),
-                  ColorBar(buttons: [ColorButtons.color]),
-                  Paragraph(buttons: [
-                    ParagraphButtons.ul,
-                    ParagraphButtons.ol,
-                    ParagraphButtons.paragraph
-                  ]),
-                  Insert(buttons: [
-                    InsertButtons.link,
-                    InsertButtons.picture,
-                    InsertButtons.video,
-                    InsertButtons.table
-                  ]),
-                  Misc(buttons: [
-                    MiscButtons.fullscreen,
-                    MiscButtons.codeview,
-                    MiscButtons.help
-                  ])
-                ]
-              : toolbar,
-          plugins: plugins,
-          darkMode: darkMode,
-          initBC: context,
-        ),
       );
     } else {
       return Text(
