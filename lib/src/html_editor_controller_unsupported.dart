@@ -2,6 +2,24 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 /// Fallback controller (should never be used)
 class HtmlEditorController {
+  HtmlEditorController({
+    this.processInputHtml = false,
+    this.processOutputHtml = true,
+  });
+
+  /// Determines whether text processing should happen on input HTML, e.g.
+  /// whether a new line should be converted to a <br>.
+  ///
+  /// The default value is false.
+  final bool processInputHtml;
+
+  /// Determines whether text processing should happen on output HTML, e.g.
+  /// whether <p><br></p> is returned as "". For reference, Summernote uses
+  /// that HTML as the default HTML (when no text is in the editor).
+  ///
+  /// The default value is true.
+  final bool processOutputHtml;
+
   /// Allows the [InAppWebViewController] for the Html editor to be accessed
   /// outside of the package itself for endless control and customization.
   InAppWebViewController? get editorController => null;

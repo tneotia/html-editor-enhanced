@@ -197,16 +197,19 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                         ClipboardData? data =
                             await Clipboard.getData(Clipboard.kTextPlain);
                         if (data != null) {
-                          String txtIsi = data.text!
-                              .replaceAll("'", '\\"')
-                              .replaceAll('"', '\\"')
-                              .replaceAll("[", "\\[")
-                              .replaceAll("]", "\\]")
-                              .replaceAll("\n", "<br/>")
-                              .replaceAll("\n\n", "<br/>")
-                              .replaceAll("\r", " ")
-                              .replaceAll('\r\n', " ");
-                          widget.controller.insertHtml(txtIsi);
+                          String text = data.text!;
+                          if (widget.controller.processInputHtml) {
+                              text = data.text!
+                                .replaceAll("'", '\\"')
+                                .replaceAll('"', '\\"')
+                                .replaceAll("[", "\\[")
+                                .replaceAll("]", "\\]")
+                                .replaceAll("\n", "<br/>")
+                                .replaceAll("\n\n", "<br/>")
+                                .replaceAll("\r", " ")
+                                .replaceAll('\r\n', " ");
+                          }
+                          widget.controller.insertHtml(text);
                         }
                       }),
                     ],

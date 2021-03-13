@@ -10,38 +10,59 @@ import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart
 
 /// Controller for web
 class HtmlEditorController extends unsupported.HtmlEditorController {
+  HtmlEditorController({
+    this.processInputHtml = false,
+    this.processOutputHtml = true,
+  });
+
+  /// Determines whether text processing should happen on input HTML, e.g.
+  /// whether a new line should be converted to a <br>.
+  ///
+  /// The default value is false.
+  final bool processInputHtml;
+
+  /// Determines whether text processing should happen on output HTML, e.g.
+  /// whether <p><br></p> is returned as "". For reference, Summernote uses
+  /// that HTML as the default HTML (when no text is in the editor).
+  ///
+  /// The default value is true.
+  final bool processOutputHtml;
+
   /// Allows the [InAppWebViewController] for the Html editor to be accessed
   /// outside of the package itself for endless control and customization.
   InAppWebViewController get editorController => throw Exception(
       "Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart and check kIsWeb before accessing this getter");
 
   /// Gets the text from the editor and returns it as a [String].
-  Future<String?> getText() async {
+  Future<String> getText() async {
     html.window.onMessage.drain();
     _evaluateJavascriptWeb(data: {"type": "toIframe: getText"});
     html.MessageEvent e = await html.window.onMessage.firstWhere(
         (element) => json.decode(element.data)["type"] == "toDart: getText");
     String text = json.decode(e.data)["text"];
-    if (text.isEmpty ||
+    if (processOutputHtml &&
+        (text.isEmpty ||
         text == "<p></p>" ||
         text == "<p><br></p>" ||
-        text == "<p><br/></p>") text = "";
+        text == "<p><br/></p>")) text = "";
     return text;
   }
 
   /// Sets the text of the editor. Some pre-processing is applied to convert
   /// [String] elements like "\n" to HTML elements.
   void setText(String text) {
-    String txtIsi = text
-        .replaceAll("'", '\\"')
-        .replaceAll('"', '\\"')
-        .replaceAll("[", "\\[")
-        .replaceAll("]", "\\]")
-        .replaceAll("\n", "<br/>")
-        .replaceAll("\n\n", "<br/>")
-        .replaceAll("\r", " ")
-        .replaceAll('\r\n', " ");
-    _evaluateJavascriptWeb(data: {"type": "toIframe: setText", "text": txtIsi});
+    if (processInputHtml) {
+      text = text
+          .replaceAll("'", '\\"')
+          .replaceAll('"', '\\"')
+          .replaceAll("[", "\\[")
+          .replaceAll("]", "\\]")
+          .replaceAll("\n", "<br/>")
+          .replaceAll("\n\n", "<br/>")
+          .replaceAll("\r", " ")
+          .replaceAll('\r\n', " ");
+    }
+    _evaluateJavascriptWeb(data: {"type": "toIframe: setText", "text": text});
   }
 
   /// Sets the editor to full-screen mode.

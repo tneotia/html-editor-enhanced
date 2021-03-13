@@ -15,35 +15,14 @@ class HtmlEditor extends StatelessWidget {
     this.initialText,
     this.height = 380,
     this.autoAdjustHeight = true,
-    this.decoration,
+    this.decoration = const BoxDecoration(
+      borderRadius: BorderRadius.all(Radius.circular(4)),
+      border: Border.fromBorderSide(BorderSide(color: const Color(0xffececec), width: 1)),
+    ),
     this.showBottomToolbar = true,
     this.hint,
     this.callbacks,
-    this.toolbar = const [
-      Style(),
-      Font(buttons: [
-        FontButtons.bold,
-        FontButtons.underline,
-        FontButtons.clear
-      ]),
-      ColorBar(buttons: [ColorButtons.color]),
-      Paragraph(buttons: [
-        ParagraphButtons.ul,
-        ParagraphButtons.ol,
-        ParagraphButtons.paragraph
-      ]),
-      Insert(buttons: [
-        InsertButtons.link,
-        InsertButtons.picture,
-        InsertButtons.video,
-        InsertButtons.table
-      ]),
-      Misc(buttons: [
-        MiscButtons.fullscreen,
-        MiscButtons.codeview,
-        MiscButtons.help
-      ])
-    ],
+    this.toolbar = const [],
     this.plugins = const [],
     this.darkMode,
   }) : super(key: key);
@@ -70,7 +49,7 @@ class HtmlEditor extends StatelessWidget {
 
   /// The BoxDecoration to use around the Html editor. By default, the widget
   /// uses a thin, dark, rounded rectangle border around the widget.
-  final BoxDecoration? decoration;
+  final BoxDecoration decoration;
 
   /// Specifies whether the bottom toolbar for picking an image or copy/pasting
   /// is shown on the widget.
@@ -139,11 +118,7 @@ class HtmlEditor extends StatelessWidget {
             : toolbar,
         plugins: plugins,
         darkMode: darkMode,
-        decoration: decoration ??
-            BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(4)),
-              border: Border.all(color: Color(0xffececec), width: 1),
-            ),
+        decoration: decoration
       );
     } else {
       return Text(

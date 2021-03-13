@@ -16,7 +16,7 @@ import 'package:html_editor_enhanced/utils/shims/dart_ui.dart' as ui;
 class HtmlEditorWidget extends StatefulWidget {
   HtmlEditorWidget({
     Key? key,
-    required this.widgetController,
+    required this.controller,
     this.value,
     required this.height,
     required this.showBottomToolbar,
@@ -30,7 +30,7 @@ class HtmlEditorWidget extends StatefulWidget {
     required this.autoAdjustHeight,
   }) : super(key: key);
 
-  final HtmlEditorController widgetController;
+  final HtmlEditorController controller;
   final String? value;
   final double height;
   final bool showBottomToolbar;
@@ -58,7 +58,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   @override
   void initState() {
     createdViewId = getRandString(10);
-    controllerMap[widget.widgetController] = createdViewId;
+    controllerMap[widget.controller] = createdViewId;
     super.initState();
     String summernoteToolbar = "[\n";
     String headString = "";
@@ -250,7 +250,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
       ..onLoad.listen((event) async {
         if (widget.callbacks?.onInit != null) widget.callbacks!.onInit!.call();
         if (widget.value != null)
-          widget.widgetController.setText(widget.value!);
+          widget.controller.setText(widget.value!);
       });
     if (widget.callbacks != null) addJSListener(widget.callbacks!);
     ui.platformViewRegistry
@@ -279,7 +279,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                   children: <Widget>[
                     toolbarIcon(context, Icons.content_copy, "Copy",
                         onTap: () async {
-                      String? data = await widget.widgetController.getText();
+                      String? data = await widget.controller.getText();
                       Clipboard.setData(new ClipboardData(text: data));
                     }),
                     toolbarIcon(context, Icons.content_paste, "Paste",
@@ -287,16 +287,19 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                       ClipboardData? data =
                           await Clipboard.getData(Clipboard.kTextPlain);
                       if (data != null) {
-                        String txtIsi = data.text!
-                            .replaceAll("'", '\\"')
-                            .replaceAll('"', '\\"')
-                            .replaceAll("[", "\\[")
-                            .replaceAll("]", "\\]")
-                            .replaceAll("\n", "<br/>")
-                            .replaceAll("\n\n", "<br/>")
-                            .replaceAll("\r", " ")
-                            .replaceAll('\r\n', " ");
-                        widget.widgetController.insertHtml(txtIsi);
+                        String text = data.text!;
+                        if (widget.controller.processInputHtml) {
+                          text = data.text!
+                              .replaceAll("'", '\\"')
+                              .replaceAll('"', '\\"')
+                              .replaceAll("[", "\\[")
+                              .replaceAll("]", "\\]")
+                              .replaceAll("\n", "<br/>")
+                              .replaceAll("\n\n", "<br/>")
+                              .replaceAll("\r", " ")
+                              .replaceAll('\r\n', " ");
+                        }
+                        widget.controller.insertHtml(text);
                       }
                     }),
                   ],
