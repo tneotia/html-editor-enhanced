@@ -1,3 +1,25 @@
+## [1.6.0] - 2021-03-13
+* [BREAKING] removed `dispose()` method on controller
+   * The editor no longer uses a `Stream` to get text and therefore nothing needs to be disposed
+* Added `onInit` callback that fires once the editor is ready to function and accept JS
+* Added a few new parameters:
+   * `autoAdjustHeight` - for `HtmlEditor`: default true, automatically adjusts the height of the editor to make sure scrolling is not necessary
+   * `processInputHtml` - for `HtmlEditorController`: processes input HTML (e.g. new lines become `<br/>`)
+   * `processOutputHtml` - for `HtmlEditorController`: processes output HTML (e.g. `<p><br/><p>` becomes `""`)
+* Added more plugins:
+    * Summernote Case Converter
+    * Summernote List Styles
+    * Summernote RTL
+    * Summernote @ Mention
+    * Summernote Codewrapper
+    * Summernote File
+    * See the README for more details.
+* Added shim for dart:ui to remove the `ui.PlatformViewRegistry not found` error
+* Added the summernote-no-plugins.html file to load a de-bloated HTML file when no plugins are active
+* Fixed bug where two editors would be initialized in the same webview in some cases
+* Reduced the size of assets to ~650kb - ~300kb summernote libs, ~350kb plugin libs
+* Code cleanup
+
 ## [1.5.0+1] - 2021-03-10
 * Fixed getText() returning null on mobile for any device
 

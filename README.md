@@ -1,7 +1,7 @@
 # Flutter Html Editor - Enhanced
 [![pub package](https://img.shields.io/pub/v/html_editor_enhanced.svg)](https://pub.dev/packages/html_editor_enhanced)
 
-Flutter HTML Editor Enhanced is a text editor for Android and iOS to help write WYSIWYG HTML code with on the Summernote JavaScript wrapper.
+Flutter HTML Editor Enhanced is a text editor for Android and iOS to help write WYSIWYG HTML code with the Summernote JavaScript wrapper.
 
 <table>
   <tr>
@@ -35,7 +35,7 @@ Flutter HTML Editor Enhanced is a text editor for Android and iOS to help write 
 
 - [API Reference](#api-reference)
 
-  - [Parameters Table](#parameters)
+  - [Parameters Table](#parameters---htmleditor)
 
   - [Methods Table](#methods)
 
@@ -81,7 +81,7 @@ More is on the way! File a feature request or contribute to the project if you'd
 
 ## Setup
 
-Add `html_editor_enhanced: ^1.5.0` as dependency to your pubspec.yaml
+Add `html_editor_enhanced: ^1.6.0` as dependency to your pubspec.yaml
 
 Additional setup is required to allow the user to pick images via `<input type="file">`:
 
@@ -186,18 +186,11 @@ import 'package:html_editor/html_editor.dart';
 
 HtmlEditorController controller = HtmlEditorController();
 
-@override
-void dispose() {
-    //it is highly recommended to dispose on mobile to properly close the stream it uses to get text
-    controller.dispose();
-    super.dispose();
-}
-
 @override Widget build(BuildContext context) {
     return HtmlEditor(
             controller: controller, //required
             hint: "Your text here...",
-            //value: "text content initial, if any",
+            //initalText: "text content initial, if any",
             height: 400,
     );
 }
@@ -216,20 +209,28 @@ For a full example, see [here](https://github.com/tneotia/html-editor-enhanced/t
 
 Below, you will find brief descriptions of the parameters the`HtmlEditor` widget accepts and some code snippets to help you use this package.
 
-### Parameters
+### Parameters - `HtmlEditor`
 
 Parameter | Type | Default | Description
 ------------ | ------------- | ------------- | -------------
 **controller** | `HtmlEditorController` | empty | Required param. Create a controller instance and pass it to the widget. This ensures that any methods called work only on their `HtmlEditor` instance, allowing you to use multiple HTML widgets on one page.
 **initialText** | `String` | empty | Initial text content for text editor
 **height** | `double` | 380 | Height of text editor (does not set the height in HTML yet, only the height of the WebView widget)
+**autoAdjustHeight** | `bool` | `true` | Automatically adjust the height of the text editor by analyzing the HTML height once the editor is loaded
 **decoration** | `BoxDecoration` |  | `BoxDecoration` that surrounds the widget
 **showBottomToolbar** | `bool` | true | Show or hide bottom toolbar
 **hint** | `String` | empty | Placeholder hint text
 **callbacks** | `Callbacks` | empty | Customize the callbacks for various events
 **toolbar** | `List<Toolbar>` | See the widget's constructor | Customize what buttons are shown on the toolbar, and in which order. See [below](#toolbar) for more details.
 **plugins** | `List<Plugins>` | empty | Customize what plugins are activated. See [below](#plugins) for more details.
-**darkMode** | `bool` | `null` | Sets the status of dark mode - `false`: always light, `null`: follow system, `true`: always dark 
+**darkMode** | `bool` | `null` | Sets the status of dark mode - `false`: always light, `null`: follow system, `true`: always dark
+
+### Parameters - `HtmlEditorController`
+
+Parameter | Type | Default | Description
+------------ | ------------- | ------------- | -------------
+**processInputHtml** | `bool` | `false` | Determines whether processing occurs on any input HTML (e.g. new-lines become `<br/>`)
+**processOutputHtml** | `bool` | `true` | Determines whether processing occurs on any output HTML (e.g. `<p><br/><p>` becomes `""`)
 
 ### Methods
 
@@ -237,7 +238,6 @@ Access these methods like this: `<controller name>.<method name>`
 
 Method | Argument(s) | Returned Value(s) | Description
 ------------ | ------------- | ------------- | -------------
-**dispose()** | N/A | N/A | Disposes the stream used to get the editor's contents on mobile. Do *not* use this method in Flutter Web.
 **getText()** | N/A | `Future<String>` | Returns the current HTML in the editor
 **setText()** | `String` | N/A | Sets the current text in the HTML to the input HTML string
 **setFullScreen()** | N/A | N/A | Sets the editor to take up the entire size of the webview
@@ -354,6 +354,7 @@ Adds a button to the toolbar that wraps the selected text in a code block.
 
 9. [Summernote File](https://github.com/mathieu-coingt/summernote-file) -
 Adds a button to the toolbar that allows the user to upload any type of file. It supports picture files (jpg, png, gif, wvg, webp), audio files (mp3, ogg, oga), and video files (mp4, ogv, webm) in base64. For all other formats, you must use the onFileUpload callback to upload the files to a server and then insert an HTML node into the editor.
+
 Note: Setting the onFileUpload callback removes the base64 functionality - instead you will also have to provide a solution to upload the picture, audio, and video files in your Dart code. Then, you can use the `<controller name>.insertHtml(<html string>)` method to insert the relevant HTML element at the current cursor position.
 
 This list is not final, more will be added. If there's a specific plugin you'd like to see support for, please file a feature request!
