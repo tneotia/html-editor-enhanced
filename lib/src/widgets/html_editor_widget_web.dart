@@ -81,8 +81,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             (p == widget.plugins.last
                 ? "]]\n"
                 : p.getToolbarString().isNotEmpty
-                ? ", "
-                : "");
+                    ? ", "
+                    : "");
         headString = headString + p.getHeadString() + "\n";
         if (p is SummernoteAtMention) {
           summernoteCallbacks = summernoteCallbacks +
@@ -140,10 +140,10 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     summernoteCallbacks = summernoteCallbacks + "}";
     String darkCSS = "";
     if ((Theme.of(widget.initBC).brightness == Brightness.dark ||
-        widget.darkMode == true) &&
+            widget.darkMode == true) &&
         widget.darkMode != false) {
       darkCSS =
-      "<link href=\"assets/packages/html_editor_enhanced/assets/summernote-lite-dark.css\" rel=\"stylesheet\">";
+          "<link href=\"assets/packages/html_editor_enhanced/assets/summernote-lite-dark.css\" rel=\"stylesheet\">";
     }
     String jsCallbacks = "";
     if (widget.callbacks != null)
@@ -264,7 +264,9 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     if (widget.callbacks != null) addJSListener(widget.callbacks!);
     final html.IFrameElement iframe = html.IFrameElement()
       ..width = MediaQuery.of(widget.initBC).size.width.toString() //'800'
-      ..height = widget.autoAdjustHeight ? actualHeight.toString() : widget.height.toString()
+      ..height = widget.autoAdjustHeight
+          ? actualHeight.toString()
+          : widget.height.toString()
       ..srcdoc = htmlString
       ..style.border = 'none'
       ..onLoad.listen((event) async {
@@ -297,39 +299,39 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
               : Container(height: 0, width: 0),
           widget.showBottomToolbar
               ? Padding(
-            padding:
-            const EdgeInsets.only(left: 4, right: 4, bottom: 8, top: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                toolbarIcon(context, Icons.content_copy, "Copy",
-                    onTap: () async {
-                      String? data = await widget.controller.getText();
-                      Clipboard.setData(new ClipboardData(text: data));
-                    }),
-                toolbarIcon(context, Icons.content_paste, "Paste",
-                    onTap: () async {
-                      ClipboardData? data =
-                      await Clipboard.getData(Clipboard.kTextPlain);
-                      if (data != null) {
-                        String text = data.text!;
-                        if (widget.controller.processInputHtml) {
-                          text = data.text!
-                              .replaceAll("'", '\\"')
-                              .replaceAll('"', '\\"')
-                              .replaceAll("[", "\\[")
-                              .replaceAll("]", "\\]")
-                              .replaceAll("\n", "<br/>")
-                              .replaceAll("\n\n", "<br/>")
-                              .replaceAll("\r", " ")
-                              .replaceAll('\r\n', " ");
+                  padding: const EdgeInsets.only(
+                      left: 4, right: 4, bottom: 8, top: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      toolbarIcon(context, Icons.content_copy, "Copy",
+                          onTap: () async {
+                        String? data = await widget.controller.getText();
+                        Clipboard.setData(new ClipboardData(text: data));
+                      }),
+                      toolbarIcon(context, Icons.content_paste, "Paste",
+                          onTap: () async {
+                        ClipboardData? data =
+                            await Clipboard.getData(Clipboard.kTextPlain);
+                        if (data != null) {
+                          String text = data.text!;
+                          if (widget.controller.processInputHtml) {
+                            text = data.text!
+                                .replaceAll("'", '\\"')
+                                .replaceAll('"', '\\"')
+                                .replaceAll("[", "\\[")
+                                .replaceAll("]", "\\]")
+                                .replaceAll("\n", "<br/>")
+                                .replaceAll("\n\n", "<br/>")
+                                .replaceAll("\r", " ")
+                                .replaceAll('\r\n', " ");
+                          }
+                          widget.controller.insertHtml(text);
                         }
-                        widget.controller.insertHtml(text);
-                      }
-                    }),
-              ],
-            ),
-          )
+                      }),
+                    ],
+                  ),
+                )
               : Container(height: 0, width: 0),
         ],
       ),
@@ -410,7 +412,9 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   void addJSListener(Callbacks c) {
     html.window.onMessage.listen((event) {
       var data = json.decode(event.data);
-      if (data["type"].contains("toDart:") && data["view"] == createdViewId) {
+      if (data["type"] != null &&
+          data["type"].contains("toDart:") &&
+          data["view"] == createdViewId) {
         if (data["type"].contains("htmlHeight") && widget.autoAdjustHeight) {
           final docHeight = data["height"] ?? actualHeight;
           if ((docHeight != null && docHeight != actualHeight) && mounted) {
