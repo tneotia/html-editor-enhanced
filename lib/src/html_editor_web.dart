@@ -16,7 +16,8 @@ class HtmlEditor extends StatelessWidget {
     this.autoAdjustHeight = true,
     this.decoration = const BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(4)),
-      border: Border.fromBorderSide(BorderSide(color: const Color(0xffececec), width: 1)),
+      border: Border.fromBorderSide(
+          BorderSide(color: const Color(0xffececec), width: 1)),
     ),
     this.showBottomToolbar = true,
     this.hint,

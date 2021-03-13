@@ -60,7 +60,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
         children: <Widget>[
           Expanded(
             child: InAppWebView(
-              initialFile: 'packages/html_editor_enhanced/assets/summernote${widget.plugins.isEmpty ? '-no-plugins' : ''}.html',
+              initialFile:
+                  'packages/html_editor_enhanced/assets/summernote${widget.plugins.isEmpty ? '-no-plugins' : ''}.html',
               onWebViewCreated: (webViewController) {
                 controllerMap[widget.controller] = webViewController;
               },
@@ -77,7 +78,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
               },
               onLoadStop: (InAppWebViewController controller, Uri? uri) async {
                 String url = uri.toString();
-                if (url.endsWith("summernote.html") || url.endsWith("summernote-no-plugins.html")) {
+                if (url.endsWith("summernote.html") ||
+                    url.endsWith("summernote-no-plugins.html")) {
                   String summernoteToolbar = "[\n";
                   String summernoteCallbacks = "callbacks: {";
                   for (Toolbar t in widget.toolbar) {
@@ -88,10 +90,17 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                     summernoteToolbar = summernoteToolbar + "['plugins', [";
                     for (Plugins p in widget.plugins) {
                       summernoteToolbar = summernoteToolbar +
-                          (p.getToolbarString().isNotEmpty ? "'${p.getToolbarString()}'" : "") +
-                          (p == widget.plugins.last ? "]]\n" : p.getToolbarString().isNotEmpty ? ", " : "");
+                          (p.getToolbarString().isNotEmpty
+                              ? "'${p.getToolbarString()}'"
+                              : "") +
+                          (p == widget.plugins.last
+                              ? "]]\n"
+                              : p.getToolbarString().isNotEmpty
+                                  ? ", "
+                                  : "");
                       if (p is SummernoteAtMention) {
-                        summernoteCallbacks = summernoteCallbacks + """
+                        summernoteCallbacks = summernoteCallbacks +
+                            """
                           \nsummernoteAtMention: {
                             getSuggestions: (value) => ${p.getMentions()},
                             onSelect: (value) => {
@@ -109,7 +118,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       }
                       if (p is SummernoteFile) {
                         if (p.onFileUpload != null) {
-                          summernoteCallbacks = summernoteCallbacks + """
+                          summernoteCallbacks = summernoteCallbacks +
+                              """
                             onFileUpload: function(files) {
                               var newObject  = {
                                  'lastModified': files[0].lastModified,
@@ -124,7 +134,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                           controllerMap[widget.controller].addJavaScriptHandler(
                               handlerName: 'onFileUpload',
                               callback: (files) {
-                                FileUpload file = fileUploadFromJson(files.first);
+                                FileUpload file =
+                                    fileUploadFromJson(files.first);
                                 p.onFileUpload!.call(file);
                               });
                         }
@@ -147,7 +158,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       });
                   """);
                   if ((Theme.of(context).brightness == Brightness.dark ||
-                        widget.darkMode == true) && widget.darkMode != false) {
+                          widget.darkMode == true) &&
+                      widget.darkMode != false) {
                     String darkCSS =
                         "<link href=\"summernote-lite-dark.css\" rel=\"stylesheet\">";
                     await controller.evaluateJavascript(
@@ -173,17 +185,20 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                     callbacksInitialized = true;
                   }
                   //call onInit callback
-                  if (widget.callbacks != null && widget.callbacks!.onInit != null)
+                  if (widget.callbacks != null &&
+                      widget.callbacks!.onInit != null)
                     widget.callbacks!.onInit!.call();
                 }
               },
             ),
           ),
-          widget.showBottomToolbar ? Divider(height: 0) : Container(height: 0, width: 0),
+          widget.showBottomToolbar
+              ? Divider(height: 0)
+              : Container(height: 0, width: 0),
           widget.showBottomToolbar
               ? Padding(
-                  padding:
-                      const EdgeInsets.only(left: 4, right: 4, bottom: 8, top: 8),
+                  padding: const EdgeInsets.only(
+                      left: 4, right: 4, bottom: 8, top: 8),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
@@ -199,7 +214,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                         if (data != null) {
                           String text = data.text!;
                           if (widget.controller.processInputHtml) {
-                              text = data.text!
+                            text = data.text!
                                 .replaceAll("'", '\\"')
                                 .replaceAll('"', '\\"')
                                 .replaceAll("[", "\\[")

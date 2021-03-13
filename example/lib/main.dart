@@ -102,19 +102,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 SummernoteListStyles(),
                 SummernoteRTL(),
                 SummernoteAtMention(
-                  mentions: ['test1', 'test2', 'test3'],
-                  onSelect: (String value) {
-                    print(value);
-                  }
-                ),
+                    mentions: ['test1', 'test2', 'test3'],
+                    onSelect: (String value) {
+                      print(value);
+                    }),
                 SummernoteCodewrapper(),
-                SummernoteFile(
-                  onFileUpload: (file) {
-                    print(file.name);
-                    print(file.size);
-                    print(file.type);
-                  }
-                ),
+                SummernoteFile(onFileUpload: (file) {
+                  print(file.name);
+                  print(file.size);
+                  print(file.type);
+                }),
               ],
             ),
             Padding(

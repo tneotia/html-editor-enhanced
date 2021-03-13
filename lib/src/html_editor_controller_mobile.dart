@@ -31,14 +31,13 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Gets the text from the editor and returns it as a [String].
   Future<String> getText() async {
     String? text = await _evaluateJavascript(
-        source:
-            "\$('#summernote-2').summernote('code');") as String?;
+        source: "\$('#summernote-2').summernote('code');") as String?;
     if (processOutputHtml &&
         (text == null ||
-        text.isEmpty ||
-        text == "<p></p>" ||
-        text == "<p><br></p>" ||
-        text == "<p><br/></p>")) text = "";
+            text.isEmpty ||
+            text == "<p></p>" ||
+            text == "<p><br></p>" ||
+            text == "<p><br/></p>")) text = "";
     return text ?? "";
   }
 

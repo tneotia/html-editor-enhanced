@@ -64,18 +64,25 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     String headString = "";
     String summernoteCallbacks = "callbacks: {";
     for (Toolbar t in widget.toolbar) {
-      summernoteToolbar =
-          summernoteToolbar + "['${t.getGroupName()}', ${t.getButtons(listStyles: widget.plugins.whereType<SummernoteListStyles>().isNotEmpty)}],\n";
+      summernoteToolbar = summernoteToolbar +
+          "['${t.getGroupName()}', ${t.getButtons(listStyles: widget.plugins.whereType<SummernoteListStyles>().isNotEmpty)}],\n";
     }
     if (widget.plugins.isNotEmpty) {
       summernoteToolbar = summernoteToolbar + "['plugins', [";
       for (Plugins p in widget.plugins) {
         summernoteToolbar = summernoteToolbar +
-            (p.getToolbarString().isNotEmpty ? "'${p.getToolbarString()}'" : "") +
-            (p == widget.plugins.last ? "]]\n" : p.getToolbarString().isNotEmpty ? ", " : "");
+            (p.getToolbarString().isNotEmpty
+                ? "'${p.getToolbarString()}'"
+                : "") +
+            (p == widget.plugins.last
+                ? "]]\n"
+                : p.getToolbarString().isNotEmpty
+                    ? ", "
+                    : "");
         headString = headString + p.getHeadString() + "\n";
         if (p is SummernoteAtMention) {
-          summernoteCallbacks = summernoteCallbacks + """
+          summernoteCallbacks = summernoteCallbacks +
+              """
             \nsummernoteAtMention: {
               getSuggestions: (value) => ${p.getMentions()},
               onSelect: (value) => {
@@ -86,8 +93,9 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           if (p.onSelect != null) {
             html.window.onMessage.listen((event) {
               var data = json.decode(event.data);
-              if (data["type"].contains("toDart:") && data["view"] == createdViewId
-                  && data["type"].contains("onSelectMention")) {
+              if (data["type"].contains("toDart:") &&
+                  data["view"] == createdViewId &&
+                  data["type"].contains("onSelectMention")) {
                 p.onSelect!.call(data["value"]);
               }
             });
@@ -95,15 +103,17 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         }
         if (p is SummernoteFile) {
           if (p.onFileUpload != null) {
-            summernoteCallbacks = summernoteCallbacks + """
+            summernoteCallbacks = summernoteCallbacks +
+                """
                 onFileUpload: function(files) {
                   window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "messageType": "toDart: onFileUpload", "lastModified": files[0].lastModified, "lastModifiedDate": files[0].lastModifiedDate, "name": files[0].name, "size": files[0].size, "type": files[0].type}), "*");
                 }
             """;
             html.window.onMessage.listen((event) {
               var data = json.decode(event.data);
-              if (data["messageType"].contains("toDart:") && data["view"] == createdViewId
-                  && data["messageType"].contains("onFileUpload")) {
+              if (data["messageType"].contains("toDart:") &&
+                  data["view"] == createdViewId &&
+                  data["messageType"].contains("onFileUpload")) {
                 Map<String, dynamic> map = {
                   'lastModified': data["lastModified"],
                   'lastModifiedDate': data["lastModifiedDate"],
@@ -249,8 +259,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
       ..style.border = 'none'
       ..onLoad.listen((event) async {
         if (widget.callbacks?.onInit != null) widget.callbacks!.onInit!.call();
-        if (widget.value != null)
-          widget.controller.setText(widget.value!);
+        if (widget.value != null) widget.controller.setText(widget.value!);
       });
     if (widget.callbacks != null) addJSListener(widget.callbacks!);
     ui.platformViewRegistry

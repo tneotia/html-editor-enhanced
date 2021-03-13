@@ -42,9 +42,9 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     String text = json.decode(e.data)["text"];
     if (processOutputHtml &&
         (text.isEmpty ||
-        text == "<p></p>" ||
-        text == "<p><br></p>" ||
-        text == "<p><br/></p>")) text = "";
+            text == "<p></p>" ||
+            text == "<p><br></p>" ||
+            text == "<p><br/></p>")) text = "";
     return text;
   }
 

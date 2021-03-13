@@ -17,7 +17,8 @@ class HtmlEditor extends StatelessWidget {
     this.autoAdjustHeight = true,
     this.decoration = const BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(4)),
-      border: Border.fromBorderSide(BorderSide(color: const Color(0xffececec), width: 1)),
+      border: Border.fromBorderSide(
+          BorderSide(color: const Color(0xffececec), width: 1)),
     ),
     this.showBottomToolbar = true,
     this.hint,
@@ -81,45 +82,44 @@ class HtmlEditor extends StatelessWidget {
   Widget build(BuildContext context) {
     if (!kIsWeb) {
       return html.HtmlEditorWidget(
-        key: key,
-        controller: controller,
-        value: initialText,
-        height: height,
-        autoAdjustHeight: autoAdjustHeight,
-        showBottomToolbar: showBottomToolbar,
-        hint: hint,
-        callbacks: callbacks,
-        toolbar: toolbar.isEmpty
-            ? [
-                Style(),
-                Font(buttons: [
-                  FontButtons.bold,
-                  FontButtons.underline,
-                  FontButtons.clear
-                ]),
-                ColorBar(buttons: [ColorButtons.color]),
-                Paragraph(buttons: [
-                  ParagraphButtons.ul,
-                  ParagraphButtons.ol,
-                  ParagraphButtons.paragraph
-                ]),
-                Insert(buttons: [
-                  InsertButtons.link,
-                  InsertButtons.picture,
-                  InsertButtons.video,
-                  InsertButtons.table
-                ]),
-                Misc(buttons: [
-                  MiscButtons.fullscreen,
-                  MiscButtons.codeview,
-                  MiscButtons.help
-                ])
-              ]
-            : toolbar,
-        plugins: plugins,
-        darkMode: darkMode,
-        decoration: decoration
-      );
+          key: key,
+          controller: controller,
+          value: initialText,
+          height: height,
+          autoAdjustHeight: autoAdjustHeight,
+          showBottomToolbar: showBottomToolbar,
+          hint: hint,
+          callbacks: callbacks,
+          toolbar: toolbar.isEmpty
+              ? [
+                  Style(),
+                  Font(buttons: [
+                    FontButtons.bold,
+                    FontButtons.underline,
+                    FontButtons.clear
+                  ]),
+                  ColorBar(buttons: [ColorButtons.color]),
+                  Paragraph(buttons: [
+                    ParagraphButtons.ul,
+                    ParagraphButtons.ol,
+                    ParagraphButtons.paragraph
+                  ]),
+                  Insert(buttons: [
+                    InsertButtons.link,
+                    InsertButtons.picture,
+                    InsertButtons.video,
+                    InsertButtons.table
+                  ]),
+                  Misc(buttons: [
+                    MiscButtons.fullscreen,
+                    MiscButtons.codeview,
+                    MiscButtons.help
+                  ])
+                ]
+              : toolbar,
+          plugins: plugins,
+          darkMode: darkMode,
+          decoration: decoration);
     } else {
       return Text(
           "Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart");

@@ -173,7 +173,10 @@ class Paragraph extends Toolbar {
     } else {
       String list = "[";
       for (ParagraphButtons e in buttons) {
-        list = list + "'${describeEnum(e)}'" + getListStyle(e) + (buttons.last != e ? ", " : "");
+        list = list +
+            "'${describeEnum(e)}'" +
+            getListStyle(e) +
+            (buttons.last != e ? ", " : "");
       }
       return list + "]";
     }
@@ -184,11 +187,13 @@ class Paragraph extends Toolbar {
   String getListStyle(ParagraphButtons pb) {
     bool hasUlOl = false;
     bool hasBoth = false;
-    if (buttons.contains(ParagraphButtons.ul) || buttons.contains(ParagraphButtons.ol))
-      hasUlOl = true;
-    if (buttons.contains(ParagraphButtons.ul) && buttons.contains(ParagraphButtons.ol))
-      hasBoth = true;
-    if (hasUlOl && !hasBoth && (pb == ParagraphButtons.ul || pb == ParagraphButtons.ol))
+    if (buttons.contains(ParagraphButtons.ul) ||
+        buttons.contains(ParagraphButtons.ol)) hasUlOl = true;
+    if (buttons.contains(ParagraphButtons.ul) &&
+        buttons.contains(ParagraphButtons.ol)) hasBoth = true;
+    if (hasUlOl &&
+        !hasBoth &&
+        (pb == ParagraphButtons.ul || pb == ParagraphButtons.ol))
       return ", 'listStyles'";
     else if (hasUlOl && hasBoth && pb == ParagraphButtons.ol)
       return ", 'listStyles'";

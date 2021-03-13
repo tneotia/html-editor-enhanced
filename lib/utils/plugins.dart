@@ -166,7 +166,8 @@ class SummernoteAtMention extends Plugins {
   String getMentions() {
     String mentionsString = "[";
     for (String e in mentions) {
-      mentionsString = mentionsString + "'$e'" + (e != mentions.last ? ", " : "");
+      mentionsString =
+          mentionsString + "'$e'" + (e != mentions.last ? ", " : "");
     }
     return mentionsString + "]";
   }
