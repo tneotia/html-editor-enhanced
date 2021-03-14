@@ -13,19 +13,11 @@ class HtmlEditor extends StatelessWidget {
     Key? key,
     required this.controller,
     this.initialText,
-    this.height = 380,
-    this.autoAdjustHeight = true,
-    this.decoration = const BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(4)),
-      border: Border.fromBorderSide(
-          BorderSide(color: const Color(0xffececec), width: 1)),
-    ),
-    this.showBottomToolbar = true,
     this.hint,
     this.callbacks,
     this.toolbar = const [],
     this.plugins = const [],
-    this.darkMode,
+    this.options = const HtmlEditorOptions(),
   }) : super(key: key);
 
   /// The controller that is passed to the widget, which allows multiple [HtmlEditor]
@@ -34,29 +26,6 @@ class HtmlEditor extends StatelessWidget {
 
   /// The initial text that is be supplied to the Html editor.
   final String? initialText;
-
-  /// Sets the height of the Html editor space. It does not take the toolbar
-  /// for the editor into account.
-  ///
-  /// The default value is 380.
-  final double height;
-
-  /// The editor will automatically adjust its height once the page is loaded to
-  /// ensure there is no vertical scrolling or empty space. It will only perform
-  /// the adjustment when the summernote editor is the loaded page.
-  ///
-  /// The default value is true.
-  final bool autoAdjustHeight;
-
-  /// The BoxDecoration to use around the Html editor. By default, the widget
-  /// uses a thin, dark, rounded rectangle border around the widget.
-  final BoxDecoration decoration;
-
-  /// Specifies whether the bottom toolbar for picking an image or copy/pasting
-  /// is shown on the widget.
-  ///
-  /// The default value is true.
-  final bool showBottomToolbar;
 
   /// Sets the Html editor's hint (text displayed when there is no text in the
   /// editor).
@@ -72,11 +41,8 @@ class HtmlEditor extends StatelessWidget {
   /// Sets the list of Summernote plugins enabled in the editor.
   final List<Plugins> plugins;
 
-  /// Sets the editor to dark mode. `null` - switches with system, `false` -
-  /// always light, `true` - always dark.
-  ///
-  /// The default value is null (switches with system).
-  final bool? darkMode;
+  /// Defines miscellaneous options for the editor
+  final HtmlEditorOptions options;
 
   @override
   Widget build(BuildContext context) {
@@ -85,9 +51,6 @@ class HtmlEditor extends StatelessWidget {
           key: key,
           controller: controller,
           value: initialText,
-          height: height,
-          autoAdjustHeight: autoAdjustHeight,
-          showBottomToolbar: showBottomToolbar,
           hint: hint,
           callbacks: callbacks,
           toolbar: toolbar.isEmpty
@@ -118,8 +81,7 @@ class HtmlEditor extends StatelessWidget {
                 ]
               : toolbar,
           plugins: plugins,
-          darkMode: darkMode,
-          decoration: decoration);
+          options: options);
     } else {
       return Text(
           "Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart");

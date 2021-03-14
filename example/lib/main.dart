@@ -3,9 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(HtmlEditorExampleApp());
 
-class MyApp extends StatelessWidget {
+class HtmlEditorExampleApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -13,21 +13,21 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(),
       darkTheme: ThemeData.dark(),
-      home: MyHomePage(title: 'Flutter HTML Editor Example'),
+      home: HtmlEditorExample(title: 'Flutter HTML Editor Example'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
+class HtmlEditorExample extends StatefulWidget {
+  HtmlEditorExample({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HtmlEditorExampleState createState() => _HtmlEditorExampleState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HtmlEditorExampleState extends State<HtmlEditorExample> {
   String result = "";
   final HtmlEditorController controller = HtmlEditorController();
 
@@ -64,7 +64,9 @@ class _MyHomePageState extends State<MyHomePage> {
               controller: controller,
               hint: "Your text here...",
               //initialText: "<p>text content initial, if any</p>",
-              height: 250,
+              options: HtmlEditorOptions(
+                height: 250,
+              ),
               callbacks: Callbacks(
                 onChange: (String? changed) {
                   print("content changed to $changed");

@@ -1,6 +1,6 @@
 name: html_editor_enhanced
 description: HTML rich text editor for Android, iOS, and Web, using the Summernote library.
-  Enhanced with critical bug fixes and support for callbacks, Summernote Awesome plugins, dark mode, and much more.
+  Enhanced with critical bug fixes and support for callbacks, plugins, dark mode, and much more.
 version: 1.6.0
 homepage: https://github.com/tneotia/html-editor-enhanced
 
@@ -31,6 +31,7 @@ flutter:
     - packages/html_editor_enhanced/summernote-lite-dark.css
     - packages/html_editor_enhanced/summernote-lite.min.js
     - packages/html_editor_enhanced/jquery.min.js
+    # todo check if these fonts can be removed
     - packages/html_editor_enhanced/assets/font/summernote.eot
     - packages/html_editor_enhanced/assets/font/summernote.ttf
     - packages/html_editor_enhanced/assets/font/summernote.woff

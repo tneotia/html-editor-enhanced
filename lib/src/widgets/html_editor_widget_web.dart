@@ -18,31 +18,23 @@ class HtmlEditorWidget extends StatefulWidget {
     Key? key,
     required this.controller,
     this.value,
-    required this.height,
-    required this.showBottomToolbar,
     this.hint,
     this.callbacks,
     required this.toolbar,
     required this.plugins,
-    this.darkMode,
     required this.initBC,
-    required this.decoration,
-    required this.autoAdjustHeight,
+    required this.options,
   }) : super(key: key);
 
   final HtmlEditorController controller;
   final String? value;
-  final double height;
-  final bool showBottomToolbar;
   final String? hint;
-  final UniqueKey webViewKey = UniqueKey();
   final Callbacks? callbacks;
   final List<Toolbar> toolbar;
   final List<Plugins> plugins;
-  final bool? darkMode;
   final BuildContext initBC;
-  final BoxDecoration decoration;
-  final bool autoAdjustHeight;
+  final UniqueKey webViewKey = UniqueKey();
+  final HtmlEditorOptions options;
 
   _HtmlEditorWidgetWebState createState() => _HtmlEditorWidgetWebState();
 }
@@ -58,12 +50,21 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   /// The actual height of the editor, used to automatically set the height
   late double actualHeight;
 
+  /// A Future that is observed by the [FutureBuilder]. We don't use a function
+  /// as the Future on the [FutureBuilder] because when the widget is rebuilt,
+  /// the function may be excessively called, hurting performance.
+  late Future<bool> summernoteInit;
+
   @override
   void initState() {
-    actualHeight = widget.height + 125;
+    actualHeight = widget.options.height + 125;
     createdViewId = getRandString(10);
     controllerMap[widget.controller] = createdViewId;
+    initSummernote();
     super.initState();
+  }
+
+  void initSummernote() async {
     String summernoteToolbar = "[\n";
     String headString = "";
     String summernoteCallbacks = "callbacks: {";
@@ -81,8 +82,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             (p == widget.plugins.last
                 ? "]]\n"
                 : p.getToolbarString().isNotEmpty
-                    ? ", "
-                    : "");
+                ? ", "
+                : "");
         headString = headString + p.getHeadString() + "\n";
         if (p is SummernoteAtMention) {
           summernoteCallbacks = summernoteCallbacks +
@@ -140,36 +141,21 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     summernoteCallbacks = summernoteCallbacks + "}";
     String darkCSS = "";
     if ((Theme.of(widget.initBC).brightness == Brightness.dark ||
-            widget.darkMode == true) &&
-        widget.darkMode != false) {
+        widget.options.darkMode == true) &&
+        widget.options.darkMode != false) {
       darkCSS =
-          "<link href=\"assets/packages/html_editor_enhanced/assets/summernote-lite-dark.css\" rel=\"stylesheet\">";
+      "<link href=\"assets/packages/html_editor_enhanced/assets/summernote-lite-dark.css\" rel=\"stylesheet\">";
     }
     String jsCallbacks = "";
     if (widget.callbacks != null)
       jsCallbacks = getJsCallbacks(widget.callbacks!);
-    String htmlString = """
-      <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-        <meta name="description" content="Flutter Summernote HTML Editor">
-        <meta name="author" content="tneotia">
-        <title>Summernote Text Editor HTML</title>
-        <script src="assets/packages/html_editor_enhanced/assets/jquery.min.js" type="application/javascript"></script>
-        <link href="assets/packages/html_editor_enhanced/assets/summernote-lite.min.css" rel="stylesheet">
-        <script src="assets/packages/html_editor_enhanced/assets/summernote-lite.min.js" type="application/javascript"></script>
-        $darkCSS
-      </head>
-      <body>
-      <div id="summernote-2"></div>
-      $headString
+    String summernoteScripts = """
       <script type="text/javascript">
         \$(document).ready(function () {
           \$('#summernote-2').summernote({
             placeholder: "${widget.hint}",
             tabsize: 2,
-            height: ${widget.height},
+            height: ${widget.options.height},
             toolbar: $summernoteToolbar
             disableGrammar: false,
             spellCheck: false,
@@ -246,27 +232,24 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         
         $jsCallbacks
       </script>
-      <style>
-        body {
-            display: block;
-            margin: 0px;
-        }
-        .note-editor.note-airframe, .note-editor.note-frame {
-            border: 0px solid #a9a9a9;
-        }
-        .note-frame {
-            border-radius: 0px;
-        }
-      </style>
-      </body>
-      </html>
     """;
+    String filePath = 'packages/html_editor_enhanced/assets/summernote-no-plugins.html';
+    if (widget.options.filePath != null)
+      filePath = widget.options.filePath!;
+    String htmlString = await rootBundle.loadString(filePath);
+    htmlString = htmlString
+        .replaceFirst("<!--darkCSS-->", darkCSS)
+        .replaceFirst("<!--headString-->", headString)
+        .replaceFirst("<!--summernoteScripts-->", summernoteScripts)
+        .replaceFirst("jquery.min.js", "assets/packages/html_editor_enhanced/assets/jquery.min.js")
+        .replaceFirst("summernote-lite.min.css", "assets/packages/html_editor_enhanced/assets/summernote-lite.min.css")
+        .replaceFirst("summernote-lite.min.js", "assets/packages/html_editor_enhanced/assets/summernote-lite.min.js");
     if (widget.callbacks != null) addJSListener(widget.callbacks!);
     final html.IFrameElement iframe = html.IFrameElement()
       ..width = MediaQuery.of(widget.initBC).size.width.toString() //'800'
-      ..height = widget.autoAdjustHeight
+      ..height = widget.options.autoAdjustHeight
           ? actualHeight.toString()
-          : widget.height.toString()
+          : widget.options.height.toString()
       ..srcdoc = htmlString
       ..style.border = 'none'
       ..onLoad.listen((event) async {
@@ -280,24 +263,35 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
       });
     ui.platformViewRegistry
         .registerViewFactory(createdViewId, (int viewId) => iframe);
+    summernoteInit = Future.value(true);
+    print("summernote init");
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: widget.autoAdjustHeight ? actualHeight : widget.height,
+      height: widget.options.autoAdjustHeight ? actualHeight : widget.options.height,
       child: Column(
         children: <Widget>[
           Expanded(
               child: Directionality(
                   textDirection: TextDirection.ltr,
-                  child: HtmlElementView(
-                    viewType: createdViewId,
+                  child: FutureBuilder<bool>(
+                    future: summernoteInit,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return HtmlElementView(
+                          viewType: createdViewId,
+                        );
+                      } else {
+                        return Container(height: widget.options.autoAdjustHeight ? actualHeight : widget.options.height);
+                      }
+                    }
                   ))),
-          widget.showBottomToolbar
+          widget.options.showBottomToolbar
               ? Divider(height: 0)
               : Container(height: 0, width: 0),
-          widget.showBottomToolbar
+          widget.options.showBottomToolbar
               ? Padding(
                   padding: const EdgeInsets.only(
                       left: 4, right: 4, bottom: 8, top: 8),
@@ -316,7 +310,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                         if (data != null) {
                           String text = data.text!;
                           if (widget.controller.processInputHtml) {
-                            text = data.text!
+                            text = text
                                 .replaceAll("'", '\\"')
                                 .replaceAll('"', '\\"')
                                 .replaceAll("[", "\\[")
@@ -415,7 +409,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
       if (data["type"] != null &&
           data["type"].contains("toDart:") &&
           data["view"] == createdViewId) {
-        if (data["type"].contains("htmlHeight") && widget.autoAdjustHeight) {
+        if (data["type"].contains("htmlHeight") && widget.options.autoAdjustHeight) {
           final docHeight = data["height"] ?? actualHeight;
           if ((docHeight != null && docHeight != actualHeight) && mounted) {
             setState(() {
@@ -452,7 +446,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   }
 
   /// Generates a random string to be used as the view ID. Technically this
-  /// limits the number of editors to a finite length, but nobody will be
+  /// limits the number of editors to a finite number, but nobody will be
   /// embedding enough editors to reach the theoretical limit (yes, this
   /// is a challenge ;-) )
   String getRandString(int len) {

@@ -7,40 +7,33 @@ import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/utils/plugins.dart';
 import 'package:html_editor_enhanced/utils/toolbar_icon.dart';
 
-/// The HTML Editor widget itself, for web (uses IFrameElement)
+/// The HTML Editor widget itself, for mobile (uses InAppWebView)
 class HtmlEditorWidget extends StatefulWidget {
   HtmlEditorWidget({
     Key? key,
     required this.controller,
     this.value,
-    required this.height,
-    required this.showBottomToolbar,
     this.hint,
     this.callbacks,
     required this.toolbar,
     required this.plugins,
-    this.darkMode,
-    required this.decoration,
-    required this.autoAdjustHeight,
+    required this.options,
   }) : super(key: key);
 
   final HtmlEditorController controller;
   final String? value;
-  final double height;
-  final bool showBottomToolbar;
   final String? hint;
-  final UniqueKey webViewKey = UniqueKey();
   final Callbacks? callbacks;
   final List<Toolbar> toolbar;
   final List<Plugins> plugins;
-  final bool? darkMode;
-  final BoxDecoration decoration;
-  final bool autoAdjustHeight;
+  final HtmlEditorOptions options;
 
   _HtmlEditorWidgetMobileState createState() => _HtmlEditorWidgetMobileState();
 }
 
-/// The HTML Editor widget itself, for mobile (uses flutter_inappwebview)
+/// State for the mobile Html editor widget
+///
+/// A stateful widget is necessary here to allow the height to dynamically adjust.
 class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
   /// Tracks whether the callbacks were initialized or not to prevent re-initializing them
   bool callbacksInitialized = false;
@@ -48,23 +41,32 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
   /// The actual height of the editor, used to automatically set the height
   late double actualHeight;
 
+  /// The file path to the html code
+  late String filePath;
+
   @override
   void initState() {
-    actualHeight = widget.height + 125;
+    actualHeight = widget.options.height + 125;
+    if (widget.options.filePath != null) {
+      filePath = widget.options.filePath!;
+    } else if (widget.plugins.isEmpty) {
+      filePath = 'packages/html_editor_enhanced/assets/summernote-no-plugins.html';
+    } else {
+      filePath = 'packages/html_editor_enhanced/assets/summernote.html';
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: widget.autoAdjustHeight ? actualHeight : widget.height,
-      decoration: widget.decoration,
+      height: widget.options.autoAdjustHeight ? actualHeight : widget.options.height,
+      decoration: widget.options.decoration,
       child: Column(
         children: <Widget>[
           Expanded(
             child: InAppWebView(
-              initialFile:
-                  'packages/html_editor_enhanced/assets/summernote${widget.plugins.isEmpty ? '-no-plugins' : ''}.html',
+              initialFile: filePath,
               onWebViewCreated: (webViewController) {
                 controllerMap[widget.controller] = webViewController;
               },
@@ -81,8 +83,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
               },
               onLoadStop: (InAppWebViewController controller, Uri? uri) async {
                 String url = uri.toString();
-                if (url.endsWith("summernote.html") ||
-                    url.endsWith("summernote-no-plugins.html")) {
+                if (url.contains(filePath)) {
                   String summernoteToolbar = "[\n";
                   String summernoteCallbacks = "callbacks: {";
                   for (Toolbar t in widget.toolbar) {
@@ -152,7 +153,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                         \$('#summernote-2').summernote({
                           placeholder: "${widget.hint}",
                           tabsize: 2,
-                          height: ${widget.height},
+                          height: ${widget.options.height},
                           toolbar: $summernoteToolbar
                           disableGrammar: false,
                           spellCheck: false,
@@ -161,8 +162,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       });
                   """);
                   if ((Theme.of(context).brightness == Brightness.dark ||
-                          widget.darkMode == true) &&
-                      widget.darkMode != false) {
+                          widget.options.darkMode == true) &&
+                      widget.options.darkMode != false) {
                     String darkCSS =
                         "<link href=\"summernote-lite-dark.css\" rel=\"stylesheet\">";
                     await controller.evaluateJavascript(
@@ -172,7 +173,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                   if (widget.value != null)
                     widget.controller.setText(widget.value!);
                   //adjusts the height of the editor when it is loaded
-                  if (widget.autoAdjustHeight) {
+                  if (widget.options.autoAdjustHeight) {
                     final docHeight = await controller.evaluateJavascript(
                         source: 'document.body.scrollHeight') as int?;
                     if ((docHeight != null) && mounted) {
@@ -195,10 +196,10 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
               },
             ),
           ),
-          widget.showBottomToolbar
+          widget.options.showBottomToolbar
               ? Divider(height: 0)
               : Container(height: 0, width: 0),
-          widget.showBottomToolbar
+          widget.options.showBottomToolbar
               ? Padding(
                   padding: const EdgeInsets.only(
                       left: 4, right: 4, bottom: 8, top: 8),
@@ -217,7 +218,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                         if (data != null) {
                           String text = data.text!;
                           if (widget.controller.processInputHtml) {
-                            text = data.text!
+                            text = text
                                 .replaceAll("'", '\\"')
                                 .replaceAll('"', '\\"')
                                 .replaceAll("[", "\\[")
