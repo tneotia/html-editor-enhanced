@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/utils/plugins.dart';
-import 'package:html_editor_enhanced/utils/toolbar_icon.dart';
 
 /// The HTML Editor widget itself, for mobile (uses InAppWebView)
 class HtmlEditorWidget extends StatefulWidget {
@@ -200,40 +199,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
               ? Divider(height: 0)
               : Container(height: 0, width: 0),
           widget.options.showBottomToolbar
-              ? Padding(
-                  padding: const EdgeInsets.only(
-                      left: 4, right: 4, bottom: 8, top: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      toolbarIcon(context, Icons.content_copy, "Copy",
-                          onTap: () async {
-                        String? data = await widget.controller.getText();
-                        Clipboard.setData(new ClipboardData(text: data));
-                      }),
-                      toolbarIcon(context, Icons.content_paste, "Paste",
-                          onTap: () async {
-                        ClipboardData? data =
-                            await Clipboard.getData(Clipboard.kTextPlain);
-                        if (data != null) {
-                          String text = data.text!;
-                          if (widget.controller.processInputHtml) {
-                            text = text
-                                .replaceAll("'", '\\"')
-                                .replaceAll('"', '\\"')
-                                .replaceAll("[", "\\[")
-                                .replaceAll("]", "\\]")
-                                .replaceAll("\n", "<br/>")
-                                .replaceAll("\n\n", "<br/>")
-                                .replaceAll("\r", " ")
-                                .replaceAll('\r\n', " ");
-                          }
-                          widget.controller.insertHtml(text);
-                        }
-                      }),
-                    ],
-                  ),
-                )
+              ? ToolbarWidget(controller: widget.controller)
               : Container(height: 0, width: 0),
         ],
       ),

@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+// TODO see if it is possible to adjust the height of the editor when the
+// keyboard is active
+// TODO see if it is possible to use Scrollable.of(context).ensureVisible
+// when the editor is focused
+// Make both of the above optional
+
 /// Options class for the html editor.
 class HtmlEditorOptions {
   const HtmlEditorOptions({
@@ -52,4 +58,5 @@ class HtmlEditorOptions {
   /// package can insert the relevant JS code to communicate between Dart and JS.
   /// See the README for more details on this.
   final String? filePath;
+
 }
