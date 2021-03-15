@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 
 // TODO see if it is possible to adjust the height of the editor when the
 // keyboard is active
-// TODO see if it is possible to use Scrollable.of(context).ensureVisible
-// when the editor is focused
-// Make both of the above optional
+// Make the above optional
 
 /// Options class for the html editor.
 class HtmlEditorOptions {
@@ -19,6 +17,7 @@ class HtmlEditorOptions {
     this.showBottomToolbar = true,
     this.darkMode,
     this.filePath,
+    this.shouldEnsureVisible = false,
   });
 
   /// Sets the height of the Html editor space. It does not take the toolbar
@@ -31,7 +30,12 @@ class HtmlEditorOptions {
   /// ensure there is no vertical scrolling or empty space. It will only perform
   /// the adjustment when the summernote editor is the loaded page.
   ///
-  /// The default value is true.
+  /// It will also disable vertical scrolling on the webview, so scrolling on
+  /// the webview will actually scroll the rest of the page rather than doing
+  /// nothing because it is trying to scroll the webview container.
+  ///
+  /// The default value is true. It is recommended to leave this as true because
+  /// it significantly improves the UX.
   final bool autoAdjustHeight;
 
   /// The BoxDecoration to use around the Html editor. By default, the widget
@@ -59,4 +63,12 @@ class HtmlEditorOptions {
   /// See the README for more details on this.
   final String? filePath;
 
+  /// Specifies whether the widget should scroll to reveal the HTML editor when
+  /// it is focused or the text content is changed.
+  /// See the README examples for the best way to implement this.
+  ///
+  /// Note: Your editor *must* be in a Scrollable type widget (e.g. ListView,
+  /// SingleChildScrollView, etc.) for this to work. Otherwise, nothing will
+  /// happen.
+  final bool shouldEnsureVisible;
 }

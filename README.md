@@ -46,6 +46,10 @@ Flutter HTML Editor Enhanced is a text editor for Android and iOS to help write 
   - [Toolbar](#toolbar)
   
   - [Plugins](#plugins)
+  
+  - [`autoAdjustHeight`](#autoadjustheight)
+  
+  - [`shouldEnsureVisible`](#shouldensurevisible)
 
   - [Examples](#examples)
 
@@ -215,15 +219,11 @@ Parameter | Type | Default | Description
 ------------ | ------------- | ------------- | -------------
 **controller** | `HtmlEditorController` | empty | Required param. Create a controller instance and pass it to the widget. This ensures that any methods called work only on their `HtmlEditor` instance, allowing you to use multiple HTML widgets on one page.
 **initialText** | `String` | empty | Initial text content for text editor
-**height** | `double` | 380 | Height of text editor (does not set the height in HTML yet, only the height of the WebView widget)
-**autoAdjustHeight** | `bool` | `true` | Automatically adjust the height of the text editor by analyzing the HTML height once the editor is loaded
-**decoration** | `BoxDecoration` |  | `BoxDecoration` that surrounds the widget
-**showBottomToolbar** | `bool` | true | Show or hide bottom toolbar
 **hint** | `String` | empty | Placeholder hint text
 **callbacks** | `Callbacks` | empty | Customize the callbacks for various events
 **toolbar** | `List<Toolbar>` | See the widget's constructor | Customize what buttons are shown on the toolbar, and in which order. See [below](#toolbar) for more details.
 **plugins** | `List<Plugins>` | empty | Customize what plugins are activated. See [below](#plugins) for more details.
-**darkMode** | `bool` | `null` | Sets the status of dark mode - `false`: always light, `null`: follow system, `true`: always dark
+**options** | `HtmlEditorOptions` | `HtmlEditorOptions()` | Class to set various options. See [below](#parameters---htmleditoroptions) for more details.
 
 ### Parameters - `HtmlEditorController`
 
@@ -231,6 +231,19 @@ Parameter | Type | Default | Description
 ------------ | ------------- | ------------- | -------------
 **processInputHtml** | `bool` | `false` | Determines whether processing occurs on any input HTML (e.g. new-lines become `<br/>`)
 **processOutputHtml** | `bool` | `true` | Determines whether processing occurs on any output HTML (e.g. `<p><br/><p>` becomes `""`)
+
+### Parameters - `HtmlEditorOptions`
+
+Parameter | Type | Default | Description
+------------ | ------------- | ------------- | -------------
+**height** | `double` | 380 | Height of text editor (does not set the height in HTML yet, only the height of the WebView widget)
+**autoAdjustHeight** | `bool` | `true` | Automatically adjust the height of the text editor by analyzing the HTML height once the editor is loaded. Recommended value: `true`.  See [below](#autoadjustheight) for more details.
+**decoration** | `BoxDecoration` |  | `BoxDecoration` that surrounds the widget
+**showBottomToolbar** | `bool` | true | Show or hide bottom toolbar
+**hint** | `String` | empty | Placeholder hint text
+**darkMode** | `bool` | `null` | Sets the status of dark mode - `false`: always light, `null`: follow system, `true`: always dark
+**filePath** | `String` | `null` | Allows you to specify your own HTML to be loaded into the webview. You can create a custom page with Summernote, or theoretically load any other editor/HTML.
+**shouldEnsureVisible** | `bool` | `false` | Scroll the parent `Scrollable` to the top of the editor widget when the webview is focused. Do *not* use this parameter if `HtmlEditor` is not inside a `Scrollable`. See [below](#shouldensurevisible) for more details.
 
 ### Methods
 
@@ -353,8 +366,7 @@ Shows a dropdown of available mentions when the '@' character is typed into the 
 Adds a button to the toolbar that wraps the selected text in a code block.
 
 9. [Summernote File](https://github.com/mathieu-coingt/summernote-file) -
-Adds a button to the toolbar that allows the user to upload any type of file. It supports picture files (jpg, png, gif, wvg, webp), audio files (mp3, ogg, oga), and video files (mp4, ogv, webm) in base64. For all other formats, you must use the onFileUpload callback to upload the files to a server and then insert an HTML node into the editor.
-
+Adds a button to the toolbar that allows the user to upload any type of file. It supports picture files (jpg, png, gif, wvg, webp), audio files (mp3, ogg, oga), and video files (mp4, ogv, webm) in base64. For all other formats, you must use the onFileUpload callback to upload the files to a server and then insert an HTML node into the editor.<br>
 Note: Setting the onFileUpload callback removes the base64 functionality - instead you will also have to provide a solution to upload the picture, audio, and video files in your Dart code. Then, you can use the `<controller name>.insertHtml(<html string>)` method to insert the relevant HTML element at the current cursor position.
 
 This list is not final, more will be added. If there's a specific plugin you'd like to see support for, please file a feature request!
@@ -379,11 +391,129 @@ All plugin buttons will be displayed in one section in the toolbar. Overriding t
 
 Please see the `plugins.dart` file for more specific details on each plugin, including some important notes to consider when deciding whether or not to use them in your implementation.
 
+### `autoAdjustHeight`
+
+Default value: true
+
+This option parameter sets the height of the editor automatically by getting the value returned by the JS `document.body.scrollHeight`. 
+
+This is useful because the Summernote toolbar could have either 1, 2, or 3 rows depending on the widget's configuration, screen size, orientation, etc. There is no reliable way to tell how large the toolbar is going to be before the webview content is loaded, and thus simply hardcoding the height of the webview can induce either empty space at the bottom or a scrollable webview. By using the JS, the editor can get the exact height and update the widget to reflect that.
+
+There is a drawback: The webview will visibly shift size after the page is loaded. Depending on how large the change is, it could be jarring. Sometimes, it takes a second for the webview to adjust to the new size and you might see the editor page jump down/up a second or two after the webview container adjusts itself.
+
+There is also an advantage: Since the webview is sized exactly to the size of the content, it no longer needs to scroll. Thus, when `autoAdjustHeight: true`, the webview has `disableVerticalScroll: true`, and `gestureRecognizers: null`. This is an advantage because scrolling on the webview will now scroll the Flutter scrollview, rather than trying to scroll the webview content. Personally, I like this UX - I don't like it when the webview should not be scrollable but scrolling on it will appear to do nothing.
+
+If this does not help your use case feel free to disable it, but the recommended value is `true`.
+
+### `shouldEnsureVisible`
+
+Default value: false
+
+This option parameter will scroll the editor container into view whenever the webview is focused or text is typed into the editor. 
+
+You can only use this parameter if your `HtmlEditor` is inside a `Scrollview`, otherwise it does nothing.
+
+This is useful in cases where the page is a `SingleChildScrollView` or something similar with multiple widgets (eg a form). When the user is going through the different fields, it will pop the webview into view, just like a `TextField` would scroll into in view if text is being typed inside it. See [below](#example-for-shouldensurevisible) for an example with a good way to use this.
+
 ### Examples
 
 See the [example app](https://github.com/tneotia/html-editor-enhanced/blob/master/example/lib/main.dart) to see how the majority of methods & callbacks can be used. You can also play around with the parameters to see how they function.
 
 This section will be updated later with more specialized and specific examples as this library grows and more features are implemented.
+
+#### Example for `shouldEnsureVisible`:
+
+```dart
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:html_editor_enhanced/html_editor.dart';
+
+class _ExampleState extends State<Example> {
+  String result = "";
+  final HtmlEditorController controller = HtmlEditorController();
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        if (!kIsWeb) {
+          //these lines of code hide the keyboard and clear focus from the webview when any empty
+          //space is clicked. These are very important for the shouldEnsureVisible to work as intended.
+          SystemChannels.textInput.invokeMethod('TextInput.hide');
+          controller.editorController!.clearFocus();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+          elevation: 0,
+          actions: [
+            IconButton(
+               icon: Icon(Icons.check),
+               tooltip: "Save",
+               onPressed: () {
+                  //save profile details
+               }
+            ),
+          ]   
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(left: 18, right: 18),
+                child: TextField(
+                  controller: titleController,
+                  textInputAction: TextInputAction.next,
+                  focusNode: titleFocusNode,
+                  decoration: InputDecoration(
+                      hintText: "Name",
+                      border: InputBorder.none
+                  ),
+                ),
+              ),
+              SizedBox(height: 16),
+              HtmlEditor(
+                controller: controller,
+                hint: "Description",
+                options: HtmlEditorOptions(
+                  height: 450,
+                  shouldEnsureVisible: true,
+                ),
+              ),
+              SizedBox(height: 16),
+              Padding(
+                padding: EdgeInsets.only(left: 18, right: 18),
+                child: TextField(
+                  controller: bioController,
+                  textInputAction: TextInputAction.next,
+                  focusNode: bioFocusNode,
+                  decoration: InputDecoration(
+                    hintText: "Bio",
+                    border: InputBorder.none
+                  ),
+                ),
+              ),
+              Image.network("path_to_profile_picture"),
+              IconButton(
+                 icon: Icon(Icons.edit, size: 35),
+                 tooltip: "Edit profile picture",
+                 onPressed: () async {
+                    //open gallery and make api call to update profile picture   
+                 }
+              ),
+              //etc... just a basic form.
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
 
 ## Notes
 

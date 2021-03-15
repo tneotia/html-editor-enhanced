@@ -58,163 +58,196 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: widget.options.autoAdjustHeight ? actualHeight : widget.options.height,
-      decoration: widget.options.decoration,
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            child: InAppWebView(
-              initialFile: filePath,
-              onWebViewCreated: (webViewController) {
-                controllerMap[widget.controller] = webViewController;
-              },
-              initialOptions: InAppWebViewGroupOptions(
-                  crossPlatform: InAppWebViewOptions(
-                      javaScriptEnabled: true, transparentBackground: true),
-                  android: AndroidInAppWebViewOptions(
-                    useHybridComposition: true,
-                    loadWithOverviewMode: true,
-                  )),
-              gestureRecognizers: {
-                Factory<VerticalDragGestureRecognizer>(
-                    () => VerticalDragGestureRecognizer())
-              },
-              onLoadStop: (InAppWebViewController controller, Uri? uri) async {
-                String url = uri.toString();
-                if (url.contains(filePath)) {
-                  String summernoteToolbar = "[\n";
-                  String summernoteCallbacks = "callbacks: {";
-                  for (Toolbar t in widget.toolbar) {
-                    summernoteToolbar = summernoteToolbar +
-                        "['${t.getGroupName()}', ${t.getButtons(listStyles: widget.plugins.whereType<SummernoteListStyles>().isNotEmpty)}],\n";
+    return GestureDetector(
+      onTap: () {
+        SystemChannels.textInput.invokeMethod('TextInput.hide');
+        controllerMap[widget.controller].clearFocus();
+      },
+      child: Container(
+        height: widget.options.autoAdjustHeight ? actualHeight : widget.options.height,
+        decoration: widget.options.decoration,
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: InAppWebView(
+                initialFile: filePath,
+                onWebViewCreated: (webViewController) {
+                  controllerMap[widget.controller] = webViewController;
+                },
+                initialOptions: InAppWebViewGroupOptions(
+                    crossPlatform: InAppWebViewOptions(
+                        javaScriptEnabled: true,
+                        transparentBackground: true,
+                        disableVerticalScroll: widget.options.autoAdjustHeight,
+                    ),
+                    android: AndroidInAppWebViewOptions(
+                      useHybridComposition: true,
+                      loadWithOverviewMode: true,
+                    )),
+                gestureRecognizers: widget.options.autoAdjustHeight ? null : {
+                  Factory<VerticalDragGestureRecognizer>(
+                      () => VerticalDragGestureRecognizer())
+                },
+                onConsoleMessage: (controller, message) {
+                  print(message.message);
+                },
+                onWindowFocus: (controller) {
+                  if (widget.options.shouldEnsureVisible && Scrollable.of(context) != null) {
+                    Scrollable.of(context)!.position.ensureVisible(
+                        context.findRenderObject()!,
+                        duration: const Duration(milliseconds: 100),
+                        curve: Curves.easeIn
+                    );
                   }
-                  if (widget.plugins.isNotEmpty) {
-                    summernoteToolbar = summernoteToolbar + "['plugins', [";
-                    for (Plugins p in widget.plugins) {
+                },
+                onLoadStop: (InAppWebViewController controller, Uri? uri) async {
+                  String url = uri.toString();
+                  if (url.contains(filePath)) {
+                    String summernoteToolbar = "[\n";
+                    String summernoteCallbacks = "callbacks: {";
+                    for (Toolbar t in widget.toolbar) {
                       summernoteToolbar = summernoteToolbar +
-                          (p.getToolbarString().isNotEmpty
-                              ? "'${p.getToolbarString()}'"
-                              : "") +
-                          (p == widget.plugins.last
-                              ? "]]\n"
-                              : p.getToolbarString().isNotEmpty
-                                  ? ", "
-                                  : "");
-                      if (p is SummernoteAtMention) {
-                        summernoteCallbacks = summernoteCallbacks +
-                            """
-                          \nsummernoteAtMention: {
-                            getSuggestions: (value) => ${p.getMentions()},
-                            onSelect: (value) => {
-                              window.flutter_inappwebview.callHandler('onSelectMention', value);
-                            },
-                          },
-                        """;
-                        if (p.onSelect != null) {
-                          controllerMap[widget.controller].addJavaScriptHandler(
-                              handlerName: 'onSelectMention',
-                              callback: (value) {
-                                p.onSelect!.call(value.first.toString());
-                              });
-                        }
-                      }
-                      if (p is SummernoteFile) {
-                        if (p.onFileUpload != null) {
+                          "['${t.getGroupName()}', ${t.getButtons(listStyles: widget.plugins.whereType<SummernoteListStyles>().isNotEmpty)}],\n";
+                    }
+                    if (widget.plugins.isNotEmpty) {
+                      summernoteToolbar = summernoteToolbar + "['plugins', [";
+                      for (Plugins p in widget.plugins) {
+                        summernoteToolbar = summernoteToolbar +
+                            (p.getToolbarString().isNotEmpty
+                                ? "'${p.getToolbarString()}'"
+                                : "") +
+                            (p == widget.plugins.last
+                                ? "]]\n"
+                                : p.getToolbarString().isNotEmpty
+                                    ? ", "
+                                    : "");
+                        if (p is SummernoteAtMention) {
                           summernoteCallbacks = summernoteCallbacks +
                               """
-                            onFileUpload: function(files) {
-                              var newObject  = {
-                                 'lastModified': files[0].lastModified,
-                                 'lastModifiedDate': files[0].lastModifiedDate,
-                                 'name': files[0].name,
-                                 'size': files[0].size,
-                                 'type': files[0].type
-                              };
-                              window.flutter_inappwebview.callHandler('onFileUpload', JSON.stringify(newObject));
-                            }
-                        """;
-                          controllerMap[widget.controller].addJavaScriptHandler(
-                              handlerName: 'onFileUpload',
-                              callback: (files) {
-                                FileUpload file =
-                                    fileUploadFromJson(files.first);
-                                p.onFileUpload!.call(file);
-                              });
+                            \nsummernoteAtMention: {
+                              getSuggestions: (value) => ${p.getMentions()},
+                              onSelect: (value) => {
+                                window.flutter_inappwebview.callHandler('onSelectMention', value);
+                              },
+                            },
+                          """;
+                          if (p.onSelect != null) {
+                            controllerMap[widget.controller].addJavaScriptHandler(
+                                handlerName: 'onSelectMention',
+                                callback: (value) {
+                                  p.onSelect!.call(value.first.toString());
+                                });
+                          }
+                        }
+                        if (p is SummernoteFile) {
+                          if (p.onFileUpload != null) {
+                            summernoteCallbacks = summernoteCallbacks +
+                                """
+                              onFileUpload: function(files) {
+                                var newObject  = {
+                                   'lastModified': files[0].lastModified,
+                                   'lastModifiedDate': files[0].lastModifiedDate,
+                                   'name': files[0].name,
+                                   'size': files[0].size,
+                                   'type': files[0].type
+                                };
+                                window.flutter_inappwebview.callHandler('onFileUpload', JSON.stringify(newObject));
+                              }
+                          """;
+                            controllerMap[widget.controller].addJavaScriptHandler(
+                                handlerName: 'onFileUpload',
+                                callback: (files) {
+                                  FileUpload file =
+                                      fileUploadFromJson(files.first);
+                                  p.onFileUpload!.call(file);
+                                });
+                          }
                         }
                       }
                     }
-                  }
-                  summernoteToolbar = summernoteToolbar + "],";
-                  summernoteCallbacks = summernoteCallbacks + "}";
-                  controller.evaluateJavascript(source: """
-                     \$(document).ready(function () {
-                        \$('#summernote-2').summernote({
-                          placeholder: "${widget.hint}",
-                          tabsize: 2,
-                          height: ${widget.options.height},
-                          toolbar: $summernoteToolbar
-                          disableGrammar: false,
-                          spellCheck: false,
-                          $summernoteCallbacks
+                    summernoteToolbar = summernoteToolbar + "],";
+                    summernoteCallbacks = summernoteCallbacks + "}";
+                    controller.evaluateJavascript(source: """
+                       \$(document).ready(function () {
+                          \$('#summernote-2').summernote({
+                            placeholder: "${widget.hint}",
+                            tabsize: 2,
+                            height: ${widget.options.height},
+                            toolbar: $summernoteToolbar
+                            disableGrammar: false,
+                            spellCheck: false,
+                            $summernoteCallbacks
+                          });
                         });
-                      });
-                  """);
-                  if ((Theme.of(context).brightness == Brightness.dark ||
-                          widget.options.darkMode == true) &&
-                      widget.options.darkMode != false) {
-                    String darkCSS =
-                        "<link href=\"summernote-lite-dark.css\" rel=\"stylesheet\">";
-                    await controller.evaluateJavascript(
-                        source: "\$('head').append('$darkCSS');");
-                  }
-                  //set the text once the editor is loaded
-                  if (widget.value != null)
-                    widget.controller.setText(widget.value!);
-                  //adjusts the height of the editor when it is loaded
-                  if (widget.options.autoAdjustHeight) {
-                    final docHeight = await controller.evaluateJavascript(
-                        source: 'document.body.scrollHeight') as int?;
-                    if ((docHeight != null) && mounted) {
-                      setState(() {
-                        actualHeight = docHeight + 40.0;
-                      });
+                        
+                        \$('#summernote-2').on('summernote.change', function(_, contents, \$editable) {
+                          window.flutter_inappwebview.callHandler('onChange', contents);
+                        });
+                    """);
+                    if ((Theme.of(context).brightness == Brightness.dark ||
+                            widget.options.darkMode == true) &&
+                        widget.options.darkMode != false) {
+                      String darkCSS =
+                          "<link href=\"summernote-lite-dark.css\" rel=\"stylesheet\">";
+                      await controller.evaluateJavascript(
+                          source: "\$('head').append('$darkCSS');");
                     }
+                    //set the text once the editor is loaded
+                    if (widget.value != null)
+                      widget.controller.setText(widget.value!);
+                    //adjusts the height of the editor when it is loaded
+                    if (widget.options.autoAdjustHeight) {
+                      final docHeight = await controller.evaluateJavascript(
+                          source: 'document.body.scrollHeight') as int?;
+                      if ((docHeight != null) && mounted) {
+                        setState(() {
+                          actualHeight = docHeight + 40.0;
+                        });
+                      }
+                    }
+                    //initialize callbacks
+                    if (widget.callbacks != null && !callbacksInitialized) {
+                      addJSCallbacks(widget.callbacks!);
+                      addJSHandlers(widget.callbacks!);
+                      callbacksInitialized = true;
+                    }
+                    //call onInit callback
+                    if (widget.callbacks != null &&
+                        widget.callbacks!.onInit != null)
+                      widget.callbacks!.onInit!.call();
+                    //add onChange handler
+                    controller.addJavaScriptHandler(
+                        handlerName: 'onChange',
+                        callback: (contents) {
+                          if (widget.options.shouldEnsureVisible && Scrollable.of(context) != null) {
+                            Scrollable.of(context)!.position.ensureVisible(
+                                context.findRenderObject()!,
+                                duration: const Duration(milliseconds: 100),
+                                curve: Curves.easeIn
+                            );
+                          }
+                          if (widget.callbacks != null && widget.callbacks!.onChange != null) {
+                            widget.callbacks!.onChange!.call(contents.first.toString());
+                          }
+                        });
                   }
-                  //initialize callbacks
-                  if (widget.callbacks != null && !callbacksInitialized) {
-                    addJSCallbacks(widget.callbacks!);
-                    addJSHandlers(widget.callbacks!);
-                    callbacksInitialized = true;
-                  }
-                  //call onInit callback
-                  if (widget.callbacks != null &&
-                      widget.callbacks!.onInit != null)
-                    widget.callbacks!.onInit!.call();
-                }
-              },
+                },
+              ),
             ),
-          ),
-          widget.options.showBottomToolbar
-              ? Divider(height: 0)
-              : Container(height: 0, width: 0),
-          widget.options.showBottomToolbar
-              ? ToolbarWidget(controller: widget.controller)
-              : Container(height: 0, width: 0),
-        ],
+            widget.options.showBottomToolbar
+                ? Divider(height: 0)
+                : Container(height: 0, width: 0),
+            widget.options.showBottomToolbar
+                ? ToolbarWidget(controller: widget.controller)
+                : Container(height: 0, width: 0),
+          ],
+        ),
       ),
     );
   }
 
   /// adds the callbacks set by the user into the scripts
   void addJSCallbacks(Callbacks c) {
-    if (c.onChange != null) {
-      controllerMap[widget.controller].evaluateJavascript(source: """
-          \$('#summernote-2').on('summernote.change', function(_, contents, \$editable) {
-            window.flutter_inappwebview.callHandler('onChange', contents);
-          });
-        """);
-    }
     if (c.onEnter != null) {
       controllerMap[widget.controller].evaluateJavascript(source: """
           \$('#summernote-2').on('summernote.enter', function() {
@@ -269,13 +302,6 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
   /// creates flutter_inappwebview JavaScript Handlers to handle any callbacks the
   /// user has defined
   void addJSHandlers(Callbacks c) {
-    if (c.onChange != null) {
-      controllerMap[widget.controller].addJavaScriptHandler(
-          handlerName: 'onChange',
-          callback: (contents) {
-            c.onChange!.call(contents.first.toString());
-          });
-    }
     if (c.onEnter != null) {
       controllerMap[widget.controller].addJavaScriptHandler(
           handlerName: 'onEnter',

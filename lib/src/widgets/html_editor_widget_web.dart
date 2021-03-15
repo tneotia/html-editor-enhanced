@@ -52,7 +52,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   /// A Future that is observed by the [FutureBuilder]. We don't use a function
   /// as the Future on the [FutureBuilder] because when the widget is rebuilt,
   /// the function may be excessively called, hurting performance.
-  late Future<bool> summernoteInit;
+  Future<bool>? summernoteInit;
 
   @override
   void initState() {
@@ -160,6 +160,10 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             spellCheck: false,
             $summernoteCallbacks
           });
+          
+          \$('#summernote-2').on('summernote.change', function(_, contents, \$editable) {
+            window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onChange", "contents": contents}), "*");
+          });
         });
        
         window.parent.addEventListener('message', handleMessage, false);
@@ -252,18 +256,38 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
       ..srcdoc = htmlString
       ..style.border = 'none'
       ..onLoad.listen((event) async {
-        if (widget.callbacks?.onInit != null) widget.callbacks!.onInit!.call();
+        if (widget.callbacks != null &&
+            widget.callbacks!.onInit != null)
+          widget.callbacks!.onInit!.call();
         if (widget.value != null) widget.controller.setText(widget.value!);
         Map<String, Object> data = {"type": "toIframe: getHeight"};
         data["view"] = createdViewId;
         final jsonEncoder = JsonEncoder();
-        var json = jsonEncoder.convert(data);
-        html.window.postMessage(json, "*");
+        var jsonStr = jsonEncoder.convert(data);
+        html.window.postMessage(jsonStr, "*");
+        html.window.onMessage.listen((event) {
+          var data = json.decode(event.data);
+          if (data["type"] != null &&
+              data["type"].contains("toDart: onChange") &&
+              data["view"] == createdViewId) {
+            if (widget.callbacks != null &&
+                widget.callbacks!.onChange != null)
+              widget.callbacks!.onChange!.call(data["contents"]);
+            if (widget.options.shouldEnsureVisible && Scrollable.of(context) != null) {
+              Scrollable.of(context)!.position.ensureVisible(
+                  context.findRenderObject()!,
+                  duration: const Duration(milliseconds: 100),
+                  curve: Curves.easeIn
+              );
+            }
+          }
+        });
       });
     ui.platformViewRegistry
         .registerViewFactory(createdViewId, (int viewId) => iframe);
-    summernoteInit = Future.value(true);
-    print("summernote init");
+    setState(() {
+      summernoteInit = Future.value(true);
+    });
   }
 
   @override
@@ -301,14 +325,6 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   /// Adds the callbacks the user set into JavaScript
   String getJsCallbacks(Callbacks c) {
     String callbacks = "";
-    if (c.onChange != null) {
-      callbacks = callbacks +
-          """
-          \$('#summernote-2').on('summernote.change', function(_, contents, \$editable) {
-            window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onChange", "contents": contents}), "*");
-          });\n
-        """;
-    }
     if (c.onEnter != null) {
       callbacks = callbacks +
           """
