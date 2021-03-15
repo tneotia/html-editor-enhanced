@@ -49,9 +49,11 @@ Flutter HTML Editor Enhanced is a text editor for Android and iOS to help write 
   
   - [`autoAdjustHeight`](#autoadjustheight)
   
+  - [`filePath`](#filepath)
+  
   - [`shouldEnsureVisible`](#shouldensurevisible)
 
-  - [Examples](#examples)
+- [Examples](#examples)
 
 - [Notes](#notes)
 
@@ -405,6 +407,37 @@ There is also an advantage: Since the webview is sized exactly to the size of th
 
 If this does not help your use case feel free to disable it, but the recommended value is `true`.
 
+### `filePath`
+
+This option parameter allows you to fully customize what HTML is loaded into the webview, by providing a file path to a custom HTML file from assets.
+
+There is a particular format that is required/recommended when providing a file path for web, because the web implementation will load the HTML as a `String` and make changes to it directly using `replaceAll().`, rather than using a method like `evaluateJavascript()` - because that does not exist on Web.
+
+On Web, you should include the following:
+
+1. `<!--darkCSS-->` inside `<head>` - this enables dark mode support
+
+2. `<!--headString-->` inside `<body>` and below your summernote `<div>` - this allows the JS and CSS files for any enabled plugins to be loaded
+
+3. `<!--summernoteScripts-->` inside `<body>` and below your summernote `<div>` - REQUIRED - this allows Dart and JS to communicate with each other. If you don't include this, then methods/callbacks will do nothing. 
+
+Notes:
+
+1. Do *not* initialize the Summernote editor in your custom HTML file! The package will take care of that.
+
+2. Make sure to set the `id` for Summernote to `summernote-2`! - `<div id="summernote-2"></div>`.
+
+3. Make sure to include jquery and the Summernote JS/CSS in your file! The package does not do this for you.<br><br>
+You can use these files from the package to avoid adding more asset files:
+
+```html
+<script src="assets/packages/html_editor_enhanced/assets/jquery.min.js"></script>
+<link href="assets/packages/html_editor_enhanced/assets/summernote-lite.min.css" rel="stylesheet">
+<script src="assets/packages/html_editor_enhanced/assets/summernote-lite.min.js"></script>
+```
+
+See the example HTML file [below](#example-html-for-filepath) for an actual example.
+
 ### `shouldEnsureVisible`
 
 Default value: false
@@ -413,15 +446,19 @@ This option parameter will scroll the editor container into view whenever the we
 
 You can only use this parameter if your `HtmlEditor` is inside a `Scrollview`, otherwise it does nothing.
 
-This is useful in cases where the page is a `SingleChildScrollView` or something similar with multiple widgets (eg a form). When the user is going through the different fields, it will pop the webview into view, just like a `TextField` would scroll into in view if text is being typed inside it. See [below](#example-for-shouldensurevisible) for an example with a good way to use this.
+This is useful in cases where the page is a `SingleChildScrollView` or something similar with multiple widgets (eg a form). When the user is going through the different fields, it will pop the webview into view, just like a `TextField` would scroll into in view if text is being typed inside it. 
 
-### Examples
+See [below](#example-for-shouldensurevisible) for an example with a good way to use this.
+
+## Examples
 
 See the [example app](https://github.com/tneotia/html-editor-enhanced/blob/master/example/lib/main.dart) to see how the majority of methods & callbacks can be used. You can also play around with the parameters to see how they function.
 
 This section will be updated later with more specialized and specific examples as this library grows and more features are implemented.
 
-#### Example for `shouldEnsureVisible`:
+### Example for `shouldEnsureVisible`:
+
+<details><summary>Example code</summary>
 
 ```dart
 import 'package:flutter/cupertino.dart';
@@ -514,6 +551,47 @@ class _ExampleState extends State<Example> {
   }
 }
 ```
+
+</details>
+
+### Example HTML for `filePath`:
+
+<details><summary>Example HTML</summary>
+
+```html
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="description" content="Flutter Summernote HTML Editor">
+    <meta name="author" content="xrb21">
+    <title>Summernote Text Editor HTML</title>
+    <script src="assets/packages/html_editor_enhanced/assets/jquery.min.js"></script>
+    <link href="assets/packages/html_editor_enhanced/assets/summernote-lite.min.css" rel="stylesheet">
+    <script src="assets/packages/html_editor_enhanced/assets/summernote-lite.min.js"></script>
+    <!--darkCSS-->
+</head>
+<body>
+<div id="summernote-2"></div>
+<!--headString-->
+<!--summernoteScripts-->
+<style>
+  body {
+      display: block;
+      margin: 0px;
+  }
+  .note-editor.note-airframe, .note-editor.note-frame {
+      border: 0px solid #a9a9a9;
+  }
+  .note-frame {
+      border-radius: 0px;
+  }
+</style>
+</body>
+</html>
+```
+
+</details>
 
 ## Notes
 
