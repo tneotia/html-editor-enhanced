@@ -70,10 +70,8 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                 controller: controller,
                 hint: "Your text here...",
                 //initialText: "<p>text content initial, if any</p>",
-                options: HtmlEditorOptions(
-                  height: 450,
-                  shouldEnsureVisible: true
-                ),
+                options:
+                    HtmlEditorOptions(height: 450, shouldEnsureVisible: true),
                 callbacks: Callbacks(
                   onChange: (String? changed) {
                     print("content changed to $changed");
@@ -137,23 +135,25 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     TextButton(
-                      style:
-                          TextButton.styleFrom(backgroundColor: Colors.blueGrey),
+                      style: TextButton.styleFrom(
+                          backgroundColor: Colors.blueGrey),
                       onPressed: () {
                         controller.undo();
                       },
-                      child: Text("Undo", style: TextStyle(color: Colors.white)),
+                      child:
+                          Text("Undo", style: TextStyle(color: Colors.white)),
                     ),
                     SizedBox(
                       width: 16,
                     ),
                     TextButton(
-                      style:
-                          TextButton.styleFrom(backgroundColor: Colors.blueGrey),
+                      style: TextButton.styleFrom(
+                          backgroundColor: Colors.blueGrey),
                       onPressed: () {
                         controller.clear();
                       },
-                      child: Text("Reset", style: TextStyle(color: Colors.white)),
+                      child:
+                          Text("Reset", style: TextStyle(color: Colors.white)),
                     ),
                     SizedBox(
                       width: 16,
@@ -205,13 +205,13 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     TextButton(
-                      style:
-                          TextButton.styleFrom(backgroundColor: Colors.blueGrey),
+                      style: TextButton.styleFrom(
+                          backgroundColor: Colors.blueGrey),
                       onPressed: () {
                         controller.disable();
                       },
-                      child:
-                          Text("Disable", style: TextStyle(color: Colors.white)),
+                      child: Text("Disable",
+                          style: TextStyle(color: Colors.white)),
                     ),
                     SizedBox(
                       width: 16,

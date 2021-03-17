@@ -153,7 +153,9 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// accommodate the keyboard. This should only be used on mobile, and only
   /// when [adjustHeightForKeyboard] is enabled.
   void resetHeight() {
-    _evaluateJavascript(source: "console.log('_HtmlEditorWidgetMobileState().resetHeight();');");
+    _evaluateJavascript(
+        source:
+            "console.log('_HtmlEditorWidgetMobileState().resetHeight();');");
   }
 
   /// Reloads the IFrameElement, throws an exception on mobile

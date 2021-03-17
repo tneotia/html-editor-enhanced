@@ -1,3 +1,17 @@
+## [1.7.0] - 2021-03-17
+* [BREAKING]:
+   * Refactored `height`, `autoAdjustHeight`, `decoration`, `showBottomToolbar`, and `darkMode` into new `HtmlEditorOptions` class - see README for how to migrate
+   * Removed 'Summernote Classes' plugin
+   * Sorry for all the breaking changes lately - I think I've finally figured out how I want to do the API design so there should be far less in future releases
+* Added `onImageUpload` callback that fires when an image is inserted via `<input type="file">`
+* Added `onImageLinkInsert` callback that fires when an image is inserted via URL
+* Added `shouldEnsureVisible` that scrolls the editor into view when it is focused or text is typed, kind of like `TextField`s
+* Added `adjustHeightForKeyboard` (default true) that adjusts the editor's height when the keyboard is active to ensure no content is cut off by the keyboard
+* Added `filePath` which allows you to provide a completely custom HTML file to load
+* If you plan on using any of the above, it is highly recommend looking at the README for more details and examples.
+* Removed disabled scroll feature since it prevented the editor from scrolling even when the editor content was larger than the height
+* Code cleanup
+
 ## [1.6.0] - 2021-03-13
 * [BREAKING] removed `dispose()` method on controller
    * The editor no longer uses a `Stream` to get text and therefore nothing needs to be disposed

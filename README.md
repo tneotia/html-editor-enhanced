@@ -93,7 +93,7 @@ More is on the way! File a feature request or contribute to the project if you'd
 
 ## Setup
 
-Add `html_editor_enhanced: ^1.6.0` as dependency to your pubspec.yaml
+Add `html_editor_enhanced: ^1.7.0` as dependency to your pubspec.yaml
 
 Additional setup is required to allow the user to pick images via `<input type="file">`:
 
@@ -248,7 +248,7 @@ Parameter | Type | Default | Description
 ------------ | ------------- | ------------- | -------------
 **height** | `double` | 380 | Height of text editor (does not set the height in HTML yet, only the height of the WebView widget)
 **autoAdjustHeight** | `bool` | `true` | Automatically adjust the height of the text editor by analyzing the HTML height once the editor is loaded. Recommended value: `true`.  See [below](#autoadjustheight) for more details.
-**adjustHeightForKeyboard** | `bool` | `true` | Adjust the height of the editor if the keyboard is active and it overlaps the editor to prevent the overlap. Recommended value: `true`.  See [below](#adjustheightforkeyboard) for more details.
+**adjustHeightForKeyboard** | `bool` | `true` | Adjust the height of the editor if the keyboard is active and it overlaps the editor to prevent the overlap. Recommended value: `true`, only works on mobile.  See [below](#adjustheightforkeyboard) for more details.
 **decoration** | `BoxDecoration` |  | `BoxDecoration` that surrounds the widget
 **showBottomToolbar** | `bool` | true | Show or hide bottom toolbar
 **hint** | `String` | empty | Placeholder hint text
@@ -436,7 +436,7 @@ If this does not help your use case feel free to disable it, but the recommended
 
 ### `adjustHeightForKeyboard`
 
-Default value: true
+Default value: true, only considered on mobile
 
 This option parameter changes the height of the editor if the keyboard is active and it overlaps with the editor. 
 

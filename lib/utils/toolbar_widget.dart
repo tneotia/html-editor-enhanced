@@ -10,41 +10,38 @@ class ToolbarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-          left: 4, right: 4, bottom: 8, top: 8),
+      padding: const EdgeInsets.only(left: 4, right: 4, bottom: 8, top: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          toolbarIcon(context, Icons.content_copy, "Copy",
-              onTap: () async {
-                String? data = await controller.getText();
-                Clipboard.setData(new ClipboardData(text: data));
-              }),
-          toolbarIcon(context, Icons.content_paste, "Paste",
-              onTap: () async {
-                ClipboardData? data =
-                await Clipboard.getData(Clipboard.kTextPlain);
-                if (data != null) {
-                  String text = data.text!;
-                  if (controller.processInputHtml) {
-                    text = text
-                        .replaceAll("'", '\\"')
-                        .replaceAll('"', '\\"')
-                        .replaceAll("[", "\\[")
-                        .replaceAll("]", "\\]")
-                        .replaceAll("\n", "<br/>")
-                        .replaceAll("\n\n", "<br/>")
-                        .replaceAll("\r", " ")
-                        .replaceAll('\r\n', " ");
-                  }
-                  controller.insertHtml(text);
-                }
-              }),
+          toolbarIcon(context, Icons.content_copy, "Copy", onTap: () async {
+            String? data = await controller.getText();
+            Clipboard.setData(new ClipboardData(text: data));
+          }),
+          toolbarIcon(context, Icons.content_paste, "Paste", onTap: () async {
+            ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
+            if (data != null) {
+              String text = data.text!;
+              if (controller.processInputHtml) {
+                text = text
+                    .replaceAll("'", '\\"')
+                    .replaceAll('"', '\\"')
+                    .replaceAll("[", "\\[")
+                    .replaceAll("]", "\\]")
+                    .replaceAll("\n", "<br/>")
+                    .replaceAll("\n\n", "<br/>")
+                    .replaceAll("\r", " ")
+                    .replaceAll('\r\n', " ");
+              }
+              controller.insertHtml(text);
+            }
+          }),
         ],
       ),
     );
   }
 }
+
 /// Widget for the toolbar icon
 Widget toolbarIcon(BuildContext context, IconData icon, String title,
     {required Function() onTap}) {
