@@ -210,7 +210,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                      'type': files[0].type
                                   };
                                   window.flutter_inappwebview.callHandler('onFileUpload', JSON.stringify(newObject));
-                                }
+                                },
                             """;
                               controllerMap[widget.controller].addJavaScriptHandler(
                                   handlerName: 'onFileUpload',
@@ -221,6 +221,29 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                   });
                             }
                           }
+                        }
+                      }
+                      if (widget.callbacks != null) {
+                        if (widget.callbacks!.onImageLinkInsert != null) {
+                          summernoteCallbacks = summernoteCallbacks + """
+                              onImageLinkInsert: function(url) {
+                                window.flutter_inappwebview.callHandler('onImageLinkInsert', url);
+                              },
+                            """;
+                        }
+                        if (widget.callbacks!.onImageUpload != null) {
+                          summernoteCallbacks = summernoteCallbacks + """
+                              onImageUpload: function(files) {
+                                var newObject  = {
+                                   'lastModified': files[0].lastModified,
+                                   'lastModifiedDate': files[0].lastModifiedDate,
+                                   'name': files[0].name,
+                                   'size': files[0].size,
+                                   'type': files[0].type
+                                };
+                                window.flutter_inappwebview.callHandler('onImageUpload', JSON.stringify(newObject));
+                              },
+                            """;
                         }
                       }
                       summernoteToolbar = summernoteToolbar + "],";
@@ -389,6 +412,22 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
           handlerName: 'onBlurCodeview',
           callback: (_) {
             c.onBlurCodeview!.call();
+          });
+    }
+    if (c.onImageLinkInsert != null) {
+      controllerMap[widget.controller].addJavaScriptHandler(
+          handlerName: 'onImageLinkInsert',
+          callback: (url) {
+            c.onImageLinkInsert!.call(url.first.toString());
+          });
+    }
+    if (c.onImageUpload != null) {
+      controllerMap[widget.controller].addJavaScriptHandler(
+          handlerName: 'onImageUpload',
+          callback: (files) {
+            FileUpload file =
+            fileUploadFromJson(files.first);
+            c.onImageUpload!.call(file);
           });
     }
     if (c.onKeyDown != null) {

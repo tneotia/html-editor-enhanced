@@ -110,21 +110,20 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             summernoteCallbacks = summernoteCallbacks +
                 """
                 onFileUpload: function(files) {
-                  window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "messageType": "toDart: onFileUpload", "lastModified": files[0].lastModified, "lastModifiedDate": files[0].lastModifiedDate, "name": files[0].name, "size": files[0].size, "type": files[0].type}), "*");
-                }
+                  window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onFileUpload", "lastModified": files[0].lastModified, "lastModifiedDate": files[0].lastModifiedDate, "name": files[0].name, "size": files[0].size, "mimeType": files[0].type}), "*");
+                },
             """;
             html.window.onMessage.listen((event) {
               var data = json.decode(event.data);
-              if (data["messageType"] != null &&
-                  data["messageType"].contains("toDart:") &&
-                  data["view"] == createdViewId &&
-                  data["messageType"].contains("onFileUpload")) {
+              if (data["type"] != null &&
+                  data["type"].contains("toDart: onFileUpload") &&
+                  data["view"] == createdViewId) {
                 Map<String, dynamic> map = {
                   'lastModified': data["lastModified"],
                   'lastModifiedDate': data["lastModifiedDate"],
                   'name': data["name"],
                   'size': data["size"],
-                  'type': data["type"]
+                  'type': data["mimeType"]
                 };
                 String jsonStr = json.encode(map);
                 FileUpload file = fileUploadFromJson(jsonStr);
@@ -135,8 +134,26 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         }
       }
     }
+    if (widget.callbacks != null) {
+      if (widget.callbacks!.onImageLinkInsert != null) {
+        summernoteCallbacks = summernoteCallbacks + """
+          onImageLinkInsert: function(url) {
+            console.log('fired');
+            window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onImageLinkInsert", "url": url}), "*");
+          },
+        """;
+      }
+      if (widget.callbacks!.onImageUpload != null) {
+        summernoteCallbacks = summernoteCallbacks + """
+          onImageUpload: function(files) {
+            window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onImageUpload", "lastModified": files[0].lastModified, "lastModifiedDate": files[0].lastModifiedDate, "name": files[0].name, "size": files[0].size, "mimeType": files[0].type}), "*");
+          },
+        """;
+      }
+    }
     summernoteToolbar = summernoteToolbar + "],";
     summernoteCallbacks = summernoteCallbacks + "}";
+    print(summernoteCallbacks);
     String darkCSS = "";
     if ((Theme.of(widget.initBC).brightness == Brightness.dark ||
         widget.options.darkMode == true) &&
@@ -412,6 +429,21 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         }
         if (data["type"].contains("onBlurCodeview")) {
           c.onBlurCodeview!.call();
+        }
+        if (data["type"].contains("onImageLinkInsert")) {
+          c.onImageLinkInsert!.call(data["url"]);
+        }
+        if (data["type"].contains("onImageUpload")) {
+          Map<String, dynamic> map = {
+            'lastModified': data["lastModified"],
+            'lastModifiedDate': data["lastModifiedDate"],
+            'name': data["name"],
+            'size': data["size"],
+            'type': data["mimeType"]
+          };
+          String jsonStr = json.encode(map);
+          FileUpload file = fileUploadFromJson(jsonStr);
+          c.onImageUpload!.call(file);
         }
         if (data["type"].contains("onKeyDown")) {
           c.onKeyDown!.call(data["keyCode"]);

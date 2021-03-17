@@ -93,6 +93,15 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                   onInit: () {
                     print("init");
                   },
+                  //this is commented because it overrides the default Summernote handlers
+                  /*onImageLinkInsert: (String? url) {
+                    print(url ?? "unknown url");
+                  },
+                  onImageUpload: (FileUpload file) async {
+                    print(file.name);
+                    print(file.size);
+                    print(file.type);
+                  },*/
                   onKeyDown: (int? keyCode) {
                     print("$keyCode key downed");
                   },
@@ -115,7 +124,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                         print(value);
                       }),
                   SummernoteCodewrapper(),
-                  SummernoteFile(onFileUpload: (file) {
+                  SummernoteFile(onFileUpload: (FileUpload file) {
                     print(file.name);
                     print(file.size);
                     print(file.type);
@@ -244,7 +253,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                           backgroundColor: Theme.of(context).accentColor),
                       onPressed: () {
                         controller.insertHtml(
-                            "<p style=\"color: blue \">Google in blue</p>");
+                            """<p style="color: blue">Google in blue</p>""");
                       },
                       child: Text("Insert HTML",
                           style: TextStyle(color: Colors.white)),

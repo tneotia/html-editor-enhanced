@@ -49,6 +49,8 @@ Note that the API shown in this README.md file shows only a part of the document
   
   - [Plugins](#plugins)
   
+  - [`onImageUpload` and `onImageLinkInsert`](#onimageupload-and-onimagelinkinsert)
+    
   - [`autoAdjustHeight`](#autoadjustheight)
   
   - [`adjustHeightForKeyboard`](#adjustheightforkeyboard)
@@ -290,6 +292,8 @@ Callback | Parameter(s) | Description
 **onFocus** | N/A | Called when the rich text field gains focus
 **onBlur** | N/A | Called when the rich text field or the codeview loses focus
 **onBlurCodeview** | N/A | Called when the codeview either gains or loses focus
+**onImageLinkInsert** | `String` | Called when an image is inserted via URL, passes the URL of the image
+**onImageUpload** | `FileUpload` | Called when an image is inserted via upload, passes `FileUpload` which holds filename, date modified, size, and MIME type
 **onInit** | N/A | Called when the rich text field is initialized and JavaScript methods can be called
 **onKeyDown** | `int` | Called when a key is downed, passes the keycode of the downed key
 **onKeyUp** | `int` | Called when a key is released, passes the keycode of the released key
@@ -408,6 +412,16 @@ All plugin buttons will be displayed in one section in the toolbar. Overriding t
 
 Please see the `plugins.dart` file for more specific details on each plugin, including some important notes to consider when deciding whether or not to use them in your implementation.
 
+### `onImageUpload` and `onImageLinkInsert`
+
+These two callbacks pass the file data or URL of the inserted image, respectively.
+
+The important thing to note with these callbacks is that they override Summernote's default implementation.
+
+THis means that you must provide code, using either `<controller name>.insertHtml()` or `<controller name>.insertNetworkImage()`, to insert the image into the editor because it will not insert automatically.
+
+See [below](#example-for-onimageupload-and-onimagelinkinsert) for an example.
+
 ### `autoAdjustHeight`
 
 Default value: true
@@ -484,6 +498,44 @@ See [below](#example-for-shouldensurevisible) for an example with a good way to 
 See the [example app](https://github.com/tneotia/html-editor-enhanced/blob/master/example/lib/main.dart) to see how the majority of methods & callbacks can be used. You can also play around with the parameters to see how they function.
 
 This section will be updated later with more specialized and specific examples as this library grows and more features are implemented.
+
+### Example for `onImageUpload` and `onImageLinkInsert`:
+
+<details><summary>Example code</summary>
+
+```dart
+  Widget editor = HtmlEditor(
+    controller: controller,
+    hint: "Your text here...",
+    //initialText: "<p>text content initial, if any</p>",
+    callbacks: Callbacks(
+      onImageLinkInsert: (String? url) {
+        if (url != null && url.contains(website_url)) {
+          controller.insertNetworkImage(url!);
+        } else {
+          controller.insertText("This image is invalid!");
+        }
+      },
+      onImageUpload: (FileUpload file) async {
+        print(file.name); //filename
+        print(file.size); //size in bytes
+        print(file.type); //MIME type (e.g. image/jpg)
+        print(file.lastModified.toString()); //DateTime object for last modified
+        //either upload to server:
+        //make http/dio request here...
+        controller.insertNetworkImage(response.url); //where response.url is the url of the uploaded image
+        //or insert as base64:
+        ByteData bytes = await rootBundle.load('path/to/image/${file.name}');
+        Uint8List list = bytes.buffer.asUint8List();
+        String base64Image =
+            """<img src="data:${file.type};base64,${base64Encode(list)}" data-filename="${file.name}"/>""";
+        controller.insertHtml(base64Image);
+      },
+    ),
+  );
+```
+
+</details>
 
 ### Example for `adjustHeightForKeyboard`:
 
