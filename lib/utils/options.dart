@@ -9,6 +9,7 @@ class HtmlEditorOptions {
   const HtmlEditorOptions({
     this.height = 380,
     this.autoAdjustHeight = true,
+    this.adjustHeightForKeyboard = true,
     this.decoration = const BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(4)),
       border: Border.fromBorderSide(
@@ -37,6 +38,13 @@ class HtmlEditorOptions {
   /// The default value is true. It is recommended to leave this as true because
   /// it significantly improves the UX.
   final bool autoAdjustHeight;
+
+  /// The editor will automatically adjust its height when the keyboard is active
+  /// to prevent the keyboard overlapping the editor.
+  ///
+  /// The default value is true. It is recommended to leave this as true because
+  /// it significantly improves the UX.
+  final bool adjustHeightForKeyboard;
 
   /// The BoxDecoration to use around the Html editor. By default, the widget
   /// uses a thin, dark, rounded rectangle border around the widget.

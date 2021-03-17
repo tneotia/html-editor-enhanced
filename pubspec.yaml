@@ -13,6 +13,7 @@ dependencies:
     sdk: flutter
   flutter_inappwebview: ^5.1.0+4
   js: ^0.6.3
+  visibility_detector: ^0.2.0-nullsafety.1
 
 dev_dependencies:
   flutter_test:

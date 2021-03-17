@@ -72,6 +72,16 @@ class HtmlEditorController {
   /// Insert a link at the position of the cursor in the editor
   void insertLink(String text, String url, bool isNewWindow) {}
 
+  /// Clears the focus from the webview by hiding the keyboard, calling the
+  /// clearFocus method on the [InAppWebViewController], and resetting the height
+  /// in case it was changed.
+  void clearFocus() {}
+
+  /// Resets the height of the editor back to the original if it was changed to
+  /// accommodate the keyboard. This should only be used on mobile, and only
+  /// when [adjustHeightForKeyboard] is enabled.
+  void resetHeight() {}
+
   /// Refresh the page
   ///
   /// Note: This should only be used in Flutter Web!!!

@@ -143,6 +143,22 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     });
   }
 
+  /// Clears the focus from the webview by hiding the keyboard, calling the
+  /// clearFocus method on the [InAppWebViewController], and resetting the height
+  /// in case it was changed.
+  void clearFocus() {
+    throw Exception(
+        "Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart and check kIsWeb before calling this method.");
+  }
+
+  /// Resets the height of the editor back to the original if it was changed to
+  /// accommodate the keyboard. This should only be used on mobile, and only
+  /// when [adjustHeightForKeyboard] is enabled.
+  void resetHeight() {
+    throw Exception(
+        "Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart and check kIsWeb before calling this method.");
+  }
+
   /// Refresh the page
   ///
   /// Note: This should only be used in Flutter Web!!!

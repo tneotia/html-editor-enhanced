@@ -49,6 +49,8 @@ Flutter HTML Editor Enhanced is a text editor for Android and iOS to help write 
   
   - [`autoAdjustHeight`](#autoadjustheight)
   
+  - [`adjustHeightForKeyboard`](#adjustheightforkeyboard)
+  
   - [`filePath`](#filepath)
   
   - [`shouldEnsureVisible`](#shouldensurevisible)
@@ -194,10 +196,12 @@ HtmlEditorController controller = HtmlEditorController();
 
 @override Widget build(BuildContext context) {
     return HtmlEditor(
-            controller: controller, //required
-            hint: "Your text here...",
-            //initalText: "text content initial, if any",
-            height: 400,
+        controller: controller, //required
+        hint: "Your text here...",
+        //initalText: "text content initial, if any",
+        options: HtmlEditorOptions(
+          height: 400,
+        ),
     );
 }
 ```
@@ -240,6 +244,7 @@ Parameter | Type | Default | Description
 ------------ | ------------- | ------------- | -------------
 **height** | `double` | 380 | Height of text editor (does not set the height in HTML yet, only the height of the WebView widget)
 **autoAdjustHeight** | `bool` | `true` | Automatically adjust the height of the text editor by analyzing the HTML height once the editor is loaded. Recommended value: `true`.  See [below](#autoadjustheight) for more details.
+**adjustHeightForKeyboard** | `bool` | `true` | Adjust the height of the editor if the keyboard is active and it overlaps the editor to prevent the overlap. Recommended value: `true`.  See [below](#adjustheightforkeyboard) for more details.
 **decoration** | `BoxDecoration` |  | `BoxDecoration` that surrounds the widget
 **showBottomToolbar** | `bool` | true | Show or hide bottom toolbar
 **hint** | `String` | empty | Placeholder hint text
@@ -268,6 +273,8 @@ Method | Argument(s) | Returned Value(s) | Description
 **insertHtml()** | `String` | N/A | Inserts the provided HTML string into the editor at the current cursor position. Do *not* use this method for plaintext strings.
 **insertNetworkImage()** | `String` url, `String` filename (optional) | N/A | Inserts an image using the provided url and optional filename into the editor at the current cursor position. The image must be accessible via a URL.
 **insertLink()** | `String` text, `String` url, `bool` isNewWindow | N/A | Inserts a hyperlink using the provided text and url into the editor at the current cursor position. `isNewWindow` defines whether a new browser window is launched if the link is tapped.
+**clearFocus()** | N/A | N/A | Clears focus for the webview and resets the height to the original height on mobile. Do *not* use this method in Flutter Web.
+**resetHeight()** | N/A | N/A | Resets the height of the webview to the original height. Do *not* use this method in Flutter Web.
 **reloadWeb()** | N/A | N/A | Reloads the webpage in Flutter Web. This is mainly provided to refresh the text editor theme when the theme is changed. Do *not* use this method in Flutter Mobile.
 
 ### Callbacks
@@ -403,7 +410,21 @@ This is useful because the Summernote toolbar could have either 1, 2, or 3 rows 
 
 There is a drawback: The webview will visibly shift size after the page is loaded. Depending on how large the change is, it could be jarring. Sometimes, it takes a second for the webview to adjust to the new size and you might see the editor page jump down/up a second or two after the webview container adjusts itself.
 
-There is also an advantage: Since the webview is sized exactly to the size of the content, it no longer needs to scroll. Thus, when `autoAdjustHeight: true`, the webview has `disableVerticalScroll: true`, and `gestureRecognizers: null`. This is an advantage because scrolling on the webview will now scroll the Flutter scrollview, rather than trying to scroll the webview content. Personally, I like this UX - I don't like it when the webview should not be scrollable but scrolling on it will appear to do nothing.
+If this does not help your use case feel free to disable it, but the recommended value is `true`.
+
+### `adjustHeightForKeyboard`
+
+Default value: true
+
+This option parameter changes the height of the editor if the keyboard is active and it overlaps with the editor. 
+
+This is useful because webviews do not shift their view when the keyboard is active on Flutter at the moment. This means that if your editor spans the height of the page, if the user types a long text they might not be able to see what they are typing because it is obscured by the keyboard.
+
+When this parameter is enabled, the webview will shift to the perfect height to ensure all the typed content is visible, and as soon as the keyboard is hidden, the editor shifts back to its original height.
+
+The webview does take a moment to shift itself back and forth after the keyboard pops up/keyboard disappears, but the delay isn't too bad. It is highly recommended to have the webview in a `Scrollable`  and `shouldEnsureVisible` enabled if there are other widgets on the page - if the editor is on the bottom half of the page it will be scrolled to the top and then the height will be set accordingly, rather than the plugin trying to set the height for a webview obscured completely by the keyboard.
+
+See [below](#example-for-adjustheightforkeyboard) for an example use case.
 
 If this does not help your use case feel free to disable it, but the recommended value is `true`.
 
@@ -456,6 +477,56 @@ See the [example app](https://github.com/tneotia/html-editor-enhanced/blob/maste
 
 This section will be updated later with more specialized and specific examples as this library grows and more features are implemented.
 
+### Example for `adjustHeightForKeyboard`:
+
+<details><summary>Example code</summary>
+
+```dart
+class _HtmlEditorExampleState extends State<HtmlEditorExample> {
+  final HtmlEditorController controller = HtmlEditorController();
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        if (!kIsWeb) {
+          // this is extremely important to the example, as it allows the user to tap any blank space outside the webview,
+          // and the webview will lose focus and reset to the original height as expected. 
+          controller.clearFocus();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+          elevation: 0,
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              //other widgets
+              HtmlEditor(
+                controller: controller,
+                hint: "Your text here...",
+                //initialText: "<p>text content initial, if any</p>",
+                options: HtmlEditorOptions(
+                  height: 550,
+                  shouldEnsureVisible: true,
+                  //adjustHeightForKeyboard is true by default
+                ),
+              ),
+              //other widgets
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
+</details>
+
 ### Example for `shouldEnsureVisible`:
 
 <details><summary>Example code</summary>
@@ -468,7 +539,6 @@ import 'package:flutter/services.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 
 class _ExampleState extends State<Example> {
-  String result = "";
   final HtmlEditorController controller = HtmlEditorController();
 
   @override
@@ -602,6 +672,8 @@ If you do find any issues, please report them in the Issues tab and I will see i
 1. When switching between dark and light mode, a reload is required for the HTML editor to switch to the correct color scheme. You can implement this programmatically in Flutter Mobile: `<controller name>.editorController.reload()`, or in Flutter Web: `<controller name>.reloadWeb()`. This will reset the editor! You can save the current text, reload, and then set the text if you'd like to maintain the state.
 
 2. If you are making a cross platform implementation and are using either the `controller` getter or the `reloadWeb()` method, use `kIsWeb` in your app to ensure you are calling these in the correct platform.
+
+3. It is recommended to set the editor height to a value less than half the screen size on mobile - `height: 0.5 * MediaQuery.of(context).size.height`. This is because Flutter webviews do not rebuild themselves to occupy the available space when the keyboard is active, instead the keyboard overlaps the webview. I am trying to find a way to get the available space when the keyboard is active, but so far nothing has worked (I only either get `double.infinity` or `0.0`).
 
 ## License
 

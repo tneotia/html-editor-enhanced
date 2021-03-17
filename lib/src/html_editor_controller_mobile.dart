@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart'
@@ -139,8 +140,24 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     """);
   }
 
+  /// Clears the focus from the webview by hiding the keyboard, calling the
+  /// clearFocus method on the [InAppWebViewController], and resetting the height
+  /// in case it was changed.
+  void clearFocus() {
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    editorController!.clearFocus();
+    resetHeight();
+  }
+
+  /// Resets the height of the editor back to the original if it was changed to
+  /// accommodate the keyboard. This should only be used on mobile, and only
+  /// when [adjustHeightForKeyboard] is enabled.
+  void resetHeight() {
+    _evaluateJavascript(source: "console.log('_HtmlEditorWidgetMobileState().resetHeight();');");
+  }
+
   /// Reloads the IFrameElement, throws an exception on mobile
-  reloadWeb() {
+  void reloadWeb() {
     throw Exception(
         "Non-Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart and check kIsWeb before calling this function");
   }

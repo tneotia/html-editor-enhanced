@@ -32,7 +32,6 @@ class HtmlEditorWidget extends StatefulWidget {
   final List<Toolbar> toolbar;
   final List<Plugins> plugins;
   final BuildContext initBC;
-  final UniqueKey webViewKey = UniqueKey();
   final HtmlEditorOptions options;
 
   _HtmlEditorWidgetWebState createState() => _HtmlEditorWidgetWebState();

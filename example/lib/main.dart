@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 
 void main() => runApp(HtmlEditorExampleApp());
@@ -37,8 +36,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
     return GestureDetector(
       onTap: () {
         if (!kIsWeb) {
-          SystemChannels.textInput.invokeMethod('TextInput.hide');
-          controller.editorController!.clearFocus();
+          controller.clearFocus();
         }
       },
       child: Scaffold(
@@ -73,7 +71,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                 hint: "Your text here...",
                 //initialText: "<p>text content initial, if any</p>",
                 options: HtmlEditorOptions(
-                  height: 250,
+                  height: 450,
                   shouldEnsureVisible: true
                 ),
                 callbacks: Callbacks(
