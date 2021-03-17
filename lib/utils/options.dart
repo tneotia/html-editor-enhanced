@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 
-// TODO see if it is possible to adjust the height of the editor when the
-// keyboard is active
-// Make the above optional
-
 /// Options class for the html editor.
 class HtmlEditorOptions {
   const HtmlEditorOptions({

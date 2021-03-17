@@ -62,26 +62,6 @@ class AdditionalTextTags extends Plugins {
   }
 }
 
-/// Summernote Classes plugin - adds a hotbar at the bottom of the editor
-/// to add various inline tags and stylings to certain HTML elements. Most of the
-/// tags are fairly obscure and advanced, so I would not recommend this plugin
-/// for the average user.
-///
-/// README available [here](https://github.com/DiemenDesign/summernote-classes)
-class SummernoteClasses extends Plugins {
-  const SummernoteClasses();
-
-  @override
-  String getHeadString() {
-    return "<script src=\"assets/packages/html_editor_enhanced/assets/plugins/summernote-classes/summernote-classes.js\"></script>";
-  }
-
-  @override
-  String getToolbarString() {
-    return "classes";
-  }
-}
-
 /// Summernote case converter plugin - adds a toolbar item that can convert any text
 /// between cases. The supported cases are upper, lower, sentence, and title.
 ///

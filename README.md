@@ -3,6 +3,8 @@
 
 Flutter HTML Editor Enhanced is a text editor for Android and iOS to help write WYSIWYG HTML code with the Summernote JavaScript wrapper.
 
+Note that the API shown in this README.md file shows only a part of the documentation and, also, conforms to the GitHub master branch only! So, here you could have methods, options, and events that aren't published/released yet! If you need a specific version, please change the GitHub branch of this repository to your version or use the online [API Reference](https://pub.dev/documentation/html_editor_enhanced/latest/) (recommended).
+
 <table>
   <tr>
     <td align="center">Video Example</td>
@@ -356,25 +358,22 @@ Adds a button to the toolbar to allow the user to insert emojis. These are loade
 2. [Summernote Add Text Tags](https://github.com/tylerecouture/summernote-add-text-tags) -
 Adds a button to the toolbar to support tags like var, code, samp, and more.
 
-3. [Summernote Classes](https://github.com/DiemenDesign/summernote-classes) -
-Adds a hotbar at the bottom of the editor to quickly and easily add common tags for the specific HTML node. This should only be used by advanced users, ideally.
-
-4. [Summernote Case Converter](https://github.com/piranga8/summernote-case-converter) -
+3. [Summernote Case Converter](https://github.com/piranga8/summernote-case-converter) -
 Adds a button to the toolbar to convert the selected text to all lowercase, all uppercase, sentence case, or title case.
 
-5. [Summernote List Styles](https://github.com/tylerecouture/summernote-list-styles) -
+4. [Summernote List Styles](https://github.com/tylerecouture/summernote-list-styles) -
 Adds a button to the toolbar to customize the ul and ol list style.
 
-6. [Summernote RTL](https://github.com/virtser/summernote-rtl-plugin) -
+5. [Summernote RTL](https://github.com/virtser/summernote-rtl-plugin) -
 Adds two buttons to the toolbar that switch the currently selected text between LTR and RTL format.
 
-7. [Summernote At Mention](https://github.com/team-loxo/summernote-at-mention) -
+6. [Summernote At Mention](https://github.com/team-loxo/summernote-at-mention) -
 Shows a dropdown of available mentions when the '@' character is typed into the editor. The implementation requires that you pass a list of available mentions, and you can also provide a function to call when a mention is inserted into the editor.
 
-8. [Summernote Codewrapper](https://github.com/semplon/summernote-ext-codewrapper) -
+7. [Summernote Codewrapper](https://github.com/semplon/summernote-ext-codewrapper) -
 Adds a button to the toolbar that wraps the selected text in a code block.
 
-9. [Summernote File](https://github.com/mathieu-coingt/summernote-file) -
+8. [Summernote File](https://github.com/mathieu-coingt/summernote-file) -
 Adds a button to the toolbar that allows the user to upload any type of file. It supports picture files (jpg, png, gif, wvg, webp), audio files (mp3, ogg, oga), and video files (mp4, ogv, webm) in base64. For all other formats, you must use the onFileUpload callback to upload the files to a server and then insert an HTML node into the editor.<br>
 Note: Setting the onFileUpload callback removes the base64 functionality - instead you will also have to provide a solution to upload the picture, audio, and video files in your Dart code. Then, you can use the `<controller name>.insertHtml(<html string>)` method to insert the relevant HTML element at the current cursor position.
 
@@ -389,12 +388,21 @@ Widget htmlEditor = HtmlEditor(
   //other options
   plugins: [
     SummernoteEmoji(),
-    SummernoteClasses()
+    SummernoteAtMention(
+      mentions: ['test1', 'test2', 'test3'],
+      onSelect: (String value) {
+        print(value);
+    }),
+    SummernoteFile(onFileUpload: (file) {
+      print(file.name);
+      print(file.size);
+      print(file.type);
+    }),
   ]
 );
 ```
 
-In the above example, only those two plugins will be activated in the editor. Order matters here - whatever order you define the plugins is the order their buttons will be displayed in the toolbar.
+In the above example, only those three plugins will be activated in the editor. Order matters here - whatever order you define the plugins is the order their buttons will be displayed in the toolbar.
 
 All plugin buttons will be displayed in one section in the toolbar. Overriding the toolbar using the `toolbar` parameter does not affect how the plugin buttons are displayed. 
 

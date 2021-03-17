@@ -106,7 +106,6 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                 plugins: [
                   SummernoteEmoji(),
                   AdditionalTextTags(),
-                  SummernoteClasses(),
                   SummernoteCaseConverter(),
                   SummernoteListStyles(),
                   SummernoteRTL(),
