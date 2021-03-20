@@ -46,7 +46,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
   late double actualHeight;
 
   /// The height of the document loaded in the editor
-  int? docHeight;
+  double? docHeight;
 
   /// The file path to the html code
   late String filePath;
@@ -290,17 +290,18 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                         widget.controller.setText(widget.value!);
                       //adjusts the height of the editor when it is loaded
                       if (widget.options.autoAdjustHeight) {
-                        docHeight = await controller.evaluateJavascript(
-                            source: 'document.body.scrollHeight') as int?;
-                        if (docHeight != null && mounted) {
+                        dynamic height = await controller.evaluateJavascript(
+                            source: 'document.body.scrollHeight');
+                        docHeight = double.tryParse(height.toString());
+                        if (docHeight != null && docHeight! > 0 && mounted) {
                           setState(() {
                             actualHeight = docHeight! + 40.0;
                           });
                         } else {
-                          docHeight = (actualHeight - 40) as int?;
+                          docHeight = actualHeight - 40;
                         }
                       } else {
-                        docHeight = (actualHeight - 40) as int?;
+                        docHeight = actualHeight - 40;
                       }
                       //initialize callbacks
                       if (widget.callbacks != null && !callbacksInitialized) {
