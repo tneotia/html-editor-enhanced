@@ -1,3 +1,8 @@
+## [1.7.0+1] - 2021-03-22
+* Fixed `type 'double' is not a subtype of type 'int?' in type cast` on iOS
+   * By extension this fixes the `adjustHeightForKeyboard` not working on iOS
+* Fixed `Bad state: Cannot add new events after calling close` exception when disposing the page containing the editor
+
 ## [1.7.0] - 2021-03-17
 * [BREAKING]:
    * Refactored `height`, `autoAdjustHeight`, `decoration`, `showBottomToolbar`, and `darkMode` into new `HtmlEditorOptions` class - see README for how to migrate

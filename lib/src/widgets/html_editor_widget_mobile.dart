@@ -97,7 +97,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
     return VisibilityDetector(
       key: Key(key),
       onVisibilityChanged: (VisibilityInfo info) async {
-        visibleStream.add(info.visibleFraction);
+        if (!visibleStream.isClosed)
+          visibleStream.add(info.visibleFraction);
       },
       child: GestureDetector(
         onTap: () {
