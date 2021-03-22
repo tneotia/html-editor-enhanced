@@ -11,9 +11,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  # webview plugin
   flutter_inappwebview: ^5.1.0+4
+  # plugin for Dart/JS interoperability on Web platform
   js: ^0.6.3
+  # plugin to get webview's visible fraction for keyboard height adjustment
   visibility_detector: ^0.2.0-nullsafety.1
+  # plugin to get when the keyboard is hidden via back (Android)
+  # or "done" (iOS) to reset the editor's height
+  flutter_keyboard_visibility: ^5.0.0
 
 dev_dependencies:
   flutter_test:

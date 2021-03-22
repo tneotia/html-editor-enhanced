@@ -145,17 +145,6 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// in case it was changed.
   void clearFocus() {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
-    editorController!.clearFocus();
-    resetHeight();
-  }
-
-  /// Resets the height of the editor back to the original if it was changed to
-  /// accommodate the keyboard. This should only be used on mobile, and only
-  /// when [adjustHeightForKeyboard] is enabled.
-  void resetHeight() {
-    _evaluateJavascript(
-        source:
-            "console.log('_HtmlEditorWidgetMobileState().resetHeight();');");
   }
 
   /// Reloads the IFrameElement, throws an exception on mobile

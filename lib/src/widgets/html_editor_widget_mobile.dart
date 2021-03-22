@@ -7,6 +7,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/utils/plugins.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -102,8 +103,6 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
       child: GestureDetector(
         onTap: () {
           SystemChannels.textInput.invokeMethod('TextInput.hide');
-          controllerMap[widget.controller].clearFocus();
-          resetHeight();
         },
         child: Container(
           height: actualHeight,
@@ -128,12 +127,6 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                   gestureRecognizers: {
                     Factory<VerticalDragGestureRecognizer>(
                         () => VerticalDragGestureRecognizer())
-                  },
-                  onConsoleMessage: (controller, message) {
-                    print(message.message);
-                    if (message.message ==
-                        "_HtmlEditorWidgetMobileState().resetHeight();")
-                      resetHeight();
                   },
                   onWindowFocus: (controller) async {
                     if (widget.options.shouldEnsureVisible &&
@@ -300,6 +293,19 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                         }
                       } else {
                         docHeight = actualHeight - 40;
+                      }
+                      //reset the editor's height if the keyboard disappears at any point
+                      if (widget.options.adjustHeightForKeyboard) {
+                        KeyboardVisibilityController keyboardVisibilityController = KeyboardVisibilityController();
+                        keyboardVisibilityController.onChange.listen((bool visible) {
+                          if (!visible && docHeight != null && actualHeight != docHeight! + 40) {
+                            controller.clearFocus();
+                            resetHeight();
+                          } else if (!visible && docHeight == null && actualHeight != widget.options.height + 125) {
+                            controller.clearFocus();
+                            resetHeight();
+                          }
+                        });
                       }
                       //initialize callbacks
                       if (widget.callbacks != null && !callbacksInitialized) {
