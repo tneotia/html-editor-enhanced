@@ -2,6 +2,7 @@
 * Fixed `type 'double' is not a subtype of type 'int?' in type cast` on iOS
    * By extension this fixes the `adjustHeightForKeyboard` not working on iOS
 * Fixed `Bad state: Cannot add new events after calling close` exception when disposing the page containing the editor
+* Fixed web page not found when inserting a video URL (see [here](https://github.com/summernote/summernote/issues/3252))
 
 ## [1.7.0] - 2021-03-17
 * [BREAKING]:
