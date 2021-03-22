@@ -97,8 +97,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
     return VisibilityDetector(
       key: Key(key),
       onVisibilityChanged: (VisibilityInfo info) async {
-        if (!visibleStream.isClosed)
-          visibleStream.add(info.visibleFraction);
+        if (!visibleStream.isClosed) visibleStream.add(info.visibleFraction);
       },
       child: GestureDetector(
         onTap: () {
@@ -262,8 +261,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       summernoteToolbar = summernoteToolbar + "],";
                       summernoteCallbacks = summernoteCallbacks + "}";
                       controller.evaluateJavascript(source: """
-                         \$(document).ready(function () {
-                            \$('#summernote-2').summernote({
+                          \$('#summernote-2').summernote({
                               placeholder: "${widget.hint}",
                               tabsize: 2,
                               height: ${widget.options.height},
@@ -271,7 +269,6 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                               disableGrammar: false,
                               spellCheck: false,
                               $summernoteCallbacks
-                            });
                           });
                           
                           \$('#summernote-2').on('summernote.change', function(_, contents, \$editable) {
