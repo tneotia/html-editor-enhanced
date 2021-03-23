@@ -733,8 +733,6 @@ If you do find any issues, please report them in the Issues tab and I will see i
 
 2. If you are making a cross platform implementation and are using either the `controller` getter or the `reloadWeb()` method, use `kIsWeb` in your app to ensure you are calling these in the correct platform.
 
-3. It is recommended to set the editor height to a value less than half the screen size on mobile - `height: 0.5 * MediaQuery.of(context).size.height`. This is because Flutter webviews do not rebuild themselves to occupy the available space when the keyboard is active, instead the keyboard overlaps the webview. I am trying to find a way to get the available space when the keyboard is active, but so far nothing has worked (I only either get `double.infinity` or `0.0`).
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -744,3 +742,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 > Coming soon!
 >
 > Meanwhile, PRs are always welcome
+
+Original html_editor by [xrb21](https://github.com/xrb21) - [repo link](https://github.com/xrb21/flutter-html-editor). Credits for the original idea and original base code to him. This library is a fork of his repo.
