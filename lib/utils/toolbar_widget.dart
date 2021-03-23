@@ -24,14 +24,19 @@ class ToolbarWidget extends StatelessWidget {
               String text = data.text!;
               if (controller.processInputHtml) {
                 text = text
-                    .replaceAll("'", '\\"')
-                    .replaceAll('"', '\\"')
-                    .replaceAll("[", "\\[")
-                    .replaceAll("]", "\\]")
+                    .replaceAll("'", r"\'")
+                    .replaceAll('"', r'\"')
+                    .replaceAll("\r", "")
+                    .replaceAll('\r\n', "");
+              }
+              if (controller.processNewLineAsBr) {
+                text = text
                     .replaceAll("\n", "<br/>")
-                    .replaceAll("\n\n", "<br/>")
-                    .replaceAll("\r", " ")
-                    .replaceAll('\r\n', " ");
+                    .replaceAll("\n\n", "<br/>");
+              } else {
+                text = text
+                    .replaceAll("\n", "")
+                    .replaceAll("\n\n", "");
               }
               controller.insertHtml(text);
             }

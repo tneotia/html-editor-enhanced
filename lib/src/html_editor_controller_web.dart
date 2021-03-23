@@ -11,15 +11,22 @@ import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart
 /// Controller for web
 class HtmlEditorController extends unsupported.HtmlEditorController {
   HtmlEditorController({
-    this.processInputHtml = false,
+    this.processInputHtml = true,
+    this.processNewLineAsBr = false,
     this.processOutputHtml = true,
   });
 
   /// Determines whether text processing should happen on input HTML, e.g.
   /// whether a new line should be converted to a <br>.
   ///
-  /// The default value is false.
+  /// The default value is true.
   final bool processInputHtml;
+
+  /// Determines whether newlines (\n) should be written as <br>. This is not
+  /// recommended for HTML documents.
+  ///
+  /// The default value is false.
+  final bool processNewLineAsBr;
 
   /// Determines whether text processing should happen on output HTML, e.g.
   /// whether <p><br></p> is returned as "". For reference, Summernote uses
@@ -53,14 +60,19 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   void setText(String text) {
     if (processInputHtml) {
       text = text
-          .replaceAll("'", '\\"')
-          .replaceAll('"', '\\"')
-          .replaceAll("[", "\\[")
-          .replaceAll("]", "\\]")
+          .replaceAll("'", r"\'")
+          .replaceAll('"', r'\"')
+          .replaceAll("\r", "")
+          .replaceAll('\r\n', "");
+    }
+    if (processNewLineAsBr) {
+      text = text
           .replaceAll("\n", "<br/>")
-          .replaceAll("\n\n", "<br/>")
-          .replaceAll("\r", " ")
-          .replaceAll('\r\n', " ");
+          .replaceAll("\n\n", "<br/>");
+    } else {
+      text = text
+          .replaceAll("\n", "")
+          .replaceAll("\n\n", "");
     }
     _evaluateJavascriptWeb(data: {"type": "toIframe: setText", "text": text});
   }
