@@ -22,22 +22,6 @@ class ToolbarWidget extends StatelessWidget {
             ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
             if (data != null) {
               String text = data.text!;
-              if (controller.processInputHtml) {
-                text = text
-                    .replaceAll("'", r"\'")
-                    .replaceAll('"', r'\"')
-                    .replaceAll("\r", "")
-                    .replaceAll('\r\n', "");
-              }
-              if (controller.processNewLineAsBr) {
-                text = text
-                    .replaceAll("\n", "<br/>")
-                    .replaceAll("\n\n", "<br/>");
-              } else {
-                text = text
-                    .replaceAll("\n", "")
-                    .replaceAll("\n\n", "");
-              }
               controller.insertHtml(text);
             }
           }),

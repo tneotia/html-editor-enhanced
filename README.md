@@ -58,6 +58,8 @@ Note that the API shown in this README.md file shows only a part of the document
   - [`filePath`](#filepath)
   
   - [`shouldEnsureVisible`](#shouldensurevisible)
+  
+  - [`processInputHtml`, `processOutputHtml`, and `processNewLineAsBr`](#processinputhtml-processoutputhtml-and-processnewlineasbr)
 
 - [Examples](#examples)
 
@@ -239,8 +241,9 @@ Parameter | Type | Default | Description
 
 Parameter | Type | Default | Description
 ------------ | ------------- | ------------- | -------------
-**processInputHtml** | `bool` | `false` | Determines whether processing occurs on any input HTML (e.g. new-lines become `<br/>`)
+**processInputHtml** | `bool` | `true` | Determines whether processing occurs on any input HTML (e.g. new-lines become `<br/>`)
 **processOutputHtml** | `bool` | `true` | Determines whether processing occurs on any output HTML (e.g. `<p><br/><p>` becomes `""`)
+**processNewLineAsBr** | `bool` | `false` | Determines whether a new line (`\n`) becomes a `<br/>` in any *input* HTML
 
 ### Parameters - `HtmlEditorOptions`
 
@@ -492,6 +495,26 @@ You can only use this parameter if your `HtmlEditor` is inside a `Scrollview`, o
 This is useful in cases where the page is a `SingleChildScrollView` or something similar with multiple widgets (eg a form). When the user is going through the different fields, it will pop the webview into view, just like a `TextField` would scroll into in view if text is being typed inside it. 
 
 See [below](#example-for-shouldensurevisible) for an example with a good way to use this.
+
+### `processInputHtml`, `processOutputHtml`, and `processNewLineAsBr`
+
+Default values: true, true, false, respectively
+
+`processInputHtml` replaces any occurrences of `"` with `\\"`, `'` with `\\'`, and `\r`, `\r\n`, `\n`, and `\n\n` with empty strings. This is necessary to prevent syntax exceptions when inserting HTML into the editor as quotes and other special characters will not be escaped. If you have already sanitized and escaped all relevant characters from your HTML input, it is recommended to set this parameter `false`. You may also want to set this parameter `false` on Web, as in testing it seems these characters are handled correctly by default, but that may not be the case for your HTML.
+
+`processOutputHtml` replaces the output HTML with `""` if: 
+
+1. It is empty
+
+2. It is `<p></p>`
+
+3. It is `<p><br></p>`
+
+4. It is `<p><br/></p>`
+
+These may seem a little random, but they are the three possible default/initial HTML codes the Summernote editor will have. If you'd like to still receive these outputs, set the parameter `false`.
+
+`processNewLineAsBr` will replace `\n` and `\n\n` with `<br/>`. This is only recommended when inserting plaintext as the initial value. In typical HTML any new-lines are ignored, and therefore this parameter defaults to `false`.
 
 ## Examples
 

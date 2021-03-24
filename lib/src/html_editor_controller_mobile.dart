@@ -52,22 +52,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Sets the text of the editor. Some pre-processing is applied to convert
   /// [String] elements like "\n" to HTML elements.
   void setText(String text) {
-    if (processInputHtml) {
-      text = text
-          .replaceAll("'", r"\'")
-          .replaceAll('"', r'\"')
-          .replaceAll("\r", "")
-          .replaceAll('\r\n', "");
-    }
-    if (processNewLineAsBr) {
-      text = text
-          .replaceAll("\n", "<br/>")
-          .replaceAll("\n\n", "<br/>");
-    } else {
-      text = text
-          .replaceAll("\n", "")
-          .replaceAll("\n\n", "");
-    }
+    text = _processHtml(html: text);
     _evaluateJavascript(
         source: "\$('#summernote-2').summernote('code', '$text');");
   }
@@ -90,6 +75,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
   /// Sets the hint for the editor.
   void setHint(String text) {
+    text = _processHtml(html: text);
     String hint = '\$(".note-placeholder").html("$text");';
     _evaluateJavascript(source: hint);
   }
@@ -130,6 +116,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Insert HTML at the position of the cursor in the editor
   /// Note: This method should not be used for plaintext strings
   void insertHtml(String html) {
+    html = _processHtml(html: html);
     _evaluateJavascript(
         source: "\$('#summernote-2').summernote('pasteHTML', '$html');");
   }
@@ -163,6 +150,26 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   void reloadWeb() {
     throw Exception(
         "Non-Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart and check kIsWeb before calling this function");
+  }
+
+  String _processHtml({required html}) {
+    if (processInputHtml) {
+      html = html
+          .replaceAll("'", r"\'")
+          .replaceAll('"', r'\"')
+          .replaceAll("\r", "")
+          .replaceAll('\r\n', "");
+    }
+    if (processNewLineAsBr) {
+      html = html
+          .replaceAll("\n", "<br/>")
+          .replaceAll("\n\n", "<br/>");
+    } else {
+      html = html
+          .replaceAll("\n", "")
+          .replaceAll("\n\n", "");
+    }
+    return html;
   }
 
   /// Helper function to evaluate JS and check the current environment

@@ -58,22 +58,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Sets the text of the editor. Some pre-processing is applied to convert
   /// [String] elements like "\n" to HTML elements.
   void setText(String text) {
-    if (processInputHtml) {
-      text = text
-          .replaceAll("'", r"\'")
-          .replaceAll('"', r'\"')
-          .replaceAll("\r", "")
-          .replaceAll('\r\n', "");
-    }
-    if (processNewLineAsBr) {
-      text = text
-          .replaceAll("\n", "<br/>")
-          .replaceAll("\n\n", "<br/>");
-    } else {
-      text = text
-          .replaceAll("\n", "")
-          .replaceAll("\n\n", "");
-    }
+    text = _processHtml(html: text);
     _evaluateJavascriptWeb(data: {"type": "toIframe: setText", "text": text});
   }
 
@@ -94,6 +79,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
   /// Sets the hint for the editor.
   void setHint(String text) {
+    text = _processHtml(html: text);
     _evaluateJavascriptWeb(data: {"type": "toIframe: setHint", "text": text});
   }
 
@@ -132,6 +118,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Insert HTML at the position of the cursor in the editor
   /// Note: This method should not be used for plaintext strings
   void insertHtml(String html) {
+    html = _processHtml(html: html);
     _evaluateJavascriptWeb(
         data: {"type": "toIframe: insertHtml", "html": html});
   }
@@ -176,6 +163,26 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Note: This should only be used in Flutter Web!!!
   void reloadWeb() {
     _evaluateJavascriptWeb(data: {"type": "toIframe: reload"});
+  }
+
+  String _processHtml({required html}) {
+    if (processInputHtml) {
+      html = html
+          .replaceAll("'", r"\'")
+          .replaceAll('"', r'\"')
+          .replaceAll("\r", "")
+          .replaceAll('\r\n', "");
+    }
+    if (processNewLineAsBr) {
+      html = html
+          .replaceAll("\n", "<br/>")
+          .replaceAll("\n\n", "<br/>");
+    } else {
+      html = html
+          .replaceAll("\n", "")
+          .replaceAll("\n\n", "");
+    }
+    return html;
   }
 
   /// Helper function to run javascript and check current environment
