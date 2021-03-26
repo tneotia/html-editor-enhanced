@@ -191,12 +191,11 @@ class SummernoteFile extends Plugins {
   /// Define what to do when a file fails to insert for any reason
   final Function(FileUpload?, String?, UploadError)? onFileUploadError;
 
-  const SummernoteFile({
-    this.maximumFileSize = 10485760,
-    this.onFileUpload,
-    this.onFileLinkInsert,
-    this.onFileUploadError
-  });
+  const SummernoteFile(
+      {this.maximumFileSize = 10485760,
+      this.onFileUpload,
+      this.onFileLinkInsert,
+      this.onFileUploadError});
 
   @override
   String getHeadString() {
@@ -210,4 +209,4 @@ class SummernoteFile extends Plugins {
 }
 
 /// Defines the 3 different cases for file insertion failing
-enum UploadError {unsupportedFile, exceededMaxSize, jsException}
+enum UploadError { unsupportedFile, exceededMaxSize, jsException }

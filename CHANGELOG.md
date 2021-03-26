@@ -1,3 +1,15 @@
+## [1.7.1] - 2021-03-26
+* Fixed bug where initial text would not be inserted and default toolbar would be shown regardless of editor options
+* Significantly improved keyboard height detection (detect when keyboard comes up and goes down)
+* Adjusted HTML processing algorithm to fix issues where `"` and `'` would not be properly escaped on HTML insertion
+   * Added `processNewLineAsBr` - this will replace any `\n` in the input string to `<br/>` rather than the default `""`
+   * Applied processing to `setHint()` and `insertHtml()` functions
+* Added support for returning the file's base64 data in `onImageUpload` and `onFileUpload`
+   * Now you can use `MultipartFile.fromBytes()` to upload to server - [example](https://github.com/tneotia/html-editor-enhanced#example-for-onimageupload-and-onimagelinkinsert)
+* Added support for `onFileUploadError` and `onFileLinkInsert` (Summernote File plugin)
+* Added support for `maximumFileSize` (Summernote File plugin)
+* See the README for more details on these changes
+
 ## [1.7.0+1] - 2021-03-22
 * Fixed `type 'double' is not a subtype of type 'int?' in type cast` on iOS
    * By extension this fixes the `adjustHeightForKeyboard` not working on iOS

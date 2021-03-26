@@ -60,6 +60,8 @@ Note that the API shown in this README.md file shows only a part of the document
   - [`shouldEnsureVisible`](#shouldensurevisible)
   
   - [`processInputHtml`, `processOutputHtml`, and `processNewLineAsBr`](#processinputhtml-processoutputhtml-and-processnewlineasbr)
+  
+  - [Summernote File Plugin](#summernote-file-plugin)
 
 - [Examples](#examples)
 

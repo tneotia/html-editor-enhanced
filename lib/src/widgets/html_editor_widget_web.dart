@@ -192,12 +192,14 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                   data["type"].contains("toDart: onFileUploadError") &&
                   data["view"] == createdViewId) {
                 if (data["base64"] != null) {
-                  p.onFileUploadError!.call(null, data["base64"],
+                  p.onFileUploadError!.call(
+                      null,
+                      data["base64"],
                       data["error"].contains("base64")
-                          ? UploadError.jsException :
-                      data["error"].contains("unsupported") ?
-                      UploadError.unsupportedFile :
-                      UploadError.exceededMaxSize);
+                          ? UploadError.jsException
+                          : data["error"].contains("unsupported")
+                              ? UploadError.unsupportedFile
+                              : UploadError.exceededMaxSize);
                 } else {
                   Map<String, dynamic> map = {
                     'lastModified': data["lastModified"],
@@ -208,12 +210,14 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                   };
                   String jsonStr = json.encode(map);
                   FileUpload file = fileUploadFromJson(jsonStr);
-                  p.onFileUploadError!.call(file, null,
+                  p.onFileUploadError!.call(
+                      file,
+                      null,
                       data["error"].contains("base64")
-                          ? UploadError.jsException :
-                      data["error"].contains("unsupported") ?
-                      UploadError.unsupportedFile :
-                      UploadError.exceededMaxSize);
+                          ? UploadError.jsException
+                          : data["error"].contains("unsupported")
+                              ? UploadError.unsupportedFile
+                              : UploadError.exceededMaxSize);
                 }
               }
             });

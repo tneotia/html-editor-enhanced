@@ -192,11 +192,10 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                             """;
                             if (p.onSelect != null) {
                               controller.addJavaScriptHandler(
-                                      handlerName: 'onSelectMention',
-                                      callback: (value) {
-                                        p.onSelect!
-                                            .call(value.first.toString());
-                                      });
+                                  handlerName: 'onSelectMention',
+                                  callback: (value) {
+                                    p.onSelect!.call(value.first.toString());
+                                  });
                             }
                           }
                           if (p is SummernoteFile) {
@@ -234,12 +233,12 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                 },
                             """;
                               controller.addJavaScriptHandler(
-                                      handlerName: 'onFileUpload',
-                                      callback: (files) {
-                                        FileUpload file =
-                                            fileUploadFromJson(files.first);
-                                        p.onFileUpload!.call(file);
-                                      });
+                                  handlerName: 'onFileUpload',
+                                  callback: (files) {
+                                    FileUpload file =
+                                        fileUploadFromJson(files.first);
+                                    p.onFileUpload!.call(file);
+                                  });
                             }
                             if (p.onFileLinkInsert != null) {
                               summernoteCallbacks = summernoteCallbacks +
@@ -251,7 +250,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                               controller.addJavaScriptHandler(
                                   handlerName: 'onFileLinkInsert',
                                   callback: (link) {
-                                    p.onFileLinkInsert!.call(link[0].toString());
+                                    p.onFileLinkInsert!
+                                        .call(link[0].toString());
                                   });
                             }
                             if (p.onFileUploadError != null) {
@@ -275,22 +275,32 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                               controller.addJavaScriptHandler(
                                   handlerName: 'onFileUploadError',
                                   callback: (args) {
-                                    if (!args.first.toString().startsWith("{")) {
-                                      p.onFileUploadError!.call(null, args.first,
+                                    if (!args.first
+                                        .toString()
+                                        .startsWith("{")) {
+                                      p.onFileUploadError!.call(
+                                          null,
+                                          args.first,
                                           args.last.contains("base64")
-                                              ? UploadError.jsException :
-                                          args.last.contains("unsupported") ?
-                                          UploadError.unsupportedFile :
-                                          UploadError.exceededMaxSize);
+                                              ? UploadError.jsException
+                                              : args.last
+                                                      .contains("unsupported")
+                                                  ? UploadError.unsupportedFile
+                                                  : UploadError
+                                                      .exceededMaxSize);
                                     } else {
-                                      FileUpload file =
-                                        fileUploadFromJson(args.first.toString());
-                                      p.onFileUploadError!.call(file, null,
+                                      FileUpload file = fileUploadFromJson(
+                                          args.first.toString());
+                                      p.onFileUploadError!.call(
+                                          file,
+                                          null,
                                           args.last.contains("base64")
-                                              ? UploadError.jsException :
-                                          args.last.contains("unsupported") ?
-                                          UploadError.unsupportedFile :
-                                          UploadError.exceededMaxSize);
+                                              ? UploadError.jsException
+                                              : args.last
+                                                      .contains("unsupported")
+                                                  ? UploadError.unsupportedFile
+                                                  : UploadError
+                                                      .exceededMaxSize);
                                     }
                                   });
                             }
@@ -386,12 +396,19 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       }
                       //reset the editor's height if the keyboard disappears at any point
                       if (widget.options.adjustHeightForKeyboard) {
-                        KeyboardVisibilityController keyboardVisibilityController = KeyboardVisibilityController();
-                        keyboardVisibilityController.onChange.listen((bool visible) {
-                          if (!visible && docHeight != null && actualHeight != docHeight! + 40) {
+                        KeyboardVisibilityController
+                            keyboardVisibilityController =
+                            KeyboardVisibilityController();
+                        keyboardVisibilityController.onChange
+                            .listen((bool visible) {
+                          if (!visible &&
+                              docHeight != null &&
+                              actualHeight != docHeight! + 40) {
                             controller.clearFocus();
                             resetHeight();
-                          } else if (!visible && docHeight == null && actualHeight != widget.options.height + 125) {
+                          } else if (!visible &&
+                              docHeight == null &&
+                              actualHeight != widget.options.height + 125) {
                             controller.clearFocus();
                             resetHeight();
                           }
