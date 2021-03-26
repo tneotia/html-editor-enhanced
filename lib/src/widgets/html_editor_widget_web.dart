@@ -66,6 +66,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     String summernoteToolbar = "[\n";
     String headString = "";
     String summernoteCallbacks = "callbacks: {";
+    int maximumFileSize = 10485760;
     for (Toolbar t in widget.toolbar) {
       summernoteToolbar = summernoteToolbar +
           "['${t.getGroupName()}', ${t.getButtons(listStyles: widget.plugins.whereType<SummernoteListStyles>().isNotEmpty)}],\n";
@@ -106,11 +107,37 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           }
         }
         if (p is SummernoteFile) {
+          maximumFileSize = p.maximumFileSize;
           if (p.onFileUpload != null) {
             summernoteCallbacks = summernoteCallbacks +
                 """
                 onFileUpload: function(files) {
-                  window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onFileUpload", "lastModified": files[0].lastModified, "lastModifiedDate": files[0].lastModifiedDate, "name": files[0].name, "size": files[0].size, "mimeType": files[0].type}), "*");
+                  var reader = new FileReader();
+                  var base64 = "<an error occurred>";
+                  reader.onload = function (_) {
+                    base64 = reader.result;
+                    var newObject = {
+                       'lastModified': files[0].lastModified,
+                       'lastModifiedDate': files[0].lastModifiedDate,
+                       'name': files[0].name,
+                       'size': files[0].size,
+                       'type': files[0].type,
+                       'base64': base64
+                    };
+                    window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onFileUpload", "lastModified": files[0].lastModified, "lastModifiedDate": files[0].lastModifiedDate, "name": files[0].name, "size": files[0].size, "mimeType": files[0].type, "base64": base64}), "*");
+                  };
+                  reader.onerror = function (_) {
+                    var newObject = {
+                       'lastModified': files[0].lastModified,
+                       'lastModifiedDate': files[0].lastModifiedDate,
+                       'name': files[0].name,
+                       'size': files[0].size,
+                       'type': files[0].type,
+                       'base64': base64
+                    };
+                    window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onFileUpload", "lastModified": files[0].lastModified, "lastModifiedDate": files[0].lastModifiedDate, "name": files[0].name, "size": files[0].size, "mimeType": files[0].type, "base64": base64}), "*");
+                  };
+                  reader.readAsDataURL(files[0]);
                 },
             """;
             html.window.onMessage.listen((event) {
@@ -123,11 +150,71 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                   'lastModifiedDate': data["lastModifiedDate"],
                   'name': data["name"],
                   'size': data["size"],
-                  'type': data["mimeType"]
+                  'type': data["mimeType"],
+                  'base64': data["base64"]
                 };
                 String jsonStr = json.encode(map);
                 FileUpload file = fileUploadFromJson(jsonStr);
                 p.onFileUpload!.call(file);
+              }
+            });
+          }
+          if (p.onFileLinkInsert != null) {
+            summernoteCallbacks = summernoteCallbacks +
+                """
+                onFileLinkInsert: function(link) {
+                  window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onFileLinkInsert", "link": link}), "*");
+                },
+            """;
+            html.window.onMessage.listen((event) {
+              var data = json.decode(event.data);
+              if (data["type"] != null &&
+                  data["type"].contains("toDart: onFileLinkInsert") &&
+                  data["view"] == createdViewId) {
+                p.onFileLinkInsert!.call(data["link"]);
+              }
+            });
+          }
+          if (p.onFileUploadError != null) {
+            summernoteCallbacks = summernoteCallbacks +
+                """
+                onFileUploadError: function(file, error) {
+                  if (typeof file === 'string') {
+                    window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onFileUploadError", "base64": file, "error": error}), "*");
+                  } else {
+                    window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onFileUploadError", "lastModified": file.lastModified, "lastModifiedDate": file.lastModifiedDate, "name": file.name, "size": file.size, "mimeType": file.type, "error": error}), "*");
+                  }
+                },
+            """;
+            html.window.onMessage.listen((event) {
+              var data = json.decode(event.data);
+              if (data["type"] != null &&
+                  data["type"].contains("toDart: onFileUploadError") &&
+                  data["view"] == createdViewId) {
+                if (data["base64"] != null) {
+                  p.onFileUploadError!.call(null, data["base64"],
+                      data["error"].contains("base64")
+                          ? UploadError.jsException :
+                      data["error"].contains("unsupported") ?
+                      UploadError.unsupportedFile :
+                      UploadError.exceededMaxSize);
+                } else {
+                  Map<String, dynamic> map = {
+                    'lastModified': data["lastModified"],
+                    'lastModifiedDate': data["lastModifiedDate"],
+                    'name': data["name"],
+                    'size': data["size"],
+                    'type': data["mimeType"]
+                  };
+                  String jsonStr = json.encode(map);
+                  FileUpload file = fileUploadFromJson(jsonStr);
+                  p.onFileUploadError!.call(file, null,
+                      data["error"].contains("base64")
+                          ? UploadError.jsException :
+                      data["error"].contains("unsupported") ?
+                      UploadError.unsupportedFile :
+                      UploadError.exceededMaxSize);
+                }
               }
             });
           }
@@ -139,7 +226,6 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         summernoteCallbacks = summernoteCallbacks +
             """
           onImageLinkInsert: function(url) {
-            console.log('fired');
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onImageLinkInsert", "url": url}), "*");
           },
         """;
@@ -148,7 +234,32 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         summernoteCallbacks = summernoteCallbacks +
             """
           onImageUpload: function(files) {
-            window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onImageUpload", "lastModified": files[0].lastModified, "lastModifiedDate": files[0].lastModifiedDate, "name": files[0].name, "size": files[0].size, "mimeType": files[0].type}), "*");
+            var reader = new FileReader();
+            var base64 = "<an error occurred>";
+            reader.onload = function (_) {
+              base64 = reader.result;
+              var newObject = {
+                 'lastModified': files[0].lastModified,
+                 'lastModifiedDate': files[0].lastModifiedDate,
+                 'name': files[0].name,
+                 'size': files[0].size,
+                 'type': files[0].type,
+                 'base64': base64
+              };
+              window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onImageUpload", "lastModified": files[0].lastModified, "lastModifiedDate": files[0].lastModifiedDate, "name": files[0].name, "size": files[0].size, "mimeType": files[0].type, "base64": base64}), "*");
+            };
+            reader.onerror = function (_) {
+              var newObject = {
+                 'lastModified': files[0].lastModified,
+                 'lastModifiedDate': files[0].lastModifiedDate,
+                 'name': files[0].name,
+                 'size': files[0].size,
+                 'type': files[0].type,
+                 'base64': base64
+              };
+              window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onImageUpload", "lastModified": files[0].lastModified, "lastModifiedDate": files[0].lastModifiedDate, "name": files[0].name, "size": files[0].size, "mimeType": files[0].type, "base64": base64}), "*");
+            };
+            reader.readAsDataURL(files[0]);
           },
         """;
       }
@@ -176,6 +287,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             toolbar: $summernoteToolbar
             disableGrammar: false,
             spellCheck: false,
+            maximumFileSize: $maximumFileSize,
             $summernoteCallbacks
           });
           
@@ -447,7 +559,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             'lastModifiedDate': data["lastModifiedDate"],
             'name': data["name"],
             'size': data["size"],
-            'type': data["mimeType"]
+            'type': data["mimeType"],
+            'base64': data["base64"]
           };
           String jsonStr = json.encode(map);
           FileUpload file = fileUploadFromJson(jsonStr);

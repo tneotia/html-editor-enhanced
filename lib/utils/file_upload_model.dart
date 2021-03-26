@@ -10,6 +10,7 @@ class FileUpload {
     this.name,
     this.size,
     this.type,
+    this.base64,
   });
 
   DateTime? lastModified;
@@ -17,6 +18,7 @@ class FileUpload {
   String? name;
   int? size;
   String? type;
+  String? base64;
 
   factory FileUpload.fromJson(Map<String, dynamic> json) => FileUpload(
         lastModified: json["lastModified"] == null
@@ -28,5 +30,6 @@ class FileUpload {
         name: json["name"] == null ? null : json["name"],
         size: json["size"] == null ? null : json["size"],
         type: json["type"] == null ? null : json["type"],
+        base64: json["base64"] == null ? null : json["base64"],
       );
 }

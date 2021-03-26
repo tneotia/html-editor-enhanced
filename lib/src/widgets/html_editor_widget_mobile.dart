@@ -160,6 +160,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                   onLoadStop:
                       (InAppWebViewController controller, Uri? uri) async {
                     String url = uri.toString();
+                    int maximumFileSize = 10485760;
                     if (url.contains(filePath)) {
                       String summernoteToolbar = "[\n";
                       String summernoteCallbacks = "callbacks: {";
@@ -190,8 +191,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                               },
                             """;
                             if (p.onSelect != null) {
-                              controllerMap[widget.controller]
-                                  .addJavaScriptHandler(
+                              controller.addJavaScriptHandler(
                                       handlerName: 'onSelectMention',
                                       callback: (value) {
                                         p.onSelect!
@@ -200,28 +200,99 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                             }
                           }
                           if (p is SummernoteFile) {
+                            maximumFileSize = p.maximumFileSize;
                             if (p.onFileUpload != null) {
                               summernoteCallbacks = summernoteCallbacks +
                                   """
                                 onFileUpload: function(files) {
-                                  var newObject  = {
-                                     'lastModified': files[0].lastModified,
-                                     'lastModifiedDate': files[0].lastModifiedDate,
-                                     'name': files[0].name,
-                                     'size': files[0].size,
-                                     'type': files[0].type
+                                  var reader = new FileReader();
+                                  var base64 = "<an error occurred>";
+                                  reader.onload = function (_) {
+                                    base64 = reader.result;
+                                    var newObject = {
+                                       'lastModified': files[0].lastModified,
+                                       'lastModifiedDate': files[0].lastModifiedDate,
+                                       'name': files[0].name,
+                                       'size': files[0].size,
+                                       'type': files[0].type,
+                                       'base64': base64
+                                    };
+                                    window.flutter_inappwebview.callHandler('onFileUpload', JSON.stringify(newObject));
                                   };
-                                  window.flutter_inappwebview.callHandler('onFileUpload', JSON.stringify(newObject));
+                                  reader.onerror = function (_) {
+                                    var newObject = {
+                                       'lastModified': files[0].lastModified,
+                                       'lastModifiedDate': files[0].lastModifiedDate,
+                                       'name': files[0].name,
+                                       'size': files[0].size,
+                                       'type': files[0].type,
+                                       'base64': base64
+                                    };
+                                    window.flutter_inappwebview.callHandler('onFileUpload', JSON.stringify(newObject));
+                                  };
+                                  reader.readAsDataURL(files[0]);
                                 },
                             """;
-                              controllerMap[widget.controller]
-                                  .addJavaScriptHandler(
+                              controller.addJavaScriptHandler(
                                       handlerName: 'onFileUpload',
                                       callback: (files) {
                                         FileUpload file =
                                             fileUploadFromJson(files.first);
                                         p.onFileUpload!.call(file);
                                       });
+                            }
+                            if (p.onFileLinkInsert != null) {
+                              summernoteCallbacks = summernoteCallbacks +
+                                  """
+                                onFileLinkInsert: function(link) {
+                                  window.flutter_inappwebview.callHandler('onFileLinkInsert', link);
+                                },
+                            """;
+                              controller.addJavaScriptHandler(
+                                  handlerName: 'onFileLinkInsert',
+                                  callback: (link) {
+                                    p.onFileLinkInsert!.call(link[0].toString());
+                                  });
+                            }
+                            if (p.onFileUploadError != null) {
+                              summernoteCallbacks = summernoteCallbacks +
+                                  """
+                                onFileUploadError: function(file, error) {
+                                  if (typeof file === 'string') {
+                                    window.flutter_inappwebview.callHandler('onFileUploadError', file, error);
+                                  } else {
+                                    var newObject = {
+                                       'lastModified': file.lastModified,
+                                       'lastModifiedDate': file.lastModifiedDate,
+                                       'name': file.name,
+                                       'size': file.size,
+                                       'type': file.type,
+                                    };
+                                    window.flutter_inappwebview.callHandler('onFileUploadError', JSON.stringify(newObject), error);
+                                  }
+                                },
+                            """;
+                              controller.addJavaScriptHandler(
+                                  handlerName: 'onFileUploadError',
+                                  callback: (args) {
+                                    if (!args.first.toString().startsWith("{")) {
+                                      p.onFileUploadError!.call(null, args.first,
+                                          args.last.contains("base64")
+                                              ? UploadError.jsException :
+                                          args.last.contains("unsupported") ?
+                                          UploadError.unsupportedFile :
+                                          UploadError.exceededMaxSize);
+                                    } else {
+                                      FileUpload file =
+                                        fileUploadFromJson(args.first.toString());
+                                      p.onFileUploadError!.call(file, null,
+                                          args.last.contains("base64")
+                                              ? UploadError.jsException :
+                                          args.last.contains("unsupported") ?
+                                          UploadError.unsupportedFile :
+                                          UploadError.exceededMaxSize);
+                                    }
+                                  });
                             }
                           }
                         }
@@ -239,14 +310,32 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                           summernoteCallbacks = summernoteCallbacks +
                               """
                               onImageUpload: function(files) {
-                                var newObject  = {
-                                   'lastModified': files[0].lastModified,
-                                   'lastModifiedDate': files[0].lastModifiedDate,
-                                   'name': files[0].name,
-                                   'size': files[0].size,
-                                   'type': files[0].type
+                                var reader = new FileReader();
+                                var base64 = "<an error occurred>";
+                                reader.onload = function (_) {
+                                  base64 = reader.result;
+                                  var newObject = {
+                                     'lastModified': files[0].lastModified,
+                                     'lastModifiedDate': files[0].lastModifiedDate,
+                                     'name': files[0].name,
+                                     'size': files[0].size,
+                                     'type': files[0].type,
+                                     'base64': base64
+                                  };
+                                  window.flutter_inappwebview.callHandler('onImageUpload', JSON.stringify(newObject));
                                 };
-                                window.flutter_inappwebview.callHandler('onImageUpload', JSON.stringify(newObject));
+                                reader.onerror = function (_) {
+                                  var newObject = {
+                                     'lastModified': files[0].lastModified,
+                                     'lastModifiedDate': files[0].lastModifiedDate,
+                                     'name': files[0].name,
+                                     'size': files[0].size,
+                                     'type': files[0].type,
+                                     'base64': base64
+                                  };
+                                  window.flutter_inappwebview.callHandler('onImageUpload', JSON.stringify(newObject));
+                                };
+                                reader.readAsDataURL(files[0]);
                               },
                             """;
                         }
@@ -261,6 +350,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                               toolbar: $summernoteToolbar
                               disableGrammar: false,
                               spellCheck: false,
+                              maximumFileSize: $maximumFileSize,
                               $summernoteCallbacks
                           });
                           

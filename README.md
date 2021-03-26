@@ -241,7 +241,7 @@ Parameter | Type | Default | Description
 
 Parameter | Type | Default | Description
 ------------ | ------------- | ------------- | -------------
-**processInputHtml** | `bool` | `true` | Determines whether processing occurs on any input HTML (e.g. new-lines become `<br/>`)
+**processInputHtml** | `bool` | `true` | Determines whether processing occurs on any input HTML (e.g. escape quotes, apostrophes, and remove `/n`s)
 **processOutputHtml** | `bool` | `true` | Determines whether processing occurs on any output HTML (e.g. `<p><br/><p>` becomes `""`)
 **processNewLineAsBr** | `bool` | `false` | Determines whether a new line (`\n`) becomes a `<br/>` in any *input* HTML
 
@@ -382,7 +382,7 @@ Adds a button to the toolbar that wraps the selected text in a code block.
 
 8. [Summernote File](https://github.com/mathieu-coingt/summernote-file) -
 Adds a button to the toolbar that allows the user to upload any type of file. It supports picture files (jpg, png, gif, wvg, webp), audio files (mp3, ogg, oga), and video files (mp4, ogv, webm) in base64. For all other formats, you must use the onFileUpload callback to upload the files to a server and then insert an HTML node into the editor.<br>
-Note: Setting the onFileUpload callback removes the base64 functionality - instead you will also have to provide a solution to upload the picture, audio, and video files in your Dart code. Then, you can use the `<controller name>.insertHtml(<html string>)` method to insert the relevant HTML element at the current cursor position.
+See [below](#summernote-file-plugin) for more details.
 
 This list is not final, more will be added. If there's a specific plugin you'd like to see support for, please file a feature request!
 
@@ -516,6 +516,24 @@ These may seem a little random, but they are the three possible default/initial 
 
 `processNewLineAsBr` will replace `\n` and `\n\n` with `<br/>`. This is only recommended when inserting plaintext as the initial value. In typical HTML any new-lines are ignored, and therefore this parameter defaults to `false`.
 
+### Summernote File Plugin
+
+Adds a button to the toolbar that allows the user to upload any type of file. It supports picture files (jpg, png, gif, wvg, webp), audio files (mp3, ogg, oga), and video files (mp4, ogv, webm) in base64. 
+
+Callbacks and parameters: `onFileUpload` (fired when a file is uploaded), `onFileLinkInsert` (fired when a file is inserted by link), `onFileUploadError` (fired when a file insertion fails for any reason), and `maximumFileSize` (allows you to set a max file size to upload, if exceeded, then onFileUploadError is called)
+
+For all other formats, you can use the onFileUpload callback to upload the files to a server and then insert an HTML node into the editor.
+
+Please be aware that setting the onFileUpload callback removes the base64 functionality - instead you will also have to provide a solution to upload the picture, audio, and video files in your Dart code. Then, you can use the `<controller name>.insertHtml(<html string>)` method to insert the relevant HTML element at the current cursor position.
+
+Another way to upload any other type of file without overriding the default handler is to use `onFileUploadError`. This function will return the same data as `onFileUpload`, and it will also describe which error occurred (either unsupported file, exceeded max size, or JavaScript error). Using the base64 data, you can upload the files and create your HTML node.
+
+`onFileLinkInsert` will pass the link of the inserted file as a `String`. Note that the link insertion has no validation, so if a user inserts "test" as the link, this function will be called rather than `onFileUploadError`.
+
+Setting onFileLinkInsert also overrides the default handler, so you must provide code to manually insert the link into the editor.
+
+See [below](#example-for-onimageupload-and-onimagelinkinsert) for an example that shows how to insert HTML and upload files.
+
 ## Examples
 
 See the [example app](https://github.com/tneotia/html-editor-enhanced/blob/master/example/lib/main.dart) to see how the majority of methods & callbacks can be used. You can also play around with the parameters to see how they function.
@@ -523,6 +541,8 @@ See the [example app](https://github.com/tneotia/html-editor-enhanced/blob/maste
 This section will be updated later with more specialized and specific examples as this library grows and more features are implemented.
 
 ### Example for `onImageUpload` and `onImageLinkInsert`:
+
+Note: This example could also be easily refactored for the Summernote File plugin's `onFileUpload`, `onFileLinkInsert`, and `onFileUploadError`.
 
 <details><summary>Example code</summary>
 
@@ -545,11 +565,16 @@ This section will be updated later with more specialized and specific examples a
         print(file.type); //MIME type (e.g. image/jpg)
         print(file.lastModified.toString()); //DateTime object for last modified
         //either upload to server:
+        Uint8List list = base64.decode(file.base64);
+        MultipartFile multipartFile = MultipartFile.fromBytes(
+          'file',
+          list,
+          filename: file.name,
+        );
         //make http/dio request here...
         controller.insertNetworkImage(response.url); //where response.url is the url of the uploaded image
         //or insert as base64:
-        ByteData bytes = await rootBundle.load('path/to/image/${file.name}');
-        Uint8List list = bytes.buffer.asUint8List();
+        Uint8List list = base64.decode(file.base64);
         String base64Image =
             """<img src="data:${file.type};base64,${base64Encode(list)}" data-filename="${file.name}"/>""";
         controller.insertHtml(base64Image);

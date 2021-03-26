@@ -179,9 +179,24 @@ class SummernoteCodewrapper extends Plugins {
 ///
 /// README available [here](https://github.com/mathieu-coingt/summernote-file)
 class SummernoteFile extends Plugins {
+  /// Set the max file size for uploads, if exceeded, [onFileUploadError] is called
+  final int maximumFileSize;
+
+  /// Define what to do when a file is uploaded. This will override the default handler so you must insert the file into the editor manually
   final Function(FileUpload)? onFileUpload;
 
-  const SummernoteFile({this.onFileUpload});
+  /// Define what to do when a file is inserted via a link. This will override the default handler so you must insert the file yourself
+  final Function(String)? onFileLinkInsert;
+
+  /// Define what to do when a file fails to insert for any reason
+  final Function(FileUpload?, String?, UploadError)? onFileUploadError;
+
+  const SummernoteFile({
+    this.maximumFileSize = 10485760,
+    this.onFileUpload,
+    this.onFileLinkInsert,
+    this.onFileUploadError
+  });
 
   @override
   String getHeadString() {
@@ -193,3 +208,6 @@ class SummernoteFile extends Plugins {
     return "file";
   }
 }
+
+/// Defines the 3 different cases for file insertion failing
+enum UploadError {unsupportedFile, exceededMaxSize, jsException}

@@ -99,6 +99,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     print(file.name);
                     print(file.size);
                     print(file.type);
+                    print(file.base64);
                   },*/
                   onKeyDown: (int? keyCode) {
                     print("$keyCode key downed");
@@ -122,11 +123,27 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                         print(value);
                       }),
                   SummernoteCodewrapper(),
-                  SummernoteFile(onFileUpload: (FileUpload file) {
-                    print(file.name);
-                    print(file.size);
-                    print(file.type);
-                  }),
+                  SummernoteFile(
+                    //this is commented because it overrides the default SummernoteFile handlers
+                    /*onFileUpload: (FileUpload file) {
+                      print(file.name);
+                      print(file.size);
+                      print(file.type);
+                      print(file.base64);
+                    },*/
+                    onFileLinkInsert: (String link) {
+                      print(link);
+                    },
+                    onFileUploadError: (FileUpload? file, String? base64Str, UploadError error) {
+                      print(describeEnum(error));
+                      print(base64Str ?? "");
+                      if (file != null) {
+                        print(file.name);
+                        print(file.size);
+                        print(file.type);
+                      }
+                    }
+                  ),
                 ],
               ),
               Padding(
