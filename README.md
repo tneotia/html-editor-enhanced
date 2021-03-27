@@ -578,7 +578,7 @@ Note: This example could also be easily refactored for the Summernote File plugi
         //or insert as base64:
         Uint8List list = base64.decode(file.base64);
         String base64Image =
-            """<img src="data:${file.type};base64,${base64Encode(list)}" data-filename="${file.name}"/>""";
+            """<img src="${file.base64}" data-filename="${file.name}"/>""";
         controller.insertHtml(base64Image);
       },
     ),
