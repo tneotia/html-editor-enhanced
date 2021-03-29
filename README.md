@@ -97,7 +97,7 @@ More is on the way! File a feature request or contribute to the project if you'd
 
 ## Setup
 
-Add `html_editor_enhanced: ^1.7.0+1` as dependency to your pubspec.yaml
+Add `html_editor_enhanced: ^1.7.1` as dependency to your pubspec.yaml
 
 Additional setup is required to allow the user to pick images via `<input type="file">`:
 
