@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 
 /// Abstract class that all the plguin classes extend
@@ -123,15 +124,26 @@ class SummernoteRTL extends Plugins {
 
 /// Summernote @ Mention plugin - adds a dropdown to select the person to mention whenever
 /// the '@' character is typed into the editor. The list of people to mention is
-/// drawn from the [mentions] parameter. You can detect who was mentioned using the
-/// [onSelect] parameter.
+/// drawn from the [getSuggestionsMobile] (on mobile) or [mentionsWeb] (on Web)
+/// parameter. You can detect who was mentioned using the [onSelect] callback.
 ///
 /// README available [here](https://github.com/team-loxo/summernote-at-mention)
 class SummernoteAtMention extends Plugins {
-  final List<String> mentions;
+  /// Function used to get the displayed suggestions on mobile
+  final List<String> Function(String)? getSuggestionsMobile;
+
+  /// List of mentions to display on Web. The default behavior is to only return
+  /// the mentions containing the string entered by the user in the editor
+  final List<String>? mentionsWeb;
+
+  /// Callback to run code when a mention is selected
   final Function(String)? onSelect;
 
-  const SummernoteAtMention({required this.mentions, this.onSelect});
+  const SummernoteAtMention({
+    this.getSuggestionsMobile,
+    this.mentionsWeb,
+    this.onSelect}) :
+        assert(kIsWeb ? mentionsWeb != null : getSuggestionsMobile != null);
 
   @override
   String getHeadString() {
@@ -143,11 +155,11 @@ class SummernoteAtMention extends Plugins {
     return "";
   }
 
-  String getMentions() {
+  String getMentionsWeb() {
     String mentionsString = "[";
-    for (String e in mentions) {
+    for (String e in mentionsWeb!) {
       mentionsString =
-          mentionsString + "'$e'" + (e != mentions.last ? ", " : "");
+          mentionsString + "'$e'" + (e != mentionsWeb!.last ? ", " : "");
     }
     return mentionsString + "]";
   }

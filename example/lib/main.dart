@@ -118,7 +118,12 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                   SummernoteListStyles(),
                   SummernoteRTL(),
                   SummernoteAtMention(
-                      mentions: ['test1', 'test2', 'test3'],
+                      getSuggestionsMobile: (String value) {
+                        List<String> mentions = ['test1', 'test2', 'test3'];
+                        return mentions.where((element) =>
+                            element.contains(value)).toList();
+                      },
+                      mentionsWeb: ['test1', 'test2', 'test3'],
                       onSelect: (String value) {
                         print(value);
                       }),

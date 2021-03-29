@@ -88,7 +88,12 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           summernoteCallbacks = summernoteCallbacks +
               """
             \nsummernoteAtMention: {
-              getSuggestions: (value) => ${p.getMentions()},
+              getSuggestions: (value) => {
+                const mentions = ${p.getMentionsWeb()};
+                return mentions.filter((mention) => {
+                  return mention.includes(value);
+                });
+              },
               onSelect: (value) => {
                 window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onSelectMention", "value": value}), "*");
               },

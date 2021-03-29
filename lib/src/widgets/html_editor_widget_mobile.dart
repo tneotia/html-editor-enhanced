@@ -128,6 +128,9 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                     Factory<VerticalDragGestureRecognizer>(
                         () => VerticalDragGestureRecognizer())
                   },
+                  onConsoleMessage: (controller, message) {
+                    print(message.message);
+                  },
                   onWindowFocus: (controller) async {
                     if (widget.options.shouldEnsureVisible &&
                         Scrollable.of(context) != null) {
@@ -184,12 +187,24 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                             summernoteCallbacks = summernoteCallbacks +
                                 """
                               \nsummernoteAtMention: {
-                                getSuggestions: (value) => ${p.getMentions()},
+                                getSuggestions: async function(value) {
+                                  var result = await window.flutter_inappwebview.callHandler('getSuggestions', value);
+                                  var resultList = result.split(',');
+                                  return resultList;
+                                },
                                 onSelect: (value) => {
                                   window.flutter_inappwebview.callHandler('onSelectMention', value);
                                 },
                               },
                             """;
+                            controller.addJavaScriptHandler(
+                                handlerName: 'getSuggestions',
+                                callback: (value) {
+                                  return p.getSuggestionsMobile!.call(value.first.toString())
+                                      .toString()
+                                      .replaceAll("[", "")
+                                      .replaceAll("]", "");
+                                });
                             if (p.onSelect != null) {
                               controller.addJavaScriptHandler(
                                   handlerName: 'onSelectMention',
