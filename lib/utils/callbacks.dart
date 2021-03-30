@@ -3,29 +3,58 @@ import 'package:html_editor_enhanced/html_editor.dart';
 /// Manages all the callback functions the library provides
 class Callbacks {
   Callbacks({
+    this.onBeforeCommand,
     this.onChange,
+    this.onChangeCodeview,
+    this.onDialogShown,
     this.onEnter,
     this.onFocus,
     this.onBlur,
     this.onBlurCodeview,
     this.onImageLinkInsert,
     this.onImageUpload,
+    this.onImageUploadError,
     this.onInit,
     this.onKeyUp,
     this.onKeyDown,
+    this.onMouseUp,
+    this.onMouseDown,
     this.onPaste,
+    this.onScroll,
   });
 
+  /// Called before certain commands are fired and the editor is in rich text view.
+  /// There is currently no documentation on this parameter, thus it is
+  /// unclear which commands this will fire before.
+  ///
+  /// This function will return the current HTML in the editor as an argument.
+  Function(String?)? onBeforeCommand;
+
   /// Called whenever the HTML content of the editor is changed and the editor
-  /// is in rich text view. There is currently no way to detect changes when
-  /// the editor is in code view.
+  /// is in rich text view.
   ///
   /// Note: This function also seems to be called if input is detected in the
-  /// editor field. E.g. repeatedly pressing backspace when the field is empty
+  /// editor field but the content does not change.
+  /// E.g. repeatedly pressing backspace when the field is empty
   /// will also trigger this callback.
   ///
   /// This function will return the current HTML in the editor as an argument.
   Function(String?)? onChange;
+
+  /// Called whenever the code of the editor is changed and the editor
+  /// is in code view.
+  ///
+  /// Note: This function also seems to be called if input is detected in the
+  /// editor field but the content does not change.
+  /// E.g. repeatedly pressing backspace when the field is empty
+  /// will also trigger this callback.
+  ///
+  /// This function will return the current code in the codeview as an argument.
+  Function(String?)? onChangeCodeview;
+
+  /// Called whenever a dialog is shown in the editor. The dialogs will be either
+  /// the link, image, video, or help dialogs.
+  Function()? onDialogShown;
 
   /// Called whenever the enter/return key is pressed and the editor
   /// is in rich text view. There is currently no way to detect enter/return
@@ -71,8 +100,8 @@ class Callbacks {
   Function(String?)? onImageLinkInsert;
 
   /// Called whenever an image is inserted via upload. The function passes the
-  /// [FileUpload] class, containing the filename, size, MIME type, and last
-  /// modified information so you can upload it into your server.
+  /// [FileUpload] class, containing the filename, size, MIME type, base64 data,
+  /// and last modified information so you can upload it into your server.
   ///
   /// Note: Setting this function overrides the default summernote upload image
   /// insertion handler (base64 handler)! This means you must manually insert
@@ -80,6 +109,11 @@ class Callbacks {
   /// [controller.insertHtml] (for base64 data) in your callback function,
   /// otherwise nothing will be inserted into the editor!
   Function(FileUpload)? onImageUpload;
+
+  /// Called whenever an image is failed to be inserted via upload. The function
+  /// passes the [FileUpload] class, containing the filename, size, MIME type,
+  /// base64 data, and last modified information so you can do error handling.
+  Function(FileUpload?, String?, UploadError)? onImageUploadError;
 
   /// Called whenever [InAppWebViewController.onLoadStop] is fired on mobile
   /// or when the [IFrameElement.onLoad] stream is fired on web. Note that this
@@ -109,10 +143,27 @@ class Callbacks {
   /// and those keys are downed.
   Function(int?)? onKeyDown;
 
+  /// Called whenever the mouse/finger is released and the editor is in rich text view.
+  Function()? onMouseUp;
+
+  /// Called whenever the mouse/finger is downed and the editor is in rich text view.
+  Function()? onMouseDown;
+
   /// Called whenever text is pasted into the rich text field. This will not be
   /// called when text is pasted into the code view editor.
   ///
   /// Note: This will not be called when programmatically inserting HTML into
   /// the editor with [HtmlEditor.insertHtml].
   Function()? onPaste;
+
+  /// Called whenever the editor is scrolled and it is in rich text view.
+  /// Editor scrolled is considered to be the editor box only, not the webview
+  /// container itself. Thus, this callback will only fire when the content in
+  /// the editor is longer than the editor height. This function can be called
+  /// with an explicit scrolling action via the mouse, or also via implied
+  /// scrolling, e.g. the enter key scrolling the editor to make new text visible.
+  ///
+  /// Note: This function will be repeatedly called while the editor is scrolled.
+  /// Make sure to factor that into your implementation.
+  Function()? onScroll;
 }

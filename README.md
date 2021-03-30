@@ -83,7 +83,7 @@ Note that the API shown in this README.md file shows only a part of the document
 
 5. It has support for many of Summernote's methods
 
-6. It has support for many of Summernote's callbacks
+6. It has support for all of Summernote's callbacks
 
 7. It has support for some of Summernote's 3rd party plugins, found [here](https://github.com/summernote/awesome-summernote)
 
@@ -292,17 +292,24 @@ Every callback is defined as a `Function(<parameters in some cases>)`. See the [
  
 Callback | Parameter(s) | Description
 ------------ | ------------- | -------------
+**onBeforeCommand** | `String` | Called before certain commands are called (like undo and redo), passes the HTML in the editor before the command is called
 **onChange** | `String` | Called when the content of the editor changes, passes the current HTML in the editor
+**onChangeCodeview** | `String` | Called when the content of the codeview changes, passes the current code in the codeview
+**onDialogShown** | N/A | Called when either the image, link, video, or help dialogs are shown
 **onEnter** | N/A | Called when enter/return is pressed
 **onFocus** | N/A | Called when the rich text field gains focus
 **onBlur** | N/A | Called when the rich text field or the codeview loses focus
 **onBlurCodeview** | N/A | Called when the codeview either gains or loses focus
 **onImageLinkInsert** | `String` | Called when an image is inserted via URL, passes the URL of the image
 **onImageUpload** | `FileUpload` | Called when an image is inserted via upload, passes `FileUpload` which holds filename, date modified, size, and MIME type
+**onImageUploadError** | `FileUpload`, `String`, `UploadError` | Called when an image fails to inserted via upload, passes `FileUpload` which may hold filename, date modified, size, and MIME type (or be null), `String` which is the base64 (or null), and `UploadError` which describes the type of error
 **onInit** | N/A | Called when the rich text field is initialized and JavaScript methods can be called
 **onKeyDown** | `int` | Called when a key is downed, passes the keycode of the downed key
 **onKeyUp** | `int` | Called when a key is released, passes the keycode of the released key
+**onMouseDown** | N/A | Called when the mouse/finger is downed
+**onMouseUp** | N/A | Called when the mouse/finger is released
 **onPaste** | N/A | Called when content is pasted into the editor
+**onScroll** | N/A | Called when editor box is scrolled
 
 ### Getters
 

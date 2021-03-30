@@ -272,6 +272,18 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           },
         """;
       }
+      if (widget.callbacks!.onImageUploadError != null) {
+        summernoteCallbacks = summernoteCallbacks +
+            """
+              onImageUploadError: function(file, error) {
+                if (typeof file === 'string') {
+                  window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onImageUploadError", "base64": file, "error": error}), "*");
+                } else {
+                  window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onImageUploadError", "lastModified": file.lastModified, "lastModifiedDate": file.lastModifiedDate, "name": file.name, "size": file.size, "mimeType": file.type, "error": error}), "*");
+                }
+              },
+            """;
+      }
     }
     summernoteToolbar = summernoteToolbar + "],";
     summernoteCallbacks = summernoteCallbacks + "}";
@@ -469,6 +481,30 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   /// Adds the callbacks the user set into JavaScript
   String getJsCallbacks(Callbacks c) {
     String callbacks = "";
+    if (c.onBeforeCommand != null) {
+      callbacks = callbacks +
+        """
+          \$('#summernote-2').on('summernote.before.command', function(_, contents, \$editable) {
+            window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onBeforeCommand", "contents": contents}), "*");
+          });\n
+        """;
+    }
+    if (c.onChangeCodeview != null) {
+      callbacks = callbacks +
+          """
+          \$('#summernote-2').on('summernote.change.codeview', function(_, contents, \$editable) {
+            window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onChangeCodeview", "contents": contents}), "*");
+          });\n
+        """;
+    }
+    if (c.onDialogShown != null) {
+      callbacks = callbacks +
+          """
+          \$('#summernote-2').on('summernote.dialog.shown', function() {
+            window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onDialogShown"}), "*");
+          });\n
+        """;
+    }
     if (c.onEnter != null) {
       callbacks = callbacks +
           """
@@ -517,11 +553,35 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           });\n
         """;
     }
+    if (c.onMouseDown != null) {
+      callbacks = callbacks +
+          """
+          \$('#summernote-2').on('summernote.mousedown', function(_) {
+            window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onMouseDown"}), "*");
+          });\n
+        """;
+    }
+    if (c.onMouseUp != null) {
+      callbacks = callbacks +
+          """
+          \$('#summernote-2').on('summernote.mouseup', function(_) {
+            window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onMouseUp"}), "*");
+          });\n
+        """;
+    }
     if (c.onPaste != null) {
       callbacks = callbacks +
           """
           \$('#summernote-2').on('summernote.paste', function(_) {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onPaste"}), "*");
+          });\n
+        """;
+    }
+    if (c.onScroll != null) {
+      callbacks = callbacks +
+          """
+          \$('#summernote-2').on('summernote.scroll', function(_) {
+            window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onScroll"}), "*");
           });\n
         """;
     }
@@ -544,8 +604,17 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             });
           }
         }
+        if (data["type"].contains("onBeforeCommand")) {
+          c.onBeforeCommand!.call(data["contents"]);
+        }
         if (data["type"].contains("onChange")) {
           c.onChange!.call(data["contents"]);
+        }
+        if (data["type"].contains("onChangeCodeview")) {
+          c.onChangeCodeview!.call(data["contents"]);
+        }
+        if (data["type"].contains("onDialogShown")) {
+          c.onDialogShown!.call();
         }
         if (data["type"].contains("onEnter")) {
           c.onEnter!.call();
@@ -575,14 +644,53 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           FileUpload file = fileUploadFromJson(jsonStr);
           c.onImageUpload!.call(file);
         }
+        if (data["type"].contains("onImageUploadError")) {
+          if (data["base64"] != null) {
+            c.onImageUploadError!.call(
+                null,
+                data["base64"],
+                data["error"].contains("base64")
+                    ? UploadError.jsException
+                    : data["error"].contains("unsupported")
+                    ? UploadError.unsupportedFile
+                    : UploadError.exceededMaxSize);
+          } else {
+            Map<String, dynamic> map = {
+              'lastModified': data["lastModified"],
+              'lastModifiedDate': data["lastModifiedDate"],
+              'name': data["name"],
+              'size': data["size"],
+              'type': data["mimeType"]
+            };
+            String jsonStr = json.encode(map);
+            FileUpload file = fileUploadFromJson(jsonStr);
+            c.onImageUploadError!.call(
+                file,
+                null,
+                data["error"].contains("base64")
+                    ? UploadError.jsException
+                    : data["error"].contains("unsupported")
+                    ? UploadError.unsupportedFile
+                    : UploadError.exceededMaxSize);
+          }
+        }
         if (data["type"].contains("onKeyDown")) {
           c.onKeyDown!.call(data["keyCode"]);
         }
         if (data["type"].contains("onKeyUp")) {
           c.onKeyUp!.call(data["keyCode"]);
         }
+        if (data["type"].contains("onMouseDown")) {
+          c.onMouseDown!.call();
+        }
+        if (data["type"].contains("onMouseUp")) {
+          c.onMouseUp!.call();
+        }
         if (data["type"].contains("onPaste")) {
           c.onPaste!.call();
+        }
+        if (data["type"].contains("onScroll")) {
+          c.onScroll!.call();
         }
       }
     });

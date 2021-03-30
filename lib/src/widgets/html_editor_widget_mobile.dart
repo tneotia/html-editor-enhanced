@@ -364,6 +364,25 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                               },
                             """;
                         }
+                        if (widget.callbacks!.onImageUploadError != null) {
+                          summernoteCallbacks = summernoteCallbacks +
+                              """
+                                onImageUploadError: function(file, error) {
+                                  if (typeof file === 'string') {
+                                    window.flutter_inappwebview.callHandler('onImageUploadError', file, error);
+                                  } else {
+                                    var newObject = {
+                                       'lastModified': file.lastModified,
+                                       'lastModifiedDate': file.lastModifiedDate,
+                                       'name': file.name,
+                                       'size': file.size,
+                                       'type': file.type,
+                                    };
+                                    window.flutter_inappwebview.callHandler('onImageUploadError', JSON.stringify(newObject), error);
+                                  }
+                                },
+                            """;
+                        }
                       }
                       summernoteToolbar = summernoteToolbar + "],";
                       summernoteCallbacks = summernoteCallbacks + "}";
@@ -474,6 +493,27 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
 
   /// adds the callbacks set by the user into the scripts
   void addJSCallbacks(Callbacks c) {
+    if (c.onBeforeCommand != null) {
+      controllerMap[widget.controller].evaluateJavascript(source: """
+          \$('#summernote-2').on('summernote.before.command', function(_, contents) {
+            window.flutter_inappwebview.callHandler('onBeforeCommand', contents);
+          });
+        """);
+    }
+    if (c.onChangeCodeview != null) {
+      controllerMap[widget.controller].evaluateJavascript(source: """
+          \$('#summernote-2').on('summernote.change.codeview', function(_, contents, \$editable) {
+            window.flutter_inappwebview.callHandler('onChangeCodeview', contents);
+          });
+        """);
+    }
+    if (c.onDialogShown != null) {
+      controllerMap[widget.controller].evaluateJavascript(source: """
+          \$('#summernote-2').on('summernote.dialog.shown', function() {
+            window.flutter_inappwebview.callHandler('onDialogShown', 'fired');
+          });
+        """);
+    }
     if (c.onEnter != null) {
       controllerMap[widget.controller].evaluateJavascript(source: """
           \$('#summernote-2').on('summernote.enter', function() {
@@ -516,10 +556,31 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
           });
         """);
     }
+    if (c.onMouseDown != null) {
+      controllerMap[widget.controller].evaluateJavascript(source: """
+          \$('#summernote-2').on('summernote.mousedown', function(_) {
+            window.flutter_inappwebview.callHandler('onMouseDown', 'fired');
+          });
+        """);
+    }
+    if (c.onMouseUp != null) {
+      controllerMap[widget.controller].evaluateJavascript(source: """
+          \$('#summernote-2').on('summernote.mouseup', function(_) {
+            window.flutter_inappwebview.callHandler('onMouseUp', 'fired');
+          });
+        """);
+    }
     if (c.onPaste != null) {
       controllerMap[widget.controller].evaluateJavascript(source: """
           \$('#summernote-2').on('summernote.paste', function(_) {
             window.flutter_inappwebview.callHandler('onPaste', 'fired');
+          });
+        """);
+    }
+    if (c.onScroll != null) {
+      controllerMap[widget.controller].evaluateJavascript(source: """
+          \$('#summernote-2').on('summernote.scroll', function(_) {
+            window.flutter_inappwebview.callHandler('onScroll', 'fired');
           });
         """);
     }
@@ -528,6 +589,27 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
   /// creates flutter_inappwebview JavaScript Handlers to handle any callbacks the
   /// user has defined
   void addJSHandlers(Callbacks c) {
+    if (c.onBeforeCommand != null) {
+      controllerMap[widget.controller].addJavaScriptHandler(
+          handlerName: 'onBeforeCommand',
+          callback: (contents) {
+              c.onBeforeCommand!.call(contents.first.toString());
+          });
+    }
+    if (c.onChangeCodeview != null) {
+      controllerMap[widget.controller].addJavaScriptHandler(
+          handlerName: 'onChangeCodeview',
+          callback: (contents) {
+            c.onChangeCodeview!.call(contents.first.toString());
+          });
+    }
+    if (c.onDialogShown != null) {
+      controllerMap[widget.controller].addJavaScriptHandler(
+          handlerName: 'onDialogShown',
+          callback: (_) {
+            c.onDialogShown!.call();
+          });
+    }
     if (c.onEnter != null) {
       controllerMap[widget.controller].addJavaScriptHandler(
           handlerName: 'onEnter',
@@ -571,6 +653,39 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
             c.onImageUpload!.call(file);
           });
     }
+    if (c.onImageUploadError != null) {
+      controllerMap[widget.controller].addJavaScriptHandler(
+          handlerName: 'onImageUploadError',
+          callback: (args) {
+            if (!args.first
+                .toString()
+                .startsWith("{")) {
+              c.onImageUploadError!.call(
+                  null,
+                  args.first,
+                  args.last.contains("base64")
+                      ? UploadError.jsException
+                      : args.last
+                      .contains("unsupported")
+                      ? UploadError.unsupportedFile
+                      : UploadError
+                      .exceededMaxSize);
+            } else {
+              FileUpload file = fileUploadFromJson(
+                  args.first.toString());
+              c.onImageUploadError!.call(
+                  file,
+                  null,
+                  args.last.contains("base64")
+                      ? UploadError.jsException
+                      : args.last
+                      .contains("unsupported")
+                      ? UploadError.unsupportedFile
+                      : UploadError
+                      .exceededMaxSize);
+            }
+          });
+    }
     if (c.onKeyDown != null) {
       controllerMap[widget.controller].addJavaScriptHandler(
           handlerName: 'onKeyDown',
@@ -585,11 +700,32 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
             c.onKeyUp!.call(keyCode.first);
           });
     }
+    if (c.onMouseDown != null) {
+      controllerMap[widget.controller].addJavaScriptHandler(
+          handlerName: 'onMouseDown',
+          callback: (_) {
+            c.onMouseDown!.call();
+          });
+    }
+    if (c.onMouseUp != null) {
+      controllerMap[widget.controller].addJavaScriptHandler(
+          handlerName: 'onMouseUp',
+          callback: (_) {
+            c.onMouseUp!.call();
+          });
+    }
     if (c.onPaste != null) {
       controllerMap[widget.controller].addJavaScriptHandler(
           handlerName: 'onPaste',
           callback: (_) {
             c.onPaste!.call();
+          });
+    }
+    if (c.onScroll != null) {
+      controllerMap[widget.controller].addJavaScriptHandler(
+          handlerName: 'onScroll',
+          callback: (_) {
+            c.onScroll!.call();
           });
     }
   }
