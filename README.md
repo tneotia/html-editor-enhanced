@@ -567,19 +567,22 @@ Note: This example could also be easily refactored for the Summernote File plugi
         print(file.type); //MIME type (e.g. image/jpg)
         print(file.lastModified.toString()); //DateTime object for last modified
         //either upload to server:
-        Uint8List list = base64.decode(file.base64);
-        MultipartFile multipartFile = MultipartFile.fromBytes(
-          'file',
-          list,
-          filename: file.name,
-        );
-        //make http/dio request here...
-        controller.insertNetworkImage(response.url); //where response.url is the url of the uploaded image
+        if (file.base64 != null)
+          //you must remove the initial identifying data (MIME type and dnd data type) from the
+          //base64 string before decoding it - split helps us do this
+          Uint8List list = base64.decode(file.base64!.split(",")[1]);
+          MultipartFile multipartFile = MultipartFile.fromBytes(
+            'file',
+            list,
+            filename: file.name,
+          );
+          //make http/dio request here...
+          controller.insertNetworkImage(response.url); //where response.url is the url of the uploaded image
         //or insert as base64:
-        Uint8List list = base64.decode(file.base64);
-        String base64Image =
-            """<img src="${file.base64}" data-filename="${file.name}"/>""";
-        controller.insertHtml(base64Image);
+        if (file.base64 != null)
+          String base64Image =
+              """<img src="${file.base64!}" data-filename="${file.name}"/>""";
+          controller.insertHtml(base64Image);
       },
     ),
   );
