@@ -232,34 +232,33 @@ Below, you will find brief descriptions of the parameters the`HtmlEditor` widget
 Parameter | Type | Default | Description
 ------------ | ------------- | ------------- | -------------
 **controller** | `HtmlEditorController` | empty | Required param. Create a controller instance and pass it to the widget. This ensures that any methods called work only on their `HtmlEditor` instance, allowing you to use multiple HTML widgets on one page.
-**initialText** | `String` | empty | Initial text content for text editor
-**hint** | `String` | empty | Placeholder hint text
 **callbacks** | `Callbacks` | empty | Customize the callbacks for various events
-**toolbar** | `List<Toolbar>` | See the widget's constructor | Customize what buttons are shown on the toolbar, and in which order. See [below](#toolbar) for more details.
-**plugins** | `List<Plugins>` | empty | Customize what plugins are activated. See [below](#plugins) for more details.
+**hint** | `String` | empty | Placeholder hint text
+**initialText** | `String` | empty | Initial text content for text editor
 **options** | `HtmlEditorOptions` | `HtmlEditorOptions()` | Class to set various options. See [below](#parameters---htmleditoroptions) for more details.
+**plugins** | `List<Plugins>` | empty | Customize what plugins are activated. See [below](#plugins) for more details.
+**toolbar** | `List<Toolbar>` | See the widget's constructor | Customize what buttons are shown on the toolbar, and in which order. See [below](#toolbar) for more details.
 
 ### Parameters - `HtmlEditorController`
 
 Parameter | Type | Default | Description
 ------------ | ------------- | ------------- | -------------
 **processInputHtml** | `bool` | `true` | Determines whether processing occurs on any input HTML (e.g. escape quotes, apostrophes, and remove `/n`s)
-**processOutputHtml** | `bool` | `true` | Determines whether processing occurs on any output HTML (e.g. `<p><br/><p>` becomes `""`)
 **processNewLineAsBr** | `bool` | `false` | Determines whether a new line (`\n`) becomes a `<br/>` in any *input* HTML
+**processOutputHtml** | `bool` | `true` | Determines whether processing occurs on any output HTML (e.g. `<p><br/><p>` becomes `""`)
 
 ### Parameters - `HtmlEditorOptions`
 
 Parameter | Type | Default | Description
 ------------ | ------------- | ------------- | -------------
-**height** | `double` | 380 | Height of text editor (does not set the height in HTML yet, only the height of the WebView widget)
 **autoAdjustHeight** | `bool` | `true` | Automatically adjust the height of the text editor by analyzing the HTML height once the editor is loaded. Recommended value: `true`.  See [below](#autoadjustheight) for more details.
 **adjustHeightForKeyboard** | `bool` | `true` | Adjust the height of the editor if the keyboard is active and it overlaps the editor to prevent the overlap. Recommended value: `true`, only works on mobile.  See [below](#adjustheightforkeyboard) for more details.
-**decoration** | `BoxDecoration` |  | `BoxDecoration` that surrounds the widget
-**showBottomToolbar** | `bool` | true | Show or hide bottom toolbar
-**hint** | `String` | empty | Placeholder hint text
 **darkMode** | `bool` | `null` | Sets the status of dark mode - `false`: always light, `null`: follow system, `true`: always dark
+**decoration** | `BoxDecoration` |  | `BoxDecoration` that surrounds the widget
 **filePath** | `String` | `null` | Allows you to specify your own HTML to be loaded into the webview. You can create a custom page with Summernote, or theoretically load any other editor/HTML.
+**hint** | `String` | empty | Placeholder hint text
 **shouldEnsureVisible** | `bool` | `false` | Scroll the parent `Scrollable` to the top of the editor widget when the webview is focused. Do *not* use this parameter if `HtmlEditor` is not inside a `Scrollable`. See [below](#shouldensurevisible) for more details.
+**showBottomToolbar** | `bool` | true | Show or hide bottom toolbar
 
 ### Methods
 
@@ -267,27 +266,27 @@ Access these methods like this: `<controller name>.<method name>`
 
 Method | Argument(s) | Returned Value(s) | Description
 ------------ | ------------- | ------------- | -------------
-**getText()** | N/A | `Future<String>` | Returns the current HTML in the editor
-**setText()** | `String` | N/A | Sets the current text in the HTML to the input HTML string
-**setFullScreen()** | N/A | N/A | Sets the editor to take up the entire size of the webview
-**setFocus()** | N/A | N/A | If the pointer is in the webview, the focus will be set to the editor box
+**addNotification()** | `String` html, `NotificationType` notificationType | N/A | Adds a notification to the bottom of the editor with the provided HTML content. `NotificationType` determines how it is styled.
 **clear()** | N/A | N/A | Resets the HTML editor to its default state
-**setHint()** | `String` | N/A | Sets the current hint text of the editor
-**toggleCodeview()** | N/A | N/A | Toggles between the code view and the rich text view
+**clearFocus()** | N/A | N/A | Clears focus for the webview and resets the height to the original height on mobile. Do *not* use this method in Flutter Web.
 **disable()** | N/A | N/A | Disables the editor (a gray mask is applied and all touches are absorbed)
 **enable()** | N/A | N/A | Enables the editor
-**undo()** | N/A | N/A | Undoes the last command in the editor
-**redo()** | N/A | N/A | Redoes the last command in the editor
-**insertText()** | `String` | N/A | Inserts the provided text into the editor at the current cursor position. Do *not* use this method for HTML strings.
+**getText()** | N/A | `Future<String>` | Returns the current HTML in the editor
 **insertHtml()** | `String` | N/A | Inserts the provided HTML string into the editor at the current cursor position. Do *not* use this method for plaintext strings.
-**insertNetworkImage()** | `String` url, `String` filename (optional) | N/A | Inserts an image using the provided url and optional filename into the editor at the current cursor position. The image must be accessible via a URL.
 **insertLink()** | `String` text, `String` url, `bool` isNewWindow | N/A | Inserts a hyperlink using the provided text and url into the editor at the current cursor position. `isNewWindow` defines whether a new browser window is launched if the link is tapped.
-**clearFocus()** | N/A | N/A | Clears focus for the webview and resets the height to the original height on mobile. Do *not* use this method in Flutter Web.
-**resetHeight()** | N/A | N/A | Resets the height of the webview to the original height. Do *not* use this method in Flutter Web.
-**reloadWeb()** | N/A | N/A | Reloads the webpage in Flutter Web. This is mainly provided to refresh the text editor theme when the theme is changed. Do *not* use this method in Flutter Mobile.
+**insertNetworkImage()** | `String` url, `String` filename (optional) | N/A | Inserts an image using the provided url and optional filename into the editor at the current cursor position. The image must be accessible via a URL.
+**insertText()** | `String` | N/A | Inserts the provided text into the editor at the current cursor position. Do *not* use this method for HTML strings.
 **recalculateHeight()** | N/A | N/A | Recalculates the height of the editor by re-evaluating `document.body.scrollHeight`
-**addNotification()** | `String` html, `NotificationType` notificationType | N/A | Adds a notification to the bottom of the editor with the provided HTML content. `NotificationType` determines how it is styled.
+**redo()** | N/A | N/A | Redoes the last command in the editor
+**reloadWeb()** | N/A | N/A | Reloads the webpage in Flutter Web. This is mainly provided to refresh the text editor theme when the theme is changed. Do *not* use this method in Flutter Mobile.
 **removeNotification()** | N/A | N/A | Removes the current notification from the bottom of the editor
+**resetHeight()** | N/A | N/A | Resets the height of the webview to the original height. Do *not* use this method in Flutter Web.
+**setHint()** | `String` | N/A | Sets the current hint text of the editor
+**setFocus()** | N/A | N/A | If the pointer is in the webview, the focus will be set to the editor box
+**setFullScreen()** | N/A | N/A | Sets the editor to take up the entire size of the webview
+**setText()** | `String` | N/A | Sets the current text in the HTML to the input HTML string
+**toggleCodeview()** | N/A | N/A | Toggles between the code view and the rich text view
+**undo()** | N/A | N/A | Undoes the last command in the editor
 
 ### Callbacks
 
