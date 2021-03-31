@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 
+/// The toolbar widget at the bottom of the editor
 class ToolbarWidget extends StatelessWidget {
   ToolbarWidget({Key? key, required this.controller}) : super(key: key);
 
+  /// Needs the controller to call methods easily
   final HtmlEditorController controller;
 
   @override

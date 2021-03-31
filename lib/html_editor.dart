@@ -22,4 +22,6 @@ export 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart
 /// Global variable used to get the [InAppWebViewController] of the Html editor
 Map<HtmlEditorController, dynamic> controllerMap = {};
 
+/// Manages the notification type for a notification displayed at the bottom of
+/// the editor
 enum NotificationType {info, warning, success, danger, plaintext}

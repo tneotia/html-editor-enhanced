@@ -557,7 +557,13 @@ Note: This example could also be easily refactored for the Summernote File plugi
 
 <details><summary>Example code</summary>
 
+Note: This example uses the [http](https://pub.dev/packages/http) package.
+
 ```dart
+import 'dart:convert';
+import 'dart:typed_data';
+import 'package:http/http.dart' as http;
+
   Widget editor = HtmlEditor(
     controller: controller,
     hint: "Your text here...",
@@ -576,22 +582,28 @@ Note: This example could also be easily refactored for the Summernote File plugi
         print(file.type); //MIME type (e.g. image/jpg)
         print(file.lastModified.toString()); //DateTime object for last modified
         //either upload to server:
-        if (file.base64 != null)
+        if (file.base64 != null) {
           //you must remove the initial identifying data (MIME type and dnd data type) from the
           //base64 string before decoding it - split helps us do this
           Uint8List list = base64.decode(file.base64!.split(",")[1]);
-          MultipartFile multipartFile = MultipartFile.fromBytes(
-            'file',
-            list,
-            filename: file.name,
-          );
-          //make http/dio request here...
-          controller.insertNetworkImage(response.url); //where response.url is the url of the uploaded image
+          final request = http.MultipartRequest('POST', Uri.parse("your_server_url"));
+          request.files.add(http.MultipartFile.fromBytes("file", bytes, filename: file.name)); //your server may require a different key than "file"
+          final response = await request.send();
+          //try to insert as network image, but if it fails, then try to insert as base64:
+          if (response.statusCode == 200) {
+            controller.insertNetworkImage(response.body["url"], filename: file.name); //where "url" is the url of the uploaded image returned in the body JSON
+          } else {
+            String base64Image =
+              """<img src="${file.base64!}" data-filename="${file.name}"/>""";
+            controller.insertHtml(base64Image);
+          }
+        }
         //or insert as base64:
-        if (file.base64 != null)
+        if (file.base64 != null) {
           String base64Image =
               """<img src="${file.base64!}" data-filename="${file.name}"/>""";
           controller.insertHtml(base64Image);
+        }
       },
     ),
   );
