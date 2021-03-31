@@ -285,6 +285,9 @@ Method | Argument(s) | Returned Value(s) | Description
 **clearFocus()** | N/A | N/A | Clears focus for the webview and resets the height to the original height on mobile. Do *not* use this method in Flutter Web.
 **resetHeight()** | N/A | N/A | Resets the height of the webview to the original height. Do *not* use this method in Flutter Web.
 **reloadWeb()** | N/A | N/A | Reloads the webpage in Flutter Web. This is mainly provided to refresh the text editor theme when the theme is changed. Do *not* use this method in Flutter Mobile.
+**recalculateHeight()** | N/A | N/A | Recalculates the height of the editor by re-evaluating `document.body.scrollHeight`
+**addNotification()** | `String` html, `NotificationType` notificationType | N/A | Adds a notification to the bottom of the editor with the provided HTML content. `NotificationType` determines how it is styled.
+**removeNotification()** | N/A | N/A | Removes the current notification from the bottom of the editor
 
 ### Callbacks
 
@@ -792,6 +795,8 @@ If you do find any issues, please report them in the Issues tab and I will see i
 1. When switching between dark and light mode, a reload is required for the HTML editor to switch to the correct color scheme. You can implement this programmatically in Flutter Mobile: `<controller name>.editorController.reload()`, or in Flutter Web: `<controller name>.reloadWeb()`. This will reset the editor! You can save the current text, reload, and then set the text if you'd like to maintain the state.
 
 2. If you are making a cross platform implementation and are using either the `controller` getter or the `reloadWeb()` method, use `kIsWeb` in your app to ensure you are calling these in the correct platform.
+
+3. Inline notifications are finnicky on mobile. It seems that adding/removing a notification adds 2 px to the height of the editor, even though the height is recalculated each time. At the moment I have not found a workaround. This behavior is not present on Web, however.
 
 ## License
 

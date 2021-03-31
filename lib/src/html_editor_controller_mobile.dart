@@ -152,6 +152,41 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
         "Non-Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart and check kIsWeb before calling this function");
   }
 
+  /// Resets the height of the editor back to the original if it was changed to
+  /// accommodate the keyboard. This should only be used on mobile, and only
+  /// when [adjustHeightForKeyboard] is enabled.
+  void resetHeight() {
+    _evaluateJavascript(
+        source: "window.flutter_inappwebview.callHandler('setHeight', 'reset');");
+  }
+
+  /// Recalculates the height of the editor to remove any vertical scrolling.
+  /// This method will not do anything if [autoAdjustHeight] is turned off.
+  void recalculateHeight() {
+    _evaluateJavascript(
+        source: "var height = document.body.scrollHeight; window.flutter_inappwebview.callHandler('setHeight', height);");
+  }
+
+  /// Add a notification to the bottom of the editor. This is styled similar to
+  /// Bootstrap alerts. You can set the HTML to be displayed in the alert,
+  /// and the notificationType determines how the alert is displayed.
+  void addNotification(String html, NotificationType notificationType) async {
+    await _evaluateJavascript(
+        source: """
+        \$('.note-status-output').html(
+          '<div class="alert alert-${describeEnum(notificationType)}">$html</div>'
+        );
+        """);
+    recalculateHeight();
+  }
+
+  /// Remove the current notification from the bottom of the editor
+  void removeNotification() async {
+    await _evaluateJavascript(
+        source: "\$('.note-status-output').empty();");
+    recalculateHeight();
+  }
+
   String _processHtml({required html}) {
     if (processInputHtml) {
       html = html

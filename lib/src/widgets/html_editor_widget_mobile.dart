@@ -415,16 +415,25 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                         widget.controller.setText(widget.value!);
                       //adjusts the height of the editor when it is loaded
                       if (widget.options.autoAdjustHeight) {
-                        dynamic height = await controller.evaluateJavascript(
-                            source: 'document.body.scrollHeight');
-                        docHeight = double.tryParse(height.toString());
-                        if (docHeight != null && docHeight! > 0 && mounted) {
-                          setState(() {
-                            actualHeight = docHeight! + 40.0;
-                          });
-                        } else {
-                          docHeight = actualHeight - 40;
-                        }
+                        controller.addJavaScriptHandler(
+                            handlerName: 'setHeight',
+                            callback: (height) {
+                              if (height.first == "reset") {
+                                resetHeight();
+                              } else {
+                                docHeight = double.tryParse(height.first.toString());
+                                print(height.first.toString());
+                                if (docHeight != null && docHeight! > 0 && mounted) {
+                                  setState(() {
+                                    actualHeight = docHeight! + 40.0;
+                                  });
+                                } else {
+                                  docHeight = actualHeight - 40;
+                                }
+                              }
+                            });
+                        controller.evaluateJavascript(
+                            source: "var height = document.body.scrollHeight; window.flutter_inappwebview.callHandler('setHeight', height);");
                       } else {
                         docHeight = actualHeight - 40;
                       }

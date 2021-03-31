@@ -165,6 +165,40 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     _evaluateJavascriptWeb(data: {"type": "toIframe: reload"});
   }
 
+  /// Recalculates the height of the editor to remove any vertical scrolling.
+  /// This method will not do anything if [autoAdjustHeight] is turned off.
+  void recalculateHeight() {
+    _evaluateJavascriptWeb(data: {
+      "type": "toIframe: getHeight",
+    });
+  }
+
+  /// Add a notification to the bottom of the editor. This is styled similar to
+  /// Bootstrap alerts. You can set the HTML to be displayed in the alert,
+  /// and the notificationType determines how the alert is displayed.
+  void addNotification(String html, NotificationType notificationType) {
+    if (notificationType == NotificationType.plaintext)
+      _evaluateJavascriptWeb(data: {
+        "type": "toIframe: addNotification",
+        "html": html
+      });
+    else
+      _evaluateJavascriptWeb(data: {
+        "type": "toIframe: addNotification",
+        "html": html,
+        "alertType": "alert alert-${describeEnum(notificationType)}"
+      });
+    recalculateHeight();
+  }
+
+  /// Remove the current notification from the bottom of the editor
+  void removeNotification() {
+    _evaluateJavascriptWeb(data: {
+      "type": "toIframe: removeNotification"
+    });
+    recalculateHeight();
+  }
+
   String _processHtml({required html}) {
     if (processInputHtml) {
       html = html

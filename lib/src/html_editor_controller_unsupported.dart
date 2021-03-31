@@ -1,4 +1,5 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:html_editor_enhanced/html_editor.dart';
 
 /// Fallback controller (should never be used)
 class HtmlEditorController {
@@ -93,4 +94,16 @@ class HtmlEditorController {
   ///
   /// Note: This should only be used in Flutter Web!!!
   void reloadWeb() {}
+
+  /// Recalculates the height of the editor to remove any vertical scrolling.
+  /// This method will not do anything if [autoAdjustHeight] is turned off.
+  void recalculateHeight() {}
+
+  /// Add a notification to the bottom of the editor. This is styled similar to
+  /// Bootstrap alerts. You can set the HTML to be displayed in the alert,
+  /// and the notificationType determines how the alert is displayed.
+  void addNotification(String html, NotificationType notificationType) {}
+
+  /// Remove the current notification from the bottom of the editor
+  void removeNotification() {}
 }

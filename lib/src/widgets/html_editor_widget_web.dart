@@ -287,7 +287,6 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     }
     summernoteToolbar = summernoteToolbar + "],";
     summernoteCallbacks = summernoteCallbacks + "}";
-    print(summernoteCallbacks);
     String darkCSS = "";
     if ((Theme.of(widget.initBC).brightness == Brightness.dark ||
             widget.options.darkMode == true) &&
@@ -379,6 +378,22 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
               }
               if (data["type"].includes("reload")) {
                 window.location.reload();
+              }
+              if (data["type"].includes("addNotification")) {
+                if (data["alertType"] === null) {
+                  \$('.note-status-output').html(
+                    data["html"]
+                  );
+                } else {
+                  \$('.note-status-output').html(
+                    '<div class="' + data["alertType"] + '">' +
+                      data["html"] +
+                    '</div>'
+                  );
+                }
+              }
+              if (data["type"].includes("removeNotification")) {
+                \$('.note-status-output').empty();
               }
             }
           }
