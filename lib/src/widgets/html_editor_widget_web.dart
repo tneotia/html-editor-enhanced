@@ -48,6 +48,9 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   /// The actual height of the editor, used to automatically set the height
   late double actualHeight;
 
+  /// A variable used to correct for the height of the bottom toolbar, if visible.
+  double toolbarHeightCorrection = 0;
+
   /// A Future that is observed by the [FutureBuilder]. We don't use a function
   /// as the Future on the [FutureBuilder] because when the widget is rebuilt,
   /// the function may be excessively called, hurting performance.
@@ -55,7 +58,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
 
   @override
   void initState() {
-    actualHeight = widget.options.height + 125;
+    if (widget.options.showBottomToolbar) toolbarHeightCorrection = 40;
+    actualHeight = widget.options.height + 85 + toolbarHeightCorrection;
     createdViewId = getRandString(10);
     controllerMap[widget.controller] = createdViewId;
     initSummernote();
@@ -615,7 +619,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           final docHeight = data["height"] ?? actualHeight;
           if ((docHeight != null && docHeight != actualHeight) && mounted) {
             setState(() {
-              actualHeight = docHeight + 40.0;
+              actualHeight = docHeight + toolbarHeightCorrection;
             });
           }
         }

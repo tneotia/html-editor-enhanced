@@ -46,6 +46,9 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
   /// The actual height of the editor, used to automatically set the height
   late double actualHeight;
 
+  /// A variable used to correct for the height of the bottom toolbar, if visible.
+  double toolbarHeightCorrection = 0;
+
   /// The height of the document loaded in the editor
   double? docHeight;
 
@@ -61,7 +64,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
 
   @override
   void initState() {
-    actualHeight = widget.options.height + 125;
+    if (widget.options.showBottomToolbar) toolbarHeightCorrection = 40;
+    actualHeight = widget.options.height + 85 + toolbarHeightCorrection;
     key = getRandString(10);
     if (widget.options.filePath != null) {
       filePath = widget.options.filePath!;
@@ -84,9 +88,9 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
   void resetHeight() async {
     setState(() {
       if (docHeight != null) {
-        actualHeight = docHeight! + 40;
+        actualHeight = docHeight! + toolbarHeightCorrection;
       } else {
-        actualHeight = widget.options.height + 125;
+        actualHeight = widget.options.height + 85 + toolbarHeightCorrection;
       }
     });
     await controllerMap[widget.controller].evaluateJavascript(
@@ -143,10 +147,10 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       double visibleDecimal = await visibleStream.stream.first;
                       double newHeight = widget.options.height;
                       if (docHeight != null) {
-                        newHeight = (docHeight! + 40) * visibleDecimal;
+                        newHeight = (docHeight! + toolbarHeightCorrection) * visibleDecimal;
                       } else {
                         newHeight =
-                            (widget.options.height + 125) * visibleDecimal;
+                            (widget.options.height + 85 + toolbarHeightCorrection) * visibleDecimal;
                       }
                       await controller.evaluateJavascript(
                           source:
@@ -422,20 +426,19 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                 resetHeight();
                               } else {
                                 docHeight = double.tryParse(height.first.toString());
-                                print(height.first.toString());
                                 if (docHeight != null && docHeight! > 0 && mounted) {
                                   setState(() {
-                                    actualHeight = docHeight! + 40.0;
+                                    actualHeight = docHeight! + toolbarHeightCorrection;
                                   });
                                 } else {
-                                  docHeight = actualHeight - 40;
+                                  docHeight = actualHeight - toolbarHeightCorrection;
                                 }
                               }
                             });
                         controller.evaluateJavascript(
                             source: "var height = document.body.scrollHeight; window.flutter_inappwebview.callHandler('setHeight', height);");
                       } else {
-                        docHeight = actualHeight - 40;
+                        docHeight = actualHeight - toolbarHeightCorrection;
                       }
                       //reset the editor's height if the keyboard disappears at any point
                       if (widget.options.adjustHeightForKeyboard) {
@@ -446,12 +449,12 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                             .listen((bool visible) {
                           if (!visible &&
                               docHeight != null &&
-                              actualHeight != docHeight! + 40) {
+                              actualHeight != docHeight! + toolbarHeightCorrection) {
                             controller.clearFocus();
                             resetHeight();
                           } else if (!visible &&
                               docHeight == null &&
-                              actualHeight != widget.options.height + 125) {
+                              actualHeight != widget.options.height + 85 + toolbarHeightCorrection) {
                             controller.clearFocus();
                             resetHeight();
                           }

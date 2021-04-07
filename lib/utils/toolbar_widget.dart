@@ -11,24 +11,27 @@ class ToolbarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 4, right: 4, bottom: 8, top: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          toolbarIcon(context, Icons.content_copy, "Copy", onTap: () async {
-            String? data = await controller.getText();
-            Clipboard.setData(new ClipboardData(text: data));
-          }),
-          toolbarIcon(context, Icons.content_paste, "Paste", onTap: () async {
-            ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
-            if (data != null) {
-              String text = data.text!;
-              controller.insertHtml(text);
-            }
-          }),
-        ],
-      ),
+    return Container(
+      height: 40,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 4, right: 4, bottom: 8, top: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            toolbarIcon(context, Icons.content_copy, "Copy", onTap: () async {
+              String? data = await controller.getText();
+              Clipboard.setData(new ClipboardData(text: data));
+            }),
+            toolbarIcon(context, Icons.content_paste, "Paste", onTap: () async {
+              ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
+              if (data != null) {
+                String text = data.text!;
+                controller.insertHtml(text);
+              }
+            }),
+          ],
+        ),
+      )
     );
   }
 }
