@@ -24,4 +24,4 @@ Map<HtmlEditorController, dynamic> controllerMap = {};
 
 /// Manages the notification type for a notification displayed at the bottom of
 /// the editor
-enum NotificationType {info, warning, success, danger, plaintext}
+enum NotificationType { info, warning, success, danger, plaintext }

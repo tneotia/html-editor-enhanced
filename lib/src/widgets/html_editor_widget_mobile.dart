@@ -147,10 +147,13 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       double visibleDecimal = await visibleStream.stream.first;
                       double newHeight = widget.options.height;
                       if (docHeight != null) {
-                        newHeight = (docHeight! + toolbarHeightCorrection) * visibleDecimal;
+                        newHeight = (docHeight! + toolbarHeightCorrection) *
+                            visibleDecimal;
                       } else {
-                        newHeight =
-                            (widget.options.height + 85 + toolbarHeightCorrection) * visibleDecimal;
+                        newHeight = (widget.options.height +
+                                85 +
+                                toolbarHeightCorrection) *
+                            visibleDecimal;
                       }
                       await controller.evaluateJavascript(
                           source:
@@ -204,7 +207,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                             controller.addJavaScriptHandler(
                                 handlerName: 'getSuggestions',
                                 callback: (value) {
-                                  return p.getSuggestionsMobile!.call(value.first.toString())
+                                  return p.getSuggestionsMobile!
+                                      .call(value.first.toString())
                                       .toString()
                                       .replaceAll("[", "")
                                       .replaceAll("]", "");
@@ -425,18 +429,24 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                               if (height.first == "reset") {
                                 resetHeight();
                               } else {
-                                docHeight = double.tryParse(height.first.toString());
-                                if (docHeight != null && docHeight! > 0 && mounted) {
+                                docHeight =
+                                    double.tryParse(height.first.toString());
+                                if (docHeight != null &&
+                                    docHeight! > 0 &&
+                                    mounted) {
                                   setState(() {
-                                    actualHeight = docHeight! + toolbarHeightCorrection;
+                                    actualHeight =
+                                        docHeight! + toolbarHeightCorrection;
                                   });
                                 } else {
-                                  docHeight = actualHeight - toolbarHeightCorrection;
+                                  docHeight =
+                                      actualHeight - toolbarHeightCorrection;
                                 }
                               }
                             });
                         controller.evaluateJavascript(
-                            source: "var height = document.body.scrollHeight; window.flutter_inappwebview.callHandler('setHeight', height);");
+                            source:
+                                "var height = document.body.scrollHeight; window.flutter_inappwebview.callHandler('setHeight', height);");
                       } else {
                         docHeight = actualHeight - toolbarHeightCorrection;
                       }
@@ -449,12 +459,16 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                             .listen((bool visible) {
                           if (!visible &&
                               docHeight != null &&
-                              actualHeight != docHeight! + toolbarHeightCorrection) {
+                              actualHeight !=
+                                  docHeight! + toolbarHeightCorrection) {
                             controller.clearFocus();
                             resetHeight();
                           } else if (!visible &&
                               docHeight == null &&
-                              actualHeight != widget.options.height + 85 + toolbarHeightCorrection) {
+                              actualHeight !=
+                                  widget.options.height +
+                                      85 +
+                                      toolbarHeightCorrection) {
                             controller.clearFocus();
                             resetHeight();
                           }
@@ -605,7 +619,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
       controllerMap[widget.controller].addJavaScriptHandler(
           handlerName: 'onBeforeCommand',
           callback: (contents) {
-              c.onBeforeCommand!.call(contents.first.toString());
+            c.onBeforeCommand!.call(contents.first.toString());
           });
     }
     if (c.onChangeCodeview != null) {
@@ -669,32 +683,25 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
       controllerMap[widget.controller].addJavaScriptHandler(
           handlerName: 'onImageUploadError',
           callback: (args) {
-            if (!args.first
-                .toString()
-                .startsWith("{")) {
+            if (!args.first.toString().startsWith("{")) {
               c.onImageUploadError!.call(
                   null,
                   args.first,
                   args.last.contains("base64")
                       ? UploadError.jsException
-                      : args.last
-                      .contains("unsupported")
-                      ? UploadError.unsupportedFile
-                      : UploadError
-                      .exceededMaxSize);
+                      : args.last.contains("unsupported")
+                          ? UploadError.unsupportedFile
+                          : UploadError.exceededMaxSize);
             } else {
-              FileUpload file = fileUploadFromJson(
-                  args.first.toString());
+              FileUpload file = fileUploadFromJson(args.first.toString());
               c.onImageUploadError!.call(
                   file,
                   null,
                   args.last.contains("base64")
                       ? UploadError.jsException
-                      : args.last
-                      .contains("unsupported")
-                      ? UploadError.unsupportedFile
-                      : UploadError
-                      .exceededMaxSize);
+                      : args.last.contains("unsupported")
+                          ? UploadError.unsupportedFile
+                          : UploadError.exceededMaxSize);
             }
           });
     }

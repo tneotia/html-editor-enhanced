@@ -1,3 +1,23 @@
+## [1.8.0] - 2021-04-07
+* Add support for `getSuggestionsMobile` (Summernote @ Mentions Plugin) - allows you to programatically return the list of mentions.
+   * Only supported on mobile.
+   * [BREAKING] renamed `mentions` to `mentionsWeb` as a result of this change 
+* Added support for the remainder of Summernote callbacks:
+   * `onBeforeCommand`
+   * `onChangeCodeview`
+   * `onDialogShown`
+   * `onImageUploadError`
+   * `onMouseDown`
+   * `onMouseUp`
+   * `onScroll`
+   * See the README for how these work.
+* Added a few new functions:
+   * recalculateHeight(): recalculates the editor height and applies it
+   * addNotification(): adds a notification bar to the bottom of the editor in a specified style with specified text
+   * removeNotification(): removes the current notification from the bottom of the editor
+* Fixed blank space at the bottom of the editor when `showBottomToolbar: false`
+* Fixed 'Android resource linking failed' (bumped flutter_inappwebview to 5.3.1+1)
+
 ## [1.7.1] - 2021-03-26
 * Fixed bug where initial text would not be inserted and default toolbar would be shown regardless of editor options
 * Significantly improved keyboard height detection (detect when keyboard comes up and goes down)

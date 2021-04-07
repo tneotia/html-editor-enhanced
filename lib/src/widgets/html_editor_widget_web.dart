@@ -502,7 +502,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     String callbacks = "";
     if (c.onBeforeCommand != null) {
       callbacks = callbacks +
-        """
+          """
           \$('#summernote-2').on('summernote.before.command', function(_, contents, \$editable) {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onBeforeCommand", "contents": contents}), "*");
           });\n
@@ -671,8 +671,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                 data["error"].contains("base64")
                     ? UploadError.jsException
                     : data["error"].contains("unsupported")
-                    ? UploadError.unsupportedFile
-                    : UploadError.exceededMaxSize);
+                        ? UploadError.unsupportedFile
+                        : UploadError.exceededMaxSize);
           } else {
             Map<String, dynamic> map = {
               'lastModified': data["lastModified"],
@@ -689,8 +689,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                 data["error"].contains("base64")
                     ? UploadError.jsException
                     : data["error"].contains("unsupported")
-                    ? UploadError.unsupportedFile
-                    : UploadError.exceededMaxSize);
+                        ? UploadError.unsupportedFile
+                        : UploadError.exceededMaxSize);
           }
         }
         if (data["type"].contains("onKeyDown")) {

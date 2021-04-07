@@ -178,10 +178,8 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// and the notificationType determines how the alert is displayed.
   void addNotification(String html, NotificationType notificationType) {
     if (notificationType == NotificationType.plaintext)
-      _evaluateJavascriptWeb(data: {
-        "type": "toIframe: addNotification",
-        "html": html
-      });
+      _evaluateJavascriptWeb(
+          data: {"type": "toIframe: addNotification", "html": html});
     else
       _evaluateJavascriptWeb(data: {
         "type": "toIframe: addNotification",
@@ -193,9 +191,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
   /// Remove the current notification from the bottom of the editor
   void removeNotification() {
-    _evaluateJavascriptWeb(data: {
-      "type": "toIframe: removeNotification"
-    });
+    _evaluateJavascriptWeb(data: {"type": "toIframe: removeNotification"});
     recalculateHeight();
   }
 
