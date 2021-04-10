@@ -86,15 +86,17 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
 
   /// resets the height of the editor to the original height
   void resetHeight() async {
-    setState(() {
-      if (docHeight != null) {
-        actualHeight = docHeight! + toolbarHeightCorrection;
-      } else {
-        actualHeight = widget.options.height + 85 + toolbarHeightCorrection;
-      }
-    });
-    await controllerMap[widget.controller].evaluateJavascript(
-        source: "\$('div.note-editable').height(${widget.options.height});");
+    if (mounted) {
+      setState(() {
+        if (docHeight != null) {
+          actualHeight = docHeight! + toolbarHeightCorrection;
+        } else {
+          actualHeight = widget.options.height + 85 + toolbarHeightCorrection;
+        }
+      });
+      await controllerMap[widget.controller].evaluateJavascript(
+          source: "\$('div.note-editable').height(${widget.options.height});");
+    }
   }
 
   @override
@@ -460,7 +462,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                           if (!visible &&
                               docHeight != null &&
                               actualHeight !=
-                                  docHeight! + toolbarHeightCorrection) {
+                                  docHeight! + toolbarHeightCorrection
+                              && mounted) {
                             controller.clearFocus();
                             resetHeight();
                           } else if (!visible &&
@@ -468,7 +471,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                               actualHeight !=
                                   widget.options.height +
                                       85 +
-                                      toolbarHeightCorrection) {
+                                      toolbarHeightCorrection && mounted) {
                             controller.clearFocus();
                             resetHeight();
                           }
