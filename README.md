@@ -27,6 +27,12 @@ Note that the API shown in this README.md file shows only a part of the document
   </tr>
 </table>
 
+<br/>
+
+### [v2.0.0 Roadmap](https://github.com/tneotia/html-editor-enhanced/wiki/Roadmap)
+
+<br/>
+
 ## Table of Contents:
 
 - ["Enhanced"? In what ways?](#in-what-ways-is-this-package-enhanced)
