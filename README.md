@@ -27,6 +27,20 @@ Note that the API shown in this README.md file shows only a part of the document
   </tr>
 </table>
 
+<br/>
+
+## Roadmap
+
+<details><summary>Roadmap details and progress updates:</summary>
+
+### [v2.0.0 Roadmap Wiki Page](https://github.com/tneotia/html-editor-enhanced/wiki/Roadmap)
+
+Recent update: **Initial sample of native controls!**
+
+<img alt="Native Controls Sample GIF" src="https://user-images.githubusercontent.com/50850142/114736473-1dcfda80-9d14-11eb-81b7-661f65b7a04b.gif" width="250"/></td>
+
+</details>
+
 ## Table of Contents:
 
 - ["Enhanced"? In what ways?](#in-what-ways-is-this-package-enhanced)
