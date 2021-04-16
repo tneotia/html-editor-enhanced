@@ -36,6 +36,11 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// outside of the package itself for endless control and customization.
   InAppWebViewController? get editorController => controllerMap[this];
 
+  /// A function to quickly call a document.execCommand function in a readable format
+  void execCommand(String command, {String? argument}) {
+    _evaluateJavascript(source: "document.execCommand('$command', false${argument == null ? "" : ", '$argument'"});");
+  }
+
   /// Gets the text from the editor and returns it as a [String].
   Future<String> getText() async {
     String? text = await _evaluateJavascript(

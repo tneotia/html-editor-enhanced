@@ -1,3 +1,7 @@
+.note-toolbar {
+    display: none !important;
+}
+
 @font-face {
   font-family: summernote;
   font-style: normal;
