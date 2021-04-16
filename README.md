@@ -35,9 +35,9 @@ Note that the API shown in this README.md file shows only a part of the document
 
 ### [v2.0.0 Roadmap Wiki Page](https://github.com/tneotia/html-editor-enhanced/wiki/Roadmap)
 
-Recent update: **Initial sample of native controls!**
+Recent update: **Native controls UI on mobile is complete!**
 
-<img alt="Native Controls Sample GIF" src="https://user-images.githubusercontent.com/50850142/114736473-1dcfda80-9d14-11eb-81b7-661f65b7a04b.gif" width="250"/></td>
+<img alt="Native Controls UI" src="https://user-images.githubusercontent.com/50850142/115062229-18ab9080-9eb8-11eb-95f1-f0e3ead3a825.png" width="250"/></td>
 
 </details>
 
