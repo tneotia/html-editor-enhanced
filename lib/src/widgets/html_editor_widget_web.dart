@@ -486,12 +486,6 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                                   : widget.options.height);
                         }
                       }))),
-          widget.options.showBottomToolbar
-              ? Divider(height: 0)
-              : Container(height: 0, width: 0),
-          widget.options.showBottomToolbar
-              ? ToolbarWidget(controller: widget.controller)
-              : Container(height: 0, width: 0),
         ],
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:html_editor_enhanced/html_editor.dart';
 
 /// Options class for the html editor.
 class HtmlEditorOptions {
@@ -15,6 +16,8 @@ class HtmlEditorOptions {
     this.height = 380,
     this.shouldEnsureVisible = false,
     this.showBottomToolbar = true,
+    this.toolbarType = ToolbarType.nativeScrollable,
+    this.toolbarPosition = ToolbarPosition.aboveEditor,
   });
 
   /// The editor will automatically adjust its height when the keyboard is active
@@ -75,4 +78,10 @@ class HtmlEditorOptions {
   ///
   /// The default value is true.
   final bool showBottomToolbar;
+
+  /// Controls how the toolbar displays. See [ToolbarType] for more details.
+  final ToolbarType toolbarType;
+
+  /// Controls where the toolbar is positioned. See [ToolbarPosition] for more details.
+  final ToolbarPosition toolbarPosition;
 }

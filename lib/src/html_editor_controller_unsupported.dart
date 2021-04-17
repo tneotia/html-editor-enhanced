@@ -51,6 +51,9 @@ class HtmlEditorController {
   /// enables the Html editor
   void enable() {}
 
+  /// A function to quickly call a document.execCommand function in a readable format
+  void execCommand(String command, {String? argument}) {}
+
   /// Gets the text from the editor and returns it as a [String].
   Future<String?> getText() => Future.value(null);
 
