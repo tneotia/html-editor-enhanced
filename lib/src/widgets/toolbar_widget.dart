@@ -13,7 +13,7 @@ import 'package:numberpicker/numberpicker.dart';
 class ToolbarWidget extends StatefulWidget {
   /// The [HtmlEditorController] is mainly used to call the [execCommand] method
   final HtmlEditorController controller;
-  final HtmlEditorOptions options;
+  final HtmlToolbarOptions options;
 
   const ToolbarWidget({
     Key? key,

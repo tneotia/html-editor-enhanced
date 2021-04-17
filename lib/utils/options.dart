@@ -1,23 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 
-/// Options class for the html editor.
+/// Options that modify the editor and its behavior
 class HtmlEditorOptions {
   const HtmlEditorOptions({
     this.autoAdjustHeight = true,
     this.adjustHeightForKeyboard = true,
     this.darkMode,
-    this.decoration = const BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(4)),
-      border: Border.fromBorderSide(
-          BorderSide(color: const Color(0xffececec), width: 1)),
-    ),
     this.filePath,
-    this.height = 380,
+    this.hint,
+    this.initialText,
     this.shouldEnsureVisible = false,
-    this.showBottomToolbar = true,
-    this.toolbarType = ToolbarType.nativeScrollable,
-    this.toolbarPosition = ToolbarPosition.aboveEditor,
   });
 
   /// The editor will automatically adjust its height when the keyboard is active
@@ -45,10 +38,6 @@ class HtmlEditorOptions {
   /// The default value is null (switches with system).
   final bool? darkMode;
 
-  /// The BoxDecoration to use around the Html editor. By default, the widget
-  /// uses a thin, dark, rounded rectangle border around the widget.
-  final BoxDecoration decoration;
-
   /// Specify the file path to your custom html editor code.
   ///
   /// Make sure to set the editor's HTML ID to be 'summernote-2'.
@@ -58,11 +47,12 @@ class HtmlEditorOptions {
   /// See the README for more details on this.
   final String? filePath;
 
-  /// Sets the height of the Html editor space. It does not take the toolbar
-  /// for the editor into account.
-  ///
-  /// The default value is 380.
-  final double height;
+  /// Sets the Html editor's hint (text displayed when there is no text in the
+  /// editor).
+  final String? hint;
+
+  /// The initial text that is be supplied to the Html editor.
+  final String? initialText;
 
   /// Specifies whether the widget should scroll to reveal the HTML editor when
   /// it is focused or the text content is changed.
@@ -72,16 +62,74 @@ class HtmlEditorOptions {
   /// SingleChildScrollView, etc.) for this to work. Otherwise, nothing will
   /// happen.
   final bool shouldEnsureVisible;
+}
 
-  /// Specifies whether the bottom toolbar for picking an image or copy/pasting
-  /// is shown on the widget.
-  ///
-  /// The default value is true.
-  final bool showBottomToolbar;
+/// Options that modify the toolbar and its behavior
+class HtmlToolbarOptions {
+  const HtmlToolbarOptions({
+    this.customToolbarButtons = const [],
+    this.defaultToolbarButtons = const [
+      Style(),
+      Font(buttons: [
+        FontButtons.bold,
+        FontButtons.underline,
+        FontButtons.clear
+      ]),
+      ColorBar(buttons: [ColorButtons.color]),
+      Paragraph(buttons: [
+        ParagraphButtons.ul,
+        ParagraphButtons.ol,
+        ParagraphButtons.paragraph
+      ]),
+      Insert(buttons: [
+        InsertButtons.link,
+        InsertButtons.picture,
+        InsertButtons.video,
+        InsertButtons.table
+      ]),
+      Misc(buttons: [
+        MiscButtons.fullscreen,
+        MiscButtons.codeview,
+        MiscButtons.help
+      ])
+    ],
+    this.toolbarType = ToolbarType.nativeScrollable,
+    this.toolbarPosition = ToolbarPosition.aboveEditor,
+  });
+
+  /// Allows you to create your own buttons that are added to the end of the
+  /// default buttons list
+  final List<Widget> customToolbarButtons;
+
+  /// Sets which options are visible in the toolbar for the editor.
+  final List<Toolbar> defaultToolbarButtons;
 
   /// Controls how the toolbar displays. See [ToolbarType] for more details.
   final ToolbarType toolbarType;
 
   /// Controls where the toolbar is positioned. See [ToolbarPosition] for more details.
   final ToolbarPosition toolbarPosition;
+}
+
+/// Other options such as the height of the widget and the decoration surrounding it
+class OtherOptions {
+  const OtherOptions({
+    this.decoration = const BoxDecoration(
+      borderRadius: BorderRadius.all(Radius.circular(4)),
+      border: Border.fromBorderSide(
+          BorderSide(color: const Color(0xffececec), width: 1)),
+    ),
+    this.height = 400,
+  });
+
+  /// The BoxDecoration to use around the Html editor. By default, the widget
+  /// uses a thin, dark, rounded rectangle border around the widget.
+  final BoxDecoration decoration;
+
+  /// Sets the height of the Html editor widget. This takes the toolbar into
+  /// account (i.e. this sets the height of the entire widget rather than the
+  /// editor space)
+  ///
+  /// The default value is 400.
+  final double height;
 }

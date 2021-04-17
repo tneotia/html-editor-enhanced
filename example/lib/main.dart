@@ -68,10 +68,17 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
             children: <Widget>[
               HtmlEditor(
                 controller: controller,
-                hint: "Your text here...",
-                //initialText: "<p>text content initial, if any</p>",
-                options:
-                    HtmlEditorOptions(height: 450, shouldEnsureVisible: true),
+                htmlEditorOptions: HtmlEditorOptions(
+                    hint: "Your text here...",
+                    shouldEnsureVisible: true,
+                    //initialText: "<p>text content initial, if any</p>",
+                ),
+                htmlToolbarOptions: HtmlToolbarOptions(
+                    toolbarPosition: ToolbarPosition.aboveEditor, //by default
+                    toolbarType: ToolbarType.nativeScrollable, //by default
+                ),
+                otherOptions:
+                    OtherOptions(height: 550),
                 callbacks: Callbacks(onBeforeCommand: (String? currentHtml) {
                   print("html before change is $currentHtml");
                 }, onChange: (String? changed) {
