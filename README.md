@@ -35,9 +35,18 @@ Note that the API shown in this README.md file shows only a part of the document
 
 ### [v2.0.0 Roadmap Wiki Page](https://github.com/tneotia/html-editor-enhanced/wiki/Roadmap)
 
-Recent update: **Native controls UI on mobile is complete!**
+Recent update: **Native controls UI on mobile is (mostly) complete! 2 different styles:**
 
-<img alt="Native Controls UI" src="https://user-images.githubusercontent.com/50850142/115062229-18ab9080-9eb8-11eb-95f1-f0e3ead3a825.png" width="250"/></td>
+<table>
+  <tr>
+    <td align="center">Native Controls Gridview</td>
+    <td align="center">Native Controls Scrollview</td>
+  </tr>
+  <tr>
+    <td><img alt="Native Controls Gridview" src="https://user-images.githubusercontent.com/50850142/115062229-18ab9080-9eb8-11eb-95f1-f0e3ead3a825.png" width="250"/></td>
+    <td><img alt="Native Controls Scrollview" src="https://user-images.githubusercontent.com/50850142/115120906-eb291a80-9f7d-11eb-9689-fc046b9353f7.gif" width="250"/></td>
+  </tr>
+</table>
 
 </details>
 
