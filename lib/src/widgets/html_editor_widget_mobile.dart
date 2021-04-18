@@ -165,10 +165,6 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                     if (url.contains(filePath)) {
                       String summernoteToolbar = "[\n";
                       String summernoteCallbacks = "callbacks: {";
-                      for (Toolbar t in widget.htmlToolbarOptions.defaultToolbarButtons) {
-                        summernoteToolbar = summernoteToolbar +
-                            "['${t.getGroupName()}', ${t.getButtons(listStyles: widget.plugins.whereType<SummernoteListStyles>().isNotEmpty)}],\n";
-                      }
                       if (widget.plugins.isNotEmpty) {
                         summernoteToolbar = summernoteToolbar + "['plugins', [";
                         for (Plugins p in widget.plugins) {

@@ -65,30 +65,14 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   }
 
   void initSummernote() async {
-    String summernoteToolbar = "[\n";
     String headString = "";
     String summernoteCallbacks = "callbacks: {";
     int maximumFileSize = 10485760;
-    for (Toolbar t in widget.htmlToolbarOptions.defaultToolbarButtons) {
-      summernoteToolbar = summernoteToolbar +
-          "['${t.getGroupName()}', ${t.getButtons(listStyles: widget.plugins.whereType<SummernoteListStyles>().isNotEmpty)}],\n";
-    }
-    if (widget.plugins.isNotEmpty) {
-      summernoteToolbar = summernoteToolbar + "['plugins', [";
-      for (Plugins p in widget.plugins) {
-        summernoteToolbar = summernoteToolbar +
-            (p.getToolbarString().isNotEmpty
-                ? "'${p.getToolbarString()}'"
-                : "") +
-            (p == widget.plugins.last
-                ? "]]\n"
-                : p.getToolbarString().isNotEmpty
-                    ? ", "
-                    : "");
-        headString = headString + p.getHeadString() + "\n";
-        if (p is SummernoteAtMention) {
-          summernoteCallbacks = summernoteCallbacks +
-              """
+    for (Plugins p in widget.plugins) {
+      headString = headString + p.getHeadString() + "\n";
+      if (p is SummernoteAtMention) {
+        summernoteCallbacks = summernoteCallbacks +
+            """
             \nsummernoteAtMention: {
               getSuggestions: (value) => {
                 const mentions = ${p.getMentionsWeb()};
@@ -101,23 +85,23 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
               },
             },
           """;
-          if (p.onSelect != null) {
-            html.window.onMessage.listen((event) {
-              var data = json.decode(event.data);
-              if (data["type"] != null &&
-                  data["type"].contains("toDart:") &&
-                  data["view"] == createdViewId &&
-                  data["type"].contains("onSelectMention")) {
-                p.onSelect!.call(data["value"]);
-              }
-            });
-          }
+        if (p.onSelect != null) {
+          html.window.onMessage.listen((event) {
+            var data = json.decode(event.data);
+            if (data["type"] != null &&
+                data["type"].contains("toDart:") &&
+                data["view"] == createdViewId &&
+                data["type"].contains("onSelectMention")) {
+              p.onSelect!.call(data["value"]);
+            }
+          });
         }
-        if (p is SummernoteFile) {
-          maximumFileSize = p.maximumFileSize;
-          if (p.onFileUpload != null) {
-            summernoteCallbacks = summernoteCallbacks +
-                """
+      }
+      if (p is SummernoteFile) {
+        maximumFileSize = p.maximumFileSize;
+        if (p.onFileUpload != null) {
+          summernoteCallbacks = summernoteCallbacks +
+              """
                 onFileUpload: function(files) {
                   var reader = new FileReader();
                   var base64 = "<an error occurred>";
@@ -147,44 +131,44 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                   reader.readAsDataURL(files[0]);
                 },
             """;
-            html.window.onMessage.listen((event) {
-              var data = json.decode(event.data);
-              if (data["type"] != null &&
-                  data["type"].contains("toDart: onFileUpload") &&
-                  data["view"] == createdViewId) {
-                Map<String, dynamic> map = {
-                  'lastModified': data["lastModified"],
-                  'lastModifiedDate': data["lastModifiedDate"],
-                  'name': data["name"],
-                  'size': data["size"],
-                  'type': data["mimeType"],
-                  'base64': data["base64"]
-                };
-                String jsonStr = json.encode(map);
-                FileUpload file = fileUploadFromJson(jsonStr);
-                p.onFileUpload!.call(file);
-              }
-            });
-          }
-          if (p.onFileLinkInsert != null) {
-            summernoteCallbacks = summernoteCallbacks +
-                """
+          html.window.onMessage.listen((event) {
+            var data = json.decode(event.data);
+            if (data["type"] != null &&
+                data["type"].contains("toDart: onFileUpload") &&
+                data["view"] == createdViewId) {
+              Map<String, dynamic> map = {
+                'lastModified': data["lastModified"],
+                'lastModifiedDate': data["lastModifiedDate"],
+                'name': data["name"],
+                'size': data["size"],
+                'type': data["mimeType"],
+                'base64': data["base64"]
+              };
+              String jsonStr = json.encode(map);
+              FileUpload file = fileUploadFromJson(jsonStr);
+              p.onFileUpload!.call(file);
+            }
+          });
+        }
+        if (p.onFileLinkInsert != null) {
+          summernoteCallbacks = summernoteCallbacks +
+              """
                 onFileLinkInsert: function(link) {
                   window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onFileLinkInsert", "link": link}), "*");
                 },
             """;
-            html.window.onMessage.listen((event) {
-              var data = json.decode(event.data);
-              if (data["type"] != null &&
-                  data["type"].contains("toDart: onFileLinkInsert") &&
-                  data["view"] == createdViewId) {
-                p.onFileLinkInsert!.call(data["link"]);
-              }
-            });
-          }
-          if (p.onFileUploadError != null) {
-            summernoteCallbacks = summernoteCallbacks +
-                """
+          html.window.onMessage.listen((event) {
+            var data = json.decode(event.data);
+            if (data["type"] != null &&
+                data["type"].contains("toDart: onFileLinkInsert") &&
+                data["view"] == createdViewId) {
+              p.onFileLinkInsert!.call(data["link"]);
+            }
+          });
+        }
+        if (p.onFileUploadError != null) {
+          summernoteCallbacks = summernoteCallbacks +
+              """
                 onFileUploadError: function(file, error) {
                   if (typeof file === 'string') {
                     window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onFileUploadError", "base64": file, "error": error}), "*");
@@ -193,42 +177,41 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                   }
                 },
             """;
-            html.window.onMessage.listen((event) {
-              var data = json.decode(event.data);
-              if (data["type"] != null &&
-                  data["type"].contains("toDart: onFileUploadError") &&
-                  data["view"] == createdViewId) {
-                if (data["base64"] != null) {
-                  p.onFileUploadError!.call(
-                      null,
-                      data["base64"],
-                      data["error"].contains("base64")
-                          ? UploadError.jsException
-                          : data["error"].contains("unsupported")
-                              ? UploadError.unsupportedFile
-                              : UploadError.exceededMaxSize);
-                } else {
-                  Map<String, dynamic> map = {
-                    'lastModified': data["lastModified"],
-                    'lastModifiedDate': data["lastModifiedDate"],
-                    'name': data["name"],
-                    'size': data["size"],
-                    'type': data["mimeType"]
-                  };
-                  String jsonStr = json.encode(map);
-                  FileUpload file = fileUploadFromJson(jsonStr);
-                  p.onFileUploadError!.call(
-                      file,
-                      null,
-                      data["error"].contains("base64")
-                          ? UploadError.jsException
-                          : data["error"].contains("unsupported")
-                              ? UploadError.unsupportedFile
-                              : UploadError.exceededMaxSize);
-                }
+          html.window.onMessage.listen((event) {
+            var data = json.decode(event.data);
+            if (data["type"] != null &&
+                data["type"].contains("toDart: onFileUploadError") &&
+                data["view"] == createdViewId) {
+              if (data["base64"] != null) {
+                p.onFileUploadError!.call(
+                    null,
+                    data["base64"],
+                    data["error"].contains("base64")
+                        ? UploadError.jsException
+                        : data["error"].contains("unsupported")
+                        ? UploadError.unsupportedFile
+                        : UploadError.exceededMaxSize);
+              } else {
+                Map<String, dynamic> map = {
+                  'lastModified': data["lastModified"],
+                  'lastModifiedDate': data["lastModifiedDate"],
+                  'name': data["name"],
+                  'size': data["size"],
+                  'type': data["mimeType"]
+                };
+                String jsonStr = json.encode(map);
+                FileUpload file = fileUploadFromJson(jsonStr);
+                p.onFileUploadError!.call(
+                    file,
+                    null,
+                    data["error"].contains("base64")
+                        ? UploadError.jsException
+                        : data["error"].contains("unsupported")
+                        ? UploadError.unsupportedFile
+                        : UploadError.exceededMaxSize);
               }
-            });
-          }
+            }
+          });
         }
       }
     }
@@ -287,7 +270,6 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             """;
       }
     }
-    summernoteToolbar = summernoteToolbar + "],";
     summernoteCallbacks = summernoteCallbacks + "}";
     String darkCSS = "";
     if ((Theme.of(widget.initBC).brightness == Brightness.dark ||
@@ -306,7 +288,6 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             placeholder: "${widget.htmlEditorOptions.hint}",
             tabsize: 2,
             height: ${widget.otherOptions.height},
-            toolbar: $summernoteToolbar
             disableGrammar: false,
             spellCheck: false,
             maximumFileSize: $maximumFileSize,

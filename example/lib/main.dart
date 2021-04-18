@@ -76,6 +76,15 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                 htmlToolbarOptions: HtmlToolbarOptions(
                     toolbarPosition: ToolbarPosition.aboveEditor, //by default
                     toolbarType: ToolbarType.nativeScrollable, //by default
+                    defaultToolbarButtons: [
+                      FontButtons(bold: false, italic: false),
+                      StyleButtons(),
+                      ColorButtons(foregroundColor: false),
+                      ListButtons(ul: false),
+                      ParagraphButtons(alignLeft: false, alignJustify: false, increaseIndent: false),
+                      InsertButtons(link: false, video: false, hr: false),
+                      OtherButtons(fullscreen: false, codeview: false, help: false, copy: false)
+                    ],
                 ),
                 otherOptions:
                     OtherOptions(height: 550),

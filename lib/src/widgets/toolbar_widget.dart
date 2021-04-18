@@ -31,24 +31,24 @@ class ToolbarWidget extends StatefulWidget {
 class ToolbarWidgetState extends State<ToolbarWidget> {
   /// List that controls which [ToggleButtons] are selected for
   /// bold/italic/underline/clear styles
-  final fontSelected = List<bool>.filled(4, false);
+  List<bool> fontSelected = List<bool>.filled(4, false);
 
   /// List that controls which [ToggleButtons] are selected for
   /// strikthrough/superscript/subscript
-  final miscFontSelected = List<bool>.filled(3, false);
+  List<bool> miscFontSelected = List<bool>.filled(3, false);
 
   /// List that controls which [ToggleButtons] are selected for
   /// forecolor/backcolor
-  final colorSelected = List<bool>.filled(2, false);
+  List<bool> colorSelected = List<bool>.filled(2, false);
 
   /// List that controls which [ToggleButtons] are selected for
   /// ordered/unordered list
-  final paragraphSelected = List<bool>.filled(2, false);
+  List<bool> listSelected = List<bool>.filled(2, false);
 
   /// List that controls which [ToggleButtons] are selected for
   /// fullscreen, codeview, undo, redo, and help. Fullscreen and codeview
   /// are the only buttons that will ever be selected.
-  final miscSelected = List<bool>.filled(5, false);
+  List<bool> miscSelected = List<bool>.filled(5, false);
 
   /// List that controls which [ToggleButtons] are selected for
   /// justify left/right/center/full.
@@ -81,12 +81,31 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   @override
   void initState() {
     updateToolbar = _updateToolbar;
+    for (Toolbar t in widget.options.defaultToolbarButtons) {
+      if (t is FontButtons) {
+        fontSelected = List<bool>.filled(t.getIcons1().length, false);
+        miscFontSelected = List<bool>.filled(t.getIcons2().length, false);
+      }
+      if (t is ColorButtons) {
+        colorSelected = List<bool>.filled(t.getIcons().length, false);
+      }
+      if (t is ListButtons) {
+        listSelected = List<bool>.filled(t.getIcons().length, false);
+      }
+      if (t is OtherButtons) {
+        miscSelected = List<bool>.filled(t.getIcons1().length, false);
+      }
+      if (t is ParagraphButtons) {
+        alignSelected = List<bool>.filled(t.getIcons1().length, false);
+      }
+    }
     super.initState();
   }
 
   /// Updates the toolbar from the JS handler on mobile and the onMessage
   /// listener on web
   void _updateToolbar(Map<String, dynamic> json) {
+    print(json);
     //get parent element
     String parentElem = json['style'] ?? "";
     //get font size
@@ -167,491 +186,552 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
     }
     //use the remaining bool lists to update the selected items accordingly
     setState(() {
-      fontSelected[0] = fontList[0] ?? false;
-      fontSelected[1] = fontList[1] ?? false;
-      fontSelected[2] = fontList[2] ?? false;
-      miscFontSelected[0] = miscFontList[0] ?? false;
-      miscFontSelected[1] = miscFontList[1] ?? false;
-      miscFontSelected[2] = miscFontList[2] ?? false;
-      paragraphSelected[0] = paragraphList[0] ?? false;
-      paragraphSelected[1] = paragraphList[1] ?? false;
-      alignSelected[0] = alignList[0] ?? false;
-      alignSelected[1] = alignList[1] ?? false;
-      alignSelected[2] = alignList[2] ?? false;
-      alignSelected[3] = alignList[3] ?? false;
+      for (Toolbar t in widget.options.defaultToolbarButtons) {
+        if (t is FontButtons) {
+          for (int i = 0; i < fontSelected.length; i++) {
+            if (t.getIcons1()[i].icon == Icons.format_bold) {
+              fontSelected[i] = fontList[0] ?? false;
+            }
+            if (t.getIcons1()[i].icon == Icons.format_italic) {
+              fontSelected[i] = fontList[1] ?? false;
+            }
+            if (t.getIcons1()[i].icon == Icons.format_underline) {
+              fontSelected[i] = fontList[2] ?? false;
+            }
+          }
+          for (int i = 0; i < miscFontSelected.length; i++) {
+            if (t.getIcons2()[i].icon == Icons.format_strikethrough) {
+              miscFontSelected[i] = miscFontList[0] ?? false;
+            }
+            if (t.getIcons2()[i].icon == Icons.superscript) {
+              miscFontSelected[i] = miscFontList[1] ?? false;
+            }
+            if (t.getIcons2()[i].icon == Icons.subscript) {
+              miscFontSelected[i] = miscFontList[2] ?? false;
+            }
+          }
+        }
+        if (t is ListButtons) {
+          for (int i = 0; i < listSelected.length; i++) {
+            if (t.getIcons()[i].icon == Icons.format_list_bulleted) {
+              listSelected[i] = paragraphList[0] ?? false;
+            }
+            if (t.getIcons()[i].icon == Icons.format_list_numbered) {
+              listSelected[i] = paragraphList[1] ?? false;
+            }
+          }
+        }
+        if (t is ParagraphButtons) {
+          for (int i = 0; i < alignSelected.length; i++) {
+            if (t.getIcons1()[i].icon == Icons.format_align_left) {
+              alignSelected[i] = alignList[0] ?? false;
+            }
+            if (t.getIcons1()[i].icon == Icons.format_align_center) {
+              alignSelected[i] = alignList[1] ?? false;
+            }
+            if (t.getIcons1()[i].icon == Icons.format_align_right) {
+              alignSelected[i] = alignList[2] ?? false;
+            }
+            if (t.getIcons1()[i].icon == Icons.format_align_justify) {
+              alignSelected[i] = alignList[3] ?? false;
+            }
+          }
+        }
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> children = [
-      Container(
-        padding: const EdgeInsets.only(left: 8.0),
-        height: 36,
-        decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            border: Border.all(color: ToggleButtonsTheme.of(context).borderColor ?? Colors.grey[800]!)
+    if (widget.options.toolbarType == ToolbarType.nativeGrid) {
+      return Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Wrap(
+          runSpacing: 5,
+          spacing: 5,
+          children: _buildChildren(),
         ),
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton<String>(
-            items: [
-              DropdownMenuItem(child: Text("Normal"), value: "p"),
-              DropdownMenuItem(child: Text("   Quote"), value: "blockquote"),
-              DropdownMenuItem(child: Text("   Code", style: TextStyle(fontFamily: "times")), value: "pre"),
-              DropdownMenuItem(child: Text("Header 1", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32)), value: "h1"),
-              DropdownMenuItem(child: Text("Header 2", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)), value: "h2"),
-              DropdownMenuItem(child: Text("Header 3", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)), value: "h3"),
-              DropdownMenuItem(child: Text("Header 4", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)), value: "h4"),
-              DropdownMenuItem(child: Text("Header 5", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)), value: "h5"),
-              DropdownMenuItem(child: Text("Header 6", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11)), value: "h6"),
+      );
+    } else {
+      return Container(
+        height: 39,
+        child: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: CustomScrollView(
+            scrollDirection: Axis.horizontal,
+            slivers: [
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: _buildChildren(),
+                ),
+              ),
             ],
-            value: fontSelectedItem,
-            onChanged: (String? changed) {
-              if (changed != null) {
-                widget.controller.execCommand('formatBlock', argument: changed);
-                setState(() {
-                  fontSelectedItem = changed;
-                });
-              }
-            },
           ),
         ),
-      ),
-      //todo font family??
-      Container(
-        padding: const EdgeInsets.only(left: 8.0),
-        height: 36,
-        decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            border: Border.all(color: ToggleButtonsTheme.of(context).borderColor ?? Colors.grey[800]!)
-        ),
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton<double>(
-            items: [
-              DropdownMenuItem(
-                  child: Text("${fontSizeUnitSelectedItem == "px" ? "11" : "8"} $fontSizeUnitSelectedItem"),
-                  value: 1
-              ),
-              DropdownMenuItem(
-                  child: Text("${fontSizeUnitSelectedItem == "px" ? "13" : "10"} $fontSizeUnitSelectedItem"),
-                  value: 2
-              ),
-              DropdownMenuItem(
-                  child: Text("${fontSizeUnitSelectedItem == "px" ? "16" : "12"} $fontSizeUnitSelectedItem"),
-                  value: 3
-              ),
-              DropdownMenuItem(
-                  child: Text("${fontSizeUnitSelectedItem == "px" ? "19" : "14"} $fontSizeUnitSelectedItem"),
-                  value: 4
-              ),
-              DropdownMenuItem(
-                  child: Text("${fontSizeUnitSelectedItem == "px" ? "24" : "18"} $fontSizeUnitSelectedItem"),
-                  value: 5
-              ),
-              DropdownMenuItem(
-                  child: Text("${fontSizeUnitSelectedItem == "px" ? "32" : "24"} $fontSizeUnitSelectedItem"),
-                  value: 6
-              ),
-              DropdownMenuItem(
-                  child: Text("${fontSizeUnitSelectedItem == "px" ? "48" : "36"} $fontSizeUnitSelectedItem"),
-                  value: 7
-              ),
-            ],
-            value: fontSizeSelectedItem,
-            onChanged: (double? changed) {
-              if (changed != null) {
-                int intChanged = changed.toInt();
-                switch (intChanged) {
-                  case 1:
-                    actualFontSizeSelectedItem = 11;
-                    break;
-                  case 2:
-                    actualFontSizeSelectedItem = 13;
-                    break;
-                  case 3:
-                    actualFontSizeSelectedItem = 16;
-                    break;
-                  case 4:
-                    actualFontSizeSelectedItem = 19;
-                    break;
-                  case 5:
-                    actualFontSizeSelectedItem = 24;
-                    break;
-                  case 6:
-                    actualFontSizeSelectedItem = 32;
-                    break;
-                  case 7:
-                    actualFontSizeSelectedItem = 48;
-                    break;
+      );
+    }
+  }
+
+  List<Widget> _buildChildren() {
+    List<Widget> toolbarChildren = [];
+    //todo font family??
+    for (Toolbar t in widget.options.defaultToolbarButtons) {
+      if (t is StyleButtons) {
+        toolbarChildren.add(Container(
+          padding: const EdgeInsets.only(left: 8.0),
+          height: 36,
+          decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              border: Border.all(color: ToggleButtonsTheme.of(context).borderColor ?? Colors.grey[800]!)
+          ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              items: [
+                DropdownMenuItem(child: Text("Normal"), value: "p"),
+                DropdownMenuItem(child: Text("   Quote"), value: "blockquote"),
+                DropdownMenuItem(child: Text("   Code", style: TextStyle(fontFamily: "times")), value: "pre"),
+                DropdownMenuItem(child: Text("Header 1", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32)), value: "h1"),
+                DropdownMenuItem(child: Text("Header 2", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)), value: "h2"),
+                DropdownMenuItem(child: Text("Header 3", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)), value: "h3"),
+                DropdownMenuItem(child: Text("Header 4", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)), value: "h4"),
+                DropdownMenuItem(child: Text("Header 5", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)), value: "h5"),
+                DropdownMenuItem(child: Text("Header 6", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11)), value: "h6"),
+              ],
+              value: fontSelectedItem,
+              onChanged: (String? changed) {
+                if (changed != null) {
+                  widget.controller.execCommand('formatBlock', argument: changed);
+                  setState(() {
+                    fontSelectedItem = changed;
+                  });
                 }
-                widget.controller.execCommand('fontSize', argument: changed.toString());
+              },
+            ),
+          ),
+        ),);
+      }
+      if (t is FontSettingButtons) {
+        if (t.fontSize) toolbarChildren.add(Container(
+          padding: const EdgeInsets.only(left: 8.0),
+          height: 36,
+          decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              border: Border.all(color: ToggleButtonsTheme.of(context).borderColor ?? Colors.grey[800]!)
+          ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<double>(
+              items: [
+                DropdownMenuItem(
+                    child: Text("${fontSizeUnitSelectedItem == "px" ? "11" : "8"} $fontSizeUnitSelectedItem"),
+                    value: 1
+                ),
+                DropdownMenuItem(
+                    child: Text("${fontSizeUnitSelectedItem == "px" ? "13" : "10"} $fontSizeUnitSelectedItem"),
+                    value: 2
+                ),
+                DropdownMenuItem(
+                    child: Text("${fontSizeUnitSelectedItem == "px" ? "16" : "12"} $fontSizeUnitSelectedItem"),
+                    value: 3
+                ),
+                DropdownMenuItem(
+                    child: Text("${fontSizeUnitSelectedItem == "px" ? "19" : "14"} $fontSizeUnitSelectedItem"),
+                    value: 4
+                ),
+                DropdownMenuItem(
+                    child: Text("${fontSizeUnitSelectedItem == "px" ? "24" : "18"} $fontSizeUnitSelectedItem"),
+                    value: 5
+                ),
+                DropdownMenuItem(
+                    child: Text("${fontSizeUnitSelectedItem == "px" ? "32" : "24"} $fontSizeUnitSelectedItem"),
+                    value: 6
+                ),
+                DropdownMenuItem(
+                    child: Text("${fontSizeUnitSelectedItem == "px" ? "48" : "36"} $fontSizeUnitSelectedItem"),
+                    value: 7
+                ),
+              ],
+              value: fontSizeSelectedItem,
+              onChanged: (double? changed) {
+                if (changed != null) {
+                  int intChanged = changed.toInt();
+                  switch (intChanged) {
+                    case 1:
+                      actualFontSizeSelectedItem = 11;
+                      break;
+                    case 2:
+                      actualFontSizeSelectedItem = 13;
+                      break;
+                    case 3:
+                      actualFontSizeSelectedItem = 16;
+                      break;
+                    case 4:
+                      actualFontSizeSelectedItem = 19;
+                      break;
+                    case 5:
+                      actualFontSizeSelectedItem = 24;
+                      break;
+                    case 6:
+                      actualFontSizeSelectedItem = 32;
+                      break;
+                    case 7:
+                      actualFontSizeSelectedItem = 48;
+                      break;
+                  }
+                  widget.controller.execCommand('fontSize', argument: changed.toString());
+                  setState(() {
+                    fontSizeSelectedItem = changed;
+                  });
+                }
+              },
+            ),
+          ),
+        ));
+        if (t.fontSizeUnit) toolbarChildren.add(Container(
+          padding: const EdgeInsets.only(left: 8.0),
+          height: 36,
+          decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              border: Border.all(color: ToggleButtonsTheme.of(context).borderColor ?? Colors.grey[800]!)
+          ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              items: [
+                DropdownMenuItem(child: Text("pt"), value: "pt"),
+                DropdownMenuItem(child: Text("px"), value: "px"),
+              ],
+              value: fontSizeUnitSelectedItem,
+              onChanged: (String? changed) {
+                if (changed != null)
+                  setState(() {
+                    fontSizeUnitSelectedItem = changed;
+                  });
+              },
+            ),
+          ),
+        ));
+      }
+      if (t is FontButtons) {
+        if (t.bold || t.italic || t.underline || t.clearAll) {
+          toolbarChildren.add(ToggleButtons(
+            constraints: BoxConstraints(
+              minHeight: 34,
+              maxHeight: 34,
+              minWidth: 34,
+              maxWidth: 34,
+            ),
+            children: t.getIcons1(),
+            onPressed: (int index) {
+              if (t.getIcons1()[index].icon == Icons.format_bold) {
+                widget.controller.execCommand('bold');
+              }
+              if (t.getIcons1()[index].icon == Icons.format_italic) {
+                widget.controller.execCommand('italic');
+              }
+              if (t.getIcons1()[index].icon == Icons.format_underline) {
+                widget.controller.execCommand('underline');
+              }
+              if (t.getIcons1()[index].icon == Icons.format_clear) {
+                widget.controller.execCommand('removeFormat');
+              } else {
                 setState(() {
-                  fontSizeSelectedItem = changed;
+                  fontSelected[index] = !fontSelected[index];
                 });
               }
             },
-          ),
-        ),
-      ),
-      Container(
-        padding: const EdgeInsets.only(left: 8.0),
-        height: 36,
-        decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            border: Border.all(color: ToggleButtonsTheme.of(context).borderColor ?? Colors.grey[800]!)
-        ),
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton<String>(
-            items: [
-              DropdownMenuItem(child: Text("pt"), value: "pt"),
-              DropdownMenuItem(child: Text("px"), value: "px"),
-            ],
-            value: fontSizeUnitSelectedItem,
-            onChanged: (String? changed) {
-              if (changed != null)
-                setState(() {
-                  fontSizeUnitSelectedItem = changed;
-                });
+            isSelected: fontSelected,
+          ));
+        }
+        if (t.strikethrough || t.superscript || t.subscript) {
+          toolbarChildren.add(ToggleButtons(
+            constraints: BoxConstraints(
+              minHeight: 34,
+              maxHeight: 34,
+              minWidth: 34,
+              maxWidth: 34,
+            ),
+            children: t.getIcons2(),
+            onPressed: (int index) {
+              if (t.getIcons2()[index].icon == Icons.format_strikethrough) {
+                widget.controller.execCommand('strikeThrough');
+              }
+              if (t.getIcons2()[index].icon == Icons.superscript) {
+                widget.controller.execCommand('superscript');
+              }
+              if (t.getIcons2()[index].icon == Icons.subscript) {
+                widget.controller.execCommand('subscript');
+              }
+              setState(() {
+                miscFontSelected[index] = !miscFontSelected[index];
+              });
             },
+            isSelected: miscFontSelected,
+          ));
+        }
+      }
+      if (t is ColorButtons) {
+        toolbarChildren.add(ToggleButtons(
+          constraints: BoxConstraints(
+            minHeight: 34,
+            maxHeight: 34,
+            minWidth: 34,
+            maxWidth: 34,
           ),
-        ),
-      ),
-      ToggleButtons(
-        constraints: BoxConstraints(
-          minHeight: 34,
-          maxHeight: 34,
-          minWidth: 34,
-          maxWidth: 34,
-        ),
-        children: [
-          Icon(Icons.format_bold),
-          Icon(Icons.format_italic),
-          Icon(Icons.format_underlined),
-          Icon(Icons.format_clear),
-        ],
-        onPressed: (int index) {
-          switch (index) {
-            case 0:
-              widget.controller.execCommand('bold');
-              break;
-            case 1:
-              widget.controller.execCommand('italic');
-              break;
-            case 2:
-              widget.controller.execCommand('underline');
-              break;
-            case 3:
-              widget.controller.execCommand('removeFormat');
-              break;
-          }
-          if (index < 3) {
-            setState(() {
-              fontSelected[index] = !fontSelected[index];
-            });
-          }
-        },
-        isSelected: fontSelected,
-      ),
-      ToggleButtons(
-        constraints: BoxConstraints(
-          minHeight: 34,
-          maxHeight: 34,
-          minWidth: 34,
-          maxWidth: 34,
-        ),
-        children: [
-          Icon(Icons.format_strikethrough),
-          Icon(Icons.superscript),
-          Icon(Icons.subscript),
-        ],
-        onPressed: (int index) {
-          switch (index) {
-            case 0:
-              widget.controller.execCommand('strikeThrough');
-              break;
-            case 1:
-              widget.controller.execCommand('superscript');
-              break;
-            case 2:
-              widget.controller.execCommand('subscript');
-              break;
-          }
-          setState(() {
-            miscFontSelected[index] = !miscFontSelected[index];
-          });
-        },
-        isSelected: miscFontSelected,
-      ),
-      //todo needs a lot of testing
-      ToggleButtons(
-        constraints: BoxConstraints(
-          minHeight: 34,
-          maxHeight: 34,
-          minWidth: 34,
-          maxWidth: 34,
-        ),
-        children: [
-          Icon(Icons.format_color_text, color: foreColorSelected),
-          Icon(Icons.format_color_fill, color: backColorSelected),
-        ],
-        onPressed: (int index) {
-          if (colorSelected[index]) {
-            if (index == 0) {
-              widget.controller.execCommand('foreColor',
-                  argument: (Colors.black.value & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase());
+          children: t.getIcons(),
+          onPressed: (int index) {
+            if (colorSelected[index]) {
+              if (t.getIcons()[index].icon == Icons.format_color_text) {
+                widget.controller.execCommand('foreColor',
+                    argument: (Colors.black.value & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase());
+              }
+              if (t.getIcons()[index].icon == Icons.format_color_fill) {
+                widget.controller.execCommand('hiliteColor',
+                    argument: (Colors.yellow.value & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase());
+              }
+              setState(() {
+                colorSelected[index] = !colorSelected[index];
+              });
             } else {
-              widget.controller.execCommand('hiliteColor',
-                  argument: (Colors.yellow.value & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase());
-            }
-            setState(() {
-              colorSelected[index] = !colorSelected[index];
-            });
-          } else {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  late Color newColor;
-                  if (index == 0)
-                    newColor = foreColorSelected;
-                  else
-                    newColor = backColorSelected;
-                  return AlertDialog(
-                    title: Text('Pick ${index == 0 ? "text" : "highlight"} color'),
-                    content: SingleChildScrollView(
-                      child: ColorPicker(
-                        pickerColor: newColor,
-                        paletteType: PaletteType.hsv,
-                        enableAlpha: false,
-                        displayThumbColor: true,
-                        onColorChanged: (Color changed) {
-                          newColor = changed;
-                        },
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    late Color newColor;
+                    if (t.getIcons()[index].icon == Icons.format_color_text)
+                      newColor = foreColorSelected;
+                    else
+                      newColor = backColorSelected;
+                    return AlertDialog(
+                      title: Text('Pick ${t.getIcons()[index].icon == Icons.format_color_text ? "text" : "highlight"} color'),
+                      content: SingleChildScrollView(
+                        child: ColorPicker(
+                          pickerColor: newColor,
+                          paletteType: PaletteType.hsv,
+                          enableAlpha: false,
+                          displayThumbColor: true,
+                          onColorChanged: (Color changed) {
+                            newColor = changed;
+                          },
+                        ),
                       ),
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text("Cancel"),
-                      ),
-                      TextButton(
+                      actions: <Widget>[
+                        TextButton(
                           onPressed: () {
-                            if (index == 0) {
-                              setState(() {
-                                foreColorSelected = Colors.black;
-                              });
-                              widget.controller.execCommand('removeFormat', argument: 'foreColor');
-                              widget.controller.execCommand('foreColor', argument: 'initial');
-                            } else {
-                              setState(() {
-                                backColorSelected = Colors.yellow;
-                              });
-                              widget.controller.execCommand('removeFormat', argument: 'hiliteColor');
-                              widget.controller.execCommand('hiliteColor', argument: 'initial');
-                            }
                             Navigator.of(context).pop();
                           },
-                          child: Text("Rest to default color")
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          if (index == 0) {
-                            widget.controller.execCommand('foreColor',
-                                argument: (newColor.value & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase());
+                          child: Text("Cancel"),
+                        ),
+                        TextButton(
+                            onPressed: () {
+                              if (t.getIcons()[index].icon == Icons.format_color_text) {
+                                setState(() {
+                                  foreColorSelected = Colors.black;
+                                });
+                                widget.controller.execCommand('removeFormat', argument: 'foreColor');
+                                widget.controller.execCommand('foreColor', argument: 'initial');
+                              }
+                              if (t.getIcons()[index].icon == Icons.format_color_fill) {
+                                setState(() {
+                                  backColorSelected = Colors.yellow;
+                                });
+                                widget.controller.execCommand('removeFormat', argument: 'hiliteColor');
+                                widget.controller.execCommand('hiliteColor', argument: 'initial');
+                              }
+                              Navigator.of(context).pop();
+                            },
+                            child: Text("Rest to default color")
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            if (t.getIcons()[index].icon == Icons.format_color_text) {
+                              widget.controller.execCommand('foreColor',
+                                  argument: (newColor.value & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase());
+                              setState(() {
+                                foreColorSelected = newColor;
+                              });
+                            }
+                            if (t.getIcons()[index].icon == Icons.format_color_fill) {
+                              widget.controller.execCommand('hiliteColor',
+                                  argument: (newColor.value & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase());
+                              setState(() {
+                                backColorSelected = newColor;
+                              });
+                            }
                             setState(() {
-                              foreColorSelected = newColor;
+                              colorSelected[index] = !colorSelected[index];
                             });
-                          } else {
-                            widget.controller.execCommand('hiliteColor',
-                                argument: (newColor.value & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase());
-                            setState(() {
-                              backColorSelected = newColor;
-                            });
-                          }
-                          setState(() {
-                            colorSelected[index] = !colorSelected[index];
-                          });
-                          Navigator.of(context).pop();
-                        },
-                        child: Text("Set color"),
-                      )
-                    ],
-                  );
-                }
-            );
-          }
-        },
-        isSelected: colorSelected,
-      ),
-      ToggleButtons(
-        constraints: BoxConstraints(
-          minHeight: 34,
-          maxHeight: 34,
-          minWidth: 34,
-          maxWidth: 34,
-        ),
-        children: [
-          Icon(Icons.format_list_bulleted),
-          Icon(Icons.format_list_numbered),
-        ],
-        onPressed: (int index) {
-          switch (index) {
-            case 0:
-              widget.controller.execCommand('insertUnorderedList');
-              break;
-            case 1:
-              widget.controller.execCommand('insertOrderedList');
-              break;
-          }
-          setState(() {
-            paragraphSelected[index] = !paragraphSelected[index];
-          });
-        },
-        isSelected: paragraphSelected,
-      ),
-      Container(
-        padding: const EdgeInsets.only(left: 8.0),
-        height: 36,
-        decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            border: Border.all(color: ToggleButtonsTheme.of(context).borderColor ?? Colors.grey[800]!)
-        ),
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton<String>(
-            items: [
-              DropdownMenuItem(child: Text("1. Numbered"), value: "decimal"),
-              DropdownMenuItem(child: Text("a. Lower Alpha"), value: "lower-alpha"),
-              DropdownMenuItem(child: Text("A. Upper Alpha"), value: "upper-alpha"),
-              DropdownMenuItem(child: Text("i. Lower Roman"), value: "lower-roman"),
-              DropdownMenuItem(child: Text("I. Upper Roman"), value: "upper-roman"),
-              DropdownMenuItem(child: Text("• Disc"), value: "disc"),
-              DropdownMenuItem(child: Text("○ Circle"), value: "circle"),
-              DropdownMenuItem(child: Text("■ Square"), value: "square"),
-            ],
-            hint: Text("Select list style"),
-            value: listStyleSelectedItem,
-            onChanged: (String? changed) {
-              if (changed != null) {
-                widget.controller.editorController!.evaluateJavascript(source: """
+                            Navigator.of(context).pop();
+                          },
+                          child: Text("Set color"),
+                        )
+                      ],
+                    );
+                  }
+              );
+            }
+          },
+          isSelected: colorSelected,
+        ));
+      }
+      if (t is ListButtons) {
+        if (t.ul || t.ol) {
+          toolbarChildren.add(ToggleButtons(
+            constraints: BoxConstraints(
+              minHeight: 34,
+              maxHeight: 34,
+              minWidth: 34,
+              maxWidth: 34,
+            ),
+            children: t.getIcons(),
+            onPressed: (int index) {
+              if (t.getIcons()[index].icon == Icons.format_list_bulleted) {
+                widget.controller.execCommand('insertUnorderedList');
+              }
+              if (t.getIcons()[index].icon == Icons.format_list_numbered) {
+                widget.controller.execCommand('insertOrderedList');
+              }
+              setState(() {
+                listSelected[index] = !listSelected[index];
+              });
+            },
+            isSelected: listSelected,
+          ));
+        }
+        if (t.listStyles) {
+          toolbarChildren.add(Container(
+            padding: const EdgeInsets.only(left: 8.0),
+            height: 36,
+            decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                border: Border.all(color: ToggleButtonsTheme.of(context).borderColor ?? Colors.grey[800]!)
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                items: [
+                  DropdownMenuItem(child: Text("1. Numbered"), value: "decimal"),
+                  DropdownMenuItem(child: Text("a. Lower Alpha"), value: "lower-alpha"),
+                  DropdownMenuItem(child: Text("A. Upper Alpha"), value: "upper-alpha"),
+                  DropdownMenuItem(child: Text("i. Lower Roman"), value: "lower-roman"),
+                  DropdownMenuItem(child: Text("I. Upper Roman"), value: "upper-roman"),
+                  DropdownMenuItem(child: Text("• Disc"), value: "disc"),
+                  DropdownMenuItem(child: Text("○ Circle"), value: "circle"),
+                  DropdownMenuItem(child: Text("■ Square"), value: "square"),
+                ],
+                hint: Text("Select list style"),
+                value: listStyleSelectedItem,
+                onChanged: (String? changed) {
+                  if (changed != null) {
+                    widget.controller.editorController!.evaluateJavascript(source: """
                                var \$focusNode = \$(window.getSelection().focusNode);
                                var \$parentList = \$focusNode.closest("div.note-editable ol, div.note-editable ul");
                                \$parentList.css("list-style-type", "$changed");
                             """);
-                setState(() {
-                  listStyleSelectedItem = changed;
-                });
+                    setState(() {
+                      listStyleSelectedItem = changed;
+                    });
+                  }
+                },
+              ),
+            ),
+          ));
+        }
+      }
+      if (t is ParagraphButtons) {
+        if (t.alignLeft || t.alignCenter || t.alignRight || t.alignJustify) {
+          toolbarChildren.add(ToggleButtons(
+            constraints: BoxConstraints(
+              minHeight: 34,
+              maxHeight: 34,
+              minWidth: 34,
+              maxWidth: 34,
+            ),
+            children: t.getIcons1(),
+            onPressed: (int index) {
+              if (t.getIcons1()[index].icon == Icons.format_align_left) {
+                widget.controller.execCommand('justifyLeft');
+              }
+              if (t.getIcons1()[index].icon == Icons.format_align_center) {
+                widget.controller.execCommand('justifyCenter');
+              }
+              if (t.getIcons1()[index].icon == Icons.format_align_right) {
+                widget.controller.execCommand('justifyRight');
+              }
+              if (t.getIcons1()[index].icon == Icons.format_align_justify) {
+                widget.controller.execCommand('justifyFull');
+              }
+              alignSelected = List<bool>.filled(t.getIcons1().length, false);
+              setState(() {
+                alignSelected[index] = !alignSelected[index];
+              });
+            },
+            isSelected: alignSelected,
+          ));
+        }
+        if (t.increaseIndent || t.decreaseIndent) {
+          toolbarChildren.add(ToggleButtons(
+            constraints: BoxConstraints(
+              minHeight: 34,
+              maxHeight: 34,
+              minWidth: 34,
+              maxWidth: 34,
+            ),
+            children: t.getIcons2(),
+            onPressed: (int index) {
+              if (t.getIcons2()[index].icon == Icons.format_indent_increase) {
+                widget.controller.execCommand('indent');
+              }
+              if (t.getIcons2()[index].icon == Icons.format_indent_decrease) {
+                widget.controller.execCommand('outdent');
               }
             },
+            isSelected: List<bool>.filled(t.getIcons2().length, false),
+          ));
+        }
+        if (t.lineHeight) {
+          toolbarChildren.add(Container(
+            height: 36,
+            padding: const EdgeInsets.only(left: 8.0),
+            decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                border: Border.all(color: ToggleButtonsTheme.of(context).borderColor ?? Colors.grey[800]!)
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<double>(
+                items: [
+                  DropdownMenuItem(child: Text("1.0"), value: 1),
+                  DropdownMenuItem(child: Text("1.2"), value: 1.2),
+                  DropdownMenuItem(child: Text("1.4"), value: 1.4),
+                  DropdownMenuItem(child: Text("1.5"), value: 1.5),
+                  DropdownMenuItem(child: Text("1.6"), value: 1.6),
+                  DropdownMenuItem(child: Text("1.8"), value: 1.8),
+                  DropdownMenuItem(child: Text("2.0"), value: 2),
+                  DropdownMenuItem(child: Text("3.0"), value: 3),
+                ],
+                value: lineHeightSelectedItem,
+                onChanged: (double? changed) {
+                  if (changed != null) {
+                    widget.controller.editorController!.evaluateJavascript(source:"\$('#summernote-2').summernote('lineHeight', '$changed');");
+                    setState(() {
+                      lineHeightSelectedItem = changed;
+                    });
+                  }
+                },
+              ),
+            ),
+          ));
+        }
+      }
+      if (t is InsertButtons) {
+        toolbarChildren.add(ToggleButtons(
+          constraints: BoxConstraints(
+            minHeight: 34,
+            maxHeight: 34,
+            minWidth: 34,
+            maxWidth: 34,
           ),
-        ),
-      ),
-      ToggleButtons(
-        constraints: BoxConstraints(
-          minHeight: 34,
-          maxHeight: 34,
-          minWidth: 34,
-          maxWidth: 34,
-        ),
-        children: [
-          Icon(Icons.format_align_left),
-          Icon(Icons.format_align_center),
-          Icon(Icons.format_align_right),
-          Icon(Icons.format_align_justify),
-        ],
-        onPressed: (int index) {
-          switch (index) {
-            case 0:
-              widget.controller.execCommand('justifyLeft');
-              break;
-            case 1:
-              widget.controller.execCommand('justifyCenter');
-              break;
-            case 2:
-              widget.controller.execCommand('justifyRight');
-              break;
-            case 3:
-              widget.controller.execCommand('justifyFull');
-              break;
-          }
-          alignSelected = List<bool>.filled(4, false);
-          setState(() {
-            alignSelected[index] = !alignSelected[index];
-          });
-        },
-        isSelected: alignSelected,
-      ),
-      ToggleButtons(
-        constraints: BoxConstraints(
-          minHeight: 34,
-          maxHeight: 34,
-          minWidth: 34,
-          maxWidth: 34,
-        ),
-        children: [
-          Icon(Icons.format_indent_increase),
-          Icon(Icons.format_indent_decrease),
-        ],
-        onPressed: (int index) {
-          switch (index) {
-            case 0:
-              widget.controller.execCommand('indent');
-              break;
-            case 1:
-              widget.controller.execCommand('outdent');
-              break;
-          }
-        },
-        isSelected: [false, false],
-      ),
-      Container(
-        height: 36,
-        padding: const EdgeInsets.only(left: 8.0),
-        decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            border: Border.all(color: ToggleButtonsTheme.of(context).borderColor ?? Colors.grey[800]!)
-        ),
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton<double>(
-            items: [
-              DropdownMenuItem(child: Text("1.0"), value: 1),
-              DropdownMenuItem(child: Text("1.2"), value: 1.2),
-              DropdownMenuItem(child: Text("1.4"), value: 1.4),
-              DropdownMenuItem(child: Text("1.5"), value: 1.5),
-              DropdownMenuItem(child: Text("1.6"), value: 1.6),
-              DropdownMenuItem(child: Text("1.8"), value: 1.8),
-              DropdownMenuItem(child: Text("2.0"), value: 2),
-              DropdownMenuItem(child: Text("3.0"), value: 3),
-            ],
-            value: lineHeightSelectedItem,
-            onChanged: (double? changed) {
-              if (changed != null) {
-                widget.controller.editorController!.evaluateJavascript(source:"\$('#summernote-2').summernote('lineHeight', '$changed');");
-                setState(() {
-                  lineHeightSelectedItem = changed;
-                });
-              }
-            },
-          ),
-        ),
-      ),
-      ToggleButtons(
-        constraints: BoxConstraints(
-          minHeight: 34,
-          maxHeight: 34,
-          minWidth: 34,
-          maxWidth: 34,
-        ),
-        children: [
-          Icon(Icons.link),
-          Icon(Icons.image_outlined),
-          Icon(Icons.videocam_outlined),
-          Icon(Icons.table_chart_outlined),
-          Icon(Icons.horizontal_rule),
-        ],
-        onPressed: (int index) {
-          switch (index) {
-            case 0:
+          children: t.getIcons(),
+          onPressed: (int index) {
+            if (t.getIcons()[index].icon == Icons.link) {
               final TextEditingController text = TextEditingController();
               final TextEditingController url = TextEditingController();
               final FocusNode textFocus = FocusNode();
@@ -762,8 +842,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                     );
                   }
               );
-              break;
-            case 1:
+            }
+            if (t.getIcons()[index].icon == Icons.image_outlined) {
               final TextEditingController filename = TextEditingController();
               final TextEditingController url = TextEditingController();
               final FocusNode urlFocus = FocusNode();
@@ -870,8 +950,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                     );
                   }
               );
-              break;
-            case 2:
+            }
+            if (t.getIcons()[index].icon == Icons.videocam_outlined) {
               final TextEditingController filename = TextEditingController();
               final TextEditingController url = TextEditingController();
               final FocusNode urlFocus = FocusNode();
@@ -978,8 +1058,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                     );
                   }
               );
-              break;
-            case 3:
+            }
+            if (t.getIcons()[index].icon == Icons.table_chart_outlined) {
               int currentRows = 1;
               int currentCols = 1;
               showDialog(
@@ -1028,329 +1108,296 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                     );
                   }
               );
-              break;
-            case 4:
+            }
+            if (t.getIcons()[index].icon == Icons.horizontal_rule) {
               widget.controller.insertHtml("<hr/>");
-              break;
-          }
-        },
-        isSelected: [false, false, false, false, false],
-      ),
-      ToggleButtons(
-        constraints: BoxConstraints(
-          minHeight: 34,
-          maxHeight: 34,
-          minWidth: 34,
-          maxWidth: 34,
-        ),
-        children: [
-          Icon(Icons.fullscreen),
-          Icon(Icons.code),
-          Icon(Icons.undo),
-          Icon(Icons.redo),
-          Icon(Icons.help_outline),
-        ],
-        onPressed: (int index) {
-          switch (index) {
-            case 0:
-              widget.controller.setFullScreen();
-              break;
-            case 1:
-              widget.controller.toggleCodeView();
-              break;
-            case 2:
-              widget.controller.undo();
-              break;
-            case 3:
-              widget.controller.redo();
-              break;
-            case 4:
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return StatefulBuilder(
-                        builder: (BuildContext context, StateSetter setState) {
-                          return AlertDialog(
-                            title: Text("Help"),
-                            content: Container(
-                              height: MediaQuery.of(context).size.height / 2,
-                              child: SingleChildScrollView(
-                                child: DataTable(
-                                  columnSpacing: 5,
-                                  dataRowHeight: 75,
-                                  columns: const <DataColumn>[
-                                    DataColumn(
-                                      label: Text(
-                                        'Key Combination',
-                                        style: TextStyle(fontStyle: FontStyle.italic),
+            }
+          },
+          isSelected: List<bool>.filled(t.getIcons().length, false),
+        ));
+      }
+      if (t is OtherButtons) {
+        if (t.fullscreen || t.codeview || t.undo || t.redo || t.help) {
+          toolbarChildren.add(ToggleButtons(
+            constraints: BoxConstraints(
+              minHeight: 34,
+              maxHeight: 34,
+              minWidth: 34,
+              maxWidth: 34,
+            ),
+            children: t.getIcons1(),
+            onPressed: (int index) {
+              if (t.getIcons1()[index].icon == Icons.fullscreen) {
+                widget.controller.setFullScreen();
+                setState(() {
+                  miscSelected[index] = !miscSelected[index];
+                });
+              }
+              if (t.getIcons1()[index].icon == Icons.code) {
+                widget.controller.toggleCodeView();
+                setState(() {
+                  miscSelected[index] = !miscSelected[index];
+                });
+              }
+              if (t.getIcons1()[index].icon == Icons.undo) {
+                widget.controller.undo();
+              }
+              if (t.getIcons1()[index].icon == Icons.redo) {
+                widget.controller.redo();
+              }
+              if (t.getIcons1()[index].icon == Icons.help_outline) {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return StatefulBuilder(
+                          builder: (BuildContext context, StateSetter setState) {
+                            return AlertDialog(
+                              title: Text("Help"),
+                              content: Container(
+                                height: MediaQuery.of(context).size.height / 2,
+                                child: SingleChildScrollView(
+                                  child: DataTable(
+                                    columnSpacing: 5,
+                                    dataRowHeight: 75,
+                                    columns: const <DataColumn>[
+                                      DataColumn(
+                                        label: Text(
+                                          'Key Combination',
+                                          style: TextStyle(fontStyle: FontStyle.italic),
+                                        ),
                                       ),
-                                    ),
-                                    DataColumn(
-                                      label: Text(
-                                        'Action',
-                                        style: TextStyle(fontStyle: FontStyle.italic),
+                                      DataColumn(
+                                        label: Text(
+                                          'Action',
+                                          style: TextStyle(fontStyle: FontStyle.italic),
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                  rows: const <DataRow>[
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('ESC')),
-                                        DataCell(Text('Escape')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('ENTER')),
-                                        DataCell(Text('Insert Paragraph')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('CTRL+Z')),
-                                        DataCell(Text('Undo the last command')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('CTRL+Z')),
-                                        DataCell(Text('Undo the last command')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('CTRL+Y')),
-                                        DataCell(Text('Redo the last command')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('TAB')),
-                                        DataCell(Text('Tab')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('SHIFT+TAB')),
-                                        DataCell(Text('Untab')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('CTRL+B')),
-                                        DataCell(Text('Set a bold style')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('CTRL+I')),
-                                        DataCell(Text('Set an italic style')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('CTRL+U')),
-                                        DataCell(Text('Set an underline style')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('CTRL+SHIFT+S')),
-                                        DataCell(Text('Set a strikethrough style')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('CTRL+BACKSLASH')),
-                                        DataCell(Text('Clean a style')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('CTRL+SHIFT+L')),
-                                        DataCell(Text('Set left align')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('CTRL+SHIFT+E')),
-                                        DataCell(Text('Set center align')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('CTRL+SHIFT+R')),
-                                        DataCell(Text('Set right align')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('CTRL+SHIFT+J')),
-                                        DataCell(Text('Set full align')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('CTRL+SHIFT+NUM7')),
-                                        DataCell(Text('Toggle unordered list')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('CTRL+SHIFT+NUM8')),
-                                        DataCell(Text('Toggle ordered list')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('CTRL+LEFTBRACKET')),
-                                        DataCell(Text('Outdent on current paragraph')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('CTRL+RIGHTBRACKET')),
-                                        DataCell(Text('Indent on current paragraph')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('CTRL+NUM0')),
-                                        DataCell(Text('Change current block\'s format as a paragraph (<p> tag)')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('CTRL+NUM1')),
-                                        DataCell(Text('Change current block\'s format as H1')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('CTRL+NUM2')),
-                                        DataCell(Text('Change current block\'s format as H2')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('CTRL+NUM3')),
-                                        DataCell(Text('Change current block\'s format as H3')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('CTRL+NUM4')),
-                                        DataCell(Text('Change current block\'s format as H4')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('CTRL+NUM5')),
-                                        DataCell(Text('Change current block\'s format as H5')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('CTRL+NUM6')),
-                                        DataCell(Text('Change current block\'s format as H6')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('CTRL+ENTER')),
-                                        DataCell(Text('Insert horizontal rule')),
-                                      ],
-                                    ),
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('CTRL+K')),
-                                        DataCell(Text('Show link dialog')),
-                                      ],
-                                    ),
-                                  ],
+                                    ],
+                                    rows: const <DataRow>[
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('ESC')),
+                                          DataCell(Text('Escape')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('ENTER')),
+                                          DataCell(Text('Insert Paragraph')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('CTRL+Z')),
+                                          DataCell(Text('Undo the last command')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('CTRL+Z')),
+                                          DataCell(Text('Undo the last command')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('CTRL+Y')),
+                                          DataCell(Text('Redo the last command')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('TAB')),
+                                          DataCell(Text('Tab')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('SHIFT+TAB')),
+                                          DataCell(Text('Untab')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('CTRL+B')),
+                                          DataCell(Text('Set a bold style')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('CTRL+I')),
+                                          DataCell(Text('Set an italic style')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('CTRL+U')),
+                                          DataCell(Text('Set an underline style')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('CTRL+SHIFT+S')),
+                                          DataCell(Text('Set a strikethrough style')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('CTRL+BACKSLASH')),
+                                          DataCell(Text('Clean a style')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('CTRL+SHIFT+L')),
+                                          DataCell(Text('Set left align')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('CTRL+SHIFT+E')),
+                                          DataCell(Text('Set center align')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('CTRL+SHIFT+R')),
+                                          DataCell(Text('Set right align')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('CTRL+SHIFT+J')),
+                                          DataCell(Text('Set full align')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('CTRL+SHIFT+NUM7')),
+                                          DataCell(Text('Toggle unordered list')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('CTRL+SHIFT+NUM8')),
+                                          DataCell(Text('Toggle ordered list')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('CTRL+LEFTBRACKET')),
+                                          DataCell(Text('Outdent on current paragraph')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('CTRL+RIGHTBRACKET')),
+                                          DataCell(Text('Indent on current paragraph')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('CTRL+NUM0')),
+                                          DataCell(Text('Change current block\'s format as a paragraph (<p> tag)')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('CTRL+NUM1')),
+                                          DataCell(Text('Change current block\'s format as H1')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('CTRL+NUM2')),
+                                          DataCell(Text('Change current block\'s format as H2')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('CTRL+NUM3')),
+                                          DataCell(Text('Change current block\'s format as H3')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('CTRL+NUM4')),
+                                          DataCell(Text('Change current block\'s format as H4')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('CTRL+NUM5')),
+                                          DataCell(Text('Change current block\'s format as H5')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('CTRL+NUM6')),
+                                          DataCell(Text('Change current block\'s format as H6')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('CTRL+ENTER')),
+                                          DataCell(Text('Insert horizontal rule')),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('CTRL+K')),
+                                          DataCell(Text('Show link dialog')),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () async {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text("Close"),
-                              )
-                            ],
-                          );
-                        }
-                    );
-                  }
-              );
-              break;
-          }
-          if (index < 2) {
-            setState(() {
-              miscSelected[index] = !miscSelected[index];
-            });
-          }
-        },
-        isSelected: miscSelected,
-      ),
-      ToggleButtons(
-        constraints: BoxConstraints(
-          minHeight: 34,
-          maxHeight: 34,
-          minWidth: 34,
-          maxWidth: 34,
-        ),
-        children: [
-          Icon(Icons.copy),
-          Icon(Icons.paste),
-        ],
-        onPressed: (int index) async {
-          switch (index) {
-            case 0:
-              String? data = await widget.controller.getText();
-              Clipboard.setData(new ClipboardData(text: data));
-              break;
-            case 1:
-              ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
-              if (data != null) {
-                String text = data.text!;
-                widget.controller.insertHtml(text);
+                              actions: [
+                                TextButton(
+                                  onPressed: () async {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("Close"),
+                                )
+                              ],
+                            );
+                          }
+                      );
+                    }
+                );
               }
-              break;
-          }
-        },
-        isSelected: [false, false],
-      ),
-    ];
-    if (widget.options.toolbarType == ToolbarType.nativeGrid) {
-      return Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: Wrap(
-          runSpacing: 5,
-          spacing: 5,
-          children: children,
-        ),
-      );
-    } else {
-      return Container(
-        height: 39,
-        child: Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: CustomScrollView(
-            scrollDirection: Axis.horizontal,
-            slivers: [
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: children,
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
+            },
+            isSelected: miscSelected,
+          ));
+        }
+        if (t.copy || t.paste) {
+          toolbarChildren.add(ToggleButtons(
+            constraints: BoxConstraints(
+              minHeight: 34,
+              maxHeight: 34,
+              minWidth: 34,
+              maxWidth: 34,
+            ),
+            children: t.getIcons2(),
+            onPressed: (int index) async {
+              if (t.getIcons2()[index].icon == Icons.copy) {
+                String? data = await widget.controller.getText();
+                Clipboard.setData(new ClipboardData(text: data));
+              }
+              if (t.getIcons2()[index].icon == Icons.paste) {
+                ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
+                if (data != null) {
+                  String text = data.text!;
+                  widget.controller.insertHtml(text);
+                }
+              }
+            },
+            isSelected: List<bool>.filled(t.getIcons2().length, false),
+          ));
+        }
+      }
     }
+    toolbarChildren.addAll(widget.options.customToolbarButtons);
+    return toolbarChildren;
   }
 }

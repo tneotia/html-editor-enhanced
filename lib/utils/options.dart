@@ -69,29 +69,14 @@ class HtmlToolbarOptions {
   const HtmlToolbarOptions({
     this.customToolbarButtons = const [],
     this.defaultToolbarButtons = const [
-      Style(),
-      Font(buttons: [
-        FontButtons.bold,
-        FontButtons.underline,
-        FontButtons.clear
-      ]),
-      ColorBar(buttons: [ColorButtons.color]),
-      Paragraph(buttons: [
-        ParagraphButtons.ul,
-        ParagraphButtons.ol,
-        ParagraphButtons.paragraph
-      ]),
-      Insert(buttons: [
-        InsertButtons.link,
-        InsertButtons.picture,
-        InsertButtons.video,
-        InsertButtons.table
-      ]),
-      Misc(buttons: [
-        MiscButtons.fullscreen,
-        MiscButtons.codeview,
-        MiscButtons.help
-      ])
+      StyleButtons(),
+      FontSettingButtons(),
+      FontButtons(),
+      ColorButtons(),
+      ListButtons(),
+      ParagraphButtons(),
+      InsertButtons(),
+      OtherButtons(),
     ],
     this.toolbarType = ToolbarType.nativeScrollable,
     this.toolbarPosition = ToolbarPosition.aboveEditor,
