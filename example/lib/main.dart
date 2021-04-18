@@ -74,17 +74,16 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     //initialText: "<p>text content initial, if any</p>",
                 ),
                 htmlToolbarOptions: HtmlToolbarOptions(
-                    toolbarPosition: ToolbarPosition.aboveEditor, //by default
-                    toolbarType: ToolbarType.nativeScrollable, //by default
-                    defaultToolbarButtons: [
-                      FontButtons(bold: false, italic: false),
-                      StyleButtons(),
-                      ColorButtons(foregroundColor: false),
-                      ListButtons(ul: false),
-                      ParagraphButtons(alignLeft: false, alignJustify: false, increaseIndent: false),
-                      InsertButtons(link: false, video: false, hr: false),
-                      OtherButtons(fullscreen: false, codeview: false, help: false, copy: false)
-                    ],
+                  toolbarPosition: ToolbarPosition.aboveEditor, //by default
+                  toolbarType: ToolbarType.nativeScrollable, //by default
+                  onButtonPressed: (ButtonType type, bool? status, Function()? updateStatus) {
+                      print("button '${describeEnum(type)}' pressed, the current selected status is $status");
+                      return true;
+                  },
+                  onDropdownChanged: (DropdownType type, dynamic changed, Function(dynamic) updateSelectedItem) {
+                    print("dropdown '${describeEnum(type)}' changed to $changed");
+                    return true;
+                  }
                 ),
                 otherOptions:
                     OtherOptions(height: 550),

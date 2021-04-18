@@ -39,3 +39,10 @@ enum ToolbarType { nativeGrid, nativeScrollable, summernote }
 ///
 /// Note: This is ignored when [ToolbarType.summernote] is set.
 enum ToolbarPosition { aboveEditor, belowEditor }
+
+enum ButtonType { style, bold, italic, underline, clearFormatting, strikethrough,
+    superscript, subscript, foregroundColor, highlightColor, ul, ol, alignLeft,
+    alignCenter, alignRight, alignJustify, increaseIndent, decreaseIndent, link,
+    picture, video, table, hr, fullscreen, codeview, undo, redo, help, copy, paste }
+
+enum DropdownType { style, fontSize, fontSizeUnit, listStyles, lineHeight }

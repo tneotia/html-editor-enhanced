@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 
@@ -78,8 +79,15 @@ class HtmlToolbarOptions {
       InsertButtons(),
       OtherButtons(),
     ],
+    this.imageExtensions,
+    this.linkInsertInterceptor,
+    this.mediaLinkInsertInterceptor,
+    this.mediaUploadInterceptor,
+    this.onButtonPressed,
+    this.onDropdownChanged,
     this.toolbarType = ToolbarType.nativeScrollable,
     this.toolbarPosition = ToolbarPosition.aboveEditor,
+    this.videoExtensions,
   });
 
   /// Allows you to create your own buttons that are added to the end of the
@@ -89,11 +97,85 @@ class HtmlToolbarOptions {
   /// Sets which options are visible in the toolbar for the editor.
   final List<Toolbar> defaultToolbarButtons;
 
+  /// Allows you to set the allowed extensions when a user inserts an image
+  ///
+  /// By default any image extension is allowed.
+  final List<String>? imageExtensions;
+
+  /// Allows you to intercept any links being inserted into the editor. The
+  /// function passes the display text, the URL itself, and whether the
+  /// URL should open a new tab.
+  ///
+  /// Return a bool to tell the plugin if it should continue with its own handler
+  /// or if you want to handle the link by yourself.
+  /// (true = continue with internal handler, false = do not use internal handler)
+  ///
+  /// If no interceptor is set, the plugin uses the internal handler.
+  final bool Function(String, String, bool)? linkInsertInterceptor;
+
+  /// Allows you to intercept any images/videos inserted as links into the editor.
+  /// The function passes the URL of the media inserted.
+  ///
+  /// Return a bool to tell the plugin if it should continue with its own handler
+  /// or if you want to handle the image/video link by yourself.
+  /// (true = continue with internal handler, false = do not use internal handler)
+  ///
+  /// If no interceptor is set, the plugin uses the internal handler.
+  final bool Function(String)? mediaLinkInsertInterceptor;
+
+  /// Allows you to intercept any image/video files being inserted into the editor.
+  /// The function passes the PlatformFile class, which contains all the file data
+  /// including name, size, type, Uint8List bytes, etc.
+  ///
+  /// Return a bool to tell the plugin if it should continue with its own handler
+  /// or if you want to handle the image/video upload by yourself.
+  /// (true = continue with internal handler, false = do not use internal handler)
+  ///
+  /// If no interceptor is set, the plugin uses the internal handler.
+  final bool Function(PlatformFile)? mediaUploadInterceptor;
+
+  /// Allows you to intercept any button press. The function passes the ButtonType
+  /// enum, which tells you which button was pressed, the current selected status of
+  /// the button, and a function to reverse the status (in case you decide to handle
+  /// the button press yourself).
+  ///
+  /// Note: In some cases, the button is never active (e.g. copy/paste buttons)
+  /// so null will be returned for both the selected status and the function.
+  ///
+  /// Return a bool to tell the plugin if it should continue with its own handler
+  /// or if you want to handle the button press by yourself.
+  /// (true = continue with internal handler, false = do not use internal handler)
+  ///
+  /// If no interceptor is set, the plugin uses the internal handler.
+  final bool Function(ButtonType, bool?, void Function()?)? onButtonPressed;
+
+  /// Allows you to intercept any dropdown changes. The function passes the
+  /// DropdownType enum, which tells you which dropdown was changed,
+  /// the changed value to indicate what the dropdown was changed to, and the
+  /// function to update the changed value (in case you decide to handle the
+  /// dropdown change yourself).
+  ///
+  /// Return a bool to tell the plugin if it should continue with its own handler
+  /// or if you want to handle the dropdown change by yourself.
+  /// (true = continue with internal handler, false = do not use internal handler)
+  ///
+  /// If no interceptor is set, the plugin uses the internal handler.
+  final bool Function(DropdownType, dynamic, void Function(dynamic))? onDropdownChanged;
+
   /// Controls how the toolbar displays. See [ToolbarType] for more details.
+  ///
+  /// By default the toolbar is rendered as a scrollable one-line list.
   final ToolbarType toolbarType;
 
   /// Controls where the toolbar is positioned. See [ToolbarPosition] for more details.
+  ///
+  /// By default the toolbar is above the editor.
   final ToolbarPosition toolbarPosition;
+
+  /// Allows you to set the allowed extensions when a user inserts a video.
+  ///
+  /// By default any video extension is allowed.
+  final List<String>? videoExtensions;
 }
 
 /// Other options such as the height of the widget and the decoration surrounding it
