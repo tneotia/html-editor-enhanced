@@ -291,7 +291,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         child: Opacity(
           opacity: _enabled ? 1 : 0.5,
           child: Container(
-            height: widget.options.toolbarItemHeight + 3,
+            height: widget.options.toolbarItemHeight + 15,
             child: Padding(
               padding: const EdgeInsets.all(5.0),
               child: CustomScrollView(
@@ -339,8 +339,22 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               style: widget.options.textStyle,
               items: [
                 DropdownMenuItem(child: Text("Normal"), value: "p"),
-                DropdownMenuItem(child: Text("   Quote"), value: "blockquote"),
-                DropdownMenuItem(child: Text("   Code", style: TextStyle(fontFamily: "times")), value: "pre"),
+                DropdownMenuItem(
+                    child: Container(
+                        decoration: BoxDecoration(border: Border(left: BorderSide(color: Colors.grey, width: 3.0))),
+                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Text("Quote", style: TextStyle(fontFamily: "times", color: Colors.grey))
+                    ),
+                    value: "blockquote"
+                ),
+                DropdownMenuItem(
+                    child: Container(
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.grey),
+                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Text("Code", style: TextStyle(fontFamily: "courier", color: Colors.white))
+                    ),
+                    value: "pre"
+                ),
                 DropdownMenuItem(child: Text("Header 1", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32)), value: "h1"),
                 DropdownMenuItem(child: Text("Header 2", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)), value: "h2"),
                 DropdownMenuItem(child: Text("Header 3", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)), value: "h3"),
