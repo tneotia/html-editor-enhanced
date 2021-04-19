@@ -118,8 +118,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                     controllerMap[widget.controller] = controller;
                     controller.addJavaScriptHandler(handlerName: 'FormatSettings', callback: (e) {
                       Map<String, dynamic> json = e[0] as Map<String, dynamic>;
-                      if (updateToolbar != null)
-                        updateToolbar!(json);
+                      if (widget.controller.toolbar != null)
+                        widget.controller.toolbar!.updateToolbar(json);
                     });
                   },
                   initialOptions: InAppWebViewGroupOptions(
@@ -412,6 +412,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                             var isCenter = false;
                             var isFull = false;
                             var parent;
+                            var fontName;
                             var fontSize = 16;
                             var foreColor = "000000";
                             var backColor = "FFFF00";
@@ -438,9 +439,11 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                               fontSize = document.queryCommandValue('fontSize');
                               foreColor = document.queryCommandValue('foreColor');
                               backColor = document.queryCommandValue('hiliteColor');
+                              fontName = document.queryCommandValue('fontName');
                             }
                             var message = {
                               'style': parent,
+                              'fontName': fontName,
                               'fontSize': fontSize,
                               'font': [isBold, isItalic, isUnderline],
                               'miscFont': [isStrikethrough, isSuperscript, isSubscript],

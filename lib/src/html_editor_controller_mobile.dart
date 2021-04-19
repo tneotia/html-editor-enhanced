@@ -4,6 +4,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart'
     as unsupported;
+import 'package:html_editor_enhanced/src/widgets/toolbar_widget.dart';
 
 /// Controller for mobile
 class HtmlEditorController extends unsupported.HtmlEditorController {
@@ -12,6 +13,9 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     this.processNewLineAsBr = false,
     this.processOutputHtml = true,
   });
+
+  /// Toolbar widget state to call various methods. For internal use only.
+  ToolbarWidgetState? toolbar;
 
   /// Determines whether text processing should happen on input HTML, e.g.
   /// whether a new line should be converted to a <br>.
@@ -93,11 +97,13 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
   /// disables the Html editor
   void disable() {
+    toolbar!.disable();
     _evaluateJavascript(source: "\$('#summernote-2').summernote('disable');");
   }
 
   /// enables the Html editor
   void enable() {
+    toolbar!.enable();
     _evaluateJavascript(source: "\$('#summernote-2').summernote('enable');");
   }
 

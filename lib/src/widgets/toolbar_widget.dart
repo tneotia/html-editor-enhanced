@@ -29,83 +29,101 @@ class ToolbarWidget extends StatefulWidget {
 class ToolbarWidgetState extends State<ToolbarWidget> {
   /// List that controls which [ToggleButtons] are selected for
   /// bold/italic/underline/clear styles
-  List<bool> fontSelected = List<bool>.filled(4, false);
+  List<bool> _fontSelected = List<bool>.filled(4, false);
 
   /// List that controls which [ToggleButtons] are selected for
   /// strikthrough/superscript/subscript
-  List<bool> miscFontSelected = List<bool>.filled(3, false);
+  List<bool> _miscFontSelected = List<bool>.filled(3, false);
 
   /// List that controls which [ToggleButtons] are selected for
   /// forecolor/backcolor
-  List<bool> colorSelected = List<bool>.filled(2, false);
+  List<bool> _colorSelected = List<bool>.filled(2, false);
 
   /// List that controls which [ToggleButtons] are selected for
   /// ordered/unordered list
-  List<bool> listSelected = List<bool>.filled(2, false);
+  List<bool> _listSelected = List<bool>.filled(2, false);
 
   /// List that controls which [ToggleButtons] are selected for
   /// fullscreen, codeview, undo, redo, and help. Fullscreen and codeview
   /// are the only buttons that will ever be selected.
-  List<bool> miscSelected = List<bool>.filled(5, false);
+  List<bool> _miscSelected = List<bool>.filled(5, false);
 
   /// List that controls which [ToggleButtons] are selected for
   /// justify left/right/center/full.
-  List<bool> alignSelected = List<bool>.filled(4, false);
+  List<bool> _alignSelected = List<bool>.filled(4, false);
 
   /// Sets the selected item for the font style dropdown
-  String fontSelectedItem = "p";
+  String _fontSelectedItem = "p";
 
+  String _fontNameSelectedItem = "sans-serif";
   /// Sets the selected item for the font size dropdown
-  double fontSizeSelectedItem = 3;
+  double _fontSizeSelectedItem = 3;
 
   /// Keeps track of the current font size in px
-  double actualFontSizeSelectedItem = 16;
+  double _actualFontSizeSelectedItem = 16;
 
   /// Sets the selected item for the font units dropdown
-  String fontSizeUnitSelectedItem = "pt";
+  String _fontSizeUnitSelectedItem = "pt";
 
   /// Sets the selected item for the foreground color dialog
-  Color foreColorSelected = Colors.black;
+  Color _foreColorSelected = Colors.black;
 
   /// Sets the selected item for the background color dialog
-  Color backColorSelected = Colors.yellow;
+  Color _backColorSelected = Colors.yellow;
 
   /// Sets the selected item for the list style dropdown
-  String? listStyleSelectedItem;
+  String? _listStyleSelectedItem;
 
   /// Sets the selected item for the line height dropdown
-  double lineHeightSelectedItem = 1;
+  double _lineHeightSelectedItem = 1;
+
+  /// Masks the toolbar with a grey color if false
+  bool _enabled = true;
 
   @override
   void initState() {
-    updateToolbar = _updateToolbar;
+    widget.controller.toolbar = this;
     for (Toolbar t in widget.options.defaultToolbarButtons) {
       if (t is FontButtons) {
-        fontSelected = List<bool>.filled(t.getIcons1().length, false);
-        miscFontSelected = List<bool>.filled(t.getIcons2().length, false);
+        _fontSelected = List<bool>.filled(t.getIcons1().length, false);
+        _miscFontSelected = List<bool>.filled(t.getIcons2().length, false);
       }
       if (t is ColorButtons) {
-        colorSelected = List<bool>.filled(t.getIcons().length, false);
+        _colorSelected = List<bool>.filled(t.getIcons().length, false);
       }
       if (t is ListButtons) {
-        listSelected = List<bool>.filled(t.getIcons().length, false);
+        _listSelected = List<bool>.filled(t.getIcons().length, false);
       }
       if (t is OtherButtons) {
-        miscSelected = List<bool>.filled(t.getIcons1().length, false);
+        _miscSelected = List<bool>.filled(t.getIcons1().length, false);
       }
       if (t is ParagraphButtons) {
-        alignSelected = List<bool>.filled(t.getIcons1().length, false);
+        _alignSelected = List<bool>.filled(t.getIcons1().length, false);
       }
     }
     super.initState();
   }
 
+  void disable() {
+    setState(() {
+      _enabled = false;
+    });
+  }
+
+  void enable() {
+    setState(() {
+      _enabled = true;
+    });
+  }
+
   /// Updates the toolbar from the JS handler on mobile and the onMessage
   /// listener on web
-  void _updateToolbar(Map<String, dynamic> json) {
+  void updateToolbar(Map<String, dynamic> json) {
     print(json);
     //get parent element
     String parentElem = json['style'] ?? "";
+    //get font name
+    String fontName = (json['fontName'] ?? "").toString().replaceAll('"', "");
     //get font size
     double fontSize = double.tryParse(json['fontSize']) ?? 3;
     //get bold/underline/italic status
@@ -125,11 +143,22 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
     //check the parent element if it matches one of the predetermined styles and update the toolbar
     if (['pre', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'].contains(parentElem)) {
       setState(() {
-        fontSelectedItem = parentElem;
+        _fontSelectedItem = parentElem;
       });
     } else {
       setState(() {
-        fontSelectedItem = "p";
+        _fontSelectedItem = "p";
+      });
+    }
+    //check the font name if it matches one of the predetermined fonts and update the toolbar
+    if (['Courier New', 'sans-serif', 'Times New Roman'].contains(fontName)) {
+      print("fired");
+      setState(() {
+        _fontNameSelectedItem = fontName;
+      });
+    } else {
+      setState(() {
+        _fontNameSelectedItem = "sans-serif";
       });
     }
     //update the fore/back selected color if necessary
@@ -137,101 +166,101 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       setState(() {
         String rgb = colorList[0]!.replaceAll("rgb(", "").replaceAll(")", "");
         List<String> rgbList = rgb.split(", ");
-        foreColorSelected = Color.fromRGBO(int.parse(rgbList[0]), int.parse(rgbList[1]), int.parse(rgbList[2]), 1);
+        _foreColorSelected = Color.fromRGBO(int.parse(rgbList[0]), int.parse(rgbList[1]), int.parse(rgbList[2]), 1);
       });
     } else {
       setState(() {
-        foreColorSelected = Colors.black;
+        _foreColorSelected = Colors.black;
       });
     }
     if (colorList[1] != null && colorList[1]!.isNotEmpty) {
       setState(() {
-        backColorSelected = Color(int.parse(colorList[1]!, radix: 16) + 0xFF000000);
+        _backColorSelected = Color(int.parse(colorList[1]!, radix: 16) + 0xFF000000);
       });
     } else {
       setState(() {
-        backColorSelected = Colors.yellow;
+        _backColorSelected = Colors.yellow;
       });
     }
     //check the list style if it matches one of the predetermined styles and update the toolbar
     if (['decimal', 'lower-alpha', 'upper-alpha', 'lower-roman', 'upper-roman', 'disc', 'circle', 'square'].contains(listType)) {
       setState(() {
-        listStyleSelectedItem = listType;
+        _listStyleSelectedItem = listType;
       });
     } else {
-      listStyleSelectedItem = null;
+      _listStyleSelectedItem = null;
     }
     //update the lineheight selected item if necessary
     if (lineHeight.isNotEmpty && lineHeight.endsWith("px")) {
       double lineHeightDouble = double.tryParse(lineHeight.replaceAll("px", "")) ?? 16;
       List<double> lineHeights = [1, 1.2, 1.4, 1.5, 1.6, 1.8, 2, 3];
-      lineHeights = lineHeights.map((e) => e * actualFontSizeSelectedItem).toList();
+      lineHeights = lineHeights.map((e) => e * _actualFontSizeSelectedItem).toList();
       if (lineHeights.contains(lineHeightDouble)) {
         setState(() {
-          lineHeightSelectedItem = lineHeightDouble / actualFontSizeSelectedItem;
+          _lineHeightSelectedItem = lineHeightDouble / _actualFontSizeSelectedItem;
         });
       }
     } else if (lineHeight == "normal") {
       setState(() {
-        lineHeightSelectedItem = 1.0;
+        _lineHeightSelectedItem = 1.0;
       });
     }
     //check if the font size matches one of the predetermined sizes and update the toolbar
     if ([1, 2, 3, 4, 5, 6, 7].contains(fontSize)) {
       setState(() {
-        fontSizeSelectedItem = fontSize;
+        _fontSizeSelectedItem = fontSize;
       });
     }
     //use the remaining bool lists to update the selected items accordingly
     setState(() {
       for (Toolbar t in widget.options.defaultToolbarButtons) {
         if (t is FontButtons) {
-          for (int i = 0; i < fontSelected.length; i++) {
+          for (int i = 0; i < _fontSelected.length; i++) {
             if (t.getIcons1()[i].icon == Icons.format_bold) {
-              fontSelected[i] = fontList[0] ?? false;
+              _fontSelected[i] = fontList[0] ?? false;
             }
             if (t.getIcons1()[i].icon == Icons.format_italic) {
-              fontSelected[i] = fontList[1] ?? false;
+              _fontSelected[i] = fontList[1] ?? false;
             }
             if (t.getIcons1()[i].icon == Icons.format_underline) {
-              fontSelected[i] = fontList[2] ?? false;
+              _fontSelected[i] = fontList[2] ?? false;
             }
           }
-          for (int i = 0; i < miscFontSelected.length; i++) {
+          for (int i = 0; i < _miscFontSelected.length; i++) {
             if (t.getIcons2()[i].icon == Icons.format_strikethrough) {
-              miscFontSelected[i] = miscFontList[0] ?? false;
+              _miscFontSelected[i] = miscFontList[0] ?? false;
             }
             if (t.getIcons2()[i].icon == Icons.superscript) {
-              miscFontSelected[i] = miscFontList[1] ?? false;
+              _miscFontSelected[i] = miscFontList[1] ?? false;
             }
             if (t.getIcons2()[i].icon == Icons.subscript) {
-              miscFontSelected[i] = miscFontList[2] ?? false;
+              _miscFontSelected[i] = miscFontList[2] ?? false;
             }
           }
         }
         if (t is ListButtons) {
-          for (int i = 0; i < listSelected.length; i++) {
+          for (int i = 0; i < _listSelected.length; i++) {
             if (t.getIcons()[i].icon == Icons.format_list_bulleted) {
-              listSelected[i] = paragraphList[0] ?? false;
+              _listSelected[i] = paragraphList[0] ?? false;
             }
             if (t.getIcons()[i].icon == Icons.format_list_numbered) {
-              listSelected[i] = paragraphList[1] ?? false;
+              _listSelected[i] = paragraphList[1] ?? false;
             }
           }
         }
         if (t is ParagraphButtons) {
-          for (int i = 0; i < alignSelected.length; i++) {
+          for (int i = 0; i < _alignSelected.length; i++) {
             if (t.getIcons1()[i].icon == Icons.format_align_left) {
-              alignSelected[i] = alignList[0] ?? false;
+              _alignSelected[i] = alignList[0] ?? false;
             }
             if (t.getIcons1()[i].icon == Icons.format_align_center) {
-              alignSelected[i] = alignList[1] ?? false;
+              _alignSelected[i] = alignList[1] ?? false;
             }
             if (t.getIcons1()[i].icon == Icons.format_align_right) {
-              alignSelected[i] = alignList[2] ?? false;
+              _alignSelected[i] = alignList[2] ?? false;
             }
             if (t.getIcons1()[i].icon == Icons.format_align_justify) {
-              alignSelected[i] = alignList[3] ?? false;
+              _alignSelected[i] = alignList[3] ?? false;
             }
           }
         }
@@ -242,30 +271,42 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   @override
   Widget build(BuildContext context) {
     if (widget.options.toolbarType == ToolbarType.nativeGrid) {
-      return Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: Wrap(
-          runSpacing: widget.options.gridViewVerticalSpacing,
-          spacing: widget.options.gridViewHorizontalSpacing,
-          children: _buildChildren(),
+      return AbsorbPointer(
+        absorbing: !_enabled,
+        child: Opacity(
+          opacity: _enabled ? 1 : 0.5,
+          child: Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Wrap(
+              runSpacing: widget.options.gridViewVerticalSpacing,
+              spacing: widget.options.gridViewHorizontalSpacing,
+              children: _buildChildren(),
+            ),
+          ),
         ),
       );
     } else {
-      return Container(
-        height: widget.options.toolbarItemHeight + 3,
-        child: Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: CustomScrollView(
-            scrollDirection: Axis.horizontal,
-            slivers: [
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: _buildChildren(),
-                ),
+      return AbsorbPointer(
+        absorbing: !_enabled,
+        child: Opacity(
+          opacity: _enabled ? 1 : 0.5,
+          child: Container(
+            height: widget.options.toolbarItemHeight + 3,
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: CustomScrollView(
+                scrollDirection: Axis.horizontal,
+                slivers: [
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: _buildChildren(),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       );
@@ -307,12 +348,12 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 DropdownMenuItem(child: Text("Header 5", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)), value: "h5"),
                 DropdownMenuItem(child: Text("Header 6", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11)), value: "h6"),
               ],
-              value: fontSelectedItem,
+              value: _fontSelectedItem,
               onChanged: (String? changed) {
                 void updateSelectedItem(dynamic changed) {
                   if (changed is String) {
                     setState(() {
-                      fontSelectedItem = changed;
+                      _fontSelectedItem = changed;
                     });
                   }
                 }
@@ -330,6 +371,51 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         ));
       }
       if (t is FontSettingButtons) {
+        if (t.fontName) toolbarChildren.add(Container(
+          padding: const EdgeInsets.only(left: 8.0),
+          height: widget.options.toolbarItemHeight,
+          decoration: !widget.options.renderBorder ? null :
+          widget.options.dropdownBoxDecoration ?? BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              border: Border.all(color: ToggleButtonsTheme.of(context).borderColor ?? Colors.grey[800]!)
+          ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              elevation: widget.options.dropdownElevation,
+              icon: widget.options.dropdownIcon,
+              iconEnabledColor: widget.options.dropdownIconColor,
+              iconSize: widget.options.dropdownIconSize,
+              itemHeight: widget.options.dropdownItemHeight,
+              focusColor: widget.options.dropdownFocusColor,
+              dropdownColor: widget.options.dropdownBackgroundColor,
+              menuMaxHeight: widget.options.dropdownMenuMaxHeight,
+              style: widget.options.textStyle,
+              items: [
+                DropdownMenuItem(child: Text("Courier New", style: TextStyle(fontFamily: "Courier")), value: "Courier New"),
+                DropdownMenuItem(child: Text("Sans Serif", style: TextStyle(fontFamily: "sans-serif")), value: "sans-serif"),
+                DropdownMenuItem(child: Text("Times New Roman", style: TextStyle(fontFamily: "Times")), value: "Times New Roman"),
+              ],
+              value: _fontNameSelectedItem,
+              onChanged: (String? changed) {
+                void updateSelectedItem(dynamic changed) {
+                  if (changed is String) {
+                    setState(() {
+                      _fontNameSelectedItem = changed;
+                    });
+                  }
+                }
+
+                if (changed != null) {
+                  bool proceed = widget.options.onDropdownChanged?.call(DropdownType.fontName, changed, updateSelectedItem) ?? true;
+                  if (proceed) {
+                    widget.controller.execCommand("fontName", argument: changed);
+                    updateSelectedItem(changed);
+                  }
+                }
+              },
+            ),
+          ),
+        ));
         if (t.fontSize) toolbarChildren.add(Container(
           padding: const EdgeInsets.only(left: 8.0),
           height: widget.options.toolbarItemHeight,
@@ -351,40 +437,40 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               style: widget.options.textStyle,
               items: [
                 DropdownMenuItem(
-                    child: Text("${fontSizeUnitSelectedItem == "px" ? "11" : "8"} $fontSizeUnitSelectedItem"),
+                    child: Text("${_fontSizeUnitSelectedItem == "px" ? "11" : "8"} $_fontSizeUnitSelectedItem"),
                     value: 1
                 ),
                 DropdownMenuItem(
-                    child: Text("${fontSizeUnitSelectedItem == "px" ? "13" : "10"} $fontSizeUnitSelectedItem"),
+                    child: Text("${_fontSizeUnitSelectedItem == "px" ? "13" : "10"} $_fontSizeUnitSelectedItem"),
                     value: 2
                 ),
                 DropdownMenuItem(
-                    child: Text("${fontSizeUnitSelectedItem == "px" ? "16" : "12"} $fontSizeUnitSelectedItem"),
+                    child: Text("${_fontSizeUnitSelectedItem == "px" ? "16" : "12"} $_fontSizeUnitSelectedItem"),
                     value: 3
                 ),
                 DropdownMenuItem(
-                    child: Text("${fontSizeUnitSelectedItem == "px" ? "19" : "14"} $fontSizeUnitSelectedItem"),
+                    child: Text("${_fontSizeUnitSelectedItem == "px" ? "19" : "14"} $_fontSizeUnitSelectedItem"),
                     value: 4
                 ),
                 DropdownMenuItem(
-                    child: Text("${fontSizeUnitSelectedItem == "px" ? "24" : "18"} $fontSizeUnitSelectedItem"),
+                    child: Text("${_fontSizeUnitSelectedItem == "px" ? "24" : "18"} $_fontSizeUnitSelectedItem"),
                     value: 5
                 ),
                 DropdownMenuItem(
-                    child: Text("${fontSizeUnitSelectedItem == "px" ? "32" : "24"} $fontSizeUnitSelectedItem"),
+                    child: Text("${_fontSizeUnitSelectedItem == "px" ? "32" : "24"} $_fontSizeUnitSelectedItem"),
                     value: 6
                 ),
                 DropdownMenuItem(
-                    child: Text("${fontSizeUnitSelectedItem == "px" ? "48" : "36"} $fontSizeUnitSelectedItem"),
+                    child: Text("${_fontSizeUnitSelectedItem == "px" ? "48" : "36"} $_fontSizeUnitSelectedItem"),
                     value: 7
                 ),
               ],
-              value: fontSizeSelectedItem,
+              value: _fontSizeSelectedItem,
               onChanged: (double? changed) {
                 void updateSelectedItem(dynamic changed) {
                   if (changed is double) {
                     setState(() {
-                      fontSizeSelectedItem = changed;
+                      _fontSizeSelectedItem = changed;
                     });
                   }
                 }
@@ -395,25 +481,25 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   if (proceed) {
                     switch (intChanged) {
                       case 1:
-                        actualFontSizeSelectedItem = 11;
+                        _actualFontSizeSelectedItem = 11;
                         break;
                       case 2:
-                        actualFontSizeSelectedItem = 13;
+                        _actualFontSizeSelectedItem = 13;
                         break;
                       case 3:
-                        actualFontSizeSelectedItem = 16;
+                        _actualFontSizeSelectedItem = 16;
                         break;
                       case 4:
-                        actualFontSizeSelectedItem = 19;
+                        _actualFontSizeSelectedItem = 19;
                         break;
                       case 5:
-                        actualFontSizeSelectedItem = 24;
+                        _actualFontSizeSelectedItem = 24;
                         break;
                       case 6:
-                        actualFontSizeSelectedItem = 32;
+                        _actualFontSizeSelectedItem = 32;
                         break;
                       case 7:
-                        actualFontSizeSelectedItem = 48;
+                        _actualFontSizeSelectedItem = 48;
                         break;
                     }
                     widget.controller.execCommand('fontSize', argument: changed.toString());
@@ -447,12 +533,12 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 DropdownMenuItem(child: Text("pt"), value: "pt"),
                 DropdownMenuItem(child: Text("px"), value: "px"),
               ],
-              value: fontSizeUnitSelectedItem,
+              value: _fontSizeUnitSelectedItem,
               onChanged: (String? changed) {
                 void updateSelectedItem(dynamic changed) {
                   if (changed is String) {
                     setState(() {
-                      fontSizeUnitSelectedItem = changed;
+                      _fontSizeUnitSelectedItem = changed;
                     });
                   }
                 }
@@ -492,26 +578,26 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             onPressed: (int index) {
               void updateStatus() {
                 setState(() {
-                  fontSelected[index] = !fontSelected[index];
+                  _fontSelected[index] = !_fontSelected[index];
                 });
               }
 
               if (t.getIcons1()[index].icon == Icons.format_bold) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.bold, fontSelected[index], updateStatus) ?? true;
+                bool proceed = widget.options.onButtonPressed?.call(ButtonType.bold, _fontSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('bold');
                   updateStatus();
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_italic) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.italic, fontSelected[index], updateStatus) ?? true;
+                bool proceed = widget.options.onButtonPressed?.call(ButtonType.italic, _fontSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('italic');
                   updateStatus();
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_underline) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.underline, fontSelected[index], updateStatus) ?? true;
+                bool proceed = widget.options.onButtonPressed?.call(ButtonType.underline, _fontSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('underline');
                   updateStatus();
@@ -524,7 +610,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
             },
-            isSelected: fontSelected,
+            isSelected: _fontSelected,
           ));
         }
         if (t.strikethrough || t.superscript || t.subscript) {
@@ -550,33 +636,33 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             onPressed: (int index) {
               void updateStatus() {
                 setState(() {
-                  miscFontSelected[index] = !miscFontSelected[index];
+                  _miscFontSelected[index] = !_miscFontSelected[index];
                 });
               }
 
               if (t.getIcons2()[index].icon == Icons.format_strikethrough) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.strikethrough, miscFontSelected[index], updateStatus) ?? true;
+                bool proceed = widget.options.onButtonPressed?.call(ButtonType.strikethrough, _miscFontSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('strikeThrough');
                   updateStatus();
                 }
               }
               if (t.getIcons2()[index].icon == Icons.superscript) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.superscript, miscFontSelected[index], updateStatus) ?? true;
+                bool proceed = widget.options.onButtonPressed?.call(ButtonType.superscript, _miscFontSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('superscript');
                   updateStatus();
                 }
               }
               if (t.getIcons2()[index].icon == Icons.subscript) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.subscript, miscFontSelected[index], updateStatus) ?? true;
+                bool proceed = widget.options.onButtonPressed?.call(ButtonType.subscript, _miscFontSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('subscript');
                   updateStatus();
                 }
               }
             },
-            isSelected: miscFontSelected,
+            isSelected: _miscFontSelected,
           ));
         }
       }
@@ -603,13 +689,13 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           onPressed: (int index) {
             void updateStatus() {
               setState(() {
-                colorSelected[index] = !colorSelected[index];
+                _colorSelected[index] = !_colorSelected[index];
               });
             }
 
-            if (colorSelected[index]) {
+            if (_colorSelected[index]) {
               if (t.getIcons()[index].icon == Icons.format_color_text) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.foregroundColor, colorSelected[index], updateStatus) ?? true;
+                bool proceed = widget.options.onButtonPressed?.call(ButtonType.foregroundColor, _colorSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('foreColor',
                       argument: (Colors.black.value & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase());
@@ -617,7 +703,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons()[index].icon == Icons.format_color_fill) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.highlightColor, colorSelected[index], updateStatus) ?? true;
+                bool proceed = widget.options.onButtonPressed?.call(ButtonType.highlightColor, _colorSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('hiliteColor',
                       argument: (Colors.yellow.value & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase());
@@ -627,9 +713,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             } else {
               bool proceed = true;
               if (t.getIcons()[index].icon == Icons.format_color_text) {
-                proceed = widget.options.onButtonPressed?.call(ButtonType.foregroundColor, colorSelected[index], updateStatus) ?? true;
+                proceed = widget.options.onButtonPressed?.call(ButtonType.foregroundColor, _colorSelected[index], updateStatus) ?? true;
               } else if (t.getIcons()[index].icon == Icons.format_color_fill) {
-                proceed = widget.options.onButtonPressed?.call(ButtonType.highlightColor, colorSelected[index], updateStatus) ?? true;
+                proceed = widget.options.onButtonPressed?.call(ButtonType.highlightColor, _colorSelected[index], updateStatus) ?? true;
               }
               if (proceed) {
                 showDialog(
@@ -637,9 +723,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                     builder: (BuildContext context) {
                       late Color newColor;
                       if (t.getIcons()[index].icon == Icons.format_color_text)
-                        newColor = foreColorSelected;
+                        newColor = _foreColorSelected;
                       else
-                        newColor = backColorSelected;
+                        newColor = _backColorSelected;
                       return AlertDialog(
                         title: Text('Pick ${t.getIcons()[index].icon == Icons.format_color_text ? "text" : "highlight"} color'),
                         content: SingleChildScrollView(
@@ -664,14 +750,14 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                               onPressed: () {
                                 if (t.getIcons()[index].icon == Icons.format_color_text) {
                                   setState(() {
-                                    foreColorSelected = Colors.black;
+                                    _foreColorSelected = Colors.black;
                                   });
                                   widget.controller.execCommand('removeFormat', argument: 'foreColor');
                                   widget.controller.execCommand('foreColor', argument: 'initial');
                                 }
                                 if (t.getIcons()[index].icon == Icons.format_color_fill) {
                                   setState(() {
-                                    backColorSelected = Colors.yellow;
+                                    _backColorSelected = Colors.yellow;
                                   });
                                   widget.controller.execCommand('removeFormat', argument: 'hiliteColor');
                                   widget.controller.execCommand('hiliteColor', argument: 'initial');
@@ -686,18 +772,18 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 widget.controller.execCommand('foreColor',
                                     argument: (newColor.value & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase());
                                 setState(() {
-                                  foreColorSelected = newColor;
+                                  _foreColorSelected = newColor;
                                 });
                               }
                               if (t.getIcons()[index].icon == Icons.format_color_fill) {
                                 widget.controller.execCommand('hiliteColor',
                                     argument: (newColor.value & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase());
                                 setState(() {
-                                  backColorSelected = newColor;
+                                  _backColorSelected = newColor;
                                 });
                               }
                               setState(() {
-                                colorSelected[index] = !colorSelected[index];
+                                _colorSelected[index] = !_colorSelected[index];
                               });
                               Navigator.of(context).pop();
                             },
@@ -710,7 +796,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
             }
           },
-          isSelected: colorSelected,
+          isSelected: _colorSelected,
         ));
       }
       if (t is ListButtons) {
@@ -737,26 +823,26 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             onPressed: (int index) {
               void updateStatus() {
                 setState(() {
-                  listSelected[index] = !listSelected[index];
+                  _listSelected[index] = !_listSelected[index];
                 });
               }
 
               if (t.getIcons()[index].icon == Icons.format_list_bulleted) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.ul, listSelected[index], updateStatus) ?? true;
+                bool proceed = widget.options.onButtonPressed?.call(ButtonType.ul, _listSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('insertUnorderedList');
                   updateStatus();
                 }
               }
               if (t.getIcons()[index].icon == Icons.format_list_numbered) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.ol, listSelected[index], updateStatus) ?? true;
+                bool proceed = widget.options.onButtonPressed?.call(ButtonType.ol, _listSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('insertOrderedList');
                   updateStatus();
                 }
               }
             },
-            isSelected: listSelected,
+            isSelected: _listSelected,
           ));
         }
         if (t.listStyles) {
@@ -790,12 +876,12 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   DropdownMenuItem(child: Text("■ Square"), value: "square"),
                 ],
                 hint: Text("Select list style"),
-                value: listStyleSelectedItem,
+                value: _listStyleSelectedItem,
                 onChanged: (String? changed) {
                   void updateSelectedItem(dynamic changed) {
                     if (changed is String) {
                       setState(() {
-                        listStyleSelectedItem = changed;
+                        _listStyleSelectedItem = changed;
                       });
                     }
                   }
@@ -841,44 +927,44 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             onPressed: (int index) {
               void updateStatus() {
                 setState(() {
-                  alignSelected[index] = !alignSelected[index];
+                  _alignSelected[index] = !_alignSelected[index];
                 });
               }
 
               if (t.getIcons1()[index].icon == Icons.format_align_left) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.alignLeft, alignSelected[index], updateStatus) ?? true;
+                bool proceed = widget.options.onButtonPressed?.call(ButtonType.alignLeft, _alignSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('justifyLeft');
-                  alignSelected = List<bool>.filled(t.getIcons1().length, false);
+                  _alignSelected = List<bool>.filled(t.getIcons1().length, false);
                   updateStatus();
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_align_center) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.alignCenter, alignSelected[index], updateStatus) ?? true;
+                bool proceed = widget.options.onButtonPressed?.call(ButtonType.alignCenter, _alignSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('justifyCenter');
-                  alignSelected = List<bool>.filled(t.getIcons1().length, false);
+                  _alignSelected = List<bool>.filled(t.getIcons1().length, false);
                   updateStatus();
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_align_right) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.alignRight, alignSelected[index], updateStatus) ?? true;
+                bool proceed = widget.options.onButtonPressed?.call(ButtonType.alignRight, _alignSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('justifyRight');
-                  alignSelected = List<bool>.filled(t.getIcons1().length, false);
+                  _alignSelected = List<bool>.filled(t.getIcons1().length, false);
                   updateStatus();
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_align_justify) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.alignJustify, alignSelected[index], updateStatus) ?? true;
+                bool proceed = widget.options.onButtonPressed?.call(ButtonType.alignJustify, _alignSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('justifyFull');
-                  alignSelected = List<bool>.filled(t.getIcons1().length, false);
+                  _alignSelected = List<bool>.filled(t.getIcons1().length, false);
                   updateStatus();
                 }
               }
             },
-            isSelected: alignSelected,
+            isSelected: _alignSelected,
           ));
         }
         if (t.increaseIndent || t.decreaseIndent) {
@@ -948,12 +1034,12 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   DropdownMenuItem(child: Text("2.0"), value: 2),
                   DropdownMenuItem(child: Text("3.0"), value: 3),
                 ],
-                value: lineHeightSelectedItem,
+                value: _lineHeightSelectedItem,
                 onChanged: (double? changed) {
                   void updateSelectedItem(dynamic changed) {
                     if (changed is double) {
                       setState(() {
-                        lineHeightSelectedItem = changed;
+                        _lineHeightSelectedItem = changed;
                       });
                     }
                   }
@@ -1437,19 +1523,19 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             onPressed: (int index) {
               void updateStatus() {
                 setState(() {
-                  miscSelected[index] = !miscSelected[index];
+                  _miscSelected[index] = !_miscSelected[index];
                 });
               }
 
               if (t.getIcons1()[index].icon == Icons.fullscreen) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.fullscreen, miscSelected[index], updateStatus) ?? true;
+                bool proceed = widget.options.onButtonPressed?.call(ButtonType.fullscreen, _miscSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.setFullScreen();
                   updateStatus();
                 }
               }
               if (t.getIcons1()[index].icon == Icons.code) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.codeview, miscSelected[index], updateStatus) ?? true;
+                bool proceed = widget.options.onButtonPressed?.call(ButtonType.codeview, _miscSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.toggleCodeView();
                   updateStatus();
@@ -1692,7 +1778,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
             },
-            isSelected: miscSelected,
+            isSelected: _miscSelected,
           ));
         }
         if (t.copy || t.paste) {

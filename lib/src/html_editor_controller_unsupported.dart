@@ -1,5 +1,6 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:html_editor_enhanced/src/widgets/toolbar_widget.dart';
 
 /// Fallback controller (should never be used)
 class HtmlEditorController {
@@ -8,6 +9,9 @@ class HtmlEditorController {
     this.processNewLineAsBr = false,
     this.processOutputHtml = true,
   });
+
+  /// Toolbar widget state to call various methods. For internal use only.
+  ToolbarWidgetState? toolbar;
 
   /// Determines whether text processing should happen on input HTML, e.g.
   /// whether a new line should be converted to a <br>.

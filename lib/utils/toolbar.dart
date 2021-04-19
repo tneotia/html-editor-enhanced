@@ -16,10 +16,12 @@ class StyleButtons extends Toolbar {
 
 /// Font setting group
 class FontSettingButtons extends Toolbar {
+  final bool fontName;
   final bool fontSize;
   final bool fontSizeUnit;
 
   const FontSettingButtons({
+    this.fontName = true,
     this.fontSize = true,
     this.fontSizeUnit = true,
   });

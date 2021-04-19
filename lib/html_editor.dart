@@ -21,9 +21,6 @@ export 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart
 /// Global variable used to get the [InAppWebViewController] of the Html editor
 Map<HtmlEditorController, dynamic> controllerMap = {};
 
-/// Global variable used to get the function to update the toolbar widget
-void Function(Map<String, dynamic>)? updateToolbar;
-
 /// Manages the notification type for a notification displayed at the bottom of
 /// the editor
 enum NotificationType { info, warning, success, danger, plaintext }
@@ -45,4 +42,4 @@ enum ButtonType { style, bold, italic, underline, clearFormatting, strikethrough
     alignCenter, alignRight, alignJustify, increaseIndent, decreaseIndent, link,
     picture, video, table, hr, fullscreen, codeview, undo, redo, help, copy, paste }
 
-enum DropdownType { style, fontSize, fontSizeUnit, listStyles, lineHeight }
+enum DropdownType { style, fontName, fontSize, fontSizeUnit, listStyles, lineHeight }
