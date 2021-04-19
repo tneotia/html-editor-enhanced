@@ -139,43 +139,18 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                   print("editor scrolled");
                 }),
                 plugins: [
-                  SummernoteEmoji(),
-                  AdditionalTextTags(),
-                  SummernoteCaseConverter(),
-                  SummernoteListStyles(),
-                  SummernoteRTL(),
                   SummernoteAtMention(
-                      getSuggestionsMobile: (String value) {
-                        List<String> mentions = ['test1', 'test2', 'test3'];
-                        return mentions
-                            .where((element) => element.contains(value))
-                            .toList();
-                      },
-                      mentionsWeb: ['test1', 'test2', 'test3'],
-                      onSelect: (String value) {
-                        print(value);
-                      }),
-                  SummernoteCodewrapper(),
-                  SummernoteFile(
-                      //this is commented because it overrides the default SummernoteFile handlers
-                      /*onFileUpload: (FileUpload file) {
-                      print(file.name);
-                      print(file.size);
-                      print(file.type);
-                      print(file.base64);
-                    },*/
-                      onFileLinkInsert: (String link) {
-                    print(link);
-                  }, onFileUploadError: (FileUpload? file, String? base64Str,
-                          UploadError error) {
-                    print(describeEnum(error));
-                    print(base64Str ?? "");
-                    if (file != null) {
-                      print(file.name);
-                      print(file.size);
-                      print(file.type);
+                    getSuggestionsMobile: (String value) {
+                      List<String> mentions = ['test1', 'test2', 'test3'];
+                      return mentions
+                          .where((element) => element.contains(value))
+                          .toList();
+                    },
+                    mentionsWeb: ['test1', 'test2', 'test3'],
+                    onSelect: (String value) {
+                      print(value);
                     }
-                  }),
+                  ),
                 ],
               ),
               Padding(

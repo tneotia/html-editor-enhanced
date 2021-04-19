@@ -23,6 +23,7 @@ dependencies:
   flutter_colorpicker: ^0.4.0
   file_picker: ^3.0.1
   numberpicker: ^2.1.1
+  pointer_interceptor: ^0.9.0
 
 dev_dependencies:
   flutter_test:
@@ -45,17 +46,7 @@ flutter:
     - packages/html_editor_enhanced/assets/font/summernote.ttf
     - packages/html_editor_enhanced/assets/font/summernote.woff
     - packages/html_editor_enhanced/assets/font/summernote.woff2
-    - packages/html_editor_enhanced/assets/plugins/additional-text-tags/summernote-add-text-tags.css
-    - packages/html_editor_enhanced/assets/plugins/additional-text-tags/summernote-add-text-tags.js
-    - packages/html_editor_enhanced/assets/plugins/summernote-emoji/summernote-ext-emoji-ajax.css
-    - packages/html_editor_enhanced/assets/plugins/summernote-emoji/summernote-ext-emoji-ajax.js
-    - packages/html_editor_enhanced/assets/plugins/summernote-case-converter/summernote-case-converter.js
-    - packages/html_editor_enhanced/assets/plugins/summernote-list-styles/summernote-list-styles.js
-    - packages/html_editor_enhanced/assets/plugins/summernote-list-styles/summernote-list-styles.css
-    - packages/html_editor_enhanced/assets/plugins/summernote-rtl/summernote-ext-rtl.js
     - packages/html_editor_enhanced/assets/plugins/summernote-at-mention/bundle.js
-    - packages/html_editor_enhanced/assets/plugins/summernote-codewrapper/summernote-ext-codewrapper.min.js
-    - packages/html_editor_enhanced/assets/plugins/summernote-file/summernote-file.js
   # This section identifies this Flutter project as a plugin project.
   # The 'pluginClass' and Android 'package' identifiers should not ordinarily
   # be modified. They are used by the tooling to maintain consistency when

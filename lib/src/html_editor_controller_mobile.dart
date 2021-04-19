@@ -198,6 +198,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     recalculateHeight();
   }
 
+  /// Helper function to process input html
   String _processHtml({required html}) {
     if (processInputHtml) {
       html = html
@@ -227,4 +228,19 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
           "Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart");
     }
   }
+
+  /// Internal function to change list style on Web
+  void changeListStyle(String changed) {}
+
+  /// Internal function to change line height on Web
+  void changeLineHeight(String changed) {}
+
+  /// Internal function to change text direction on Web
+  void changeTextDirection(String changed) {}
+
+  /// Internal function to change case on Web
+  void changeCase(String changed) {}
+
+  /// Internal function to insert table on Web
+  void insertTable(String dimensions) {}
 }

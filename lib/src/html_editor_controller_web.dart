@@ -41,7 +41,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
   /// Allows the [InAppWebViewController] for the Html editor to be accessed
   /// outside of the package itself for endless control and customization.
-  InAppWebViewController get editorController => throw Exception(
+  InAppWebViewController? get editorController => throw Exception(
       "Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart and check kIsWeb before accessing this getter");
 
   /// Gets the text from the editor and returns it as a [String].
@@ -179,6 +179,36 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     });
   }
 
+  /// A function to quickly call a document.execCommand function in a readable format
+  void execCommand(String command, {String? argument}) {
+    _evaluateJavascriptWeb(data: {"type": "toIframe: execCommand", "command": command, "argument": argument});
+  }
+
+  /// Internal function to change list style on Web
+  void changeListStyle(String changed) {
+    _evaluateJavascriptWeb(data: {"type": "toIframe: changeListStyle", "changed": changed});
+  }
+
+  /// Internal function to change line height on Web
+  void changeLineHeight(String changed) {
+    _evaluateJavascriptWeb(data: {"type": "toIframe: changeLineHeight", "changed": changed});
+  }
+
+  /// Internal function to change text direction on Web
+  void changeTextDirection(String direction) {
+    _evaluateJavascriptWeb(data: {"type": "toIframe: changeTextDirection", "direction": direction});
+  }
+
+  /// Internal function to change case on Web
+  void changeCase(String changed) {
+    _evaluateJavascriptWeb(data: {"type": "toIframe: changeCase", "case": changed});
+  }
+
+  /// Internal function to insert table on Web
+  void insertTable(String dimensions) {
+    _evaluateJavascriptWeb(data: {"type": "toIframe: insertTable", "dimensions": dimensions});
+  }
+
   /// Add a notification to the bottom of the editor. This is styled similar to
   /// Bootstrap alerts. You can set the HTML to be displayed in the alert,
   /// and the notificationType determines how the alert is displayed.
@@ -201,13 +231,10 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     recalculateHeight();
   }
 
+  /// Helper function to process input html
   String _processHtml({required html}) {
     if (processInputHtml) {
-      html = html
-          .replaceAll("'", r"\'")
-          .replaceAll('"', r'\"')
-          .replaceAll("\r", "")
-          .replaceAll('\r\n', "");
+      html = html.replaceAll("\r", "").replaceAll('\r\n', "");
     }
     if (processNewLineAsBr) {
       html = html.replaceAll("\n", "<br/>").replaceAll("\n\n", "<br/>");

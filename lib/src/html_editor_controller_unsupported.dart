@@ -113,4 +113,19 @@ class HtmlEditorController {
 
   /// Undoes the last action
   void undo() {}
+
+  /// Internal function to change list style on Web
+  void changeListStyle(String changed) {}
+
+  /// Internal function to change line height on Web
+  void changeLineHeight(String changed) {}
+
+  /// Internal function to change text direction on Web
+  void changeTextDirection(String changed) {}
+
+  /// Internal function to change case on Web
+  void changeCase(String changed) {}
+
+  /// Internal function to insert table on Web
+  void insertTable(String dimensions) {}
 }
