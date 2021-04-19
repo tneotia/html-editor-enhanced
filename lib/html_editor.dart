@@ -39,7 +39,7 @@ enum ToolbarPosition { aboveEditor, belowEditor }
 
 enum ButtonType { style, bold, italic, underline, clearFormatting, strikethrough,
     superscript, subscript, foregroundColor, highlightColor, ul, ol, alignLeft,
-    alignCenter, alignRight, alignJustify, increaseIndent, decreaseIndent, link,
-    picture, video, table, hr, fullscreen, codeview, undo, redo, help, copy, paste }
+    alignCenter, alignRight, alignJustify, increaseIndent, decreaseIndent, ltr, rtl, link,
+    picture, audio, video, otherFile, table, hr, fullscreen, codeview, undo, redo, help, copy, paste }
 
-enum DropdownType { style, fontName, fontSize, fontSizeUnit, listStyles, lineHeight }
+enum DropdownType { style, fontName, fontSize, fontSizeUnit, listStyles, lineHeight, caseConverter }

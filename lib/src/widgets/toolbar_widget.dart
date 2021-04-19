@@ -52,6 +52,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   /// justify left/right/center/full.
   List<bool> _alignSelected = List<bool>.filled(4, false);
 
+  List<bool> _textDirectionSelected = List<bool>.filled(2, false);
+
   /// Sets the selected item for the font style dropdown
   String _fontSelectedItem = "p";
 
@@ -140,6 +142,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
     String lineHeight = json['lineHeight'] ?? "";
     //get list icon type
     String listType = json['listStyle'] ?? "";
+    //get text direction
+    String textDir = json['direction'] ?? "ltr";
     //check the parent element if it matches one of the predetermined styles and update the toolbar
     if (['pre', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'].contains(parentElem)) {
       setState(() {
@@ -209,6 +213,15 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
     if ([1, 2, 3, 4, 5, 6, 7].contains(fontSize)) {
       setState(() {
         _fontSizeSelectedItem = fontSize;
+      });
+    }
+    if (textDir == "ltr") {
+      setState(() {
+        _textDirectionSelected = [true, false];
+      });
+    } else if (textDir == "rtl") {
+      setState(() {
+        _textDirectionSelected = [false, true];
       });
     }
     //use the remaining bool lists to update the selected items accordingly
@@ -940,6 +953,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             children: t.getIcons1(),
             onPressed: (int index) {
               void updateStatus() {
+                _alignSelected = List<bool>.filled(t.getIcons1().length, false);
                 setState(() {
                   _alignSelected[index] = !_alignSelected[index];
                 });
@@ -949,7 +963,6 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 bool proceed = widget.options.onButtonPressed?.call(ButtonType.alignLeft, _alignSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('justifyLeft');
-                  _alignSelected = List<bool>.filled(t.getIcons1().length, false);
                   updateStatus();
                 }
               }
@@ -957,7 +970,6 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 bool proceed = widget.options.onButtonPressed?.call(ButtonType.alignCenter, _alignSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('justifyCenter');
-                  _alignSelected = List<bool>.filled(t.getIcons1().length, false);
                   updateStatus();
                 }
               }
@@ -965,7 +977,6 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 bool proceed = widget.options.onButtonPressed?.call(ButtonType.alignRight, _alignSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('justifyRight');
-                  _alignSelected = List<bool>.filled(t.getIcons1().length, false);
                   updateStatus();
                 }
               }
@@ -973,7 +984,6 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 bool proceed = widget.options.onButtonPressed?.call(ButtonType.alignJustify, _alignSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('justifyFull');
-                  _alignSelected = List<bool>.filled(t.getIcons1().length, false);
                   updateStatus();
                 }
               }
@@ -1063,6 +1073,120 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                     if (proceed) {
                       widget.controller.editorController!.evaluateJavascript(source:"\$('#summernote-2').summernote('lineHeight', '$changed');");
                       updateSelectedItem(changed);
+                    }
+                  }
+                },
+              ),
+            ),
+          ));
+        }
+        if (t.textDirection) {
+          toolbarChildren.add(ToggleButtons(
+            constraints: BoxConstraints.tightFor(
+              width: widget.options.toolbarItemHeight - 2,
+              height: widget.options.toolbarItemHeight - 2,
+            ),
+            color: widget.options.buttonColor,
+            selectedColor: widget.options.buttonSelectedColor,
+            fillColor: widget.options.buttonFillColor,
+            focusColor: widget.options.buttonFocusColor,
+            highlightColor: widget.options.buttonHighlightColor,
+            hoverColor: widget.options.buttonHoverColor,
+            splashColor: widget.options.buttonSplashColor,
+            selectedBorderColor: widget.options.buttonSelectedBorderColor,
+            borderColor: widget.options.buttonBorderColor,
+            borderRadius: widget.options.buttonBorderRadius,
+            borderWidth: widget.options.buttonBorderWidth,
+            renderBorder: widget.options.renderBorder,
+            textStyle: widget.options.textStyle,
+            children: [
+              Icon(Icons.format_textdirection_l_to_r),
+              Icon(Icons.format_textdirection_r_to_l),
+            ],
+            onPressed: (int index) {
+              void updateStatus() {
+                _textDirectionSelected = List<bool>.filled(2, false);
+                setState(() {
+                  _textDirectionSelected[index] = !_textDirectionSelected[index];
+                });
+              }
+
+              bool proceed = widget.options.onButtonPressed?.call(index == 0 ? ButtonType.ltr : ButtonType.rtl, _alignSelected[index], updateStatus) ?? true;
+              if (proceed) {
+                widget.controller.editorController!.evaluateJavascript(source: """
+                  var s=document.getSelection();			
+                  if(s==''){
+                      document.execCommand("insertHTML", false, "<p dir='${index == 0 ? "ltr" : "rtl"}'></p>");
+                  }else{
+                      document.execCommand("insertHTML", false, "<div dir='${index == 0 ? "ltr" : "rtl"}'>"+ document.getSelection()+"</div>");
+                  }
+                """);
+                updateStatus();
+              }
+            },
+            isSelected: _textDirectionSelected,
+          ));
+        }
+        if (t.caseConverter) {
+          toolbarChildren.add(Container(
+            padding: const EdgeInsets.only(left: 8.0),
+            height: widget.options.toolbarItemHeight,
+            decoration: !widget.options.renderBorder ? null :
+            widget.options.dropdownBoxDecoration ?? BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                border: Border.all(color: ToggleButtonsTheme.of(context).borderColor ?? Colors.grey[800]!)
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                elevation: widget.options.dropdownElevation,
+                icon: widget.options.dropdownIcon,
+                iconEnabledColor: widget.options.dropdownIconColor,
+                iconSize: widget.options.dropdownIconSize,
+                itemHeight: widget.options.dropdownItemHeight,
+                focusColor: widget.options.dropdownFocusColor,
+                dropdownColor: widget.options.dropdownBackgroundColor,
+                menuMaxHeight: widget.options.dropdownMenuMaxHeight,
+                style: widget.options.textStyle,
+                items: [
+                  DropdownMenuItem(child: Text("lowercase"), value: "lower"),
+                  DropdownMenuItem(child: Text("Sentence case"), value: "sentence"),
+                  DropdownMenuItem(child: Text("Title Case"), value: "title"),
+                  DropdownMenuItem(child: Text("UPPERCASE"), value: "upper"),
+                ],
+                hint: Text("Change case"),
+                value: null,
+                onChanged: (String? changed) {
+                  if (changed != null) {
+                    bool proceed = widget.options.onDropdownChanged?.call(DropdownType.caseConverter, changed, null) ?? true;
+                    if (proceed) {
+                      widget.controller.editorController!.evaluateJavascript(source:"""
+                        var selected = \$('#summernote-2').summernote('createRange');
+                        if(selected.toString()){
+                            var texto;
+                            var count = 0;
+                            var value = "$changed";
+                            var nodes = selected.nodes();
+                            for (var i=0; i< nodes.length; ++i) {
+                                if (nodes[i].nodeName == "#text") {
+                                    count++;
+                                    texto = nodes[i].nodeValue.toLowerCase();
+                                    nodes[i].nodeValue = texto;
+                                    if (value == 'upper') {
+                                       nodes[i].nodeValue = texto.toUpperCase();
+                                    }
+                                    else if (value == 'sentence' && count==1) {
+                                       nodes[i].nodeValue = texto.charAt(0).toUpperCase() + texto.slice(1).toLowerCase();
+                                    } else if (value == 'title') {
+                                      var sentence = texto.split(" ");
+                                      for(var j = 0; j< sentence.length; j++){
+                                         sentence[j] = sentence[j][0].toUpperCase() + sentence[j].slice(1);
+                                      }
+                                      nodes[i].nodeValue = sentence.join(" ");
+                                    }
+                                }
+                            }
+                        }
+                      """);
                     }
                   }
                 },
@@ -1331,6 +1455,125 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 );
               }
             }
+            if (t.getIcons()[index].icon == Icons.audiotrack_outlined) {
+              bool proceed = widget.options.onButtonPressed?.call(ButtonType.audio, null, null) ?? true;
+              if (proceed) {
+                final TextEditingController filename = TextEditingController();
+                final TextEditingController url = TextEditingController();
+                final FocusNode urlFocus = FocusNode();
+                FilePickerResult? result;
+                String? validateFailed;
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return StatefulBuilder(
+                          builder: (BuildContext context, StateSetter setState) {
+                            return AlertDialog(
+                              title: Text("Insert Audio"),
+                              content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Select from files", style: TextStyle(fontWeight: FontWeight.bold)),
+                                    SizedBox(height: 10),
+                                    TextFormField(
+                                        controller: filename,
+                                        readOnly: true,
+                                        decoration: InputDecoration(
+                                          prefixIcon: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                primary: Theme.of(context).dialogBackgroundColor,
+                                                padding: EdgeInsets.only(left: 5, right: 5),
+                                                elevation: 0.0
+                                            ),
+                                            onPressed: () async {
+                                              result = await FilePicker.platform.pickFiles(
+                                                type: FileType.audio,
+                                                withData: true,
+                                                allowedExtensions: widget.options.audioExtensions,
+                                              );
+                                              if (result?.files.single.name != null) {
+                                                setState(() {
+                                                  filename.text = result!.files.single.name!;
+                                                });
+                                              }
+                                            },
+                                            child: Text("Choose audio"),
+                                          ),
+                                          suffixIcon: result != null ?
+                                          IconButton(
+                                              icon: Icon(Icons.close),
+                                              onPressed: () {
+                                                setState(() {
+                                                  result = null;
+                                                  filename.text = "";
+                                                });
+                                              }
+                                          ) : Container(height: 0, width: 0),
+                                          errorText: validateFailed,
+                                          errorMaxLines: 2,
+                                          border: InputBorder.none,
+                                        )
+                                    ),
+                                    SizedBox(height: 20),
+                                    Text("URL", style: TextStyle(fontWeight: FontWeight.bold)),
+                                    SizedBox(height: 10),
+                                    TextField(
+                                      controller: url,
+                                      focusNode: urlFocus,
+                                      textInputAction: TextInputAction.done,
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        hintText: "URL",
+                                        errorText: validateFailed,
+                                        errorMaxLines: 2,
+                                      ),
+                                    ),
+                                  ]
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("Cancel"),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    if (filename.text.isEmpty && url.text.isEmpty) {
+                                      setState(() {
+                                        validateFailed = "Please either choose an audio file or enter an audio file URL!";
+                                      });
+                                    } else if (filename.text.isNotEmpty && url.text.isNotEmpty) {
+                                      setState(() {
+                                        validateFailed = "Please input either an audio file or an audio URL, not both!";
+                                      });
+                                    } else if (filename.text.isNotEmpty && result?.files.single.bytes != null) {
+                                      String base64Data = base64.encode(result!.files.single.bytes!);
+                                      bool proceed = widget.options.mediaUploadInterceptor?.call(result!.files.single) ?? true;
+                                      if (proceed) {
+                                        widget.controller.insertHtml(
+                                            "<audio controls src='data:audio/${result!.files.single.extension};base64,$base64Data' data-filename='${result!.files.single.name}'></audio>");
+                                      }
+                                      Navigator.of(context).pop();
+                                    } else {
+                                      bool proceed = widget.options.mediaLinkInsertInterceptor?.call(url.text) ?? true;
+                                      if (proceed) {
+                                        widget.controller.insertHtml("<audio controls src='${url.text}'></audio>");
+                                      }
+                                      Navigator.of(context).pop();
+                                    }
+                                  },
+                                  child: Text("OK"),
+                                )
+                              ],
+                            );
+                          }
+                      );
+                    }
+                );
+              }
+            }
             if (t.getIcons()[index].icon == Icons.videocam_outlined) {
               bool proceed = widget.options.onButtonPressed?.call(ButtonType.video, null, null) ?? true;
               if (proceed) {
@@ -1429,14 +1672,125 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                       bool proceed = widget.options.mediaUploadInterceptor?.call(result!.files.single) ?? true;
                                       if (proceed) {
                                         widget.controller.insertHtml(
-                                            "<video src='data:video/${result!.files.single.extension};base64,$base64Data' data-filename='${result!.files.single.name}'></video>");
+                                            "<video controls src='data:video/${result!.files.single.extension};base64,$base64Data' data-filename='${result!.files.single.name}'></video>");
                                       }
                                       Navigator.of(context).pop();
                                     } else {
                                       bool proceed = widget.options.mediaLinkInsertInterceptor?.call(url.text) ?? true;
                                       if (proceed) {
-                                        widget.controller.insertHtml("<video src='${url.text}'></video>");
+                                        widget.controller.insertHtml("<video controls src='${url.text}'></video>");
                                       }
+                                      Navigator.of(context).pop();
+                                    }
+                                  },
+                                  child: Text("OK"),
+                                )
+                              ],
+                            );
+                          }
+                      );
+                    }
+                );
+              }
+            }
+            if (t.getIcons()[index].icon == Icons.attach_file) {
+              bool proceed = widget.options.onButtonPressed?.call(ButtonType.otherFile, null, null) ?? true;
+              if (proceed) {
+                final TextEditingController filename = TextEditingController();
+                final TextEditingController url = TextEditingController();
+                final FocusNode urlFocus = FocusNode();
+                FilePickerResult? result;
+                String? validateFailed;
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return StatefulBuilder(
+                          builder: (BuildContext context, StateSetter setState) {
+                            return AlertDialog(
+                              title: Text("Insert File"),
+                              content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Select from files", style: TextStyle(fontWeight: FontWeight.bold)),
+                                    SizedBox(height: 10),
+                                    TextFormField(
+                                        controller: filename,
+                                        readOnly: true,
+                                        decoration: InputDecoration(
+                                          prefixIcon: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                primary: Theme.of(context).dialogBackgroundColor,
+                                                padding: EdgeInsets.only(left: 5, right: 5),
+                                                elevation: 0.0
+                                            ),
+                                            onPressed: () async {
+                                              result = await FilePicker.platform.pickFiles(
+                                                type: FileType.any,
+                                                withData: true,
+                                                allowedExtensions: widget.options.otherFileExtensions,
+                                              );
+                                              if (result?.files.single.name != null) {
+                                                setState(() {
+                                                  filename.text = result!.files.single.name!;
+                                                });
+                                              }
+                                            },
+                                            child: Text("Choose file"),
+                                          ),
+                                          suffixIcon: result != null ?
+                                          IconButton(
+                                              icon: Icon(Icons.close),
+                                              onPressed: () {
+                                                setState(() {
+                                                  result = null;
+                                                  filename.text = "";
+                                                });
+                                              }
+                                          ) : Container(height: 0, width: 0),
+                                          errorText: validateFailed,
+                                          errorMaxLines: 2,
+                                          border: InputBorder.none,
+                                        )
+                                    ),
+                                    SizedBox(height: 20),
+                                    Text("URL", style: TextStyle(fontWeight: FontWeight.bold)),
+                                    SizedBox(height: 10),
+                                    TextField(
+                                      controller: url,
+                                      focusNode: urlFocus,
+                                      textInputAction: TextInputAction.done,
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        hintText: "URL",
+                                        errorText: validateFailed,
+                                        errorMaxLines: 2,
+                                      ),
+                                    ),
+                                  ]
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("Cancel"),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    if (filename.text.isEmpty && url.text.isEmpty) {
+                                      setState(() {
+                                        validateFailed = "Please either choose a file or enter a file URL!";
+                                      });
+                                    } else if (filename.text.isNotEmpty && url.text.isNotEmpty) {
+                                      setState(() {
+                                        validateFailed = "Please input either a file or a file URL, not both!";
+                                      });
+                                    } else if (filename.text.isNotEmpty && result?.files.single.bytes != null) {
+                                      widget.options.onOtherFileUpload?.call(result!.files.single);
+                                      Navigator.of(context).pop();
+                                    } else {
+                                      widget.options.onOtherFileLinkInsert?.call(url.text);
                                       Navigator.of(context).pop();
                                     }
                                   },

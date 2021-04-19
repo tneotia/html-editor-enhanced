@@ -68,6 +68,7 @@ class HtmlEditorOptions {
 /// Options that modify the toolbar and its behavior
 class HtmlToolbarOptions {
   const HtmlToolbarOptions({
+    this.audioExtensions,
     this.customToolbarButtons = const [],
     this.customToolbarInsertionIndices = const [],
     this.defaultToolbarButtons = const [
@@ -80,12 +81,15 @@ class HtmlToolbarOptions {
       InsertButtons(),
       OtherButtons(),
     ],
+    this.otherFileExtensions,
     this.imageExtensions,
     this.linkInsertInterceptor,
     this.mediaLinkInsertInterceptor,
     this.mediaUploadInterceptor,
     this.onButtonPressed,
     this.onDropdownChanged,
+    this.onOtherFileLinkInsert,
+    this.onOtherFileUpload,
     this.toolbarType = ToolbarType.nativeScrollable,
     this.toolbarPosition = ToolbarPosition.aboveEditor,
     this.videoExtensions,
@@ -118,6 +122,11 @@ class HtmlToolbarOptions {
     this.gridViewHorizontalSpacing = 5,
     this.gridViewVerticalSpacing = 5,
   });
+
+  /// Allows you to set the allowed extensions when a user inserts an audio file
+  ///
+  /// By default any audio extension is allowed.
+  final List<String>? audioExtensions;
 
   /// Allows you to create your own buttons that are added to the end of the
   /// default buttons list
@@ -195,14 +204,38 @@ class HtmlToolbarOptions {
   /// DropdownType enum, which tells you which dropdown was changed,
   /// the changed value to indicate what the dropdown was changed to, and the
   /// function to update the changed value (in case you decide to handle the
-  /// dropdown change yourself).
+  /// dropdown change yourself). The function is null in some cases because
+  /// the dropdown does not update its value.
   ///
   /// Return a bool to tell the plugin if it should continue with its own handler
   /// or if you want to handle the dropdown change by yourself.
   /// (true = continue with internal handler, false = do not use internal handler)
   ///
   /// If no interceptor is set, the plugin uses the internal handler.
-  final bool Function(DropdownType, dynamic, void Function(dynamic))? onDropdownChanged;
+  final bool Function(DropdownType, dynamic, void Function(dynamic)?)? onDropdownChanged;
+
+  /// Called when a link is inserted for a file using the "other file" button.
+  ///
+  /// The package does not have a built in handler for these files, so you should
+  /// provide this callback when using the button.
+  ///
+  /// The function passes the URL of the file inserted.
+  final Function(String?)? onOtherFileLinkInsert;
+
+  /// Called when a file is uploaded using the "other file" button.
+  ///
+  /// The package does not have a built in handler for these files, so if you use
+  /// the button you should provide this callback.
+  ///
+  /// The function passes the PlatformFile class, which contains all the file data
+  /// including name, size, type, Uint8List bytes, etc.
+  final Function(PlatformFile?)? onOtherFileUpload;
+
+  /// Allows you to set the allowed extensions when a user inserts a file other
+  /// than image/audio/video
+  ///
+  /// By default any other extension is allowed.
+  final List<String>? otherFileExtensions;
 
   /// Controls how the toolbar displays. See [ToolbarType] for more details.
   ///

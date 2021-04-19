@@ -111,7 +111,9 @@ class ParagraphButtons extends Toolbar {
   final bool alignJustify;
   final bool increaseIndent;
   final bool decreaseIndent;
+  final bool textDirection;
   final bool lineHeight;
+  final bool caseConverter;
 
   const ParagraphButtons({
     this.alignLeft = true,
@@ -120,7 +122,9 @@ class ParagraphButtons extends Toolbar {
     this.alignJustify = true,
     this.increaseIndent = true,
     this.decreaseIndent = true,
+    this.textDirection = true,
     this.lineHeight = true,
+    this.caseConverter = true,
   });
 
   List<Icon> getIcons1() {
@@ -144,14 +148,18 @@ class ParagraphButtons extends Toolbar {
 class InsertButtons extends Toolbar {
   final bool link;
   final bool picture;
+  final bool audio;
   final bool video;
+  final bool otherFile;
   final bool table;
   final bool hr;
 
   const InsertButtons({
     this.link = true,
     this.picture = true,
+    this.audio = true,
     this.video = true,
+    this.otherFile = false,
     this.table = true,
     this.hr = true,
   });
@@ -160,7 +168,9 @@ class InsertButtons extends Toolbar {
     List<Icon> icons = [];
     if (link) icons.add(Icon(Icons.link));
     if (picture) icons.add(Icon(Icons.image_outlined));
+    if (audio) icons.add(Icon(Icons.audiotrack_outlined));
     if (video) icons.add(Icon(Icons.videocam_outlined));
+    if (otherFile) icons.add(Icon(Icons.attach_file));
     if (table) icons.add(Icon(Icons.table_chart_outlined));
     if (hr) icons.add(Icon(Icons.horizontal_rule));
     return icons;

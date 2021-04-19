@@ -420,6 +420,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                             var parentList = focusNode2.closest("div.note-editable ol, div.note-editable ul");
                             var parentListType = parentList.css('list-style-type');
                             var lineHeight = \$(focusNode.parentNode).css('line-height');
+                            var direction = \$(focusNode.parentNode).css('direction');
                             if (document.queryCommandState) {
                               isBold = document.queryCommandState('bold');
                               isItalic = document.queryCommandState('italic');
@@ -452,6 +453,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                               'listStyle': parentListType,
                               'align': [isLeft, isCenter, isRight, isFull],
                               'lineHeight': lineHeight,
+                              'direction': direction,
                             };
                             window.flutter_inappwebview.callHandler('FormatSettings', message);
                           }
