@@ -9,7 +9,9 @@ abstract class Toolbar {
 class StyleButtons extends Toolbar {
   final bool style;
 
-  const StyleButtons({this.style = true});
+  const StyleButtons({
+    this.style = true,
+  });
 }
 
 /// Font setting group

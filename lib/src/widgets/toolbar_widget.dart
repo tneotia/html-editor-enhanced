@@ -245,14 +245,14 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       return Padding(
         padding: const EdgeInsets.all(5.0),
         child: Wrap(
-          runSpacing: 5,
-          spacing: 5,
+          runSpacing: widget.options.gridViewVerticalSpacing,
+          spacing: widget.options.gridViewHorizontalSpacing,
           children: _buildChildren(),
         ),
       );
     } else {
       return Container(
-        height: 39,
+        height: widget.options.toolbarItemHeight + 3,
         child: Padding(
           padding: const EdgeInsets.all(5.0),
           child: CustomScrollView(
@@ -279,13 +279,23 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       if (t is StyleButtons) {
         toolbarChildren.add(Container(
           padding: const EdgeInsets.only(left: 8.0),
-          height: 36,
-          decoration: BoxDecoration(
+          height: widget.options.toolbarItemHeight,
+          decoration: !widget.options.renderBorder ? null :
+          widget.options.dropdownBoxDecoration ?? BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
               border: Border.all(color: ToggleButtonsTheme.of(context).borderColor ?? Colors.grey[800]!)
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
+              elevation: widget.options.dropdownElevation,
+              icon: widget.options.dropdownIcon,
+              iconEnabledColor: widget.options.dropdownIconColor,
+              iconSize: widget.options.dropdownIconSize,
+              itemHeight: widget.options.dropdownItemHeight,
+              focusColor: widget.options.dropdownFocusColor,
+              dropdownColor: widget.options.dropdownBackgroundColor,
+              menuMaxHeight: widget.options.dropdownMenuMaxHeight,
+              style: widget.options.textStyle,
               items: [
                 DropdownMenuItem(child: Text("Normal"), value: "p"),
                 DropdownMenuItem(child: Text("   Quote"), value: "blockquote"),
@@ -317,18 +327,28 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               },
             ),
           ),
-        ),);
+        ));
       }
       if (t is FontSettingButtons) {
         if (t.fontSize) toolbarChildren.add(Container(
           padding: const EdgeInsets.only(left: 8.0),
-          height: 36,
-          decoration: BoxDecoration(
+          height: widget.options.toolbarItemHeight,
+          decoration: !widget.options.renderBorder ? null :
+          widget.options.dropdownBoxDecoration ?? BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
               border: Border.all(color: ToggleButtonsTheme.of(context).borderColor ?? Colors.grey[800]!)
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<double>(
+              elevation: widget.options.dropdownElevation,
+              icon: widget.options.dropdownIcon,
+              iconEnabledColor: widget.options.dropdownIconColor,
+              iconSize: widget.options.dropdownIconSize,
+              itemHeight: widget.options.dropdownItemHeight,
+              focusColor: widget.options.dropdownFocusColor,
+              dropdownColor: widget.options.dropdownBackgroundColor,
+              menuMaxHeight: widget.options.dropdownMenuMaxHeight,
+              style: widget.options.textStyle,
               items: [
                 DropdownMenuItem(
                     child: Text("${fontSizeUnitSelectedItem == "px" ? "11" : "8"} $fontSizeUnitSelectedItem"),
@@ -406,13 +426,23 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         ));
         if (t.fontSizeUnit) toolbarChildren.add(Container(
           padding: const EdgeInsets.only(left: 8.0),
-          height: 36,
-          decoration: BoxDecoration(
+          height: widget.options.toolbarItemHeight,
+          decoration: !widget.options.renderBorder ? null :
+          widget.options.dropdownBoxDecoration ?? BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
               border: Border.all(color: ToggleButtonsTheme.of(context).borderColor ?? Colors.grey[800]!)
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
+              elevation: widget.options.dropdownElevation,
+              icon: widget.options.dropdownIcon,
+              iconEnabledColor: widget.options.dropdownIconColor,
+              iconSize: widget.options.dropdownIconSize,
+              itemHeight: widget.options.dropdownItemHeight,
+              focusColor: widget.options.dropdownFocusColor,
+              dropdownColor: widget.options.dropdownBackgroundColor,
+              menuMaxHeight: widget.options.dropdownMenuMaxHeight,
+              style: widget.options.textStyle,
               items: [
                 DropdownMenuItem(child: Text("pt"), value: "pt"),
                 DropdownMenuItem(child: Text("px"), value: "px"),
@@ -441,12 +471,23 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       if (t is FontButtons) {
         if (t.bold || t.italic || t.underline || t.clearAll) {
           toolbarChildren.add(ToggleButtons(
-            constraints: BoxConstraints(
-              minHeight: 34,
-              maxHeight: 34,
-              minWidth: 34,
-              maxWidth: 34,
+            constraints: BoxConstraints.tightFor(
+              width: widget.options.toolbarItemHeight - 2,
+              height: widget.options.toolbarItemHeight - 2,
             ),
+            color: widget.options.buttonColor,
+            selectedColor: widget.options.buttonSelectedColor,
+            fillColor: widget.options.buttonFillColor,
+            focusColor: widget.options.buttonFocusColor,
+            highlightColor: widget.options.buttonHighlightColor,
+            hoverColor: widget.options.buttonHoverColor,
+            splashColor: widget.options.buttonSplashColor,
+            selectedBorderColor: widget.options.buttonSelectedBorderColor,
+            borderColor: widget.options.buttonBorderColor,
+            borderRadius: widget.options.buttonBorderRadius,
+            borderWidth: widget.options.buttonBorderWidth,
+            renderBorder: widget.options.renderBorder,
+            textStyle: widget.options.textStyle,
             children: t.getIcons1(),
             onPressed: (int index) {
               void updateStatus() {
@@ -488,12 +529,23 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         }
         if (t.strikethrough || t.superscript || t.subscript) {
           toolbarChildren.add(ToggleButtons(
-            constraints: BoxConstraints(
-              minHeight: 34,
-              maxHeight: 34,
-              minWidth: 34,
-              maxWidth: 34,
+            constraints: BoxConstraints.tightFor(
+              width: widget.options.toolbarItemHeight - 2,
+              height: widget.options.toolbarItemHeight - 2,
             ),
+            color: widget.options.buttonColor,
+            selectedColor: widget.options.buttonSelectedColor,
+            fillColor: widget.options.buttonFillColor,
+            focusColor: widget.options.buttonFocusColor,
+            highlightColor: widget.options.buttonHighlightColor,
+            hoverColor: widget.options.buttonHoverColor,
+            splashColor: widget.options.buttonSplashColor,
+            selectedBorderColor: widget.options.buttonSelectedBorderColor,
+            borderColor: widget.options.buttonBorderColor,
+            borderRadius: widget.options.buttonBorderRadius,
+            borderWidth: widget.options.buttonBorderWidth,
+            renderBorder: widget.options.renderBorder,
+            textStyle: widget.options.textStyle,
             children: t.getIcons2(),
             onPressed: (int index) {
               void updateStatus() {
@@ -530,12 +582,23 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       }
       if (t is ColorButtons) {
         toolbarChildren.add(ToggleButtons(
-          constraints: BoxConstraints(
-            minHeight: 34,
-            maxHeight: 34,
-            minWidth: 34,
-            maxWidth: 34,
+          constraints: BoxConstraints.tightFor(
+            width: widget.options.toolbarItemHeight - 2,
+            height: widget.options.toolbarItemHeight - 2,
           ),
+          color: widget.options.buttonColor,
+          selectedColor: widget.options.buttonSelectedColor,
+          fillColor: widget.options.buttonFillColor,
+          focusColor: widget.options.buttonFocusColor,
+          highlightColor: widget.options.buttonHighlightColor,
+          hoverColor: widget.options.buttonHoverColor,
+          splashColor: widget.options.buttonSplashColor,
+          selectedBorderColor: widget.options.buttonSelectedBorderColor,
+          borderColor: widget.options.buttonBorderColor,
+          borderRadius: widget.options.buttonBorderRadius,
+          borderWidth: widget.options.buttonBorderWidth,
+          renderBorder: widget.options.renderBorder,
+          textStyle: widget.options.textStyle,
           children: t.getIcons(),
           onPressed: (int index) {
             void updateStatus() {
@@ -653,12 +716,23 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       if (t is ListButtons) {
         if (t.ul || t.ol) {
           toolbarChildren.add(ToggleButtons(
-            constraints: BoxConstraints(
-              minHeight: 34,
-              maxHeight: 34,
-              minWidth: 34,
-              maxWidth: 34,
+            constraints: BoxConstraints.tightFor(
+              width: widget.options.toolbarItemHeight - 2,
+              height: widget.options.toolbarItemHeight - 2,
             ),
+            color: widget.options.buttonColor,
+            selectedColor: widget.options.buttonSelectedColor,
+            fillColor: widget.options.buttonFillColor,
+            focusColor: widget.options.buttonFocusColor,
+            highlightColor: widget.options.buttonHighlightColor,
+            hoverColor: widget.options.buttonHoverColor,
+            splashColor: widget.options.buttonSplashColor,
+            selectedBorderColor: widget.options.buttonSelectedBorderColor,
+            borderColor: widget.options.buttonBorderColor,
+            borderRadius: widget.options.buttonBorderRadius,
+            borderWidth: widget.options.buttonBorderWidth,
+            renderBorder: widget.options.renderBorder,
+            textStyle: widget.options.textStyle,
             children: t.getIcons(),
             onPressed: (int index) {
               void updateStatus() {
@@ -688,13 +762,23 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         if (t.listStyles) {
           toolbarChildren.add(Container(
             padding: const EdgeInsets.only(left: 8.0),
-            height: 36,
-            decoration: BoxDecoration(
+            height: widget.options.toolbarItemHeight,
+            decoration: !widget.options.renderBorder ? null :
+            widget.options.dropdownBoxDecoration ?? BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor,
                 border: Border.all(color: ToggleButtonsTheme.of(context).borderColor ?? Colors.grey[800]!)
             ),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
+                elevation: widget.options.dropdownElevation,
+                icon: widget.options.dropdownIcon,
+                iconEnabledColor: widget.options.dropdownIconColor,
+                iconSize: widget.options.dropdownIconSize,
+                itemHeight: widget.options.dropdownItemHeight,
+                focusColor: widget.options.dropdownFocusColor,
+                dropdownColor: widget.options.dropdownBackgroundColor,
+                menuMaxHeight: widget.options.dropdownMenuMaxHeight,
+                style: widget.options.textStyle,
                 items: [
                   DropdownMenuItem(child: Text("1. Numbered"), value: "decimal"),
                   DropdownMenuItem(child: Text("a. Lower Alpha"), value: "lower-alpha"),
@@ -736,12 +820,23 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       if (t is ParagraphButtons) {
         if (t.alignLeft || t.alignCenter || t.alignRight || t.alignJustify) {
           toolbarChildren.add(ToggleButtons(
-            constraints: BoxConstraints(
-              minHeight: 34,
-              maxHeight: 34,
-              minWidth: 34,
-              maxWidth: 34,
+            constraints: BoxConstraints.tightFor(
+              width: widget.options.toolbarItemHeight - 2,
+              height: widget.options.toolbarItemHeight - 2,
             ),
+            color: widget.options.buttonColor,
+            selectedColor: widget.options.buttonSelectedColor,
+            fillColor: widget.options.buttonFillColor,
+            focusColor: widget.options.buttonFocusColor,
+            highlightColor: widget.options.buttonHighlightColor,
+            hoverColor: widget.options.buttonHoverColor,
+            splashColor: widget.options.buttonSplashColor,
+            selectedBorderColor: widget.options.buttonSelectedBorderColor,
+            borderColor: widget.options.buttonBorderColor,
+            borderRadius: widget.options.buttonBorderRadius,
+            borderWidth: widget.options.buttonBorderWidth,
+            renderBorder: widget.options.renderBorder,
+            textStyle: widget.options.textStyle,
             children: t.getIcons1(),
             onPressed: (int index) {
               void updateStatus() {
@@ -788,12 +883,23 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         }
         if (t.increaseIndent || t.decreaseIndent) {
           toolbarChildren.add(ToggleButtons(
-            constraints: BoxConstraints(
-              minHeight: 34,
-              maxHeight: 34,
-              minWidth: 34,
-              maxWidth: 34,
+            constraints: BoxConstraints.tightFor(
+              width: widget.options.toolbarItemHeight - 2,
+              height: widget.options.toolbarItemHeight - 2,
             ),
+            color: widget.options.buttonColor,
+            selectedColor: widget.options.buttonSelectedColor,
+            fillColor: widget.options.buttonFillColor,
+            focusColor: widget.options.buttonFocusColor,
+            highlightColor: widget.options.buttonHighlightColor,
+            hoverColor: widget.options.buttonHoverColor,
+            splashColor: widget.options.buttonSplashColor,
+            selectedBorderColor: widget.options.buttonSelectedBorderColor,
+            borderColor: widget.options.buttonBorderColor,
+            borderRadius: widget.options.buttonBorderRadius,
+            borderWidth: widget.options.buttonBorderWidth,
+            renderBorder: widget.options.renderBorder,
+            textStyle: widget.options.textStyle,
             children: t.getIcons2(),
             onPressed: (int index) {
               if (t.getIcons2()[index].icon == Icons.format_indent_increase) {
@@ -814,14 +920,24 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         }
         if (t.lineHeight) {
           toolbarChildren.add(Container(
-            height: 36,
             padding: const EdgeInsets.only(left: 8.0),
-            decoration: BoxDecoration(
+            height: widget.options.toolbarItemHeight,
+            decoration: !widget.options.renderBorder ? null :
+            widget.options.dropdownBoxDecoration ?? BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor,
                 border: Border.all(color: ToggleButtonsTheme.of(context).borderColor ?? Colors.grey[800]!)
             ),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<double>(
+                elevation: widget.options.dropdownElevation,
+                icon: widget.options.dropdownIcon,
+                iconEnabledColor: widget.options.dropdownIconColor,
+                iconSize: widget.options.dropdownIconSize,
+                itemHeight: widget.options.dropdownItemHeight,
+                focusColor: widget.options.dropdownFocusColor,
+                dropdownColor: widget.options.dropdownBackgroundColor,
+                menuMaxHeight: widget.options.dropdownMenuMaxHeight,
+                style: widget.options.textStyle,
                 items: [
                   DropdownMenuItem(child: Text("1.0"), value: 1),
                   DropdownMenuItem(child: Text("1.2"), value: 1.2),
@@ -857,12 +973,23 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       }
       if (t is InsertButtons) {
         toolbarChildren.add(ToggleButtons(
-          constraints: BoxConstraints(
-            minHeight: 34,
-            maxHeight: 34,
-            minWidth: 34,
-            maxWidth: 34,
+          constraints: BoxConstraints.tightFor(
+            width: widget.options.toolbarItemHeight - 2,
+            height: widget.options.toolbarItemHeight - 2,
           ),
+          color: widget.options.buttonColor,
+          selectedColor: widget.options.buttonSelectedColor,
+          fillColor: widget.options.buttonFillColor,
+          focusColor: widget.options.buttonFocusColor,
+          highlightColor: widget.options.buttonHighlightColor,
+          hoverColor: widget.options.buttonHoverColor,
+          splashColor: widget.options.buttonSplashColor,
+          selectedBorderColor: widget.options.buttonSelectedBorderColor,
+          borderColor: widget.options.buttonBorderColor,
+          borderRadius: widget.options.buttonBorderRadius,
+          borderWidth: widget.options.buttonBorderWidth,
+          renderBorder: widget.options.renderBorder,
+          textStyle: widget.options.textStyle,
           children: t.getIcons(),
           onPressed: (int index) {
             if (t.getIcons()[index].icon == Icons.link) {
@@ -1289,12 +1416,23 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       if (t is OtherButtons) {
         if (t.fullscreen || t.codeview || t.undo || t.redo || t.help) {
           toolbarChildren.add(ToggleButtons(
-            constraints: BoxConstraints(
-              minHeight: 34,
-              maxHeight: 34,
-              minWidth: 34,
-              maxWidth: 34,
+            constraints: BoxConstraints.tightFor(
+              width: widget.options.toolbarItemHeight - 2,
+              height: widget.options.toolbarItemHeight - 2,
             ),
+            color: widget.options.buttonColor,
+            selectedColor: widget.options.buttonSelectedColor,
+            fillColor: widget.options.buttonFillColor,
+            focusColor: widget.options.buttonFocusColor,
+            highlightColor: widget.options.buttonHighlightColor,
+            hoverColor: widget.options.buttonHoverColor,
+            splashColor: widget.options.buttonSplashColor,
+            selectedBorderColor: widget.options.buttonSelectedBorderColor,
+            borderColor: widget.options.buttonBorderColor,
+            borderRadius: widget.options.buttonBorderRadius,
+            borderWidth: widget.options.buttonBorderWidth,
+            renderBorder: widget.options.renderBorder,
+            textStyle: widget.options.textStyle,
             children: t.getIcons1(),
             onPressed: (int index) {
               void updateStatus() {
@@ -1559,12 +1697,23 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         }
         if (t.copy || t.paste) {
           toolbarChildren.add(ToggleButtons(
-            constraints: BoxConstraints(
-              minHeight: 34,
-              maxHeight: 34,
-              minWidth: 34,
-              maxWidth: 34,
+            constraints: BoxConstraints.tightFor(
+              width: widget.options.toolbarItemHeight - 2,
+              height: widget.options.toolbarItemHeight - 2,
             ),
+            color: widget.options.buttonColor,
+            selectedColor: widget.options.buttonSelectedColor,
+            fillColor: widget.options.buttonFillColor,
+            focusColor: widget.options.buttonFocusColor,
+            highlightColor: widget.options.buttonHighlightColor,
+            hoverColor: widget.options.buttonHoverColor,
+            splashColor: widget.options.buttonSplashColor,
+            selectedBorderColor: widget.options.buttonSelectedBorderColor,
+            borderColor: widget.options.buttonBorderColor,
+            borderRadius: widget.options.buttonBorderRadius,
+            borderWidth: widget.options.buttonBorderWidth,
+            renderBorder: widget.options.renderBorder,
+            textStyle: widget.options.textStyle,
             children: t.getIcons2(),
             onPressed: (int index) async {
               if (t.getIcons2()[index].icon == Icons.copy) {
@@ -1590,7 +1739,34 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         }
       }
     }
-    toolbarChildren.addAll(widget.options.customToolbarButtons);
+    if (widget.options.customToolbarInsertionIndices.isNotEmpty
+        && widget.options.customToolbarInsertionIndices.length == widget.options.customToolbarButtons.length) {
+      for (int i = 0; i < widget.options.customToolbarInsertionIndices.length; i++) {
+        if (widget.options.customToolbarInsertionIndices[i] > toolbarChildren.length) {
+          toolbarChildren.insert(toolbarChildren.length, widget.options.customToolbarButtons[i]);
+        } else if (widget.options.customToolbarInsertionIndices[i] < 0) {
+          toolbarChildren.insert(0, widget.options.customToolbarButtons[i]);
+        } else {
+          toolbarChildren.insert(widget.options.customToolbarInsertionIndices[i], widget.options.customToolbarButtons[i]);
+        }
+      }
+    } else {
+      toolbarChildren.addAll(widget.options.customToolbarButtons);
+    }
+    if (widget.options.renderSeparatorWidget)
+      toolbarChildren = intersperse(widget.options.separatorWidget, toolbarChildren).toList();
     return toolbarChildren;
+  }
+}
+
+// courtesy of @modulovalue (https://github.com/modulovalue/dart_intersperse/blob/master/lib/src/intersperse.dart)
+Iterable<T> intersperse<T>(T element, Iterable<T> iterable) sync* {
+  final iterator = iterable.iterator;
+  if (iterator.moveNext()) {
+    yield iterator.current;
+    while (iterator.moveNext()) {
+      yield element;
+      yield iterator.current;
+    }
   }
 }

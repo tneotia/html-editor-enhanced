@@ -69,6 +69,7 @@ class HtmlEditorOptions {
 class HtmlToolbarOptions {
   const HtmlToolbarOptions({
     this.customToolbarButtons = const [],
+    this.customToolbarInsertionIndices = const [],
     this.defaultToolbarButtons = const [
       StyleButtons(),
       FontSettingButtons(),
@@ -88,11 +89,52 @@ class HtmlToolbarOptions {
     this.toolbarType = ToolbarType.nativeScrollable,
     this.toolbarPosition = ToolbarPosition.aboveEditor,
     this.videoExtensions,
+    this.dropdownElevation = 8,
+    this.dropdownIcon,
+    this.dropdownIconColor,
+    this.dropdownIconSize = 24,
+    this.dropdownItemHeight = kMinInteractiveDimension,
+    this.dropdownFocusColor,
+    this.dropdownBackgroundColor,
+    this.dropdownMenuMaxHeight,
+    this.dropdownBoxDecoration,
+    this.buttonColor,
+    this.buttonSelectedColor,
+    this.buttonFillColor,
+    this.buttonFocusColor,
+    this.buttonHighlightColor,
+    this.buttonHoverColor,
+    this.buttonSplashColor,
+    this.buttonBorderColor,
+    this.buttonSelectedBorderColor,
+    this.buttonBorderRadius,
+    this.buttonBorderWidth,
+    this.renderBorder = false,
+    this.textStyle,
+    this.separatorWidget =
+      const VerticalDivider(indent: 2, endIndent: 2, color: Colors.grey),
+    this.renderSeparatorWidget = true,
+    this.toolbarItemHeight = 36,
+    this.gridViewHorizontalSpacing = 5,
+    this.gridViewVerticalSpacing = 5,
   });
 
   /// Allows you to create your own buttons that are added to the end of the
   /// default buttons list
   final List<Widget> customToolbarButtons;
+
+  /// Allows you to set where each custom toolbar button is inserted into the
+  /// toolbar buttons.
+  ///
+  /// Notes: 1) This list should have the same length as the [customToolbarButtons]
+  ///
+  /// 2) If any indices > [defaultToolbarButtons.length] then the plugin will
+  /// automatically account for this and insert the buttons at the end of the
+  /// [defaultToolbarButtons]
+  ///
+  /// 3) If any indices < 0 then the plugin will automatically account for this
+  /// and insert the buttons at the beginning of the [defaultToolbarButtons]
+  final List<int> customToolbarInsertionIndices;
 
   /// Sets which options are visible in the toolbar for the editor.
   final List<Toolbar> defaultToolbarButtons;
@@ -176,6 +218,73 @@ class HtmlToolbarOptions {
   ///
   /// By default any video extension is allowed.
   final List<String>? videoExtensions;
+
+  /// Styling options for the toolbar:
+
+  /// Determines whether a border is rendered around all toolbar widgets
+  ///
+  /// The default value is false. True is recommended for [ToolbarType.nativeGrid].
+  final bool renderBorder;
+
+  /// Sets the text style for all toolbar widgets
+  final TextStyle? textStyle;
+
+  /// Sets the separator widget between toolbar sections. This widget is only
+  /// used in [ToolbarType.nativeScrollable].
+  ///
+  /// The default widget is [VerticalDivider(indent: 2, endIndent: 2, color: Colors.grey)]
+  final Widget separatorWidget;
+
+  /// Determines whether the separator widget is rendered
+  ///
+  /// The default value is true
+  final bool renderSeparatorWidget;
+
+  /// Sets the height of the toolbar items
+  ///
+  /// Button width is affected by this parameter, however dropdown widths are
+  /// not affected. The plugin will maintain a square shape for all buttons.
+  ///
+  /// The default value is 36
+  final double toolbarItemHeight;
+
+  /// Sets the vertical spacing between rows when using [ToolbarType.nativeGrid]
+  ///
+  /// The default value is 5
+  final double gridViewVerticalSpacing;
+
+  /// Sets the horizontal spacing between items when using [ToolbarType.nativeGrid]
+  ///
+  /// The default value is 5
+  final double gridViewHorizontalSpacing;
+
+  /// Styling options that only apply to dropdowns:
+  /// (See the [DropdownButton] class for more information)
+
+  final int dropdownElevation;
+  final Widget? dropdownIcon;
+  final Color? dropdownIconColor;
+  final double dropdownIconSize;
+  final double dropdownItemHeight;
+  final Color? dropdownFocusColor;
+  final Color? dropdownBackgroundColor;
+  final double? dropdownMenuMaxHeight;
+  final BoxDecoration? dropdownBoxDecoration;
+
+  /// Styling options that only apply to the buttons:
+  /// (See the [ToggleButtons] class for more information)
+
+  final Color? buttonColor;
+  final Color? buttonSelectedColor;
+  final Color? buttonFillColor;
+  final Color? buttonFocusColor;
+  final Color? buttonHighlightColor;
+  final Color? buttonHoverColor;
+  final Color? buttonSplashColor;
+  final Color? buttonBorderColor;
+  final Color? buttonSelectedBorderColor;
+  final BorderRadius? buttonBorderRadius;
+  final double? buttonBorderWidth;
 }
 
 /// Other options such as the height of the widget and the decoration surrounding it
