@@ -29,18 +29,6 @@ Note that the API shown in this README.md file shows only a part of the document
 
 <br/>
 
-## Roadmap
-
-<details><summary>Roadmap details and progress updates:</summary>
-
-### [v2.0.0 Roadmap Wiki Page](https://github.com/tneotia/html-editor-enhanced/wiki/Roadmap)
-
-Recent update: **Initial sample of native controls!**
-
-<img alt="Native Controls Sample GIF" src="https://user-images.githubusercontent.com/50850142/114736473-1dcfda80-9d14-11eb-81b7-661f65b7a04b.gif" width="250"/></td>
-
-</details>
-
 ## Table of Contents:
 
 - ["Enhanced"? In what ways?](#in-what-ways-is-this-package-enhanced)
@@ -63,19 +51,27 @@ Recent update: **Initial sample of native controls!**
   
   - [Plugins](#plugins)
   
-  - [`onImageUpload` and `onImageLinkInsert`](#onimageupload-and-onimagelinkinsert)
+  - [`HtmlEditorOptions` Parameters](#htmleditoroptions-parameters)
     
-  - [`autoAdjustHeight`](#autoadjustheight)
+    - [`autoAdjustHeight`](#autoadjustheight)
   
-  - [`adjustHeightForKeyboard`](#adjustheightforkeyboard)
+    - [`adjustHeightForKeyboard`](#adjustheightforkeyboard)
   
-  - [`filePath`](#filepath)
+    - [`filePath`](#filepath)
   
-  - [`shouldEnsureVisible`](#shouldensurevisible)
+    - [`shouldEnsureVisible`](#shouldensurevisible)
+    
+  - [`HtmlToolbarOptions` Parameters](#htmltoolbaroptions-parameters)
   
-  - [`processInputHtml`, `processOutputHtml`, and `processNewLineAsBr`](#processinputhtml-processoutputhtml-and-processnewlineasbr)
+    - [`customToolbarButtons` and `customToolbarButtonsInsertionIndices`](#customtoolbarbuttons-and-customtoolbarbuttonsinsertionindices)
+    
+    - [`linkInsertInterceptor`, `mediaLinkInsertInterceptor`, `otherFileLinkInsert`, `mediaUploadInterceptor`, and `onOtherFileUpload`](#linkinsertinterceptor-medialinkinsertinterceptor-otherfilelinkinsert-mediauploadinterceptor-and-onotherfileupload)
+    
+    - [`onButtonPressed` and `onDropdownChanged`](#onbuttonpressed-and-ondropdownchanged)
+    
+  - [`HtmlEditorController` Parameters](#htmleditorcontroller-parameters)
   
-  - [Summernote File Plugin](#summernote-file-plugin)
+    - [`processInputHtml`, `processOutputHtml`, and `processNewLineAsBr`](#processinputhtml-processoutputhtml-and-processnewlineasbr)
 
 - [Examples](#examples)
 
@@ -89,125 +85,33 @@ Recent update: **Initial sample of native controls!**
 
 1. It has official support for Flutter Web, with nearly all mobile features supported. Keyboard shortcuts like Ctrl+B for bold work as well!
 
-2. It uses a heavily optimized [WebView](https://github.com/pichillilorenzo/flutter_inappwebview) to deliver the best possible experience when using the editor
+2. It has fully native Flutter-based widget controls
 
-3. It doesn't use a local server to load the HTML code containing the editor. Instead, this package simply loads the HTML file, which improves performance and the editor's startup time.
+3. It uses a heavily optimized [WebView](https://github.com/pichillilorenzo/flutter_inappwebview) to deliver the best possible experience when using the editor
 
-4. It uses a `StatelessWidget`. You don't have to fiddle around with `GlobalKey`s to access methods, instead you can simply call `<controller name>.<method name>` anywhere you want.
+4. It doesn't use a local server to load the HTML code containing the editor. Instead, this package simply loads the HTML file, which improves performance and the editor's startup time.
 
-5. It has support for many of Summernote's methods
+5. It uses a `StatelessWidget`. You don't have to fiddle around with `GlobalKey`s to access methods, instead you can simply call `<controller name>.<method name>` anywhere you want.
 
-6. It has support for all of Summernote's callbacks
+6. It has support for many of Summernote's methods
 
-7. It has support for some of Summernote's 3rd party plugins, found [here](https://github.com/summernote/awesome-summernote)
+7. It has support for all of Summernote's callbacks
 
 8. It exposes the `InAppWebViewController` so you can customize the WebView however you like - you can even load your own HTML code and inject your own JavaScript for your use cases.
 
 9. It has support for dark mode
 
-10. It has support for low-level customization, such as setting what buttons are shown on the toolbar
+10. It has support for extremely granular toolbar customization
 
 More is on the way! File a feature request or contribute to the project if you'd like to see other features added.
 
 ## Setup
 
-Add `html_editor_enhanced: ^1.7.1` as dependency to your pubspec.yaml
+Add `html_editor_enhanced: ^2.0.0` as dependency to your pubspec.yaml.
 
-Additional setup is required to allow the user to pick images via `<input type="file">`:
+Additional setup is required on iOS to allow the user to pick files from storage. See [here](https://github.com/miguelpruivo/flutter_file_picker/wiki/Setup#--ios) for more details. 
 
-<details><summary>Instructions</summary>
-
-Add the following to your app's AndroidManifest.xml inside the `<application>` tag:
-
-```xml
-<provider
-   android:name="com.pichillilorenzo.flutter_inappwebview.InAppWebViewFileProvider"
-   android:authorities="${applicationId}.flutter_inappwebview.fileprovider"
-   android:exported="false"
-   android:grantUriPermissions="true">
-   <meta-data
-       android:name="android.support.FILE_PROVIDER_PATHS"
-       android:resource="@xml/provider_paths" />
-</provider>
-```
-
-And add the following above the `<application>` tag:
-
-```xml
-<uses-permission android:name="android.permission.INTERNET"/>
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-```
-
-In Dart, you'll need to request these permissions. You can use [`permission_handler`](https://pub.dev/packages/permission_handler) like this:
-
-```dart
-//Android
-await Permission.storage.request();
-//iOS
-await Permission.photos.request();
-```
-
-If you'd like the user to be able to insert images via the camera, you need to request for those permissions. AndroidManifest:
-
-```xml
-<uses-permission android:name="android.permission.CAMERA"/>
-```
-
-Dart:
-
-```dart
-await Permission.camera.request();
-```
-
-You must request the permissions in Dart before the user accesses the file upload dialog. I recommend requesting the permissions in `initState()` or something similar.
-
-IMPORTANT: When using `permission_handler` on iOS, you must modify the Podfile, otherwise you will not be able to upload a build to App Store Connect. Add the following at the very bottom, right underneath `flutter_additional_ios_build_settings(target)`:
-
-```text
-target.build_configurations.each do |config|
-  config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
-      '$(inherited)',
-      ## use a hashtag symbol on the permissions you want to include in your app. Make sure they are defined in Info.plist as well! 
-      ## dart: PermissionGroup.calendar
-      'PERMISSION_EVENTS=0',
-
-      ## dart: PermissionGroup.reminders
-      'PERMISSION_REMINDERS=0',
-
-      ## dart: PermissionGroup.contacts
-      'PERMISSION_CONTACTS=0',
-
-      ## dart: PermissionGroup.camera
-      'PERMISSION_CAMERA=0',
-
-      ## dart: PermissionGroup.microphone
-      'PERMISSION_MICROPHONE=0',
-
-      ## dart: PermissionGroup.speech
-      'PERMISSION_SPEECH_RECOGNIZER=0',
-
-      ## dart: PermissionGroup.photos
-      # 'PERMISSION_PHOTOS=0',
-
-      ## dart: [PermissionGroup.location, PermissionGroup.locationAlways, PermissionGroup.locationWhenInUse]
-      'PERMISSION_LOCATION=0',
-
-      ## dart: PermissionGroup.notification
-      'PERMISSION_NOTIFICATIONS=0',
-
-      ## dart: PermissionGroup.mediaLibrary
-      'PERMISSION_MEDIA_LIBRARY=0',
-
-      ## dart: PermissionGroup.sensors
-      'PERMISSION_SENSORS=0'
-    ]
- end
-```
-
-If you decide to allow images directly from the camera, you will need to comment `'PERMISSION_CAMERA=0',` as well.
-
-</details>
+For images, the package uses `FileType.image`, for video `FileType.video`, for audio `FileType.audio`, and for any other file `FileType.any`. You can just complete setup for the specific buttons you plan to enable in the editor.
 
 ## Basic Usage
 
@@ -219,14 +123,55 @@ HtmlEditorController controller = HtmlEditorController();
 @override Widget build(BuildContext context) {
     return HtmlEditor(
         controller: controller, //required
-        hint: "Your text here...",
-        //initalText: "text content initial, if any",
-        options: HtmlEditorOptions(
+        htmlEditorOptions: HtmlEditorOptions(
+          hint: "Your text here...",
+          //initalText: "text content initial, if any",
+        ),   
+        otherOptions: OtherOptions(
           height: 400,
         ),
     );
 }
 ```
+
+#### Important note for Web:
+
+At the moment, there is quite a bit of flickering and repainting when having many UI elements draw over `IframeElement`s. See https://github.com/flutter/flutter/issues/71888 for more details.
+
+The current workaround is to build and/or run your Web app with `flutter run --web-renderer html` and `flutter build web --web-renderer html`.
+
+Follow https://github.com/flutter/flutter/issues/80524 for updates on a potential fix, in the meantime the above solution should resolve the majority of the flickering issues.
+
+### Important note about toolbar buttons:
+
+It is *highly recommended* to pick and choose which buttons you'd like to show - pretty much every single button is shown by default, and this might be overwhelming for users. You can do this like so:
+
+```dart
+import 'package:html_editor/html_editor.dart';
+
+HtmlEditorController controller = HtmlEditorController();
+
+@override Widget build(BuildContext context) {
+    return HtmlEditor(
+        controller: controller, //required
+        htmlEditorOptions: HtmlEditorOptions(
+          hint: "Your text here...",
+          //initalText: "text content initial, if any",
+        ),   
+        htmlToolbarOptions: HtmlToolbarOptions(
+          defaultToolbarButtons: [
+            //add constructors here and set buttons to false, e.g.
+            ParagraphButtons(lineHeight: false, caseConverter: false)
+          ]
+        ),   
+        otherOptions: OtherOptions(
+          height: 400,
+        ),
+    );
+}
+```
+
+Please note: You cannot just add the constructor of the button group you'd like to remove buttons from. If you do this, then the plugin will only show buttons from that specific button group. You must add all the other constructors in, and you can leave them blank: `[ListButtons(), ParagraphButtons()]` etc.
 
 When you want to get text from the editor:
 ```dart
@@ -247,8 +192,6 @@ Parameter | Type | Default | Description
 ------------ | ------------- | ------------- | -------------
 **controller** | `HtmlEditorController` | empty | Required param. Create a controller instance and pass it to the widget. This ensures that any methods called work only on their `HtmlEditor` instance, allowing you to use multiple HTML widgets on one page.
 **callbacks** | `Callbacks` | empty | Customize the callbacks for various events
-**hint** | `String` | empty | Placeholder hint text
-**initialText** | `String` | empty | Initial text content for text editor
 **options** | `HtmlEditorOptions` | `HtmlEditorOptions()` | Class to set various options. See [below](#parameters---htmleditoroptions) for more details.
 **plugins** | `List<Plugins>` | empty | Customize what plugins are activated. See [below](#plugins) for more details.
 **toolbar** | `List<Toolbar>` | See the widget's constructor | Customize what buttons are shown on the toolbar, and in which order. See [below](#toolbar) for more details.
@@ -268,11 +211,83 @@ Parameter | Type | Default | Description
 **autoAdjustHeight** | `bool` | `true` | Automatically adjust the height of the text editor by analyzing the HTML height once the editor is loaded. Recommended value: `true`.  See [below](#autoadjustheight) for more details.
 **adjustHeightForKeyboard** | `bool` | `true` | Adjust the height of the editor if the keyboard is active and it overlaps the editor to prevent the overlap. Recommended value: `true`, only works on mobile.  See [below](#adjustheightforkeyboard) for more details.
 **darkMode** | `bool` | `null` | Sets the status of dark mode - `false`: always light, `null`: follow system, `true`: always dark
-**decoration** | `BoxDecoration` |  | `BoxDecoration` that surrounds the widget
 **filePath** | `String` | `null` | Allows you to specify your own HTML to be loaded into the webview. You can create a custom page with Summernote, or theoretically load any other editor/HTML.
 **hint** | `String` | empty | Placeholder hint text
+**initialText** | `String` | empty | Initial text content for text editor
 **shouldEnsureVisible** | `bool` | `false` | Scroll the parent `Scrollable` to the top of the editor widget when the webview is focused. Do *not* use this parameter if `HtmlEditor` is not inside a `Scrollable`. See [below](#shouldensurevisible) for more details.
-**showBottomToolbar** | `bool` | true | Show or hide bottom toolbar
+
+### Parameters - `HtmlToolbarOptions`
+
+#### Toolbar Options
+
+Parameter | Type | Default | Description
+------------ | ------------- | ------------- | -------------
+**audioExtensions** | `List<String>` | `null` | Allowed extensions when inserting audio files
+**customToolbarButtons** | `List<Widget>` | empty | Add custom buttons to the toolbar
+**customToolbarInsertionIndices** | `List<int>` | empty | Allows you to set where each custom toolbar button should be inserted into the toolbar widget list
+**defaultToolbarButtons** | `List<Toolbar>` | (all constructors active) | Allows you to hide/show certain buttons or certain groups of buttons
+**otherFileExtensions** | `List<String>` | `null` | Allowed extensions when inserting files other than image/audio/video
+**imageExtensions** | `List<String>` | `null` | Allowed extensions when inserting images
+**linkInsertInterceptor** | `FutureOr<bool> Function(String, String, bool)` | `null` | Intercept any links inserted into the editor. The function passes the display text, the URL, and whether it opens a new tab.
+**mediaLinkInsertInterceptor** | `FutureOr<bool> Function(String, InsertFileType)` | `null` | Intercept any media links inserted into the editor. The function passes the URL and `InsertFileType` which indicates which file type was inserted
+**mediaUploadInterceptor** | `FutureOr<bool> Function(PlatformFile, InsertFileType)` | `null` | Intercept any media files inserted into the editor. The function passes `PlatformFile` which holds all relevant file data, and `InsertFileType` which indicates which file type was inserted.
+**onButtonPressed** | `FutureOr<bool> Function(ButtonType, bool?, void Function()?)` | `null` | Intercept any button presses. The function passes the enum for the pressed button, the current selected status of the button (if applicable) and a function to update the status (if applicable).
+**onDropdownChanged** | `FutureOr<bool> Function(DropdownType, dynamic, void Function(dynamic)?)` | `null` | Intercept any dropdown changes. The function passes the enum for the changed dropdown, the changed value, and a function to update the changed value (if applicable).
+**onOtherFileLinkInsert** | `Function(String)` | `null` | Intercept file link inserts other than image/audio/video. This handler is required when using the other file button, as the package has no built-in handlers
+**onOtherFileUpload** | `Function(PlatformFile)` | `null` | Intercept file uploads other than image/audio/video. This handler is required when using the other file button, as the package has no built-in handlers
+**otherFileExtensions** | `List<String>` | `null` | Allowed extensions when inserting files other than image/audio/video
+**toolbarType** | `ToolbarType` | `ToolbarType.nativeScrollable` | Customize how the toolbar is displayed (gridview or scrollable)
+**toolbarPosition** | `ToolbarPosition` | `ToolbarPosition.aboveEditor` | Set where the toolbar is displayed (above or below the editor)
+**videoExtensions** | `List<String>` | `null` | Allowed extensions when inserting videos
+
+#### Styling Options
+
+Parameter | Type | Default | Description
+------------ | ------------- | ------------- | -------------
+**renderBorder** | `bool` | `false` | Render a border around dropdowns and buttons
+**textStyle** | `TextStyle` | `null` | The `TextStyle` to use when displaying dropdowns and buttons
+**separatorWidget** | `Widget` | `VerticalDivider(indent: 2, endIndent: 2, color: Colors.grey)` | Set the widget that separates each group of buttons/dropdowns
+**renderSeparatorWidget** | `bool` | `true` | Whether or not the separator widget should be rendered
+**toolbarItemHeight** | `double` | `36` | Set the height of dropdowns and buttons. Buttons will maintain a square aspect ratio.
+**gridViewHorizontalSpacing** | `double` | `5` | The horizontal spacing to use between button groups when displaying the toolbar as `ToolbarType.nativeGrid`
+**gridViewVerticalSpacing** | `double` | `5` | The vertical spacing to use between button groups when diplaying the toolbar as `ToolbarType.nativeGrid`
+
+#### Styling Options - applies to dropdowns only
+
+Parameter | Type | Default
+------------ | ------------- | -------------
+**dropdownElevation** | `int` | `8` 
+**dropdownIcon** | `Widget` | `null` 
+**dropdownIconColor** | `Color` | `null`
+**dropdownIconSize** | `double` | `24`
+**dropdownItemHeight** | `double` | `kMinInteractiveDimension` (`48`)
+**dropdownFocusColor** | `Color` | `null` 
+**dropdownBackgroundColor** | `Color` | `null` 
+**dropdownMenuMaxHeight** | `double` | `null` 
+**dropdownBoxDecoration** | `BoxDecoration` | `null`
+
+#### Styling Options - applies to buttons only
+
+Parameter | Type | Default
+------------ | ------------- | -------------
+**buttonColor** | `Color` | `null` 
+**buttonSelectedColor** | `Color` | `null` 
+**buttonFillColor** | `Color` | `null`
+**buttonFocusColor** | `Color` | `null`
+**buttonHighlightColor** | `Color` | `null`
+**buttonHoverColor** | `Color` | `null` 
+**buttonSplashColor** | `Color` | `null` 
+**buttonBorderColor** | `Color` | `null` 
+**buttonSelectedBorderColor** | `Color` | `null`
+**buttonBorderRadius** | `BorderRadius` | `null`
+**buttonBorderWidth** | `double` | `null`
+
+### Parameters - `Other Options`
+
+Parameter | Type | Default | Description
+------------ | ------------- | ------------- | -------------
+**decoration** | `BoxDecoration` | `null` | `BoxDecoration` that surrounds the widget
+**height** | `double` | `null` | Height of the widget (includes toolbar and editing area)
 
 ### Methods
 
@@ -285,6 +300,7 @@ Method | Argument(s) | Returned Value(s) | Description
 **clearFocus()** | N/A | N/A | Clears focus for the webview and resets the height to the original height on mobile. Do *not* use this method in Flutter Web.
 **disable()** | N/A | N/A | Disables the editor (a gray mask is applied and all touches are absorbed)
 **enable()** | N/A | N/A | Enables the editor
+**execCommand()** | `String` command, `String` argument (optional) | N/A | Allows you to run any `execCommand` command easily. See the [MDN Docs](https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand) for usage.
 **getText()** | N/A | `Future<String>` | Returns the current HTML in the editor
 **insertHtml()** | `String` | N/A | Inserts the provided HTML string into the editor at the current cursor position. Do *not* use this method for plaintext strings.
 **insertLink()** | `String` text, `String` url, `bool` isNewWindow | N/A | Inserts a hyperlink using the provided text and url into the editor at the current cursor position. `isNewWindow` defines whether a new browser window is launched if the link is tapped.
@@ -339,20 +355,7 @@ This getter *should not* be used in Flutter Web. If you are making a cross platf
 
 This API allows you to customize Summernote's toolbar in a nice, readable format (you don't have to mess around with strings!).
 
-By default, the toolbar will be set to:
-
-```text
-toolbar: [
-  ['style', ['style']],
-  ['font', ['bold', 'underline', 'clear']],
-  ['color', ['color']],
-  ['para', ['ul', 'ol', 'paragraph']],
-  ['insert', ['link', 'picture', 'video', 'table']],
-  ['view', ['fullscreen', 'codeview', 'help']],
-],
-```
-
-This is pretty close to Summernote's [default options](https://summernote.org/deep-dive/#custom-toolbar-popover). Setting `toolbar` to null or empty will initialize the editor with these options.
+By default, the toolbar will have all buttons enabled except the "other file" button, because the plugin cannot handle those files out of the box.
 
 Well, what if you want to customize it? Don't worry, it's a nice and neat API:
 
@@ -361,22 +364,24 @@ HtmlEditorController controller = HtmlEditorController();
 Widget htmlEditor = HtmlEditor(
   controller: controller, //required
   //other options
-  toolbar: [
-    Style(),
-    Font(buttons: [FontButtons.bold, FontButtons.underline, FontButtons.italic])
-  ]
+  toolbarOptions: HtmlToolbarOptions(
+    defaultToolbarButtons: [
+        StyleButtons(),
+        ParagraphButtons(lineHeight: false, caseConverter: false)
+    ]
+  )
 );
 ```
 
-In the above example, the editor will only be initialized with the 'style', 'bold', 'underline', and 'italic' buttons.
+If you leave the `Toolbar` constructor blank (like `Style()` above), then the package interprets that you want all the buttons for the `Style` group to be visible.
 
-If you leave the `Toolbar` constructor blank (like `Style()` above), then the package interprets that you want the default buttons for `Style` to be visible.
+If you want to remove certain buttons from the group, you can set their button name to `false`, as shown in the example above.
 
-You can specify a list of buttons that are visible for each `Toolbar` constructor. Each constructor accepts a different type of enum in its button list, so you'll always put the right buttons in the right places.
+Order matters! Whatever group you set first will be the first group of buttons to display.
 
-If you don't want to show an entire group of buttons, simply don't include their constructor in the `Toolbar` list!
+If you don't want to show an entire group of buttons, simply don't include their constructor in the `Toolbar` list! This means that if you want to disable just one button, you still have to provide all other constructors.
 
-Note: Setting `buttons: []` will also be interpreted as wanting the default buttons for the constructor rather than not showing the group of buttons.
+You can also create your own toolbar buttons! See [below](#customtoolbarbuttons-and-customtoolbarbuttonsinsertionindices) for more details.
 
 ### Plugins
 
@@ -384,34 +389,26 @@ This API allows you to add certain Summernote plugins from the [Summernote Aweso
 
 Currently the following plugins are supported:
 
-1. [Summernote Emoji from Ajax](https://github.com/tylerecouture/summernote-ext-emoji-ajax/) -
-Adds a button to the toolbar to allow the user to insert emojis. These are loaded via Ajax.
+1. [Summernote Case Converter](https://github.com/piranga8/summernote-case-converter) -
+Convert the selected text to all lowercase, all uppercase, sentence case, or title case. Supported via a dropdown in the toolbar in `ParagraphButtons`.
 
-2. [Summernote Add Text Tags](https://github.com/tylerecouture/summernote-add-text-tags) -
-Adds a button to the toolbar to support tags like var, code, samp, and more.
+2. [Summernote List Styles](https://github.com/tylerecouture/summernote-list-styles) -
+Customize the ul and ol list style. Supported via a dropdown in the toolbar in `ListButtons`.
 
-3. [Summernote Case Converter](https://github.com/piranga8/summernote-case-converter) -
-Adds a button to the toolbar to convert the selected text to all lowercase, all uppercase, sentence case, or title case.
+3. [Summernote RTL](https://github.com/virtser/summernote-rtl-plugin) -
+Switch the currently selected text between LTR and RTL format. Supported via two buttons in the toolbar in `ParagraphButtons`.
 
-4. [Summernote List Styles](https://github.com/tylerecouture/summernote-list-styles) -
-Adds a button to the toolbar to customize the ul and ol list style.
-
-5. [Summernote RTL](https://github.com/virtser/summernote-rtl-plugin) -
-Adds two buttons to the toolbar that switch the currently selected text between LTR and RTL format.
-
-6. [Summernote At Mention](https://github.com/team-loxo/summernote-at-mention) -
+4. [Summernote At Mention](https://github.com/team-loxo/summernote-at-mention) -
 Shows a dropdown of available mentions when the '@' character is typed into the editor. The implementation requires that you pass a list of available mentions, and you can also provide a function to call when a mention is inserted into the editor.
 
-7. [Summernote Codewrapper](https://github.com/semplon/summernote-ext-codewrapper) -
-Adds a button to the toolbar that wraps the selected text in a code block.
+5. [Summernote File](https://github.com/mathieu-coingt/summernote-file) -
+Support picture files (jpg, png, gif, wvg, webp), audio files (mp3, ogg, oga), and video files (mp4, ogv, webm) in base64. Supported via the image/audio/video/other file buttons in the toolbar in `InsertButtons`.
 
-8. [Summernote File](https://github.com/mathieu-coingt/summernote-file) -
-Adds a button to the toolbar that allows the user to upload any type of file. It supports picture files (jpg, png, gif, wvg, webp), audio files (mp3, ogg, oga), and video files (mp4, ogv, webm) in base64. For all other formats, you must use the onFileUpload callback to upload the files to a server and then insert an HTML node into the editor.<br>
-See [below](#summernote-file-plugin) for more details.
+This list is not final, more can be added. If there's a specific plugin you'd like to see support for, please file a feature request!
 
-This list is not final, more will be added. If there's a specific plugin you'd like to see support for, please file a feature request!
+Every plugin except Summernote At Mention is activated by default. They can be disabled by modifying the toolbar items, see [above](#toolbar) for details.
 
-By default, no plugins will be activated. What if you want to activate some? Don't worry, it's a nice and neat API:
+To activate Summernote At Mention:
 
 ```dart
 HtmlEditorController controller = HtmlEditorController();
@@ -419,50 +416,41 @@ Widget htmlEditor = HtmlEditor(
   controller: controller, //required
   //other options
   plugins: [
-    SummernoteEmoji(),
     SummernoteAtMention(
-      mentions: ['test1', 'test2', 'test3'],
+      //returns the dropdown items on mobile
+      getSuggestionsMobile: (String value) {
+        List<String> mentions = ['test1', 'test2', 'test3'];
+        return mentions
+            .where((element) => element.contains(value))
+            .toList();
+      },
+      //returns the dropdown items on web
+      mentionsWeb: ['test1', 'test2', 'test3'],
       onSelect: (String value) {
         print(value);
-    }),
-    SummernoteFile(onFileUpload: (file) {
-      print(file.name);
-      print(file.size);
-      print(file.type);
-    }),
+      }
+    ),
   ]
 );
 ```
 
-In the above example, only those three plugins will be activated in the editor. Order matters here - whatever order you define the plugins is the order their buttons will be displayed in the toolbar.
+### `HtmlEditorOptions` parameters
 
-All plugin buttons will be displayed in one section in the toolbar. Overriding the toolbar using the `toolbar` parameter does not affect how the plugin buttons are displayed. 
+This section contains longer descriptions for select parameters in `HtmlEditorOptions`. For parameters not mentioned here, see the parameters table [above](#parameters---htmleditoroptions) for a short description. If you have further questions, please file an issue.
 
-Please see the `plugins.dart` file for more specific details on each plugin, including some important notes to consider when deciding whether or not to use them in your implementation.
-
-### `onImageUpload` and `onImageLinkInsert`
-
-These two callbacks pass the file data or URL of the inserted image, respectively.
-
-The important thing to note with these callbacks is that they override Summernote's default implementation.
-
-THis means that you must provide code, using either `<controller name>.insertHtml()` or `<controller name>.insertNetworkImage()`, to insert the image into the editor because it will not insert automatically.
-
-See [below](#example-for-onimageupload-and-onimagelinkinsert) for an example.
-
-### `autoAdjustHeight`
+#### `autoAdjustHeight`
 
 Default value: true
 
-This option parameter sets the height of the editor automatically by getting the value returned by the JS `document.body.scrollHeight`. 
+This option parameter sets the height of the editor automatically by getting the value returned by the JS `document.body.scrollHeight` and the toolbar `GlobalKey` (`toolbarKey.currentContext?.size?.height`). 
 
-This is useful because the Summernote toolbar could have either 1, 2, or 3 rows depending on the widget's configuration, screen size, orientation, etc. There is no reliable way to tell how large the toolbar is going to be before the webview content is loaded, and thus simply hardcoding the height of the webview can induce either empty space at the bottom or a scrollable webview. By using the JS, the editor can get the exact height and update the widget to reflect that.
+This is useful because the toolbar could have either 1 - 5 rows depending on the widget's configuration, screen size, orientation, etc. There is no reliable way to tell how large the toolbar is going to be until after `build()` is executed, and thus simply hardcoding the height of the webview can induce either empty space at the bottom or a scrollable webview. By using the JS and a `GlobalKey` on the toolbar widget, the editor can get the exact height and update the widget to reflect that.
 
 There is a drawback: The webview will visibly shift size after the page is loaded. Depending on how large the change is, it could be jarring. Sometimes, it takes a second for the webview to adjust to the new size and you might see the editor page jump down/up a second or two after the webview container adjusts itself.
 
 If this does not help your use case feel free to disable it, but the recommended value is `true`.
 
-### `adjustHeightForKeyboard`
+#### `adjustHeightForKeyboard`
 
 Default value: true, only considered on mobile
 
@@ -478,7 +466,7 @@ See [below](#example-for-adjustheightforkeyboard) for an example use case.
 
 If this does not help your use case feel free to disable it, but the recommended value is `true`.
 
-### `filePath`
+#### `filePath`
 
 This option parameter allows you to fully customize what HTML is loaded into the webview, by providing a file path to a custom HTML file from assets.
 
@@ -509,7 +497,7 @@ You can use these files from the package to avoid adding more asset files:
 
 See the example HTML file [below](#example-html-for-filepath) for an actual example.
 
-### `shouldEnsureVisible`
+#### `shouldEnsureVisible`
 
 Default value: false
 
@@ -521,7 +509,105 @@ This is useful in cases where the page is a `SingleChildScrollView` or something
 
 See [below](#example-for-shouldensurevisible) for an example with a good way to use this.
 
-### `processInputHtml`, `processOutputHtml`, and `processNewLineAsBr`
+### `HtmlToolbarOptions` parameters
+
+This section contains longer descriptions for select parameters in `HtmlToolbarOptions`. For parameters not mentioned here, see the parameters table [above](#parameters---htmltoolbaroptions) for a short description. If you have further questions, please file an issue.
+
+#### `customToolbarButtons` and `customToolbarButtonsInsertionIndices`
+
+These two parameters allow you to insert custom buttons and set where they are inserted into the toolbar widget list.
+
+This would look something like this:
+
+```dart
+HtmlEditorController controller = HtmlEditorController();
+Widget htmlEditor = HtmlEditor(
+  controller: controller, //required
+  //other options
+  toolbarOptions: HtmlToolbarOptions(
+    defaultToolbarButtons: [
+      StyleButtons(),
+      FontSettingButtons(),
+      FontButtons(),
+      ColorButtons(),
+      ListButtons(),
+      ParagraphButtons(),
+      InsertButtons(),
+      OtherButtons(),
+    ],
+    customToolbarButtons: [
+      //your widgets here
+      Button1(),
+      Button2(),
+    ],
+    customToolbarInsertionIndices: [2, 5]
+  )
+);
+```
+
+In the above example, we have defined two buttons to be inserted at indices 2 and 5. These buttons will *not* be inserted before `FontSettingButtons` and before `ListButtons`, respectively! Each default button group may have a few different sub-groups:
+
+Button Group | Number of Subgroups 
+------------ | -------------
+`StyleButtons` | 1
+`FontSettingButtons` | 3
+`FontButtons` | 2
+`ColorButtons` | 1
+`ListButtons` | 2
+`ParagraphButtons` | 5
+`InsertButtons` | 1
+`OtherButtons` | 2
+
+If some of your buttons are deactivated, the number of subgroups could be reduced. The insertion index depends on these subgroups rather than the overall button group. An easy way to count the insertion index is to build the app and count the number of separator spaces between each button group/dropdown before the location you want to insert your button.
+
+So with this in mind, `Button1` will be inserted between the first two subgroups in `FontSettingButtons`, and `Button2` will be inserted between the two subgroups in `FontButtons`.
+
+When creating an `onPressed`/`onTap`/`onChanged` method for your widget, you can use `controller.execCommand` or any of the other methods on the controller to perform actions in the editor. 
+
+Notes:
+ 
+1. using `controller.editorController.<method>` will do nothing on Web!
+
+2. If you don't provide `customToolbarButtonsInsertionIndices`, the plugin will insert your buttons at the end of the default toolbar list
+
+3. If you provide `customToolbarButtonsInsertionIndices`, it ***must*** be the same length as your `customToolbarButtons` widget list.
+
+#### `linkInsertInterceptor`, `mediaLinkInsertInterceptor`, `otherFileLinkInsert`, `mediaUploadInterceptor`, and `onOtherFileUpload`
+
+These callbacks help you intercept any links or files being inserted into the editor.
+
+Parameter | Type | Description
+------------ | ------------- | -------------
+**linkInsertInterceptor** | `FutureOr<bool> Function(String, String, bool)` | Intercept any links inserted into the editor. The function passes the display text (`String`), the URL (`String`), and whether it opens a new tab (`bool`).
+**mediaLinkInsertInterceptor** | `FutureOr<bool> Function(String, InsertFileType)` | Intercept any media links inserted into the editor. The function passes the URL (`String`).
+**mediaUploadInterceptor** | `FutureOr<bool> Function(PlatformFile, InsertFileType)` | Intercept any media files inserted into the editor. The function passes `PlatformFile` which holds all relevant file data. You can use this to upload into your server, to extract base64 data, perform file validation, etc. It also passes the file type (image/audio/video).
+**onOtherFileLinkInsert** | `Function(String)` | Intercept file link inserts other than image/audio/video. This handler is required when using the other file button, as the package has no built-in handlers. The function passes the URL (`String`). It also passes the file type (image/audio/video)
+**onOtherFileUpload** | `Function(PlatformFile)` | Intercept file uploads other than image/audio/video. This handler is required when using the other file button, as the package has no built-in handlers. The function passes `PlatformFile` which holds all relevant file data. You can use this to upload into your server, to extract base64 data, perform file validation, etc.
+
+For `linkInsertInterceptor`, `mediaLinkInsertInterceptor`, and `mediaUploadInterceptor`, you must return a `bool` to tell the plugin what it should do. When you return false, it assumes that you have handled the user request and taken action. When you return true, the plugin will use the default handlers to handle the user request.
+
+`onOtherFileLinkInsert` and `onOtherFileUpload` are required when using the "other file" button. This button isn't active by default, so if you make it active, you must provide these functions, otherwise nothing will happen when the user inserts a file other than image/audio/video.
+
+See [below](#example-for-linkinsertinterceptor-medialinkinsertinterceptor-otherfilelinkinsert-mediauploadinterceptor-and-onotherfileupload) for an example.
+
+#### `onButtonPressed` and `onDropdownChanged`
+
+These callbacks help you intercept any button presses or dropdown changes.
+
+Parameter | Type | Description
+------------ | ------------- | -------------
+**onButtonPressed** | `FutureOr<bool> Function(ButtonType, bool?, void Function()?)` | Intercept any button presses. The function passes the enum for the pressed button, the current selected status of the button (if applicable) and a function to update the status (if applicable).
+**onDropdownChanged** | `FutureOr<bool> Function(DropdownType, dynamic, void Function(dynamic)?)` | Intercept any dropdown changes. The function passes the enum for the changed dropdown, the changed value, and a function to update the changed value (if applicable).
+
+You must return a `bool` to tell the plugin what it should do. When you return false, it assumes that you have handled the user request and taken action. When you return true, the plugin will use the default handlers to handle the user request.
+
+Some buttons and dropdowns, such as copy/paste and the case converter, don't need to update their changed value, so functions to update the value after handling the user request will not be provided for those buttons.
+
+See [below](#example-for-onbuttonpressed-and-ondropdownchanged) for an example.
+
+### `HtmlEditorController` Parameters
+
+#### `processInputHtml`, `processOutputHtml`, and `processNewLineAsBr`
 
 Default values: true, true, false, respectively
 
@@ -541,83 +627,112 @@ These may seem a little random, but they are the three possible default/initial 
 
 `processNewLineAsBr` will replace `\n` and `\n\n` with `<br/>`. This is only recommended when inserting plaintext as the initial value. In typical HTML any new-lines are ignored, and therefore this parameter defaults to `false`.
 
-### Summernote File Plugin
-
-Adds a button to the toolbar that allows the user to upload any type of file. It supports picture files (jpg, png, gif, wvg, webp), audio files (mp3, ogg, oga), and video files (mp4, ogv, webm) in base64. 
-
-Callbacks and parameters: `onFileUpload` (fired when a file is uploaded), `onFileLinkInsert` (fired when a file is inserted by link), `onFileUploadError` (fired when a file insertion fails for any reason), and `maximumFileSize` (allows you to set a max file size to upload, if exceeded, then onFileUploadError is called)
-
-For all other formats, you can use the onFileUpload callback to upload the files to a server and then insert an HTML node into the editor.
-
-Please be aware that setting the onFileUpload callback removes the base64 functionality - instead you will also have to provide a solution to upload the picture, audio, and video files in your Dart code. Then, you can use the `<controller name>.insertHtml(<html string>)` method to insert the relevant HTML element at the current cursor position.
-
-Another way to upload any other type of file without overriding the default handler is to use `onFileUploadError`. This function will return the same data as `onFileUpload`, and it will also describe which error occurred (either unsupported file, exceeded max size, or JavaScript error). Using the base64 data, you can upload the files and create your HTML node.
-
-`onFileLinkInsert` will pass the link of the inserted file as a `String`. Note that the link insertion has no validation, so if a user inserts "test" as the link, this function will be called rather than `onFileUploadError`.
-
-Setting onFileLinkInsert also overrides the default handler, so you must provide code to manually insert the link into the editor.
-
-See [below](#example-for-onimageupload-and-onimagelinkinsert) for an example that shows how to insert HTML and upload files.
-
 ## Examples
 
 See the [example app](https://github.com/tneotia/html-editor-enhanced/blob/master/example/lib/main.dart) to see how the majority of methods & callbacks can be used. You can also play around with the parameters to see how they function.
 
 This section will be updated later with more specialized and specific examples as this library grows and more features are implemented.
 
-### Example for `onImageUpload` and `onImageLinkInsert`:
-
-Note: This example could also be easily refactored for the Summernote File plugin's `onFileUpload`, `onFileLinkInsert`, and `onFileUploadError`.
+### Example for `linkInsertInterceptor`, `mediaLinkInsertInterceptor`, `otherFileLinkInsert`, `mediaUploadInterceptor`, and `onOtherFileUpload`:
 
 <details><summary>Example code</summary>
 
 Note: This example uses the [http](https://pub.dev/packages/http) package.
 
 ```dart
-import 'dart:convert';
-import 'dart:typed_data';
+import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 
   Widget editor = HtmlEditor(
     controller: controller,
-    hint: "Your text here...",
-    //initialText: "<p>text content initial, if any</p>",
-    callbacks: Callbacks(
-      onImageLinkInsert: (String? url) {
-        if (url != null && url.contains(website_url)) {
-          controller.insertNetworkImage(url!);
+    toolbarOptions: ToolbarOptions(
+      mediaLinkInsertInterceptor: (String url, InsertFileType type) {
+        if (url.contains(website_url)) {
+          controller.insertNetworkImage(url);
         } else {
-          controller.insertText("This image is invalid!");
+          controller.insertText("This file is invalid!");
         }
+        return false;
       },
-      onImageUpload: (FileUpload file) async {
+      mediaUploadInterceptor: (PlatformFile file, InsertFileType type) async {
         print(file.name); //filename
         print(file.size); //size in bytes
-        print(file.type); //MIME type (e.g. image/jpg)
-        print(file.lastModified.toString()); //DateTime object for last modified
+        print(file.extension); //MIME type (e.g. image/jpg)
         //either upload to server:
-        if (file.base64 != null) {
-          //you must remove the initial identifying data (MIME type and dnd data type) from the
-          //base64 string before decoding it - split helps us do this
-          Uint8List list = base64.decode(file.base64!.split(",")[1]);
+        if (file.bytes != null && file.name != null) {
           final request = http.MultipartRequest('POST', Uri.parse("your_server_url"));
-          request.files.add(http.MultipartFile.fromBytes("file", bytes, filename: file.name)); //your server may require a different key than "file"
+          request.files.add(http.MultipartFile.fromBytes("file", file.bytes, filename: file.name)); //your server may require a different key than "file"
           final response = await request.send();
           //try to insert as network image, but if it fails, then try to insert as base64:
           if (response.statusCode == 200) {
-            controller.insertNetworkImage(response.body["url"], filename: file.name); //where "url" is the url of the uploaded image returned in the body JSON
+            controller.insertNetworkImage(response.body["url"], filename: file.name!); //where "url" is the url of the uploaded image returned in the body JSON
           } else {
-            String base64Image =
-              """<img src="${file.base64!}" data-filename="${file.name}"/>""";
-            controller.insertHtml(base64Image);
+            if (type == InsertFileType.image) {
+              String base64Data = base64.encode(file.bytes!);
+              String base64Image =
+              """<img src="data:image/${file.extension};base64,$base64Data" data-filename="${file.name}"/>""";
+              controller.insertHtml(base64Image);
+            } else if (type == InsertFileType.video) {
+              String base64Data = base64.encode(file.bytes!);
+              String base64Image =
+              """<video src="data:video/${file.extension};base64,$base64Data" data-filename="${file.name}"/>""";
+              controller.insertHtml(base64Image);
+            } else if (type == InsertFileType.audio) {
+              String base64Data = base64.encode(file.bytes!);
+              String base64Image =
+              """<audio src="data:audio/${file.extension};base64,$base64Data" data-filename="${file.name}"/>""";
+              controller.insertHtml(base64Image);
+            }
           }
         }
         //or insert as base64:
-        if (file.base64 != null) {
-          String base64Image =
-              """<img src="${file.base64!}" data-filename="${file.name}"/>""";
-          controller.insertHtml(base64Image);
+        if (file.bytes != null) {
+          if (type == InsertFileType.image) {
+            String base64Data = base64.encode(file.bytes!);
+            String base64Image =
+            """<img src="data:image/${file.extension};base64,$base64Data" data-filename="${file.name}"/>""";
+            controller.insertHtml(base64Image);
+          } else if (type == InsertFileType.video) {
+            String base64Data = base64.encode(file.bytes!);
+            String base64Image =
+            """<video src="data:video/${file.extension};base64,$base64Data" data-filename="${file.name}"/>""";
+            controller.insertHtml(base64Image);
+          } else if (type == InsertFileType.audio) {
+            String base64Data = base64.encode(file.bytes!);
+            String base64Image =
+            """<audio src="data:audio/${file.extension};base64,$base64Data" data-filename="${file.name}"/>""";
+            controller.insertHtml(base64Image);
+          }
         }
+        return false;
+      },
+    ),
+  );
+```
+
+`linkInsertInterceptor`, `onOtherFileLinkInsert`, and `onOtherFileUpload` can be implemented in a very similar way, except those do not use the `InsertFileType` enum in their function.
+
+`onOtherFileLinkInsert` and `onOtherFileUpload` also do not require a `bool` to be returned.
+
+</details>
+
+### Example for `onButtonPressed` and `onDropdownChanged`
+
+<details><summary>Example code</summary>
+
+```dart
+  Widget editor = HtmlEditor(
+    controller: controller,
+    toolbarOptions: ToolbarOptions(
+      onButtonPressed: (ButtonType type, bool? status, Function()? updateStatus) {
+        print("button '${describeEnum(type)}' pressed, the current selected status is $status");
+        //run a callback and return false and update the status, otherwise
+        return true;
+      },
+      onDropdownChanged: (DropdownType type, dynamic changed, Function(dynamic)? updateSelectedItem) {
+        print("dropdown '${describeEnum(type)}' changed to $changed");
+        //run a callback and return false and update the changed value, otherwise
+        return true;
       },
     ),
   );
@@ -655,12 +770,14 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
               //other widgets
               HtmlEditor(
                 controller: controller,
-                hint: "Your text here...",
-                //initialText: "<p>text content initial, if any</p>",
-                options: HtmlEditorOptions(
-                  height: 550,
+                htmlEditorOptions: HtmlEditorOptions(
                   shouldEnsureVisible: true,
                   //adjustHeightForKeyboard is true by default
+                  hint: "Your text here...",
+                  //initialText: "<p>text content initial, if any</p>",
+                ),
+                otherOptions: OtherOptions(
+                  height: 550,c
                 ),
               ),
               //other widgets
@@ -733,10 +850,12 @@ class _ExampleState extends State<Example> {
               SizedBox(height: 16),
               HtmlEditor(
                 controller: controller,
-                hint: "Description",
-                options: HtmlEditorOptions(
-                  height: 450,
+                htmlEditorOptions: HtmlEditorOptions(
                   shouldEnsureVisible: true,
+                  hint: "Description",
+                ),
+                otherOptions: OtherOptions(
+                  height: 450,
                 ),
               ),
               SizedBox(height: 16),
@@ -819,7 +938,7 @@ If you do find any issues, please report them in the Issues tab and I will see i
 
 1. When switching between dark and light mode, a reload is required for the HTML editor to switch to the correct color scheme. You can implement this programmatically in Flutter Mobile: `<controller name>.editorController.reload()`, or in Flutter Web: `<controller name>.reloadWeb()`. This will reset the editor! You can save the current text, reload, and then set the text if you'd like to maintain the state.
 
-2. If you are making a cross platform implementation and are using either the `controller` getter or the `reloadWeb()` method, use `kIsWeb` in your app to ensure you are calling these in the correct platform.
+2. If you are making a cross platform implementation and are using either the `editorController` getter or the `reloadWeb()` method, use `kIsWeb` in your app to ensure you are calling these in the correct platform.
 
 3. Inline notifications are finnicky on mobile. It seems that adding/removing a notification adds 2 px to the height of the editor, even though the height is recalculated each time. At the moment I have not found a workaround. This behavior is not present on Web, however.
 

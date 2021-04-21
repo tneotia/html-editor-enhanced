@@ -46,3 +46,5 @@ enum ButtonType { style, bold, italic, underline, clearFormatting, strikethrough
     picture, audio, video, otherFile, table, hr, fullscreen, codeview, undo, redo, help, copy, paste }
 
 enum DropdownType { style, fontName, fontSize, fontSizeUnit, listStyles, lineHeight, caseConverter }
+
+enum InsertFileType { image, audio, video }

@@ -1,3 +1,18 @@
+## [2.0.0]
+* Transitioned to fully native controls! These are extremely customizable and have much better UX than the previous controls.
+* [BREAKING] refactored a lot of options into separate constructors
+* [BREAKING] refactored toolbar classes, so toolbar customizations will need updating
+* Added a bunch of interceptors and callbacks for button presses
+* Added the ability to make custom buttons and set their positions
+* Added official support for numerous Summernote plugins
+   * [BREAKING] removed all Summernote plugins except Summernote @ Mention. The package supports the majority that were removed out of the box now.
+   * Reduced package size by removing the Summernote plugin files
+* Added `execCommand` to controller to help you create custom toolbar buttons
+* Bumped dependencies
+* [BREAKING] Require Flutter 2.0.0+
+* As always, see the README for full documentation on these changes
+* See the [Migration Guide](//todo) for help migrating your v1.x.x widget code
+
 ## [1.8.0] - 2021-04-07
 * Add support for `getSuggestionsMobile` (Summernote @ Mentions Plugin) - allows you to programatically return the list of mentions.
    * Only supported on mobile.

@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
 
 /// Abstract class that all the plguin classes extend
 abstract class Plugins {

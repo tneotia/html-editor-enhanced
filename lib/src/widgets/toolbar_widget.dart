@@ -385,7 +385,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 DropdownMenuItem(child: PointerInterceptor(child: Text("Header 6", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11))), value: "h6"),
               ],
               value: _fontSelectedItem,
-              onChanged: (String? changed) {
+              onChanged: (String? changed) async {
                 void updateSelectedItem(dynamic changed) {
                   if (changed is String) {
                     setState(() {
@@ -395,7 +395,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
 
                 if (changed != null) {
-                  bool proceed = widget.options.onDropdownChanged?.call(DropdownType.style, changed, updateSelectedItem) ?? true;
+                  bool proceed = await widget.options.onDropdownChanged?.call(DropdownType.style, changed, updateSelectedItem) ?? true;
                   if (proceed) {
                     widget.controller.execCommand('formatBlock', argument: changed);
                     updateSelectedItem(changed);
@@ -432,8 +432,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 DropdownMenuItem(child: PointerInterceptor(child: Text("Times New Roman", style: TextStyle(fontFamily: "Times"))), value: "Times New Roman"),
               ],
               value: _fontNameSelectedItem,
-              onChanged: (String? changed) {
-                void updateSelectedItem(dynamic changed) {
+              onChanged: (String? changed) async {
+                void updateSelectedItem(dynamic changed) async {
                   if (changed is String) {
                     setState(() {
                       _fontNameSelectedItem = changed;
@@ -442,7 +442,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
 
                 if (changed != null) {
-                  bool proceed = widget.options.onDropdownChanged?.call(DropdownType.fontName, changed, updateSelectedItem) ?? true;
+                  bool proceed = await widget.options.onDropdownChanged?.call(DropdownType.fontName, changed, updateSelectedItem) ?? true;
                   if (proceed) {
                     widget.controller.execCommand("fontName", argument: changed);
                     updateSelectedItem(changed);
@@ -502,7 +502,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 ),
               ],
               value: _fontSizeSelectedItem,
-              onChanged: (double? changed) {
+              onChanged: (double? changed) async {
                 void updateSelectedItem(dynamic changed) {
                   if (changed is double) {
                     setState(() {
@@ -513,7 +513,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
 
                 if (changed != null) {
                   int intChanged = changed.toInt();
-                  bool proceed = widget.options.onDropdownChanged?.call(DropdownType.fontSize, changed, updateSelectedItem) ?? true;
+                  bool proceed = await widget.options.onDropdownChanged?.call(DropdownType.fontSize, changed, updateSelectedItem) ?? true;
                   if (proceed) {
                     switch (intChanged) {
                       case 1:
@@ -570,7 +570,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 DropdownMenuItem(child: PointerInterceptor(child: Text("px")), value: "px"),
               ],
               value: _fontSizeUnitSelectedItem,
-              onChanged: (String? changed) {
+              onChanged: (String? changed) async {
                 void updateSelectedItem(dynamic changed) {
                   if (changed is String) {
                     setState(() {
@@ -580,7 +580,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
 
                 if (changed != null) {
-                  bool proceed = widget.options.onDropdownChanged?.call(DropdownType.fontSizeUnit, changed, updateSelectedItem) ?? true;
+                  bool proceed = await widget.options.onDropdownChanged?.call(DropdownType.fontSizeUnit, changed, updateSelectedItem) ?? true;
                   if (proceed) {
                     updateSelectedItem(changed);
                   }
@@ -611,7 +611,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             renderBorder: widget.options.renderBorder,
             textStyle: widget.options.textStyle,
             children: t.getIcons1(),
-            onPressed: (int index) {
+            onPressed: (int index) async {
               void updateStatus() {
                 setState(() {
                   _fontSelected[index] = !_fontSelected[index];
@@ -619,28 +619,28 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
 
               if (t.getIcons1()[index].icon == Icons.format_bold) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.bold, _fontSelected[index], updateStatus) ?? true;
+                bool proceed = await widget.options.onButtonPressed?.call(ButtonType.bold, _fontSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('bold');
                   updateStatus();
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_italic) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.italic, _fontSelected[index], updateStatus) ?? true;
+                bool proceed = await widget.options.onButtonPressed?.call(ButtonType.italic, _fontSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('italic');
                   updateStatus();
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_underline) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.underline, _fontSelected[index], updateStatus) ?? true;
+                bool proceed = await widget.options.onButtonPressed?.call(ButtonType.underline, _fontSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('underline');
                   updateStatus();
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_clear) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.clearFormatting, null, null) ?? true;
+                bool proceed = await widget.options.onButtonPressed?.call(ButtonType.clearFormatting, null, null) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('removeFormat');
                 }
@@ -669,7 +669,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             renderBorder: widget.options.renderBorder,
             textStyle: widget.options.textStyle,
             children: t.getIcons2(),
-            onPressed: (int index) {
+            onPressed: (int index) async {
               void updateStatus() {
                 setState(() {
                   _miscFontSelected[index] = !_miscFontSelected[index];
@@ -677,21 +677,21 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
 
               if (t.getIcons2()[index].icon == Icons.format_strikethrough) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.strikethrough, _miscFontSelected[index], updateStatus) ?? true;
+                bool proceed = await widget.options.onButtonPressed?.call(ButtonType.strikethrough, _miscFontSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('strikeThrough');
                   updateStatus();
                 }
               }
               if (t.getIcons2()[index].icon == Icons.superscript) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.superscript, _miscFontSelected[index], updateStatus) ?? true;
+                bool proceed = await widget.options.onButtonPressed?.call(ButtonType.superscript, _miscFontSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('superscript');
                   updateStatus();
                 }
               }
               if (t.getIcons2()[index].icon == Icons.subscript) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.subscript, _miscFontSelected[index], updateStatus) ?? true;
+                bool proceed = await widget.options.onButtonPressed?.call(ButtonType.subscript, _miscFontSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('subscript');
                   updateStatus();
@@ -722,7 +722,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           renderBorder: widget.options.renderBorder,
           textStyle: widget.options.textStyle,
           children: t.getIcons(),
-          onPressed: (int index) {
+          onPressed: (int index) async {
             void updateStatus() {
               setState(() {
                 _colorSelected[index] = !_colorSelected[index];
@@ -731,7 +731,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
 
             if (_colorSelected[index]) {
               if (t.getIcons()[index].icon == Icons.format_color_text) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.foregroundColor, _colorSelected[index], updateStatus) ?? true;
+                bool proceed = await widget.options.onButtonPressed?.call(ButtonType.foregroundColor, _colorSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('foreColor',
                       argument: (Colors.black.value & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase());
@@ -739,7 +739,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons()[index].icon == Icons.format_color_fill) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.highlightColor, _colorSelected[index], updateStatus) ?? true;
+                bool proceed = await widget.options.onButtonPressed?.call(ButtonType.highlightColor, _colorSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('hiliteColor',
                       argument: (Colors.yellow.value & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase());
@@ -749,9 +749,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             } else {
               bool proceed = true;
               if (t.getIcons()[index].icon == Icons.format_color_text) {
-                proceed = widget.options.onButtonPressed?.call(ButtonType.foregroundColor, _colorSelected[index], updateStatus) ?? true;
+                proceed = await widget.options.onButtonPressed?.call(ButtonType.foregroundColor, _colorSelected[index], updateStatus) ?? true;
               } else if (t.getIcons()[index].icon == Icons.format_color_fill) {
-                proceed = widget.options.onButtonPressed?.call(ButtonType.highlightColor, _colorSelected[index], updateStatus) ?? true;
+                proceed = await widget.options.onButtonPressed?.call(ButtonType.highlightColor, _colorSelected[index], updateStatus) ?? true;
               }
               if (proceed) {
                 showDialog(
@@ -858,7 +858,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             renderBorder: widget.options.renderBorder,
             textStyle: widget.options.textStyle,
             children: t.getIcons(),
-            onPressed: (int index) {
+            onPressed: (int index) async {
               void updateStatus() {
                 setState(() {
                   _listSelected[index] = !_listSelected[index];
@@ -866,14 +866,14 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
 
               if (t.getIcons()[index].icon == Icons.format_list_bulleted) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.ul, _listSelected[index], updateStatus) ?? true;
+                bool proceed = await widget.options.onButtonPressed?.call(ButtonType.ul, _listSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('insertUnorderedList');
                   updateStatus();
                 }
               }
               if (t.getIcons()[index].icon == Icons.format_list_numbered) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.ol, _listSelected[index], updateStatus) ?? true;
+                bool proceed = await widget.options.onButtonPressed?.call(ButtonType.ol, _listSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('insertOrderedList');
                   updateStatus();
@@ -915,7 +915,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 ],
                 hint: Text("Select list style"),
                 value: _listStyleSelectedItem,
-                onChanged: (String? changed) {
+                onChanged: (String? changed) async {
                   void updateSelectedItem(dynamic changed) {
                     if (changed is String) {
                       setState(() {
@@ -925,7 +925,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   }
 
                   if (changed != null) {
-                    bool proceed = widget.options.onDropdownChanged?.call(DropdownType.listStyles, changed, updateSelectedItem) ?? true;
+                    bool proceed = await widget.options.onDropdownChanged?.call(DropdownType.listStyles, changed, updateSelectedItem) ?? true;
                     if (proceed) {
                       if (kIsWeb) {
                         widget.controller.changeListStyle(changed);
@@ -966,7 +966,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             renderBorder: widget.options.renderBorder,
             textStyle: widget.options.textStyle,
             children: t.getIcons1(),
-            onPressed: (int index) {
+            onPressed: (int index) async {
               void updateStatus() {
                 _alignSelected = List<bool>.filled(t.getIcons1().length, false);
                 setState(() {
@@ -975,28 +975,28 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
 
               if (t.getIcons1()[index].icon == Icons.format_align_left) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.alignLeft, _alignSelected[index], updateStatus) ?? true;
+                bool proceed = await widget.options.onButtonPressed?.call(ButtonType.alignLeft, _alignSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('justifyLeft');
                   updateStatus();
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_align_center) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.alignCenter, _alignSelected[index], updateStatus) ?? true;
+                bool proceed = await widget.options.onButtonPressed?.call(ButtonType.alignCenter, _alignSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('justifyCenter');
                   updateStatus();
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_align_right) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.alignRight, _alignSelected[index], updateStatus) ?? true;
+                bool proceed = await widget.options.onButtonPressed?.call(ButtonType.alignRight, _alignSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('justifyRight');
                   updateStatus();
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_align_justify) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.alignJustify, _alignSelected[index], updateStatus) ?? true;
+                bool proceed = await widget.options.onButtonPressed?.call(ButtonType.alignJustify, _alignSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('justifyFull');
                   updateStatus();
@@ -1026,15 +1026,15 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             renderBorder: widget.options.renderBorder,
             textStyle: widget.options.textStyle,
             children: t.getIcons2(),
-            onPressed: (int index) {
+            onPressed: (int index) async {
               if (t.getIcons2()[index].icon == Icons.format_indent_increase) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.increaseIndent, null, null) ?? true;
+                bool proceed = await widget.options.onButtonPressed?.call(ButtonType.increaseIndent, null, null) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('indent');
                 }
               }
               if (t.getIcons2()[index].icon == Icons.format_indent_decrease) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.decreaseIndent, null, null) ?? true;
+                bool proceed = await widget.options.onButtonPressed?.call(ButtonType.decreaseIndent, null, null) ?? true;
                 if (proceed) {
                   widget.controller.execCommand('outdent');
                 }
@@ -1074,7 +1074,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   DropdownMenuItem(child: PointerInterceptor(child: Text("3.0")), value: 3),
                 ],
                 value: _lineHeightSelectedItem,
-                onChanged: (double? changed) {
+                onChanged: (double? changed) async {
                   void updateSelectedItem(dynamic changed) {
                     if (changed is double) {
                       setState(() {
@@ -1084,7 +1084,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   }
 
                   if (changed != null) {
-                    bool proceed = widget.options.onDropdownChanged?.call(DropdownType.lineHeight, changed, updateSelectedItem) ?? true;
+                    bool proceed = await widget.options.onDropdownChanged?.call(DropdownType.lineHeight, changed, updateSelectedItem) ?? true;
                     if (proceed) {
                       if (kIsWeb) {
                         widget.controller.changeLineHeight(changed.toString());
@@ -1122,7 +1122,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               Icon(Icons.format_textdirection_l_to_r),
               Icon(Icons.format_textdirection_r_to_l),
             ],
-            onPressed: (int index) {
+            onPressed: (int index) async {
               void updateStatus() {
                 _textDirectionSelected = List<bool>.filled(2, false);
                 setState(() {
@@ -1130,7 +1130,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 });
               }
 
-              bool proceed = widget.options.onButtonPressed?.call(index == 0 ? ButtonType.ltr : ButtonType.rtl, _alignSelected[index], updateStatus) ?? true;
+              bool proceed = await widget.options.onButtonPressed?.call(index == 0 ? ButtonType.ltr : ButtonType.rtl, _alignSelected[index], updateStatus) ?? true;
               if (proceed) {
                 if (kIsWeb) {
                   widget.controller.changeTextDirection(index == 0 ? "ltr" : "rtl");
@@ -1178,9 +1178,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 ],
                 hint: Text("Change case"),
                 value: null,
-                onChanged: (String? changed) {
+                onChanged: (String? changed) async {
                   if (changed != null) {
-                    bool proceed = widget.options.onDropdownChanged?.call(DropdownType.caseConverter, changed, null) ?? true;
+                    bool proceed = await widget.options.onDropdownChanged?.call(DropdownType.caseConverter, changed, null) ?? true;
                     if (proceed) {
                       if (kIsWeb) {
                         widget.controller.changeCase(changed);
@@ -1242,9 +1242,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           renderBorder: widget.options.renderBorder,
           textStyle: widget.options.textStyle,
           children: t.getIcons(),
-          onPressed: (int index) {
+          onPressed: (int index) async {
             if (t.getIcons()[index].icon == Icons.link) {
-              bool proceed = widget.options.onButtonPressed?.call(ButtonType.link, null, null) ?? true;
+              bool proceed = await widget.options.onButtonPressed?.call(ButtonType.link, null, null) ?? true;
               if (proceed) {
                 final TextEditingController text = TextEditingController();
                 final TextEditingController url = TextEditingController();
@@ -1339,9 +1339,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     child: Text("Cancel"),
                                   ),
                                   TextButton(
-                                    onPressed: () {
+                                    onPressed: () async {
                                       if (formKey.currentState!.validate()) {
-                                        bool proceed = widget.options
+                                        bool proceed = await widget.options
                                             .linkInsertInterceptor
                                             ?.call(text.text.isEmpty ? url.text : text.text, url.text, openNewTab) ?? true;
                                         if (proceed) {
@@ -1366,7 +1366,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
             }
             if (t.getIcons()[index].icon == Icons.image_outlined) {
-              bool proceed = widget.options.onButtonPressed?.call(ButtonType.picture, null, null) ?? true;
+              bool proceed = await widget.options.onButtonPressed?.call(ButtonType.picture, null, null) ?? true;
               if (proceed) {
                 final TextEditingController filename = TextEditingController();
                 final TextEditingController url = TextEditingController();
@@ -1450,7 +1450,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     child: Text("Cancel"),
                                   ),
                                   TextButton(
-                                    onPressed: () {
+                                    onPressed: () async {
                                       if (filename.text.isEmpty && url.text.isEmpty) {
                                         setState(() {
                                           validateFailed = "Please either choose an image or enter an image URL!";
@@ -1461,14 +1461,14 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                         });
                                       } else if (filename.text.isNotEmpty && result?.files.single.bytes != null) {
                                         String base64Data = base64.encode(result!.files.single.bytes!);
-                                        bool proceed = widget.options.mediaUploadInterceptor?.call(result!.files.single) ?? true;
+                                        bool proceed = await widget.options.mediaUploadInterceptor?.call(result!.files.single, InsertFileType.image) ?? true;
                                         if (proceed) {
                                           widget.controller.insertHtml(
                                               "<img src='data:image/${result!.files.single.extension};base64,$base64Data' data-filename='${result!.files.single.name}'/>");
                                         }
                                         Navigator.of(context).pop();
                                       } else {
-                                        bool proceed = widget.options.mediaLinkInsertInterceptor?.call(url.text) ?? true;
+                                        bool proceed = await widget.options.mediaLinkInsertInterceptor?.call(url.text, InsertFileType.image) ?? true;
                                         if (proceed) {
                                           widget.controller.insertNetworkImage(url.text);
                                         }
@@ -1487,7 +1487,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
             }
             if (t.getIcons()[index].icon == Icons.audiotrack_outlined) {
-              bool proceed = widget.options.onButtonPressed?.call(ButtonType.audio, null, null) ?? true;
+              bool proceed = await widget.options.onButtonPressed?.call(ButtonType.audio, null, null) ?? true;
               if (proceed) {
                 final TextEditingController filename = TextEditingController();
                 final TextEditingController url = TextEditingController();
@@ -1571,7 +1571,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     child: Text("Cancel"),
                                   ),
                                   TextButton(
-                                    onPressed: () {
+                                    onPressed: () async {
                                       if (filename.text.isEmpty && url.text.isEmpty) {
                                         setState(() {
                                           validateFailed = "Please either choose an audio file or enter an audio file URL!";
@@ -1582,14 +1582,14 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                         });
                                       } else if (filename.text.isNotEmpty && result?.files.single.bytes != null) {
                                         String base64Data = base64.encode(result!.files.single.bytes!);
-                                        bool proceed = widget.options.mediaUploadInterceptor?.call(result!.files.single) ?? true;
+                                        bool proceed = await widget.options.mediaUploadInterceptor?.call(result!.files.single, InsertFileType.audio) ?? true;
                                         if (proceed) {
                                           widget.controller.insertHtml(
                                               "<audio controls src='data:audio/${result!.files.single.extension};base64,$base64Data' data-filename='${result!.files.single.name}'></audio>");
                                         }
                                         Navigator.of(context).pop();
                                       } else {
-                                        bool proceed = widget.options.mediaLinkInsertInterceptor?.call(url.text) ?? true;
+                                        bool proceed = await widget.options.mediaLinkInsertInterceptor?.call(url.text, InsertFileType.audio) ?? true;
                                         if (proceed) {
                                           widget.controller.insertHtml("<audio controls src='${url.text}'></audio>");
                                         }
@@ -1608,7 +1608,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
             }
             if (t.getIcons()[index].icon == Icons.videocam_outlined) {
-              bool proceed = widget.options.onButtonPressed?.call(ButtonType.video, null, null) ?? true;
+              bool proceed = await widget.options.onButtonPressed?.call(ButtonType.video, null, null) ?? true;
               if (proceed) {
                 final TextEditingController filename = TextEditingController();
                 final TextEditingController url = TextEditingController();
@@ -1692,7 +1692,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     child: Text("Cancel"),
                                   ),
                                   TextButton(
-                                    onPressed: () {
+                                    onPressed: () async {
                                       if (filename.text.isEmpty && url.text.isEmpty) {
                                         setState(() {
                                           validateFailed = "Please either choose a video or enter a video URL!";
@@ -1703,14 +1703,14 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                         });
                                       } else if (filename.text.isNotEmpty && result?.files.single.bytes != null) {
                                         String base64Data = base64.encode(result!.files.single.bytes!);
-                                        bool proceed = widget.options.mediaUploadInterceptor?.call(result!.files.single) ?? true;
+                                        bool proceed = await widget.options.mediaUploadInterceptor?.call(result!.files.single, InsertFileType.video) ?? true;
                                         if (proceed) {
                                           widget.controller.insertHtml(
                                               "<video controls src='data:video/${result!.files.single.extension};base64,$base64Data' data-filename='${result!.files.single.name}'></video>");
                                         }
                                         Navigator.of(context).pop();
                                       } else {
-                                        bool proceed = widget.options.mediaLinkInsertInterceptor?.call(url.text) ?? true;
+                                        bool proceed = await widget.options.mediaLinkInsertInterceptor?.call(url.text, InsertFileType.video) ?? true;
                                         if (proceed) {
                                           widget.controller.insertHtml("<video controls src='${url.text}'></video>");
                                         }
@@ -1729,7 +1729,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
             }
             if (t.getIcons()[index].icon == Icons.attach_file) {
-              bool proceed = widget.options.onButtonPressed?.call(ButtonType.otherFile, null, null) ?? true;
+              bool proceed = await widget.options.onButtonPressed?.call(ButtonType.otherFile, null, null) ?? true;
               if (proceed) {
                 final TextEditingController filename = TextEditingController();
                 final TextEditingController url = TextEditingController();
@@ -1842,7 +1842,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
             }
             if (t.getIcons()[index].icon == Icons.table_chart_outlined) {
-              bool proceed = widget.options.onButtonPressed?.call(ButtonType.table, null, null) ?? true;
+              bool proceed = await widget.options.onButtonPressed?.call(ButtonType.table, null, null) ?? true;
               if (proceed) {
                 int currentRows = 1;
                 int currentCols = 1;
@@ -1901,7 +1901,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
             }
             if (t.getIcons()[index].icon == Icons.horizontal_rule) {
-              bool proceed = widget.options.onButtonPressed?.call(ButtonType.hr, null, null) ?? true;
+              bool proceed = await widget.options.onButtonPressed?.call(ButtonType.hr, null, null) ?? true;
               if (proceed) {
                 widget.controller.insertHtml("<hr/>");
               }
@@ -1931,7 +1931,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             renderBorder: widget.options.renderBorder,
             textStyle: widget.options.textStyle,
             children: t.getIcons1(),
-            onPressed: (int index) {
+            onPressed: (int index) async {
               void updateStatus() {
                 setState(() {
                   _miscSelected[index] = !_miscSelected[index];
@@ -1939,33 +1939,33 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
 
               if (t.getIcons1()[index].icon == Icons.fullscreen) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.fullscreen, _miscSelected[index], updateStatus) ?? true;
+                bool proceed = await widget.options.onButtonPressed?.call(ButtonType.fullscreen, _miscSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.setFullScreen();
                   updateStatus();
                 }
               }
               if (t.getIcons1()[index].icon == Icons.code) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.codeview, _miscSelected[index], updateStatus) ?? true;
+                bool proceed = await widget.options.onButtonPressed?.call(ButtonType.codeview, _miscSelected[index], updateStatus) ?? true;
                 if (proceed) {
                   widget.controller.toggleCodeView();
                   updateStatus();
                 }
               }
               if (t.getIcons1()[index].icon == Icons.undo) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.undo, null, null) ?? true;
+                bool proceed = await widget.options.onButtonPressed?.call(ButtonType.undo, null, null) ?? true;
                 if (proceed) {
                   widget.controller.undo();
                 }
               }
               if (t.getIcons1()[index].icon == Icons.redo) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.redo, null, null) ?? true;
+                bool proceed = await widget.options.onButtonPressed?.call(ButtonType.redo, null, null) ?? true;
                 if (proceed) {
                   widget.controller.redo();
                 }
               }
               if (t.getIcons1()[index].icon == Icons.help_outline) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.help, null, null) ?? true;
+                bool proceed = await widget.options.onButtonPressed?.call(ButtonType.help, null, null) ?? true;
                 if (proceed) {
                   showDialog(
                       context: context,
@@ -2216,14 +2216,14 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             children: t.getIcons2(),
             onPressed: (int index) async {
               if (t.getIcons2()[index].icon == Icons.copy) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.copy, null, null) ?? true;
+                bool proceed = await widget.options.onButtonPressed?.call(ButtonType.copy, null, null) ?? true;
                 if (proceed) {
                   String? data = await widget.controller.getText();
                   Clipboard.setData(new ClipboardData(text: data));
                 }
               }
               if (t.getIcons2()[index].icon == Icons.paste) {
-                bool proceed = widget.options.onButtonPressed?.call(ButtonType.paste, null, null) ?? true;
+                bool proceed = await widget.options.onButtonPressed?.call(ButtonType.paste, null, null) ?? true;
                 if (proceed) {
                   ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
                   if (data != null) {
