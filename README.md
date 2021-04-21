@@ -134,7 +134,7 @@ HtmlEditorController controller = HtmlEditorController();
 }
 ```
 
-#### Important note for Web:
+### Important note for Web:
 
 At the moment, there is quite a bit of flickering and repainting when having many UI elements draw over `IframeElement`s. See https://github.com/flutter/flutter/issues/71888 for more details.
 
@@ -173,6 +173,8 @@ HtmlEditorController controller = HtmlEditorController();
 
 Please note: You cannot just add the constructor of the button group you'd like to remove buttons from. If you do this, then the plugin will only show buttons from that specific button group. You must add all the other constructors in, and you can leave them blank: `[ListButtons(), ParagraphButtons()]` etc.
 
+More details available [below](#toolbar)
+
 When you want to get text from the editor:
 ```dart
 final txt = await controller.getText();
@@ -184,7 +186,7 @@ For the full API reference, see [here](https://pub.dev/documentation/html_editor
 
 For a full example, see [here](https://github.com/tneotia/html-editor-enhanced/tree/master/example).
 
-Below, you will find brief descriptions of the parameters the`HtmlEditor` widget accepts and some code snippets to help you use this package.
+Below, you will find brief descriptions of the parameters the `HtmlEditor` widget accepts and some code snippets to help you use this package.
 
 ### Parameters - `HtmlEditor`
 
@@ -353,11 +355,11 @@ This getter *should not* be used in Flutter Web. If you are making a cross platf
 
 ### Toolbar
 
-This API allows you to customize Summernote's toolbar in a nice, readable format (you don't have to mess around with strings!).
+This API allows you to customize the toolbar in a nice, readable format.
 
 By default, the toolbar will have all buttons enabled except the "other file" button, because the plugin cannot handle those files out of the box.
 
-Well, what if you want to customize it? Don't worry, it's a nice and neat API:
+Here's what that a custom implementation could look like:
 
 ```dart
 HtmlEditorController controller = HtmlEditorController();
