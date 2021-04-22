@@ -34,6 +34,7 @@ class HtmlEditorWidget extends StatefulWidget {
   final HtmlToolbarOptions htmlToolbarOptions;
   final OtherOptions otherOptions;
 
+  @override
   _HtmlEditorWidgetMobileState createState() => _HtmlEditorWidgetMobileState();
 }
 
@@ -59,7 +60,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
 
   /// Helps get the height of the toolbar to accurately adjust the height of
   /// the editor when the keyboard is visible.
-  GlobalKey toolbarKey = new GlobalKey();
+  GlobalKey toolbarKey = GlobalKey();
 
   @override
   void initState() {
@@ -125,10 +126,10 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                     controller.addJavaScriptHandler(
                         handlerName: 'FormatSettings',
                         callback: (e) {
-                          Map<String, dynamic> json =
-                              e[0] as Map<String, dynamic>;
-                          if (widget.controller.toolbar != null)
+                          var json = e[0] as Map<String, dynamic>;
+                          if (widget.controller.toolbar != null) {
                             widget.controller.toolbar!.updateToolbar(json);
+                          }
                         });
                   },
                   initialOptions: InAppWebViewGroupOptions(
@@ -150,15 +151,15 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                   onWindowFocus: (controller) async {
                     if (widget.htmlEditorOptions.shouldEnsureVisible &&
                         Scrollable.of(context) != null) {
-                      Scrollable.of(context)!.position.ensureVisible(
+                      await Scrollable.of(context)!.position.ensureVisible(
                             context.findRenderObject()!,
                           );
                     }
                     if (widget.htmlEditorOptions.adjustHeightForKeyboard &&
                         mounted) {
-                      visibleStream.stream.drain();
-                      double visibleDecimal = await visibleStream.stream.first;
-                      double newHeight = widget.otherOptions.height;
+                      await visibleStream.stream.drain();
+                      var visibleDecimal = await visibleStream.stream.first;
+                      var newHeight = widget.otherOptions.height;
                       if (visibleDecimal > 0.1) {
                         setState(() {
                           docHeight = newHeight * visibleDecimal;
@@ -172,23 +173,23 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                   },
                   onLoadStop:
                       (InAppWebViewController controller, Uri? uri) async {
-                    String url = uri.toString();
-                    int maximumFileSize = 10485760;
+                    var url = uri.toString();
+                    var maximumFileSize = 10485760;
                     if (url.contains(filePath)) {
-                      String summernoteToolbar = "[\n";
-                      String summernoteCallbacks = "callbacks: {";
+                      var summernoteToolbar = '[\n';
+                      var summernoteCallbacks = 'callbacks: {';
                       if (widget.plugins.isNotEmpty) {
                         summernoteToolbar = summernoteToolbar + "['plugins', [";
-                        for (Plugins p in widget.plugins) {
+                        for (var p in widget.plugins) {
                           summernoteToolbar = summernoteToolbar +
                               (p.getToolbarString().isNotEmpty
                                   ? "'${p.getToolbarString()}'"
-                                  : "") +
+                                  : '') +
                               (p == widget.plugins.last
-                                  ? "]]\n"
+                                  ? ']]\n'
                                   : p.getToolbarString().isNotEmpty
-                                      ? ", "
-                                      : "");
+                                      ? ', '
+                                      : '');
                           if (p is SummernoteAtMention) {
                             summernoteCallbacks = summernoteCallbacks +
                                 """
@@ -209,8 +210,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                   return p.getSuggestionsMobile!
                                       .call(value.first.toString())
                                       .toString()
-                                      .replaceAll("[", "")
-                                      .replaceAll("]", "");
+                                      .replaceAll('[', '')
+                                      .replaceAll(']', '');
                                 });
                             if (p.onSelect != null) {
                               controller.addJavaScriptHandler(
@@ -284,9 +285,9 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                             """;
                         }
                       }
-                      summernoteToolbar = summernoteToolbar + "],";
-                      summernoteCallbacks = summernoteCallbacks + "}";
-                      controller.evaluateJavascript(source: """
+                      summernoteToolbar = summernoteToolbar + '],';
+                      summernoteCallbacks = summernoteCallbacks + '}';
+                      await controller.evaluateJavascript(source: """
                           \$('#summernote-2').summernote({
                               placeholder: "${widget.htmlEditorOptions.hint}",
                               tabsize: 2,
@@ -363,27 +364,28 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                             window.flutter_inappwebview.callHandler('FormatSettings', message);
                           }
                       """);
-                      controller.evaluateJavascript(
+                      await controller.evaluateJavascript(
                           source:
                               "document.onselectionchange = onSelectionChange; console.log('done');");
                       if ((Theme.of(context).brightness == Brightness.dark ||
                               widget.htmlEditorOptions.darkMode == true) &&
                           widget.htmlEditorOptions.darkMode != false) {
-                        String darkCSS =
-                            "<link href=\"summernote-lite-dark.css\" rel=\"stylesheet\">";
+                        var darkCSS =
+                            '<link href=\"summernote-lite-dark.css\" rel=\"stylesheet\">';
                         await controller.evaluateJavascript(
                             source: "\$('head').append('$darkCSS');");
                       }
                       //set the text once the editor is loaded
-                      if (widget.htmlEditorOptions.initialText != null)
+                      if (widget.htmlEditorOptions.initialText != null) {
                         widget.controller
                             .setText(widget.htmlEditorOptions.initialText!);
+                      }
                       //adjusts the height of the editor when it is loaded
                       if (widget.htmlEditorOptions.autoAdjustHeight) {
                         controller.addJavaScriptHandler(
                             handlerName: 'setHeight',
                             callback: (height) {
-                              if (height.first == "reset") {
+                              if (height.first == 'reset') {
                                 resetHeight();
                               } else {
                                 docHeight =
@@ -394,14 +396,13 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                             0);
                               }
                             });
-                        controller.evaluateJavascript(
+                        await controller.evaluateJavascript(
                             source:
                                 "var height = document.body.scrollHeight; window.flutter_inappwebview.callHandler('setHeight', height);");
                       }
                       //reset the editor's height if the keyboard disappears at any point
                       if (widget.htmlEditorOptions.adjustHeightForKeyboard) {
-                        KeyboardVisibilityController
-                            keyboardVisibilityController =
+                        var keyboardVisibilityController =
                             KeyboardVisibilityController();
                         keyboardVisibilityController.onChange
                             .listen((bool visible) {
@@ -419,8 +420,9 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       }
                       //call onInit callback
                       if (widget.callbacks != null &&
-                          widget.callbacks!.onInit != null)
+                          widget.callbacks!.onInit != null) {
                         widget.callbacks!.onInit!.call();
+                      }
                       //add onChange handler
                       controller.addJavaScriptHandler(
                           handlerName: 'onChange',
@@ -613,7 +615,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
       controllerMap[widget.controller].addJavaScriptHandler(
           handlerName: 'onImageUpload',
           callback: (files) {
-            FileUpload file = fileUploadFromJson(files.first);
+            var file = fileUploadFromJson(files.first);
             c.onImageUpload!.call(file);
           });
     }
@@ -621,23 +623,23 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
       controllerMap[widget.controller].addJavaScriptHandler(
           handlerName: 'onImageUploadError',
           callback: (args) {
-            if (!args.first.toString().startsWith("{")) {
+            if (!args.first.toString().startsWith('{')) {
               c.onImageUploadError!.call(
                   null,
                   args.first,
-                  args.last.contains("base64")
+                  args.last.contains('base64')
                       ? UploadError.jsException
-                      : args.last.contains("unsupported")
+                      : args.last.contains('unsupported')
                           ? UploadError.unsupportedFile
                           : UploadError.exceededMaxSize);
             } else {
-              FileUpload file = fileUploadFromJson(args.first.toString());
+              var file = fileUploadFromJson(args.first.toString());
               c.onImageUploadError!.call(
                   file,
                   null,
-                  args.last.contains("base64")
+                  args.last.contains('base64')
                       ? UploadError.jsException
-                      : args.last.contains("unsupported")
+                      : args.last.contains('unsupported')
                           ? UploadError.unsupportedFile
                           : UploadError.exceededMaxSize);
             }

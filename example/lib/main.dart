@@ -29,7 +29,7 @@ class HtmlEditorExample extends StatefulWidget {
 }
 
 class _HtmlEditorExampleState extends State<HtmlEditorExample> {
-  String result = "";
+  String result = '';
   final HtmlEditorController controller = HtmlEditorController();
 
   @override
@@ -57,11 +57,11 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          child: Text(r"<\>",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
           onPressed: () {
             controller.toggleCodeView();
           },
+          child: Text(r'<\>',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -70,7 +70,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
               HtmlEditor(
                 controller: controller,
                 htmlEditorOptions: HtmlEditorOptions(
-                  hint: "Your text here...",
+                  hint: 'Your text here...',
                   shouldEnsureVisible: true,
                   //initialText: "<p>text content initial, if any</p>",
                 ),
@@ -104,23 +104,23 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                 ),
                 otherOptions: OtherOptions(height: 550),
                 callbacks: Callbacks(onBeforeCommand: (String? currentHtml) {
-                  print("html before change is $currentHtml");
+                  print('html before change is $currentHtml');
                 }, onChange: (String? changed) {
-                  print("content changed to $changed");
+                  print('content changed to $changed');
                 }, onChangeCodeview: (String? changed) {
-                  print("code changed to $changed");
+                  print('code changed to $changed');
                 }, onDialogShown: () {
-                  print("dialog shown");
+                  print('dialog shown');
                 }, onEnter: () {
-                  print("enter/return pressed");
+                  print('enter/return pressed');
                 }, onFocus: () {
-                  print("editor focused");
+                  print('editor focused');
                 }, onBlur: () {
-                  print("editor unfocused");
+                  print('editor unfocused');
                 }, onBlurCodeview: () {
-                  print("codeview either focused or unfocused");
+                  print('codeview either focused or unfocused');
                 }, onInit: () {
-                  print("init");
+                  print('init');
                 },
                     //this is commented because it overrides the default Summernote handlers
                     /*onImageLinkInsert: (String? url) {
@@ -135,29 +135,29 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     onImageUploadError: (FileUpload? file, String? base64Str,
                         UploadError error) {
                   print(describeEnum(error));
-                  print(base64Str ?? "");
+                  print(base64Str ?? '');
                   if (file != null) {
                     print(file.name);
                     print(file.size);
                     print(file.type);
                   }
                 }, onKeyDown: (int? keyCode) {
-                  print("$keyCode key downed");
+                  print('$keyCode key downed');
                 }, onKeyUp: (int? keyCode) {
-                  print("$keyCode key released");
+                  print('$keyCode key released');
                 }, onMouseDown: () {
-                  print("mouse downed");
+                  print('mouse downed');
                 }, onMouseUp: () {
-                  print("mouse released");
+                  print('mouse released');
                 }, onPaste: () {
-                  print("pasted into editor");
+                  print('pasted into editor');
                 }, onScroll: () {
-                  print("editor scrolled");
+                  print('editor scrolled');
                 }),
                 plugins: [
                   SummernoteAtMention(
                       getSuggestionsMobile: (String value) {
-                        List<String> mentions = ['test1', 'test2', 'test3'];
+                        var mentions = <String>['test1', 'test2', 'test3'];
                         return mentions
                             .where((element) => element.contains(value))
                             .toList();
@@ -180,7 +180,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                         controller.undo();
                       },
                       child:
-                          Text("Undo", style: TextStyle(color: Colors.white)),
+                          Text('Undo', style: TextStyle(color: Colors.white)),
                     ),
                     SizedBox(
                       width: 16,
@@ -192,7 +192,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                         controller.clear();
                       },
                       child:
-                          Text("Reset", style: TextStyle(color: Colors.white)),
+                          Text('Reset', style: TextStyle(color: Colors.white)),
                     ),
                     SizedBox(
                       width: 16,
@@ -201,19 +201,17 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                       style: TextButton.styleFrom(
                           backgroundColor: Theme.of(context).accentColor),
                       onPressed: () async {
-                        String? txt = await controller.getText();
-                        if (txt != null) {
-                          if (txt.contains("src=\"data:")) {
-                            txt =
-                                "<text removed due to base-64 data, displaying the text could cause the app to crash>";
-                          }
-                          setState(() {
-                            result = txt!;
-                          });
+                        var txt = await controller.getText();
+                        if (txt.contains('src=\"data:')) {
+                          txt =
+                          '<text removed due to base-64 data, displaying the text could cause the app to crash>';
                         }
+                        setState(() {
+                          result = txt;
+                        });
                       },
                       child: Text(
-                        "Submit",
+                        'Submit',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -227,7 +225,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                         controller.redo();
                       },
                       child: Text(
-                        "Redo",
+                        'Redo',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -249,7 +247,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                       onPressed: () {
                         controller.disable();
                       },
-                      child: Text("Disable",
+                      child: Text('Disable',
                           style: TextStyle(color: Colors.white)),
                     ),
                     SizedBox(
@@ -262,7 +260,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                         controller.enable();
                       },
                       child: Text(
-                        "Enable",
+                        'Enable',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -279,9 +277,9 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                       style: TextButton.styleFrom(
                           backgroundColor: Theme.of(context).accentColor),
                       onPressed: () {
-                        controller.insertText("Google");
+                        controller.insertText('Google');
                       },
-                      child: Text("Insert Text",
+                      child: Text('Insert Text',
                           style: TextStyle(color: Colors.white)),
                     ),
                     SizedBox(
@@ -292,9 +290,9 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                           backgroundColor: Theme.of(context).accentColor),
                       onPressed: () {
                         controller.insertHtml(
-                            """<p style="color: blue">Google in blue</p>""");
+                            '''<p style="color: blue">Google in blue</p>''');
                       },
-                      child: Text("Insert HTML",
+                      child: Text('Insert HTML',
                           style: TextStyle(color: Colors.white)),
                     ),
                   ],
@@ -310,10 +308,10 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                           backgroundColor: Theme.of(context).accentColor),
                       onPressed: () async {
                         controller.insertLink(
-                            "Google linked", "https://google.com", true);
+                            'Google linked', 'https://google.com', true);
                       },
                       child: Text(
-                        "Insert Link",
+                        'Insert Link',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -325,11 +323,11 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                           backgroundColor: Theme.of(context).accentColor),
                       onPressed: () {
                         controller.insertNetworkImage(
-                            "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png",
-                            filename: "Google network image");
+                            'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png',
+                            filename: 'Google network image');
                       },
                       child: Text(
-                        "Insert network image",
+                        'Insert network image',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -347,10 +345,10 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                           backgroundColor: Colors.blueGrey),
                       onPressed: () {
                         controller.addNotification(
-                            "Info notification", NotificationType.info);
+                            'Info notification', NotificationType.info);
                       },
                       child:
-                          Text("Info", style: TextStyle(color: Colors.white)),
+                          Text('Info', style: TextStyle(color: Colors.white)),
                     ),
                     SizedBox(
                       width: 16,
@@ -360,9 +358,9 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                           backgroundColor: Colors.blueGrey),
                       onPressed: () {
                         controller.addNotification(
-                            "Warning notification", NotificationType.warning);
+                            'Warning notification', NotificationType.warning);
                       },
-                      child: Text("Warning",
+                      child: Text('Warning',
                           style: TextStyle(color: Colors.white)),
                     ),
                     SizedBox(
@@ -373,10 +371,10 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                           backgroundColor: Theme.of(context).accentColor),
                       onPressed: () async {
                         controller.addNotification(
-                            "Success notification", NotificationType.success);
+                            'Success notification', NotificationType.success);
                       },
                       child: Text(
-                        "Success",
+                        'Success',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -388,10 +386,10 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                           backgroundColor: Theme.of(context).accentColor),
                       onPressed: () {
                         controller.addNotification(
-                            "Danger notification", NotificationType.danger);
+                            'Danger notification', NotificationType.danger);
                       },
                       child: Text(
-                        "Danger",
+                        'Danger',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -408,10 +406,10 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                       style: TextButton.styleFrom(
                           backgroundColor: Colors.blueGrey),
                       onPressed: () {
-                        controller.addNotification("Plaintext notification",
+                        controller.addNotification('Plaintext notification',
                             NotificationType.plaintext);
                       },
-                      child: Text("Plaintext",
+                      child: Text('Plaintext',
                           style: TextStyle(color: Colors.white)),
                     ),
                     SizedBox(
@@ -424,7 +422,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                         controller.removeNotification();
                       },
                       child: Text(
-                        "Remove",
+                        'Remove',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),

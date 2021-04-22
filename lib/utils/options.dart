@@ -331,8 +331,8 @@ class OtherOptions {
   const OtherOptions({
     this.decoration = const BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(4)),
-      border: Border.fromBorderSide(
-          BorderSide(color: const Color(0xffececec), width: 1)),
+      border:
+          Border.fromBorderSide(BorderSide(color: Color(0xffececec), width: 1)),
     ),
     this.height = 400,
   });

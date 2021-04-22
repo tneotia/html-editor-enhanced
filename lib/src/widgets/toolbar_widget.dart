@@ -57,9 +57,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   List<bool> _textDirectionSelected = List<bool>.filled(2, false);
 
   /// Sets the selected item for the font style dropdown
-  String _fontSelectedItem = "p";
+  String _fontSelectedItem = 'p';
 
-  String _fontNameSelectedItem = "sans-serif";
+  String _fontNameSelectedItem = 'sans-serif';
 
   /// Sets the selected item for the font size dropdown
   double _fontSizeSelectedItem = 3;
@@ -68,7 +68,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   double _actualFontSizeSelectedItem = 16;
 
   /// Sets the selected item for the font units dropdown
-  String _fontSizeUnitSelectedItem = "pt";
+  String _fontSizeUnitSelectedItem = 'pt';
 
   /// Sets the selected item for the foreground color dialog
   Color _foreColorSelected = Colors.black;
@@ -88,7 +88,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   @override
   void initState() {
     widget.controller.toolbar = this;
-    for (Toolbar t in widget.options.defaultToolbarButtons) {
+    for (var t in widget.options.defaultToolbarButtons) {
       if (t is FontButtons) {
         _fontSelected = List<bool>.filled(t.getIcons1().length, false);
         _miscFontSelected = List<bool>.filled(t.getIcons2().length, false);
@@ -126,29 +126,27 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   void updateToolbar(Map<String, dynamic> json) {
     print(json);
     //get parent element
-    String parentElem = json['style'] ?? "";
+    String parentElem = json['style'] ?? '';
     //get font name
-    String fontName = (json['fontName'] ?? "").toString().replaceAll('"', "");
+    var fontName = (json['fontName'] ?? '').toString().replaceAll('"', '');
     //get font size
-    double fontSize = double.tryParse(json['fontSize']) ?? 3;
+    var fontSize = double.tryParse(json['fontSize']) ?? 3;
     //get bold/underline/italic status
-    List<bool?> fontList = (json['font'] as List<dynamic>).cast<bool?>();
+    var fontList = (json['font'] as List<dynamic>).cast<bool?>();
     //get superscript/subscript/strikethrough status
-    List<bool?> miscFontList =
-        (json['miscFont'] as List<dynamic>).cast<bool?>();
+    var miscFontList = (json['miscFont'] as List<dynamic>).cast<bool?>();
     //get forecolor/backcolor
-    List<String?> colorList = (json['color'] as List<dynamic>).cast<String?>();
+    var colorList = (json['color'] as List<dynamic>).cast<String?>();
     //get ordered/unordered list status
-    List<bool?> paragraphList =
-        (json['paragraph'] as List<dynamic>).cast<bool?>();
+    var paragraphList = (json['paragraph'] as List<dynamic>).cast<bool?>();
     //get justify status
-    List<bool?> alignList = (json['align'] as List<dynamic>).cast<bool?>();
+    var alignList = (json['align'] as List<dynamic>).cast<bool?>();
     //get line height
-    String lineHeight = json['lineHeight'] ?? "";
+    String lineHeight = json['lineHeight'] ?? '';
     //get list icon type
-    String listType = json['listStyle'] ?? "";
+    String listType = json['listStyle'] ?? '';
     //get text direction
-    String textDir = json['direction'] ?? "ltr";
+    String textDir = json['direction'] ?? 'ltr';
     //check the parent element if it matches one of the predetermined styles and update the toolbar
     if (['pre', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
         .contains(parentElem)) {
@@ -157,25 +155,25 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       });
     } else {
       setState(() {
-        _fontSelectedItem = "p";
+        _fontSelectedItem = 'p';
       });
     }
     //check the font name if it matches one of the predetermined fonts and update the toolbar
     if (['Courier New', 'sans-serif', 'Times New Roman'].contains(fontName)) {
-      print("fired");
+      print('fired');
       setState(() {
         _fontNameSelectedItem = fontName;
       });
     } else {
       setState(() {
-        _fontNameSelectedItem = "sans-serif";
+        _fontNameSelectedItem = 'sans-serif';
       });
     }
     //update the fore/back selected color if necessary
     if (colorList[0] != null && colorList[0]!.isNotEmpty) {
       setState(() {
-        String rgb = colorList[0]!.replaceAll("rgb(", "").replaceAll(")", "");
-        List<String> rgbList = rgb.split(", ");
+        var rgb = colorList[0]!.replaceAll('rgb(', '').replaceAll(')', '');
+        var rgbList = rgb.split(', ');
         _foreColorSelected = Color.fromRGBO(int.parse(rgbList[0]),
             int.parse(rgbList[1]), int.parse(rgbList[2]), 1);
       });
@@ -212,10 +210,10 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       _listStyleSelectedItem = null;
     }
     //update the lineheight selected item if necessary
-    if (lineHeight.isNotEmpty && lineHeight.endsWith("px")) {
-      double lineHeightDouble =
-          double.tryParse(lineHeight.replaceAll("px", "")) ?? 16;
-      List<double> lineHeights = [1, 1.2, 1.4, 1.5, 1.6, 1.8, 2, 3];
+    if (lineHeight.isNotEmpty && lineHeight.endsWith('px')) {
+      var lineHeightDouble =
+          double.tryParse(lineHeight.replaceAll('px', '')) ?? 16;
+      var lineHeights = <double>[1, 1.2, 1.4, 1.5, 1.6, 1.8, 2, 3];
       lineHeights =
           lineHeights.map((e) => e * _actualFontSizeSelectedItem).toList();
       if (lineHeights.contains(lineHeightDouble)) {
@@ -224,7 +222,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               lineHeightDouble / _actualFontSizeSelectedItem;
         });
       }
-    } else if (lineHeight == "normal") {
+    } else if (lineHeight == 'normal') {
       setState(() {
         _lineHeightSelectedItem = 1.0;
       });
@@ -235,20 +233,20 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         _fontSizeSelectedItem = fontSize;
       });
     }
-    if (textDir == "ltr") {
+    if (textDir == 'ltr') {
       setState(() {
         _textDirectionSelected = [true, false];
       });
-    } else if (textDir == "rtl") {
+    } else if (textDir == 'rtl') {
       setState(() {
         _textDirectionSelected = [false, true];
       });
     }
     //use the remaining bool lists to update the selected items accordingly
     setState(() {
-      for (Toolbar t in widget.options.defaultToolbarButtons) {
+      for (var t in widget.options.defaultToolbarButtons) {
         if (t is FontButtons) {
-          for (int i = 0; i < _fontSelected.length; i++) {
+          for (var i = 0; i < _fontSelected.length; i++) {
             if (t.getIcons1()[i].icon == Icons.format_bold) {
               _fontSelected[i] = fontList[0] ?? false;
             }
@@ -259,7 +257,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               _fontSelected[i] = fontList[2] ?? false;
             }
           }
-          for (int i = 0; i < _miscFontSelected.length; i++) {
+          for (var i = 0; i < _miscFontSelected.length; i++) {
             if (t.getIcons2()[i].icon == Icons.format_strikethrough) {
               _miscFontSelected[i] = miscFontList[0] ?? false;
             }
@@ -272,7 +270,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           }
         }
         if (t is ListButtons) {
-          for (int i = 0; i < _listSelected.length; i++) {
+          for (var i = 0; i < _listSelected.length; i++) {
             if (t.getIcons()[i].icon == Icons.format_list_bulleted) {
               _listSelected[i] = paragraphList[0] ?? false;
             }
@@ -282,7 +280,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           }
         }
         if (t is ParagraphButtons) {
-          for (int i = 0; i < _alignSelected.length; i++) {
+          for (var i = 0; i < _alignSelected.length; i++) {
             if (t.getIcons1()[i].icon == Icons.format_align_left) {
               _alignSelected[i] = alignList[0] ?? false;
             }
@@ -351,8 +349,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   }
 
   List<Widget> _buildChildren() {
-    List<Widget> toolbarChildren = [];
-    for (Toolbar t in widget.options.defaultToolbarButtons) {
+    var toolbarChildren = <Widget>[];
+    for (var t in widget.options.defaultToolbarButtons) {
       if (t is StyleButtons) {
         toolbarChildren.add(Container(
           padding: const EdgeInsets.only(left: 8.0),
@@ -376,13 +374,14 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               itemHeight: widget.options.dropdownItemHeight,
               focusColor: widget.options.dropdownFocusColor,
               dropdownColor: widget.options.dropdownBackgroundColor,
-              menuMaxHeight: widget.options.dropdownMenuMaxHeight,
+              //menuMaxHeight: widget.options.dropdownMenuMaxHeight,
               style: widget.options.textStyle,
               items: [
                 DropdownMenuItem(
-                    child: PointerInterceptor(child: Text("Normal")),
-                    value: "p"),
+                    value: 'p',
+                    child: PointerInterceptor(child: Text('Normal'))),
                 DropdownMenuItem(
+                    value: 'blockquote',
                     child: PointerInterceptor(
                       child: Container(
                           decoration: BoxDecoration(
@@ -390,59 +389,64 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                   left: BorderSide(
                                       color: Colors.grey, width: 3.0))),
                           padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Text("Quote",
+                          child: Text('Quote',
                               style: TextStyle(
-                                  fontFamily: "times", color: Colors.grey))),
-                    ),
-                    value: "blockquote"),
+                                  fontFamily: 'times', color: Colors.grey))),
+                    )),
                 DropdownMenuItem(
+                    value: 'pre',
                     child: PointerInterceptor(
                       child: Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
                               color: Colors.grey),
                           padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Text("Code",
+                          child: Text('Code',
                               style: TextStyle(
-                                  fontFamily: "courier", color: Colors.white))),
-                    ),
-                    value: "pre"),
+                                  fontFamily: 'courier', color: Colors.white))),
+                    )),
                 DropdownMenuItem(
-                    child: PointerInterceptor(
-                        child: Text("Header 1",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 32))),
-                    value: "h1"),
+                  value: 'h1',
+                  child: PointerInterceptor(
+                      child: Text('Header 1',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 32))),
+                ),
                 DropdownMenuItem(
-                    child: PointerInterceptor(
-                        child: Text("Header 2",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 24))),
-                    value: "h2"),
+                  value: 'h2',
+                  child: PointerInterceptor(
+                      child: Text('Header 2',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 24))),
+                ),
                 DropdownMenuItem(
-                    child: PointerInterceptor(
-                        child: Text("Header 3",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18))),
-                    value: "h3"),
+                  value: 'h3',
+                  child: PointerInterceptor(
+                      child: Text('Header 3',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18))),
+                ),
                 DropdownMenuItem(
-                    child: PointerInterceptor(
-                        child: Text("Header 4",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16))),
-                    value: "h4"),
+                  value: 'h4',
+                  child: PointerInterceptor(
+                      child: Text('Header 4',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16))),
+                ),
                 DropdownMenuItem(
-                    child: PointerInterceptor(
-                        child: Text("Header 5",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 13))),
-                    value: "h5"),
+                  value: 'h5',
+                  child: PointerInterceptor(
+                      child: Text('Header 5',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 13))),
+                ),
                 DropdownMenuItem(
-                    child: PointerInterceptor(
-                        child: Text("Header 6",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 11))),
-                    value: "h6"),
+                  value: 'h6',
+                  child: PointerInterceptor(
+                      child: Text('Header 6',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 11))),
+                ),
               ],
               value: _fontSelectedItem,
               onChanged: (String? changed) async {
@@ -455,7 +459,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
 
                 if (changed != null) {
-                  bool proceed = await widget.options.onDropdownChanged?.call(
+                  var proceed = await widget.options.onDropdownChanged?.call(
                           DropdownType.style, changed, updateSelectedItem) ??
                       true;
                   if (proceed) {
@@ -470,7 +474,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         ));
       }
       if (t is FontSettingButtons) {
-        if (t.fontName)
+        if (t.fontName) {
           toolbarChildren.add(Container(
             padding: const EdgeInsets.only(left: 8.0),
             height: widget.options.toolbarItemHeight,
@@ -493,24 +497,27 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 itemHeight: widget.options.dropdownItemHeight,
                 focusColor: widget.options.dropdownFocusColor,
                 dropdownColor: widget.options.dropdownBackgroundColor,
-                menuMaxHeight: widget.options.dropdownMenuMaxHeight,
+                //menuMaxHeight: widget.options.dropdownMenuMaxHeight,
                 style: widget.options.textStyle,
                 items: [
                   DropdownMenuItem(
-                      child: PointerInterceptor(
-                          child: Text("Courier New",
-                              style: TextStyle(fontFamily: "Courier"))),
-                      value: "Courier New"),
+                    value: 'Courier New',
+                    child: PointerInterceptor(
+                        child: Text('Courier New',
+                            style: TextStyle(fontFamily: 'Courier'))),
+                  ),
                   DropdownMenuItem(
-                      child: PointerInterceptor(
-                          child: Text("Sans Serif",
-                              style: TextStyle(fontFamily: "sans-serif"))),
-                      value: "sans-serif"),
+                    value: 'sans-serif',
+                    child: PointerInterceptor(
+                        child: Text('Sans Serif',
+                            style: TextStyle(fontFamily: 'sans-serif'))),
+                  ),
                   DropdownMenuItem(
-                      child: PointerInterceptor(
-                          child: Text("Times New Roman",
-                              style: TextStyle(fontFamily: "Times"))),
-                      value: "Times New Roman"),
+                    value: 'Times New Roman',
+                    child: PointerInterceptor(
+                        child: Text('Times New Roman',
+                            style: TextStyle(fontFamily: 'Times'))),
+                  ),
                 ],
                 value: _fontNameSelectedItem,
                 onChanged: (String? changed) async {
@@ -523,14 +530,14 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   }
 
                   if (changed != null) {
-                    bool proceed = await widget.options.onDropdownChanged?.call(
+                    var proceed = await widget.options.onDropdownChanged?.call(
                             DropdownType.fontName,
                             changed,
                             updateSelectedItem) ??
                         true;
                     if (proceed) {
                       widget.controller
-                          .execCommand("fontName", argument: changed);
+                          .execCommand('fontName', argument: changed);
                       updateSelectedItem(changed);
                     }
                   }
@@ -538,7 +545,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               ),
             ),
           ));
-        if (t.fontSize)
+        }
+        if (t.fontSize) {
           toolbarChildren.add(Container(
             padding: const EdgeInsets.only(left: 8.0),
             height: widget.options.toolbarItemHeight,
@@ -561,44 +569,51 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 itemHeight: widget.options.dropdownItemHeight,
                 focusColor: widget.options.dropdownFocusColor,
                 dropdownColor: widget.options.dropdownBackgroundColor,
-                menuMaxHeight: widget.options.dropdownMenuMaxHeight,
+                //menuMaxHeight: widget.options.dropdownMenuMaxHeight,
                 style: widget.options.textStyle,
                 items: [
                   DropdownMenuItem(
-                      child: PointerInterceptor(
-                          child: Text(
-                              "${_fontSizeUnitSelectedItem == "px" ? "11" : "8"} $_fontSizeUnitSelectedItem")),
-                      value: 1),
+                    value: 1,
+                    child: PointerInterceptor(
+                        child: Text(
+                            "${_fontSizeUnitSelectedItem == "px" ? "11" : "8"} $_fontSizeUnitSelectedItem")),
+                  ),
                   DropdownMenuItem(
-                      child: PointerInterceptor(
-                          child: Text(
-                              "${_fontSizeUnitSelectedItem == "px" ? "13" : "10"} $_fontSizeUnitSelectedItem")),
-                      value: 2),
+                    value: 2,
+                    child: PointerInterceptor(
+                        child: Text(
+                            "${_fontSizeUnitSelectedItem == "px" ? "13" : "10"} $_fontSizeUnitSelectedItem")),
+                  ),
                   DropdownMenuItem(
-                      child: PointerInterceptor(
-                          child: Text(
-                              "${_fontSizeUnitSelectedItem == "px" ? "16" : "12"} $_fontSizeUnitSelectedItem")),
-                      value: 3),
+                    value: 3,
+                    child: PointerInterceptor(
+                        child: Text(
+                            "${_fontSizeUnitSelectedItem == "px" ? "16" : "12"} $_fontSizeUnitSelectedItem")),
+                  ),
                   DropdownMenuItem(
-                      child: PointerInterceptor(
-                          child: Text(
-                              "${_fontSizeUnitSelectedItem == "px" ? "19" : "14"} $_fontSizeUnitSelectedItem")),
-                      value: 4),
+                    value: 4,
+                    child: PointerInterceptor(
+                        child: Text(
+                            "${_fontSizeUnitSelectedItem == "px" ? "19" : "14"} $_fontSizeUnitSelectedItem")),
+                  ),
                   DropdownMenuItem(
-                      child: PointerInterceptor(
-                          child: Text(
-                              "${_fontSizeUnitSelectedItem == "px" ? "24" : "18"} $_fontSizeUnitSelectedItem")),
-                      value: 5),
+                    value: 5,
+                    child: PointerInterceptor(
+                        child: Text(
+                            "${_fontSizeUnitSelectedItem == "px" ? "24" : "18"} $_fontSizeUnitSelectedItem")),
+                  ),
                   DropdownMenuItem(
-                      child: PointerInterceptor(
-                          child: Text(
-                              "${_fontSizeUnitSelectedItem == "px" ? "32" : "24"} $_fontSizeUnitSelectedItem")),
-                      value: 6),
+                    value: 6,
+                    child: PointerInterceptor(
+                        child: Text(
+                            "${_fontSizeUnitSelectedItem == "px" ? "32" : "24"} $_fontSizeUnitSelectedItem")),
+                  ),
                   DropdownMenuItem(
-                      child: PointerInterceptor(
-                          child: Text(
-                              "${_fontSizeUnitSelectedItem == "px" ? "48" : "36"} $_fontSizeUnitSelectedItem")),
-                      value: 7),
+                    value: 7,
+                    child: PointerInterceptor(
+                        child: Text(
+                            "${_fontSizeUnitSelectedItem == "px" ? "48" : "36"} $_fontSizeUnitSelectedItem")),
+                  ),
                 ],
                 value: _fontSizeSelectedItem,
                 onChanged: (double? changed) async {
@@ -611,8 +626,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   }
 
                   if (changed != null) {
-                    int intChanged = changed.toInt();
-                    bool proceed = await widget.options.onDropdownChanged?.call(
+                    var intChanged = changed.toInt();
+                    var proceed = await widget.options.onDropdownChanged?.call(
                             DropdownType.fontSize,
                             changed,
                             updateSelectedItem) ??
@@ -650,7 +665,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               ),
             ),
           ));
-        if (t.fontSizeUnit)
+        }
+        if (t.fontSizeUnit) {
           toolbarChildren.add(Container(
             padding: const EdgeInsets.only(left: 8.0),
             height: widget.options.toolbarItemHeight,
@@ -673,15 +689,17 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 itemHeight: widget.options.dropdownItemHeight,
                 focusColor: widget.options.dropdownFocusColor,
                 dropdownColor: widget.options.dropdownBackgroundColor,
-                menuMaxHeight: widget.options.dropdownMenuMaxHeight,
+                //menuMaxHeight: widget.options.dropdownMenuMaxHeight,
                 style: widget.options.textStyle,
                 items: [
                   DropdownMenuItem(
-                      child: PointerInterceptor(child: Text("pt")),
-                      value: "pt"),
+                    value: 'pt',
+                    child: PointerInterceptor(child: Text('pt')),
+                  ),
                   DropdownMenuItem(
-                      child: PointerInterceptor(child: Text("px")),
-                      value: "px"),
+                    value: 'px',
+                    child: PointerInterceptor(child: Text('px')),
+                  ),
                 ],
                 value: _fontSizeUnitSelectedItem,
                 onChanged: (String? changed) async {
@@ -694,7 +712,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   }
 
                   if (changed != null) {
-                    bool proceed = await widget.options.onDropdownChanged?.call(
+                    var proceed = await widget.options.onDropdownChanged?.call(
                             DropdownType.fontSizeUnit,
                             changed,
                             updateSelectedItem) ??
@@ -707,6 +725,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               ),
             ),
           ));
+        }
       }
       if (t is FontButtons) {
         if (t.bold || t.italic || t.underline || t.clearAll) {
@@ -728,7 +747,6 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             borderWidth: widget.options.buttonBorderWidth,
             renderBorder: widget.options.renderBorder,
             textStyle: widget.options.textStyle,
-            children: t.getIcons1(),
             onPressed: (int index) async {
               void updateStatus() {
                 setState(() {
@@ -737,7 +755,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
 
               if (t.getIcons1()[index].icon == Icons.format_bold) {
-                bool proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.options.onButtonPressed?.call(
                         ButtonType.bold, _fontSelected[index], updateStatus) ??
                     true;
                 if (proceed) {
@@ -746,7 +764,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_italic) {
-                bool proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.options.onButtonPressed?.call(
                         ButtonType.italic,
                         _fontSelected[index],
                         updateStatus) ??
@@ -757,7 +775,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_underline) {
-                bool proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.options.onButtonPressed?.call(
                         ButtonType.underline,
                         _fontSelected[index],
                         updateStatus) ??
@@ -768,7 +786,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_clear) {
-                bool proceed = await widget.options.onButtonPressed
+                var proceed = await widget.options.onButtonPressed
                         ?.call(ButtonType.clearFormatting, null, null) ??
                     true;
                 if (proceed) {
@@ -777,6 +795,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
             },
             isSelected: _fontSelected,
+            children: t.getIcons1(),
           ));
         }
         if (t.strikethrough || t.superscript || t.subscript) {
@@ -798,7 +817,6 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             borderWidth: widget.options.buttonBorderWidth,
             renderBorder: widget.options.renderBorder,
             textStyle: widget.options.textStyle,
-            children: t.getIcons2(),
             onPressed: (int index) async {
               void updateStatus() {
                 setState(() {
@@ -807,7 +825,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
 
               if (t.getIcons2()[index].icon == Icons.format_strikethrough) {
-                bool proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.options.onButtonPressed?.call(
                         ButtonType.strikethrough,
                         _miscFontSelected[index],
                         updateStatus) ??
@@ -818,7 +836,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons2()[index].icon == Icons.superscript) {
-                bool proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.options.onButtonPressed?.call(
                         ButtonType.superscript,
                         _miscFontSelected[index],
                         updateStatus) ??
@@ -829,7 +847,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons2()[index].icon == Icons.subscript) {
-                bool proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.options.onButtonPressed?.call(
                         ButtonType.subscript,
                         _miscFontSelected[index],
                         updateStatus) ??
@@ -841,6 +859,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
             },
             isSelected: _miscFontSelected,
+            children: t.getIcons2(),
           ));
         }
       }
@@ -863,7 +882,6 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           borderWidth: widget.options.buttonBorderWidth,
           renderBorder: widget.options.renderBorder,
           textStyle: widget.options.textStyle,
-          children: t.getIcons(),
           onPressed: (int index) async {
             void updateStatus() {
               setState(() {
@@ -873,7 +891,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
 
             if (_colorSelected[index]) {
               if (t.getIcons()[index].icon == Icons.format_color_text) {
-                bool proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.options.onButtonPressed?.call(
                         ButtonType.foregroundColor,
                         _colorSelected[index],
                         updateStatus) ??
@@ -888,7 +906,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons()[index].icon == Icons.format_color_fill) {
-                bool proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.options.onButtonPressed?.call(
                         ButtonType.highlightColor,
                         _colorSelected[index],
                         updateStatus) ??
@@ -903,7 +921,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
             } else {
-              bool proceed = true;
+              var proceed = true;
               if (t.getIcons()[index].icon == Icons.format_color_text) {
                 proceed = await widget.options.onButtonPressed?.call(
                         ButtonType.foregroundColor,
@@ -918,14 +936,15 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                     true;
               }
               if (proceed) {
-                showDialog(
+                await showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       late Color newColor;
-                      if (t.getIcons()[index].icon == Icons.format_color_text)
+                      if (t.getIcons()[index].icon == Icons.format_color_text) {
                         newColor = _foreColorSelected;
-                      else
+                      } else {
                         newColor = _backColorSelected;
+                      }
                       return PointerInterceptor(
                         child: AlertDialog(
                           title: Text(
@@ -946,7 +965,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
-                              child: Text("Cancel"),
+                              child: Text('Cancel'),
                             ),
                             TextButton(
                                 onPressed: () {
@@ -974,7 +993,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                   }
                                   Navigator.of(context).pop();
                                 },
-                                child: Text("Reset to default color")),
+                                child: Text('Reset to default color')),
                             TextButton(
                               onPressed: () {
                                 if (t.getIcons()[index].icon ==
@@ -1005,7 +1024,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 });
                                 Navigator.of(context).pop();
                               },
-                              child: Text("Set color"),
+                              child: Text('Set color'),
                             )
                           ],
                         ),
@@ -1015,6 +1034,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             }
           },
           isSelected: _colorSelected,
+          children: t.getIcons(),
         ));
       }
       if (t is ListButtons) {
@@ -1037,7 +1057,6 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             borderWidth: widget.options.buttonBorderWidth,
             renderBorder: widget.options.renderBorder,
             textStyle: widget.options.textStyle,
-            children: t.getIcons(),
             onPressed: (int index) async {
               void updateStatus() {
                 setState(() {
@@ -1046,7 +1065,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
 
               if (t.getIcons()[index].icon == Icons.format_list_bulleted) {
-                bool proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.options.onButtonPressed?.call(
                         ButtonType.ul, _listSelected[index], updateStatus) ??
                     true;
                 if (proceed) {
@@ -1055,7 +1074,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons()[index].icon == Icons.format_list_numbered) {
-                bool proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.options.onButtonPressed?.call(
                         ButtonType.ol, _listSelected[index], updateStatus) ??
                     true;
                 if (proceed) {
@@ -1065,6 +1084,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
             },
             isSelected: _listSelected,
+            children: t.getIcons(),
           ));
         }
         if (t.listStyles) {
@@ -1090,35 +1110,43 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 itemHeight: widget.options.dropdownItemHeight,
                 focusColor: widget.options.dropdownFocusColor,
                 dropdownColor: widget.options.dropdownBackgroundColor,
-                menuMaxHeight: widget.options.dropdownMenuMaxHeight,
+                //menuMaxHeight: widget.options.dropdownMenuMaxHeight,
                 style: widget.options.textStyle,
                 items: [
                   DropdownMenuItem(
-                      child: PointerInterceptor(child: Text("1. Numbered")),
-                      value: "decimal"),
+                    value: 'decimal',
+                    child: PointerInterceptor(child: Text('1. Numbered')),
+                  ),
                   DropdownMenuItem(
-                      child: PointerInterceptor(child: Text("a. Lower Alpha")),
-                      value: "lower-alpha"),
+                    value: 'lower-alpha',
+                    child: PointerInterceptor(child: Text('a. Lower Alpha')),
+                  ),
                   DropdownMenuItem(
-                      child: PointerInterceptor(child: Text("A. Upper Alpha")),
-                      value: "upper-alpha"),
+                    value: 'upper-alpha',
+                    child: PointerInterceptor(child: Text('A. Upper Alpha')),
+                  ),
                   DropdownMenuItem(
-                      child: PointerInterceptor(child: Text("i. Lower Roman")),
-                      value: "lower-roman"),
+                    value: 'lower-roman',
+                    child: PointerInterceptor(child: Text('i. Lower Roman')),
+                  ),
                   DropdownMenuItem(
-                      child: PointerInterceptor(child: Text("I. Upper Roman")),
-                      value: "upper-roman"),
+                    value: 'upper-roman',
+                    child: PointerInterceptor(child: Text('I. Upper Roman')),
+                  ),
                   DropdownMenuItem(
-                      child: PointerInterceptor(child: Text("• Disc")),
-                      value: "disc"),
+                    value: 'disc',
+                    child: PointerInterceptor(child: Text('• Disc')),
+                  ),
                   DropdownMenuItem(
-                      child: PointerInterceptor(child: Text("○ Circle")),
-                      value: "circle"),
+                    value: 'circle',
+                    child: PointerInterceptor(child: Text('○ Circle')),
+                  ),
                   DropdownMenuItem(
-                      child: PointerInterceptor(child: Text("■ Square")),
-                      value: "square"),
+                    value: 'square',
+                    child: PointerInterceptor(child: Text('■ Square')),
+                  ),
                 ],
-                hint: Text("Select list style"),
+                hint: Text('Select list style'),
                 value: _listStyleSelectedItem,
                 onChanged: (String? changed) async {
                   void updateSelectedItem(dynamic changed) {
@@ -1130,7 +1158,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   }
 
                   if (changed != null) {
-                    bool proceed = await widget.options.onDropdownChanged?.call(
+                    var proceed = await widget.options.onDropdownChanged?.call(
                             DropdownType.listStyles,
                             changed,
                             updateSelectedItem) ??
@@ -1139,12 +1167,12 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                       if (kIsWeb) {
                         widget.controller.changeListStyle(changed);
                       } else {
-                        widget.controller.editorController!
-                            .evaluateJavascript(source: """
+                        await widget.controller.editorController!
+                            .evaluateJavascript(source: '''
                                var \$focusNode = \$(window.getSelection().focusNode);
                                var \$parentList = \$focusNode.closest("div.note-editable ol, div.note-editable ul");
                                \$parentList.css("list-style-type", "$changed");
-                            """);
+                            ''');
                       }
                       updateSelectedItem(changed);
                     }
@@ -1175,7 +1203,6 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             borderWidth: widget.options.buttonBorderWidth,
             renderBorder: widget.options.renderBorder,
             textStyle: widget.options.textStyle,
-            children: t.getIcons1(),
             onPressed: (int index) async {
               void updateStatus() {
                 _alignSelected = List<bool>.filled(t.getIcons1().length, false);
@@ -1185,7 +1212,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
 
               if (t.getIcons1()[index].icon == Icons.format_align_left) {
-                bool proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.options.onButtonPressed?.call(
                         ButtonType.alignLeft,
                         _alignSelected[index],
                         updateStatus) ??
@@ -1196,7 +1223,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_align_center) {
-                bool proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.options.onButtonPressed?.call(
                         ButtonType.alignCenter,
                         _alignSelected[index],
                         updateStatus) ??
@@ -1207,7 +1234,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_align_right) {
-                bool proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.options.onButtonPressed?.call(
                         ButtonType.alignRight,
                         _alignSelected[index],
                         updateStatus) ??
@@ -1218,7 +1245,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_align_justify) {
-                bool proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.options.onButtonPressed?.call(
                         ButtonType.alignJustify,
                         _alignSelected[index],
                         updateStatus) ??
@@ -1230,6 +1257,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
             },
             isSelected: _alignSelected,
+            children: t.getIcons1(),
           ));
         }
         if (t.increaseIndent || t.decreaseIndent) {
@@ -1251,10 +1279,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             borderWidth: widget.options.buttonBorderWidth,
             renderBorder: widget.options.renderBorder,
             textStyle: widget.options.textStyle,
-            children: t.getIcons2(),
             onPressed: (int index) async {
               if (t.getIcons2()[index].icon == Icons.format_indent_increase) {
-                bool proceed = await widget.options.onButtonPressed
+                var proceed = await widget.options.onButtonPressed
                         ?.call(ButtonType.increaseIndent, null, null) ??
                     true;
                 if (proceed) {
@@ -1262,7 +1289,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons2()[index].icon == Icons.format_indent_decrease) {
-                bool proceed = await widget.options.onButtonPressed
+                var proceed = await widget.options.onButtonPressed
                         ?.call(ButtonType.decreaseIndent, null, null) ??
                     true;
                 if (proceed) {
@@ -1271,6 +1298,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
             },
             isSelected: List<bool>.filled(t.getIcons2().length, false),
+            children: t.getIcons2(),
           ));
         }
         if (t.lineHeight) {
@@ -1296,30 +1324,37 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 itemHeight: widget.options.dropdownItemHeight,
                 focusColor: widget.options.dropdownFocusColor,
                 dropdownColor: widget.options.dropdownBackgroundColor,
-                menuMaxHeight: widget.options.dropdownMenuMaxHeight,
+                //menuMaxHeight: widget.options.dropdownMenuMaxHeight,
                 style: widget.options.textStyle,
                 items: [
                   DropdownMenuItem(
-                      child: PointerInterceptor(child: Text("1.0")), value: 1),
+                      value: 1, child: PointerInterceptor(child: Text('1.0'))),
                   DropdownMenuItem(
-                      child: PointerInterceptor(child: Text("1.2")),
-                      value: 1.2),
+                    value: 1.2,
+                    child: PointerInterceptor(child: Text('1.2')),
+                  ),
                   DropdownMenuItem(
-                      child: PointerInterceptor(child: Text("1.4")),
-                      value: 1.4),
+                    value: 1.4,
+                    child: PointerInterceptor(child: Text('1.4')),
+                  ),
                   DropdownMenuItem(
-                      child: PointerInterceptor(child: Text("1.5")),
-                      value: 1.5),
+                    value: 1.5,
+                    child: PointerInterceptor(child: Text('1.5')),
+                  ),
                   DropdownMenuItem(
-                      child: PointerInterceptor(child: Text("1.6")),
-                      value: 1.6),
+                    value: 1.6,
+                    child: PointerInterceptor(child: Text('1.6')),
+                  ),
                   DropdownMenuItem(
-                      child: PointerInterceptor(child: Text("1.8")),
-                      value: 1.8),
+                    value: 1.8,
+                    child: PointerInterceptor(child: Text('1.8')),
+                  ),
                   DropdownMenuItem(
-                      child: PointerInterceptor(child: Text("2.0")), value: 2),
+                    value: 2,
+                    child: PointerInterceptor(child: Text('2.0')),
+                  ),
                   DropdownMenuItem(
-                      child: PointerInterceptor(child: Text("3.0")), value: 3),
+                      value: 3, child: PointerInterceptor(child: Text('3.0'))),
                 ],
                 value: _lineHeightSelectedItem,
                 onChanged: (double? changed) async {
@@ -1332,7 +1367,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   }
 
                   if (changed != null) {
-                    bool proceed = await widget.options.onDropdownChanged?.call(
+                    var proceed = await widget.options.onDropdownChanged?.call(
                             DropdownType.lineHeight,
                             changed,
                             updateSelectedItem) ??
@@ -1341,9 +1376,10 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                       if (kIsWeb) {
                         widget.controller.changeLineHeight(changed.toString());
                       } else {
-                        widget.controller.editorController!.evaluateJavascript(
-                            source:
-                                "\$('#summernote-2').summernote('lineHeight', '$changed');");
+                        await widget.controller.editorController!
+                            .evaluateJavascript(
+                                source:
+                                    "\$('#summernote-2').summernote('lineHeight', '$changed');");
                       }
                       updateSelectedItem(changed);
                     }
@@ -1372,10 +1408,6 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             borderWidth: widget.options.buttonBorderWidth,
             renderBorder: widget.options.renderBorder,
             textStyle: widget.options.textStyle,
-            children: [
-              Icon(Icons.format_textdirection_l_to_r),
-              Icon(Icons.format_textdirection_r_to_l),
-            ],
             onPressed: (int index) async {
               void updateStatus() {
                 _textDirectionSelected = List<bool>.filled(2, false);
@@ -1385,7 +1417,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 });
               }
 
-              bool proceed = await widget.options.onButtonPressed?.call(
+              var proceed = await widget.options.onButtonPressed?.call(
                       index == 0 ? ButtonType.ltr : ButtonType.rtl,
                       _alignSelected[index],
                       updateStatus) ??
@@ -1393,9 +1425,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               if (proceed) {
                 if (kIsWeb) {
                   widget.controller
-                      .changeTextDirection(index == 0 ? "ltr" : "rtl");
+                      .changeTextDirection(index == 0 ? 'ltr' : 'rtl');
                 } else {
-                  widget.controller.editorController!
+                  await widget.controller.editorController!
                       .evaluateJavascript(source: """
                   var s=document.getSelection();			
                   if(s==''){
@@ -1409,6 +1441,10 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
             },
             isSelected: _textDirectionSelected,
+            children: [
+              Icon(Icons.format_textdirection_l_to_r),
+              Icon(Icons.format_textdirection_r_to_l),
+            ],
           ));
         }
         if (t.caseConverter) {
@@ -1434,34 +1470,38 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 itemHeight: widget.options.dropdownItemHeight,
                 focusColor: widget.options.dropdownFocusColor,
                 dropdownColor: widget.options.dropdownBackgroundColor,
-                menuMaxHeight: widget.options.dropdownMenuMaxHeight,
+                //menuMaxHeight: widget.options.dropdownMenuMaxHeight,
                 style: widget.options.textStyle,
                 items: [
                   DropdownMenuItem(
-                      child: PointerInterceptor(child: Text("lowercase")),
-                      value: "lower"),
+                    value: 'lower',
+                    child: PointerInterceptor(child: Text('lowercase')),
+                  ),
                   DropdownMenuItem(
-                      child: PointerInterceptor(child: Text("Sentence case")),
-                      value: "sentence"),
+                    value: 'sentence',
+                    child: PointerInterceptor(child: Text('Sentence case')),
+                  ),
                   DropdownMenuItem(
-                      child: PointerInterceptor(child: Text("Title Case")),
-                      value: "title"),
+                    value: 'title',
+                    child: PointerInterceptor(child: Text('Title Case')),
+                  ),
                   DropdownMenuItem(
-                      child: PointerInterceptor(child: Text("UPPERCASE")),
-                      value: "upper"),
+                    value: 'upper',
+                    child: PointerInterceptor(child: Text('UPPERCASE')),
+                  ),
                 ],
-                hint: Text("Change case"),
+                hint: Text('Change case'),
                 value: null,
                 onChanged: (String? changed) async {
                   if (changed != null) {
-                    bool proceed = await widget.options.onDropdownChanged
+                    var proceed = await widget.options.onDropdownChanged
                             ?.call(DropdownType.caseConverter, changed, null) ??
                         true;
                     if (proceed) {
                       if (kIsWeb) {
                         widget.controller.changeCase(changed);
                       } else {
-                        widget.controller.editorController!
+                        await widget.controller.editorController!
                             .evaluateJavascript(source: """
                           var selected = \$('#summernote-2').summernote('createRange');
                           if(selected.toString()){
@@ -1518,34 +1558,33 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           borderWidth: widget.options.buttonBorderWidth,
           renderBorder: widget.options.renderBorder,
           textStyle: widget.options.textStyle,
-          children: t.getIcons(),
           onPressed: (int index) async {
             if (t.getIcons()[index].icon == Icons.link) {
-              bool proceed = await widget.options.onButtonPressed
+              var proceed = await widget.options.onButtonPressed
                       ?.call(ButtonType.link, null, null) ??
                   true;
               if (proceed) {
-                final TextEditingController text = TextEditingController();
-                final TextEditingController url = TextEditingController();
-                final FocusNode textFocus = FocusNode();
-                final FocusNode urlFocus = FocusNode();
-                final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-                bool openNewTab = false;
-                showDialog(
+                final text = TextEditingController();
+                final url = TextEditingController();
+                final textFocus = FocusNode();
+                final urlFocus = FocusNode();
+                final formKey = GlobalKey<FormState>();
+                var openNewTab = false;
+                await showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return PointerInterceptor(
                         child: StatefulBuilder(builder:
                             (BuildContext context, StateSetter setState) {
                           return AlertDialog(
-                            title: Text("Insert Link"),
+                            title: Text('Insert Link'),
                             content: Form(
                               key: formKey,
                               child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text("Text to display",
+                                    Text('Text to display',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold)),
                                     SizedBox(height: 10),
@@ -1555,14 +1594,14 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                       textInputAction: TextInputAction.next,
                                       decoration: InputDecoration(
                                         border: OutlineInputBorder(),
-                                        hintText: "Text",
+                                        hintText: 'Text',
                                       ),
                                       onSubmitted: (_) {
                                         urlFocus.requestFocus();
                                       },
                                     ),
                                     SizedBox(height: 20),
-                                    Text("URL",
+                                    Text('URL',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold)),
                                     SizedBox(height: 10),
@@ -1572,11 +1611,11 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                       textInputAction: TextInputAction.done,
                                       decoration: InputDecoration(
                                         border: OutlineInputBorder(),
-                                        hintText: "URL",
+                                        hintText: 'URL',
                                       ),
                                       validator: (String? value) {
                                         if (value == null || value.isEmpty) {
-                                          return "Please enter a URL!";
+                                          return 'Please enter a URL!';
                                         }
                                         return null;
                                       },
@@ -1608,7 +1647,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               openNewTab = !openNewTab;
                                             });
                                           },
-                                          child: Text("Open in new window",
+                                          child: Text('Open in new window',
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .textTheme
@@ -1624,12 +1663,12 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: Text("Cancel"),
+                                child: Text('Cancel'),
                               ),
                               TextButton(
                                 onPressed: () async {
                                   if (formKey.currentState!.validate()) {
-                                    bool proceed = await widget
+                                    var proceed = await widget
                                             .options.linkInsertInterceptor
                                             ?.call(
                                                 text.text.isEmpty
@@ -1650,7 +1689,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     Navigator.of(context).pop();
                                   }
                                 },
-                                child: Text("OK"),
+                                child: Text('OK'),
                               )
                             ],
                           );
@@ -1660,28 +1699,28 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
             }
             if (t.getIcons()[index].icon == Icons.image_outlined) {
-              bool proceed = await widget.options.onButtonPressed
+              var proceed = await widget.options.onButtonPressed
                       ?.call(ButtonType.picture, null, null) ??
                   true;
               if (proceed) {
-                final TextEditingController filename = TextEditingController();
-                final TextEditingController url = TextEditingController();
-                final FocusNode urlFocus = FocusNode();
+                final filename = TextEditingController();
+                final url = TextEditingController();
+                final urlFocus = FocusNode();
                 FilePickerResult? result;
                 String? validateFailed;
-                showDialog(
+                await showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return PointerInterceptor(
                         child: StatefulBuilder(builder:
                             (BuildContext context, StateSetter setState) {
                           return AlertDialog(
-                            title: Text("Insert Image"),
+                            title: Text('Insert Image'),
                             content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("Select from files",
+                                  Text('Select from files',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold)),
                                   SizedBox(height: 10),
@@ -1712,7 +1751,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               });
                                             }
                                           },
-                                          child: Text("Choose image",
+                                          child: Text('Choose image',
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .textTheme
@@ -1725,7 +1764,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                                 onPressed: () {
                                                   setState(() {
                                                     result = null;
-                                                    filename.text = "";
+                                                    filename.text = '';
                                                   });
                                                 })
                                             : Container(height: 0, width: 0),
@@ -1734,7 +1773,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                         border: InputBorder.none,
                                       )),
                                   SizedBox(height: 20),
-                                  Text("URL",
+                                  Text('URL',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold)),
                                   SizedBox(height: 10),
@@ -1744,7 +1783,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     textInputAction: TextInputAction.done,
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(),
-                                      hintText: "URL",
+                                      hintText: 'URL',
                                       errorText: validateFailed,
                                       errorMaxLines: 2,
                                     ),
@@ -1755,7 +1794,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: Text("Cancel"),
+                                child: Text('Cancel'),
                               ),
                               TextButton(
                                 onPressed: () async {
@@ -1763,19 +1802,19 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                       url.text.isEmpty) {
                                     setState(() {
                                       validateFailed =
-                                          "Please either choose an image or enter an image URL!";
+                                          'Please either choose an image or enter an image URL!';
                                     });
                                   } else if (filename.text.isNotEmpty &&
                                       url.text.isNotEmpty) {
                                     setState(() {
                                       validateFailed =
-                                          "Please input either an image or an image URL, not both!";
+                                          'Please input either an image or an image URL, not both!';
                                     });
                                   } else if (filename.text.isNotEmpty &&
                                       result?.files.single.bytes != null) {
-                                    String base64Data = base64
+                                    var base64Data = base64
                                         .encode(result!.files.single.bytes!);
-                                    bool proceed = await widget
+                                    var proceed = await widget
                                             .options.mediaUploadInterceptor
                                             ?.call(result!.files.single,
                                                 InsertFileType.image) ??
@@ -1786,7 +1825,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     }
                                     Navigator.of(context).pop();
                                   } else {
-                                    bool proceed = await widget
+                                    var proceed = await widget
                                             .options.mediaLinkInsertInterceptor
                                             ?.call(url.text,
                                                 InsertFileType.image) ??
@@ -1798,7 +1837,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     Navigator.of(context).pop();
                                   }
                                 },
-                                child: Text("OK"),
+                                child: Text('OK'),
                               )
                             ],
                           );
@@ -1808,28 +1847,28 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
             }
             if (t.getIcons()[index].icon == Icons.audiotrack_outlined) {
-              bool proceed = await widget.options.onButtonPressed
+              var proceed = await widget.options.onButtonPressed
                       ?.call(ButtonType.audio, null, null) ??
                   true;
               if (proceed) {
-                final TextEditingController filename = TextEditingController();
-                final TextEditingController url = TextEditingController();
-                final FocusNode urlFocus = FocusNode();
+                final filename = TextEditingController();
+                final url = TextEditingController();
+                final urlFocus = FocusNode();
                 FilePickerResult? result;
                 String? validateFailed;
-                showDialog(
+                await showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return PointerInterceptor(
                         child: StatefulBuilder(builder:
                             (BuildContext context, StateSetter setState) {
                           return AlertDialog(
-                            title: Text("Insert Audio"),
+                            title: Text('Insert Audio'),
                             content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("Select from files",
+                                  Text('Select from files',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold)),
                                   SizedBox(height: 10),
@@ -1860,7 +1899,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               });
                                             }
                                           },
-                                          child: Text("Choose audio",
+                                          child: Text('Choose audio',
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .textTheme
@@ -1873,7 +1912,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                                 onPressed: () {
                                                   setState(() {
                                                     result = null;
-                                                    filename.text = "";
+                                                    filename.text = '';
                                                   });
                                                 })
                                             : Container(height: 0, width: 0),
@@ -1882,7 +1921,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                         border: InputBorder.none,
                                       )),
                                   SizedBox(height: 20),
-                                  Text("URL",
+                                  Text('URL',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold)),
                                   SizedBox(height: 10),
@@ -1892,7 +1931,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     textInputAction: TextInputAction.done,
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(),
-                                      hintText: "URL",
+                                      hintText: 'URL',
                                       errorText: validateFailed,
                                       errorMaxLines: 2,
                                     ),
@@ -1903,7 +1942,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: Text("Cancel"),
+                                child: Text('Cancel'),
                               ),
                               TextButton(
                                 onPressed: () async {
@@ -1911,19 +1950,19 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                       url.text.isEmpty) {
                                     setState(() {
                                       validateFailed =
-                                          "Please either choose an audio file or enter an audio file URL!";
+                                          'Please either choose an audio file or enter an audio file URL!';
                                     });
                                   } else if (filename.text.isNotEmpty &&
                                       url.text.isNotEmpty) {
                                     setState(() {
                                       validateFailed =
-                                          "Please input either an audio file or an audio URL, not both!";
+                                          'Please input either an audio file or an audio URL, not both!';
                                     });
                                   } else if (filename.text.isNotEmpty &&
                                       result?.files.single.bytes != null) {
-                                    String base64Data = base64
+                                    var base64Data = base64
                                         .encode(result!.files.single.bytes!);
-                                    bool proceed = await widget
+                                    var proceed = await widget
                                             .options.mediaUploadInterceptor
                                             ?.call(result!.files.single,
                                                 InsertFileType.audio) ??
@@ -1934,7 +1973,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     }
                                     Navigator.of(context).pop();
                                   } else {
-                                    bool proceed = await widget
+                                    var proceed = await widget
                                             .options.mediaLinkInsertInterceptor
                                             ?.call(url.text,
                                                 InsertFileType.audio) ??
@@ -1946,7 +1985,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     Navigator.of(context).pop();
                                   }
                                 },
-                                child: Text("OK"),
+                                child: Text('OK'),
                               )
                             ],
                           );
@@ -1956,28 +1995,28 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
             }
             if (t.getIcons()[index].icon == Icons.videocam_outlined) {
-              bool proceed = await widget.options.onButtonPressed
+              var proceed = await widget.options.onButtonPressed
                       ?.call(ButtonType.video, null, null) ??
                   true;
               if (proceed) {
-                final TextEditingController filename = TextEditingController();
-                final TextEditingController url = TextEditingController();
-                final FocusNode urlFocus = FocusNode();
+                final filename = TextEditingController();
+                final url = TextEditingController();
+                final urlFocus = FocusNode();
                 FilePickerResult? result;
                 String? validateFailed;
-                showDialog(
+                await showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return PointerInterceptor(
                         child: StatefulBuilder(builder:
                             (BuildContext context, StateSetter setState) {
                           return AlertDialog(
-                            title: Text("Insert Video"),
+                            title: Text('Insert Video'),
                             content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("Select from files",
+                                  Text('Select from files',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold)),
                                   SizedBox(height: 10),
@@ -2008,7 +2047,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               });
                                             }
                                           },
-                                          child: Text("Choose video",
+                                          child: Text('Choose video',
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .textTheme
@@ -2021,7 +2060,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                                 onPressed: () {
                                                   setState(() {
                                                     result = null;
-                                                    filename.text = "";
+                                                    filename.text = '';
                                                   });
                                                 })
                                             : Container(height: 0, width: 0),
@@ -2030,7 +2069,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                         border: InputBorder.none,
                                       )),
                                   SizedBox(height: 20),
-                                  Text("URL",
+                                  Text('URL',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold)),
                                   SizedBox(height: 10),
@@ -2040,7 +2079,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     textInputAction: TextInputAction.done,
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(),
-                                      hintText: "URL",
+                                      hintText: 'URL',
                                       errorText: validateFailed,
                                       errorMaxLines: 2,
                                     ),
@@ -2051,7 +2090,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: Text("Cancel"),
+                                child: Text('Cancel'),
                               ),
                               TextButton(
                                 onPressed: () async {
@@ -2059,19 +2098,19 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                       url.text.isEmpty) {
                                     setState(() {
                                       validateFailed =
-                                          "Please either choose a video or enter a video URL!";
+                                          'Please either choose a video or enter a video URL!';
                                     });
                                   } else if (filename.text.isNotEmpty &&
                                       url.text.isNotEmpty) {
                                     setState(() {
                                       validateFailed =
-                                          "Please input either a video or a video URL, not both!";
+                                          'Please input either a video or a video URL, not both!';
                                     });
                                   } else if (filename.text.isNotEmpty &&
                                       result?.files.single.bytes != null) {
-                                    String base64Data = base64
+                                    var base64Data = base64
                                         .encode(result!.files.single.bytes!);
-                                    bool proceed = await widget
+                                    var proceed = await widget
                                             .options.mediaUploadInterceptor
                                             ?.call(result!.files.single,
                                                 InsertFileType.video) ??
@@ -2082,7 +2121,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     }
                                     Navigator.of(context).pop();
                                   } else {
-                                    bool proceed = await widget
+                                    var proceed = await widget
                                             .options.mediaLinkInsertInterceptor
                                             ?.call(url.text,
                                                 InsertFileType.video) ??
@@ -2094,7 +2133,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     Navigator.of(context).pop();
                                   }
                                 },
-                                child: Text("OK"),
+                                child: Text('OK'),
                               )
                             ],
                           );
@@ -2104,28 +2143,28 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
             }
             if (t.getIcons()[index].icon == Icons.attach_file) {
-              bool proceed = await widget.options.onButtonPressed
+              var proceed = await widget.options.onButtonPressed
                       ?.call(ButtonType.otherFile, null, null) ??
                   true;
               if (proceed) {
-                final TextEditingController filename = TextEditingController();
-                final TextEditingController url = TextEditingController();
-                final FocusNode urlFocus = FocusNode();
+                final filename = TextEditingController();
+                final url = TextEditingController();
+                final urlFocus = FocusNode();
                 FilePickerResult? result;
                 String? validateFailed;
-                showDialog(
+                await showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return PointerInterceptor(
                         child: StatefulBuilder(builder:
                             (BuildContext context, StateSetter setState) {
                           return AlertDialog(
-                            title: Text("Insert File"),
+                            title: Text('Insert File'),
                             content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("Select from files",
+                                  Text('Select from files',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold)),
                                   SizedBox(height: 10),
@@ -2156,7 +2195,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               });
                                             }
                                           },
-                                          child: Text("Choose file",
+                                          child: Text('Choose file',
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .textTheme
@@ -2169,7 +2208,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                                 onPressed: () {
                                                   setState(() {
                                                     result = null;
-                                                    filename.text = "";
+                                                    filename.text = '';
                                                   });
                                                 })
                                             : Container(height: 0, width: 0),
@@ -2178,7 +2217,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                         border: InputBorder.none,
                                       )),
                                   SizedBox(height: 20),
-                                  Text("URL",
+                                  Text('URL',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold)),
                                   SizedBox(height: 10),
@@ -2188,7 +2227,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     textInputAction: TextInputAction.done,
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(),
-                                      hintText: "URL",
+                                      hintText: 'URL',
                                       errorText: validateFailed,
                                       errorMaxLines: 2,
                                     ),
@@ -2199,7 +2238,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: Text("Cancel"),
+                                child: Text('Cancel'),
                               ),
                               TextButton(
                                 onPressed: () {
@@ -2207,13 +2246,13 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                       url.text.isEmpty) {
                                     setState(() {
                                       validateFailed =
-                                          "Please either choose a file or enter a file URL!";
+                                          'Please either choose a file or enter a file URL!';
                                     });
                                   } else if (filename.text.isNotEmpty &&
                                       url.text.isNotEmpty) {
                                     setState(() {
                                       validateFailed =
-                                          "Please input either a file or a file URL, not both!";
+                                          'Please input either a file or a file URL, not both!';
                                     });
                                   } else if (filename.text.isNotEmpty &&
                                       result?.files.single.bytes != null) {
@@ -2226,7 +2265,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     Navigator.of(context).pop();
                                   }
                                 },
-                                child: Text("OK"),
+                                child: Text('OK'),
                               )
                             ],
                           );
@@ -2236,20 +2275,20 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
             }
             if (t.getIcons()[index].icon == Icons.table_chart_outlined) {
-              bool proceed = await widget.options.onButtonPressed
+              var proceed = await widget.options.onButtonPressed
                       ?.call(ButtonType.table, null, null) ??
                   true;
               if (proceed) {
-                int currentRows = 1;
-                int currentCols = 1;
-                showDialog(
+                var currentRows = 1;
+                var currentCols = 1;
+                await showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return PointerInterceptor(
                         child: StatefulBuilder(builder:
                             (BuildContext context, StateSetter setState) {
                           return AlertDialog(
-                            title: Text("Insert Table"),
+                            title: Text('Insert Table'),
                             content: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 mainAxisAlignment:
@@ -2276,7 +2315,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: Text("Cancel"),
+                                child: Text('Cancel'),
                               ),
                               TextButton(
                                 onPressed: () async {
@@ -2284,14 +2323,14 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     widget.controller.insertTable(
                                         '${currentRows}x$currentCols');
                                   } else {
-                                    widget.controller.editorController!
+                                    await widget.controller.editorController!
                                         .evaluateJavascript(
                                             source:
                                                 "\$('#summernote-2').summernote('insertTable', '${currentRows}x$currentCols');");
                                   }
                                   Navigator.of(context).pop();
                                 },
-                                child: Text("OK"),
+                                child: Text('OK'),
                               )
                             ],
                           );
@@ -2301,15 +2340,16 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
             }
             if (t.getIcons()[index].icon == Icons.horizontal_rule) {
-              bool proceed = await widget.options.onButtonPressed
+              var proceed = await widget.options.onButtonPressed
                       ?.call(ButtonType.hr, null, null) ??
                   true;
               if (proceed) {
-                widget.controller.insertHtml("<hr/>");
+                widget.controller.insertHtml('<hr/>');
               }
             }
           },
           isSelected: List<bool>.filled(t.getIcons().length, false),
+          children: t.getIcons(),
         ));
       }
       if (t is OtherButtons) {
@@ -2332,7 +2372,6 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             borderWidth: widget.options.buttonBorderWidth,
             renderBorder: widget.options.renderBorder,
             textStyle: widget.options.textStyle,
-            children: t.getIcons1(),
             onPressed: (int index) async {
               void updateStatus() {
                 setState(() {
@@ -2341,7 +2380,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
 
               if (t.getIcons1()[index].icon == Icons.fullscreen) {
-                bool proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.options.onButtonPressed?.call(
                         ButtonType.fullscreen,
                         _miscSelected[index],
                         updateStatus) ??
@@ -2352,7 +2391,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons1()[index].icon == Icons.code) {
-                bool proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.options.onButtonPressed?.call(
                         ButtonType.codeview,
                         _miscSelected[index],
                         updateStatus) ??
@@ -2363,7 +2402,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons1()[index].icon == Icons.undo) {
-                bool proceed = await widget.options.onButtonPressed
+                var proceed = await widget.options.onButtonPressed
                         ?.call(ButtonType.undo, null, null) ??
                     true;
                 if (proceed) {
@@ -2371,7 +2410,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons1()[index].icon == Icons.redo) {
-                bool proceed = await widget.options.onButtonPressed
+                var proceed = await widget.options.onButtonPressed
                         ?.call(ButtonType.redo, null, null) ??
                     true;
                 if (proceed) {
@@ -2379,18 +2418,18 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons1()[index].icon == Icons.help_outline) {
-                bool proceed = await widget.options.onButtonPressed
+                var proceed = await widget.options.onButtonPressed
                         ?.call(ButtonType.help, null, null) ??
                     true;
                 if (proceed) {
-                  showDialog(
+                  await showDialog(
                       context: context,
                       builder: (BuildContext context) {
                         return PointerInterceptor(
                           child: StatefulBuilder(builder:
                               (BuildContext context, StateSetter setState) {
                             return AlertDialog(
-                              title: Text("Help"),
+                              title: Text('Help'),
                               content: Container(
                                 height: MediaQuery.of(context).size.height / 2,
                                 child: SingleChildScrollView(
@@ -2613,7 +2652,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                   onPressed: () async {
                                     Navigator.of(context).pop();
                                   },
-                                  child: Text("Close"),
+                                  child: Text('Close'),
                                 )
                               ],
                             );
@@ -2624,6 +2663,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
             },
             isSelected: _miscSelected,
+            children: t.getIcons1(),
           ));
         }
         if (t.copy || t.paste) {
@@ -2645,32 +2685,31 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             borderWidth: widget.options.buttonBorderWidth,
             renderBorder: widget.options.renderBorder,
             textStyle: widget.options.textStyle,
-            children: t.getIcons2(),
             onPressed: (int index) async {
               if (t.getIcons2()[index].icon == Icons.copy) {
-                bool proceed = await widget.options.onButtonPressed
+                var proceed = await widget.options.onButtonPressed
                         ?.call(ButtonType.copy, null, null) ??
                     true;
                 if (proceed) {
-                  String? data = await widget.controller.getText();
-                  Clipboard.setData(new ClipboardData(text: data));
+                  var data = await widget.controller.getText();
+                  await Clipboard.setData(ClipboardData(text: data));
                 }
               }
               if (t.getIcons2()[index].icon == Icons.paste) {
-                bool proceed = await widget.options.onButtonPressed
+                var proceed = await widget.options.onButtonPressed
                         ?.call(ButtonType.paste, null, null) ??
                     true;
                 if (proceed) {
-                  ClipboardData? data =
-                      await Clipboard.getData(Clipboard.kTextPlain);
+                  var data = await Clipboard.getData(Clipboard.kTextPlain);
                   if (data != null) {
-                    String text = data.text!;
+                    var text = data.text!;
                     widget.controller.insertHtml(text);
                   }
                 }
               }
             },
             isSelected: List<bool>.filled(t.getIcons2().length, false),
+            children: t.getIcons2(),
           ));
         }
       }
@@ -2678,7 +2717,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
     if (widget.options.customToolbarInsertionIndices.isNotEmpty &&
         widget.options.customToolbarInsertionIndices.length ==
             widget.options.customToolbarButtons.length) {
-      for (int i = 0;
+      for (var i = 0;
           i < widget.options.customToolbarInsertionIndices.length;
           i++) {
         if (widget.options.customToolbarInsertionIndices[i] >
@@ -2696,9 +2735,10 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
     } else {
       toolbarChildren.addAll(widget.options.customToolbarButtons);
     }
-    if (widget.options.renderSeparatorWidget)
+    if (widget.options.renderSeparatorWidget) {
       toolbarChildren =
           intersperse(widget.options.separatorWidget, toolbarChildren).toList();
+    }
     return toolbarChildren;
   }
 }

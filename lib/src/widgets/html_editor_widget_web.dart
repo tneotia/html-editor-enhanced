@@ -33,6 +33,7 @@ class HtmlEditorWidget extends StatefulWidget {
   final OtherOptions otherOptions;
   final BuildContext initBC;
 
+  @override
   _HtmlEditorWidgetWebState createState() => _HtmlEditorWidgetWebState();
 }
 
@@ -54,7 +55,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
 
   /// Helps get the height of the toolbar to accurately adjust the height of
   /// the editor when the keyboard is visible.
-  GlobalKey toolbarKey = new GlobalKey();
+  GlobalKey toolbarKey = GlobalKey();
 
   @override
   void initState() {
@@ -66,14 +67,14 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   }
 
   void initSummernote() async {
-    String headString = "";
-    String summernoteCallbacks = "callbacks: {";
-    int maximumFileSize = 10485760;
-    for (Plugins p in widget.plugins) {
-      headString = headString + p.getHeadString() + "\n";
+    var headString = '';
+    var summernoteCallbacks = 'callbacks: {';
+    var maximumFileSize = 10485760;
+    for (var p in widget.plugins) {
+      headString = headString + p.getHeadString() + '\n';
       if (p is SummernoteAtMention) {
         summernoteCallbacks = summernoteCallbacks +
-            """
+            '''
             \nsummernoteAtMention: {
               getSuggestions: (value) => {
                 const mentions = ${p.getMentionsWeb()};
@@ -85,15 +86,15 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                 window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onSelectMention", "value": value}), "*");
               },
             },
-          """;
+          ''';
         if (p.onSelect != null) {
           html.window.onMessage.listen((event) {
             var data = json.decode(event.data);
-            if (data["type"] != null &&
-                data["type"].contains("toDart:") &&
-                data["view"] == createdViewId &&
-                data["type"].contains("onSelectMention")) {
-              p.onSelect!.call(data["value"]);
+            if (data['type'] != null &&
+                data['type'].contains('toDart:') &&
+                data['view'] == createdViewId &&
+                data['type'].contains('onSelectMention')) {
+              p.onSelect!.call(data['value']);
             }
           });
         }
@@ -102,11 +103,11 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     if (widget.callbacks != null) {
       if (widget.callbacks!.onImageLinkInsert != null) {
         summernoteCallbacks = summernoteCallbacks +
-            """
+            '''
           onImageLinkInsert: function(url) {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onImageLinkInsert", "url": url}), "*");
           },
-        """;
+        ''';
       }
       if (widget.callbacks!.onImageUpload != null) {
         summernoteCallbacks = summernoteCallbacks +
@@ -154,18 +155,19 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             """;
       }
     }
-    summernoteCallbacks = summernoteCallbacks + "}";
-    String darkCSS = "";
+    summernoteCallbacks = summernoteCallbacks + '}';
+    var darkCSS = '';
     if ((Theme.of(widget.initBC).brightness == Brightness.dark ||
             widget.htmlEditorOptions.darkMode == true) &&
         widget.htmlEditorOptions.darkMode != false) {
       darkCSS =
-          "<link href=\"assets/packages/html_editor_enhanced/assets/summernote-lite-dark.css\" rel=\"stylesheet\">";
+          '<link href=\"assets/packages/html_editor_enhanced/assets/summernote-lite-dark.css\" rel=\"stylesheet\">';
     }
-    String jsCallbacks = "";
-    if (widget.callbacks != null)
+    var jsCallbacks = '';
+    if (widget.callbacks != null) {
       jsCallbacks = getJsCallbacks(widget.callbacks!);
-    String summernoteScripts = """
+    }
+    var summernoteScripts = """
       <script type="text/javascript">
         \$(document).ready(function () {
           \$('#summernote-2').summernote({
@@ -389,46 +391,52 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         $jsCallbacks
       </script>
     """;
-    String filePath =
+    var filePath =
         'packages/html_editor_enhanced/assets/summernote-no-plugins.html';
-    if (widget.htmlEditorOptions.filePath != null)
+    if (widget.htmlEditorOptions.filePath != null) {
       filePath = widget.htmlEditorOptions.filePath!;
-    String htmlString = await rootBundle.loadString(filePath);
+    }
+    var htmlString = await rootBundle.loadString(filePath);
     htmlString = htmlString
-        .replaceFirst("<!--darkCSS-->", darkCSS)
-        .replaceFirst("<!--headString-->", headString)
-        .replaceFirst("<!--summernoteScripts-->", summernoteScripts)
-        .replaceFirst("jquery.min.js",
-            "assets/packages/html_editor_enhanced/assets/jquery.min.js")
-        .replaceFirst("summernote-lite.min.css",
-            "assets/packages/html_editor_enhanced/assets/summernote-lite.min.css")
-        .replaceFirst("summernote-lite.min.js",
-            "assets/packages/html_editor_enhanced/assets/summernote-lite.min.js");
+        .replaceFirst('<!--darkCSS-->', darkCSS)
+        .replaceFirst('<!--headString-->', headString)
+        .replaceFirst('<!--summernoteScripts-->', summernoteScripts)
+        .replaceFirst('jquery.min.js',
+            'assets/packages/html_editor_enhanced/assets/jquery.min.js')
+        .replaceFirst('summernote-lite.min.css',
+            'assets/packages/html_editor_enhanced/assets/summernote-lite.min.css')
+        .replaceFirst('summernote-lite.min.js',
+            'assets/packages/html_editor_enhanced/assets/summernote-lite.min.js');
     if (widget.callbacks != null) addJSListener(widget.callbacks!);
-    final html.IFrameElement iframe = html.IFrameElement()
+    final iframe = html.IFrameElement()
       ..width = MediaQuery.of(widget.initBC).size.width.toString() //'800'
       ..height = widget.htmlEditorOptions.autoAdjustHeight
           ? actualHeight.toString()
           : widget.otherOptions.height.toString()
+      // ignore: unsafe_html, necessary to load HTML string
       ..srcdoc = htmlString
       ..style.border = 'none'
       ..onLoad.listen((event) async {
-        if (widget.callbacks != null && widget.callbacks!.onInit != null)
+        if (widget.callbacks != null && widget.callbacks!.onInit != null) {
           widget.callbacks!.onInit!.call();
-        if (widget.htmlEditorOptions.initialText != null)
+        }
+        if (widget.htmlEditorOptions.initialText != null) {
           widget.controller.setText(widget.htmlEditorOptions.initialText!);
-        Map<String, Object> data = {"type": "toIframe: getHeight"};
-        data["view"] = createdViewId;
+        }
+        var data = <String, Object>{'type': 'toIframe: getHeight'};
+        data['view'] = createdViewId;
         final jsonEncoder = JsonEncoder();
         var jsonStr = jsonEncoder.convert(data);
-        html.window.postMessage(jsonStr, "*");
+        html.window.postMessage(jsonStr, '*');
         html.window.onMessage.listen((event) {
           var data = json.decode(event.data);
-          if (data["type"] != null &&
-              data["type"].contains("toDart: onChange") &&
-              data["view"] == createdViewId) {
-            if (widget.callbacks != null && widget.callbacks!.onChange != null)
-              widget.callbacks!.onChange!.call(data["contents"]);
+          if (data['type'] != null &&
+              data['type'].contains('toDart: onChange') &&
+              data['view'] == createdViewId) {
+            if (widget.callbacks != null &&
+                widget.callbacks!.onChange != null) {
+              widget.callbacks!.onChange!.call(data['contents']);
+            }
             if (widget.htmlEditorOptions.shouldEnsureVisible &&
                 Scrollable.of(context) != null) {
               Scrollable.of(context)!.position.ensureVisible(
@@ -437,11 +445,12 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                   curve: Curves.easeIn);
             }
           }
-          if (data["type"] != null &&
-              data["type"].contains("toDart: updateToolbar") &&
-              data["view"] == createdViewId) {
-            if (widget.controller.toolbar != null)
+          if (data['type'] != null &&
+              data['type'].contains('toDart: updateToolbar') &&
+              data['view'] == createdViewId) {
+            if (widget.controller.toolbar != null) {
               widget.controller.toolbar!.updateToolbar(data);
+            }
           }
         });
       });
@@ -498,7 +507,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
 
   /// Adds the callbacks the user set into JavaScript
   String getJsCallbacks(Callbacks c) {
-    String callbacks = "";
+    var callbacks = '';
     if (c.onBeforeCommand != null) {
       callbacks = callbacks +
           """
@@ -610,12 +619,12 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   void addJSListener(Callbacks c) {
     html.window.onMessage.listen((event) {
       var data = json.decode(event.data);
-      if (data["type"] != null &&
-          data["type"].contains("toDart:") &&
-          data["view"] == createdViewId) {
-        if (data["type"].contains("htmlHeight") &&
+      if (data['type'] != null &&
+          data['type'].contains('toDart:') &&
+          data['view'] == createdViewId) {
+        if (data['type'].contains('htmlHeight') &&
             widget.htmlEditorOptions.autoAdjustHeight) {
-          final docHeight = data["height"] ?? actualHeight;
+          final docHeight = data['height'] ?? actualHeight;
           if ((docHeight != null && docHeight != actualHeight) && mounted) {
             setState(() {
               actualHeight =
@@ -623,92 +632,92 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             });
           }
         }
-        if (data["type"].contains("onBeforeCommand")) {
-          c.onBeforeCommand!.call(data["contents"]);
+        if (data['type'].contains('onBeforeCommand')) {
+          c.onBeforeCommand!.call(data['contents']);
         }
-        if (data["type"].contains("onChange")) {
-          c.onChange!.call(data["contents"]);
+        if (data['type'].contains('onChange')) {
+          c.onChange!.call(data['contents']);
         }
-        if (data["type"].contains("onChangeCodeview")) {
-          c.onChangeCodeview!.call(data["contents"]);
+        if (data['type'].contains('onChangeCodeview')) {
+          c.onChangeCodeview!.call(data['contents']);
         }
-        if (data["type"].contains("onDialogShown")) {
+        if (data['type'].contains('onDialogShown')) {
           c.onDialogShown!.call();
         }
-        if (data["type"].contains("onEnter")) {
+        if (data['type'].contains('onEnter')) {
           c.onEnter!.call();
         }
-        if (data["type"].contains("onFocus")) {
+        if (data['type'].contains('onFocus')) {
           c.onFocus!.call();
         }
-        if (data["type"].contains("onBlur")) {
+        if (data['type'].contains('onBlur')) {
           c.onBlur!.call();
         }
-        if (data["type"].contains("onBlurCodeview")) {
+        if (data['type'].contains('onBlurCodeview')) {
           c.onBlurCodeview!.call();
         }
-        if (data["type"].contains("onImageLinkInsert")) {
-          c.onImageLinkInsert!.call(data["url"]);
+        if (data['type'].contains('onImageLinkInsert')) {
+          c.onImageLinkInsert!.call(data['url']);
         }
-        if (data["type"].contains("onImageUpload")) {
-          Map<String, dynamic> map = {
-            'lastModified': data["lastModified"],
-            'lastModifiedDate': data["lastModifiedDate"],
-            'name': data["name"],
-            'size': data["size"],
-            'type': data["mimeType"],
-            'base64': data["base64"]
+        if (data['type'].contains('onImageUpload')) {
+          var map = <String, dynamic>{
+            'lastModified': data['lastModified'],
+            'lastModifiedDate': data['lastModifiedDate'],
+            'name': data['name'],
+            'size': data['size'],
+            'type': data['mimeType'],
+            'base64': data['base64']
           };
-          String jsonStr = json.encode(map);
-          FileUpload file = fileUploadFromJson(jsonStr);
+          var jsonStr = json.encode(map);
+          var file = fileUploadFromJson(jsonStr);
           c.onImageUpload!.call(file);
         }
-        if (data["type"].contains("onImageUploadError")) {
-          if (data["base64"] != null) {
+        if (data['type'].contains('onImageUploadError')) {
+          if (data['base64'] != null) {
             c.onImageUploadError!.call(
                 null,
-                data["base64"],
-                data["error"].contains("base64")
+                data['base64'],
+                data['error'].contains('base64')
                     ? UploadError.jsException
-                    : data["error"].contains("unsupported")
+                    : data['error'].contains('unsupported')
                         ? UploadError.unsupportedFile
                         : UploadError.exceededMaxSize);
           } else {
-            Map<String, dynamic> map = {
-              'lastModified': data["lastModified"],
-              'lastModifiedDate': data["lastModifiedDate"],
-              'name': data["name"],
-              'size': data["size"],
-              'type': data["mimeType"]
+            var map = <String, dynamic>{
+              'lastModified': data['lastModified'],
+              'lastModifiedDate': data['lastModifiedDate'],
+              'name': data['name'],
+              'size': data['size'],
+              'type': data['mimeType']
             };
-            String jsonStr = json.encode(map);
-            FileUpload file = fileUploadFromJson(jsonStr);
+            var jsonStr = json.encode(map);
+            var file = fileUploadFromJson(jsonStr);
             c.onImageUploadError!.call(
                 file,
                 null,
-                data["error"].contains("base64")
+                data['error'].contains('base64')
                     ? UploadError.jsException
-                    : data["error"].contains("unsupported")
+                    : data['error'].contains('unsupported')
                         ? UploadError.unsupportedFile
                         : UploadError.exceededMaxSize);
           }
         }
-        if (data["type"].contains("onKeyDown")) {
-          c.onKeyDown!.call(data["keyCode"]);
+        if (data['type'].contains('onKeyDown')) {
+          c.onKeyDown!.call(data['keyCode']);
         }
-        if (data["type"].contains("onKeyUp")) {
-          c.onKeyUp!.call(data["keyCode"]);
+        if (data['type'].contains('onKeyUp')) {
+          c.onKeyUp!.call(data['keyCode']);
         }
-        if (data["type"].contains("onMouseDown")) {
+        if (data['type'].contains('onMouseDown')) {
           c.onMouseDown!.call();
         }
-        if (data["type"].contains("onMouseUp")) {
+        if (data['type'].contains('onMouseUp')) {
           c.onMouseUp!.call();
         }
-        if (data["type"].contains("onPaste")) {
+        if (data['type'].contains('onPaste')) {
           c.onPaste!.call();
         }
-        if (data["type"].contains("onScroll")) {
+        if (data['type'].contains('onScroll')) {
           c.onScroll!.call();
         }
       }

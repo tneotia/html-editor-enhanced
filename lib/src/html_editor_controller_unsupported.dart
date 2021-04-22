@@ -59,7 +59,7 @@ class HtmlEditorController {
   void execCommand(String command, {String? argument}) {}
 
   /// Gets the text from the editor and returns it as a [String].
-  Future<String?> getText() => Future.value(null);
+  Future<String> getText() => Future.value('');
 
   /// Insert HTML at the position of the cursor in the editor
   /// Note: This method should not be used for plaintext strings
@@ -69,7 +69,7 @@ class HtmlEditorController {
   void insertLink(String text, String url, bool isNewWindow) {}
 
   /// Insert a network image at the position of the cursor in the editor
-  void insertNetworkImage(String url, {String filename = ""}) {}
+  void insertNetworkImage(String url, {String filename = ''}) {}
 
   /// Insert text at the end of the current HTML content in the editor
   /// Note: This method should only be used for plaintext strings

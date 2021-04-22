@@ -45,15 +45,15 @@ class FileUpload {
 
   /// Creates an instance of [FileUpload] from a JSON string
   factory FileUpload.fromJson(Map<String, dynamic> json) => FileUpload(
-        base64: json["base64"] == null ? null : json["base64"],
-        lastModified: json["lastModified"] == null
+        base64: json['base64'],
+        lastModified: json['lastModified'] == null
             ? null
-            : DateTime.fromMillisecondsSinceEpoch(json["lastModified"]),
-        lastModifiedDate: json["lastModifiedDate"] == null
+            : DateTime.fromMillisecondsSinceEpoch(json['lastModified']),
+        lastModifiedDate: json['lastModifiedDate'] == null
             ? null
-            : DateTime.tryParse(json["lastModifiedDate"]),
-        name: json["name"] == null ? null : json["name"],
-        size: json["size"] == null ? null : json["size"],
-        type: json["type"] == null ? null : json["type"],
+            : DateTime.tryParse(json['lastModifiedDate']),
+        name: json['name'],
+        size: json['size'],
+        type: json['type'],
       );
 }

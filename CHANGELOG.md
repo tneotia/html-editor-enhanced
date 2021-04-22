@@ -1,4 +1,4 @@
-## [2.0.0] - 2021-04-22
+## [2.0.0+1] - 2021-04-22
 * Transitioned to fully native controls! These are extremely customizable and have much better UX than the previous controls.
 * [BREAKING] refactored a lot of options into separate constructors
 * [BREAKING] refactored toolbar classes, so toolbar customizations will need updating

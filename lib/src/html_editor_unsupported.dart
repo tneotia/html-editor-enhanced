@@ -38,6 +38,6 @@ class HtmlEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text("Unsupported in this environment");
+    return Text('Unsupported in this environment');
   }
 }
