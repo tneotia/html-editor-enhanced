@@ -8,8 +8,8 @@ Note that the API shown in this README.md file shows only a part of the document
 <table>
   <tr>
     <td align="center">Video Example</td>
-    <td align="center">Light Mode</td>
-    <td align="center">Dark Mode</td>
+    <td align="center">Light Mode and <pre>ToolbarType.nativeGrid</pre></td>
+    <td align="center">Dark Mode and <pre>ToolbarPosition.belowEditor</pre></td>
   </tr>
   <tr>
     <td><img alt="GIF example" src="https://raw.githubusercontent.com/tneotia/html-editor-enhanced/master/screenshots/html_editor_enhanced.gif" width="250"/></td>
