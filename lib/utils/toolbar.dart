@@ -1,262 +1,216 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 /// Abstract class that all the toolbar classes extend
 abstract class Toolbar {
   const Toolbar();
-
-  /// Gives the name for the group of buttons
-  String getGroupName();
-
-  /// Gives the string for the button names
-  String getButtons({bool listStyles = false});
 }
 
 /// Style group
-class Style extends Toolbar {
-  final List<StyleButtons> buttons;
+class StyleButtons extends Toolbar {
+  final bool style;
 
-  const Style({this.buttons = const []});
-
-  @override
-  String getGroupName() {
-    return "style";
-  }
-
-  @override
-  String getButtons({bool listStyles = false}) {
-    if (buttons.isEmpty) {
-      return "['style']";
-    } else {
-      String list = "[";
-      for (StyleButtons e in buttons) {
-        list = list + "'${describeEnum(e)}'" + (buttons.last != e ? ", " : "");
-      }
-      return list + "]";
-    }
-  }
+  const StyleButtons({
+    this.style = true,
+  });
 }
-
-/// Enum for style group buttons
-enum StyleButtons { style }
 
 /// Font setting group
-class FontSetting extends Toolbar {
-  final List<FontSettingButtons> buttons;
+class FontSettingButtons extends Toolbar {
+  final bool fontName;
+  final bool fontSize;
+  final bool fontSizeUnit;
 
-  const FontSetting({this.buttons = const []});
-
-  @override
-  String getGroupName() {
-    return "fontsettings";
-  }
-
-  @override
-  String getButtons({bool listStyles = false}) {
-    if (buttons.isEmpty) {
-      return "['fontname', 'fontsize', 'fontsizeunit']";
-    } else {
-      String list = "[";
-      for (FontSettingButtons e in buttons) {
-        list = list + "'${describeEnum(e)}'" + (buttons.last != e ? ", " : "");
-      }
-      return list + "]";
-    }
-  }
-}
-
-/// Enum for font setting group buttons
-enum FontSettingButtons {
-  fontname,
-  fontsize,
-  fontsizeunit,
+  const FontSettingButtons({
+    this.fontName = true,
+    this.fontSize = true,
+    this.fontSizeUnit = true,
+  });
 }
 
 /// Font group
-class Font extends Toolbar {
-  final List<FontButtons> buttons;
+class FontButtons extends Toolbar {
+  final bool bold;
+  final bool italic;
+  final bool underline;
+  final bool clearAll;
+  final bool strikethrough;
+  final bool superscript;
+  final bool subscript;
 
-  const Font({this.buttons = const []});
+  const FontButtons({
+    this.bold = true,
+    this.italic = true,
+    this.underline = true,
+    this.clearAll = true,
+    this.strikethrough = true,
+    this.superscript = true,
+    this.subscript = true,
+  });
 
-  @override
-  String getGroupName() {
-    return "font";
+  List<Icon> getIcons1() {
+    List<Icon> icons = [];
+    if (bold) icons.add(Icon(Icons.format_bold));
+    if (italic) icons.add(Icon(Icons.format_italic));
+    if (underline) icons.add(Icon(Icons.format_underline));
+    if (clearAll) icons.add(Icon(Icons.format_clear));
+    return icons;
   }
 
-  @override
-  String getButtons({bool listStyles = false}) {
-    if (buttons.isEmpty) {
-      return "['bold', 'italic', 'underline', 'clear']";
-    } else {
-      String list = "[";
-      for (FontButtons e in buttons) {
-        list = list + "'${describeEnum(e)}'" + (buttons.last != e ? ", " : "");
-      }
-      return list + "]";
-    }
-  }
-}
-
-/// Enum for font group buttons
-enum FontButtons { bold, italic, underline, clear }
-
-/// Miscellaneous font group
-class MiscFont extends Toolbar {
-  final List<MiscFontButtons> buttons;
-
-  const MiscFont({this.buttons = const []});
-
-  @override
-  String getGroupName() {
-    return "miscfont";
-  }
-
-  @override
-  String getButtons({bool listStyles = false}) {
-    if (buttons.isEmpty) {
-      return "['strikethrough', 'superscript', 'subscript']";
-    } else {
-      String list = "[";
-      for (MiscFontButtons e in buttons) {
-        list = list + "'${describeEnum(e)}'" + (buttons.last != e ? ", " : "");
-      }
-      return list + "]";
-    }
+  List<Icon> getIcons2() {
+    List<Icon> icons = [];
+    if (strikethrough) icons.add(Icon(Icons.format_strikethrough));
+    if (superscript) icons.add(Icon(Icons.superscript));
+    if (subscript) icons.add(Icon(Icons.subscript));
+    return icons;
   }
 }
-
-/// Enum for miscellaneous font buttons
-enum MiscFontButtons { strikethrough, superscript, subscript }
 
 /// Color bar group
-class ColorBar extends Toolbar {
-  final List<ColorButtons> buttons;
+class ColorButtons extends Toolbar {
+  final bool foregroundColor;
+  final bool highlightColor;
 
-  const ColorBar({this.buttons = const []});
+  const ColorButtons({
+    this.foregroundColor = true,
+    this.highlightColor = true,
+  });
 
-  @override
-  String getGroupName() {
-    return "color";
-  }
-
-  @override
-  String getButtons({bool listStyles = false}) {
-    if (buttons.isEmpty) {
-      return "['color', 'forecolor', 'backcolor']";
-    } else {
-      String list = "[";
-      for (ColorButtons e in buttons) {
-        list = list + "'${describeEnum(e)}'" + (buttons.last != e ? ", " : "");
-      }
-      return list + "]";
-    }
+  List<Icon> getIcons() {
+    List<Icon> icons = [];
+    if (foregroundColor) icons.add(Icon(Icons.format_color_text));
+    if (highlightColor) icons.add(Icon(Icons.format_color_fill));
+    return icons;
   }
 }
 
-/// Enum for color bar group buttons
-enum ColorButtons { color, forecolor, backcolor }
+/// List group
+class ListButtons extends Toolbar {
+  final bool ul;
+  final bool ol;
+  final bool listStyles;
+
+  const ListButtons({
+    this.ul = true,
+    this.ol = true,
+    this.listStyles = true,
+  });
+
+  List<Icon> getIcons() {
+    List<Icon> icons = [];
+    if (ul) icons.add(Icon(Icons.format_list_bulleted));
+    if (ol) icons.add(Icon(Icons.format_list_numbered));
+    return icons;
+  }
+}
 
 /// Paragraph group
-class Paragraph extends Toolbar {
-  final List<ParagraphButtons> buttons;
+class ParagraphButtons extends Toolbar {
+  final bool alignLeft;
+  final bool alignCenter;
+  final bool alignRight;
+  final bool alignJustify;
+  final bool increaseIndent;
+  final bool decreaseIndent;
+  final bool textDirection;
+  final bool lineHeight;
+  final bool caseConverter;
 
-  const Paragraph({this.buttons = const []});
+  const ParagraphButtons({
+    this.alignLeft = true,
+    this.alignCenter = true,
+    this.alignRight = true,
+    this.alignJustify = true,
+    this.increaseIndent = true,
+    this.decreaseIndent = true,
+    this.textDirection = true,
+    this.lineHeight = true,
+    this.caseConverter = true,
+  });
 
-  @override
-  String getGroupName() {
-    return "para";
+  List<Icon> getIcons1() {
+    List<Icon> icons = [];
+    if (alignLeft) icons.add(Icon(Icons.format_align_left));
+    if (alignCenter) icons.add(Icon(Icons.format_align_center));
+    if (alignRight) icons.add(Icon(Icons.format_align_right));
+    if (alignJustify) icons.add(Icon(Icons.format_align_justify));
+    return icons;
   }
 
-  @override
-  String getButtons({bool listStyles = false}) {
-    if (buttons.isEmpty) {
-      return "['ul', 'ol', ${listStyles ? "'listStyles', " : ""}'paragraph', 'height']";
-    } else {
-      String list = "[";
-      for (ParagraphButtons e in buttons) {
-        list = list +
-            "'${describeEnum(e)}'" +
-            getListStyle(e) +
-            (buttons.last != e ? ", " : "");
-      }
-      return list + "]";
-    }
-  }
-
-  /// Determines where to place the 'listStyles' toolbar item if the summernote
-  /// list styles plugin is enabled.
-  String getListStyle(ParagraphButtons pb) {
-    bool hasUlOl = false;
-    bool hasBoth = false;
-    if (buttons.contains(ParagraphButtons.ul) ||
-        buttons.contains(ParagraphButtons.ol)) hasUlOl = true;
-    if (buttons.contains(ParagraphButtons.ul) &&
-        buttons.contains(ParagraphButtons.ol)) hasBoth = true;
-    if (hasUlOl &&
-        !hasBoth &&
-        (pb == ParagraphButtons.ul || pb == ParagraphButtons.ol))
-      return ", 'listStyles'";
-    else if (hasUlOl && hasBoth && pb == ParagraphButtons.ol)
-      return ", 'listStyles'";
-    else
-      return "";
+  List<Icon> getIcons2() {
+    List<Icon> icons = [];
+    if (increaseIndent) icons.add(Icon(Icons.format_indent_increase));
+    if (decreaseIndent) icons.add(Icon(Icons.format_indent_decrease));
+    return icons;
   }
 }
-
-/// Enum for paragraph group buttons
-enum ParagraphButtons { ul, ol, paragraph, height }
 
 /// Insert group
-class Insert extends Toolbar {
-  final List<InsertButtons> buttons;
+class InsertButtons extends Toolbar {
+  final bool link;
+  final bool picture;
+  final bool audio;
+  final bool video;
+  final bool otherFile;
+  final bool table;
+  final bool hr;
 
-  const Insert({this.buttons = const []});
+  const InsertButtons({
+    this.link = true,
+    this.picture = true,
+    this.audio = true,
+    this.video = true,
+    this.otherFile = false,
+    this.table = true,
+    this.hr = true,
+  });
 
-  @override
-  String getGroupName() {
-    return "insert";
-  }
-
-  @override
-  String getButtons({bool listStyles = false}) {
-    if (buttons.isEmpty) {
-      return "['link', 'picture', 'video', 'table', 'hr']";
-    } else {
-      String list = "[";
-      for (InsertButtons e in buttons) {
-        list = list + "'${describeEnum(e)}'" + (buttons.last != e ? ", " : "");
-      }
-      return list + "]";
-    }
+  List<Icon> getIcons() {
+    List<Icon> icons = [];
+    if (link) icons.add(Icon(Icons.link));
+    if (picture) icons.add(Icon(Icons.image_outlined));
+    if (audio) icons.add(Icon(Icons.audiotrack_outlined));
+    if (video) icons.add(Icon(Icons.videocam_outlined));
+    if (otherFile) icons.add(Icon(Icons.attach_file));
+    if (table) icons.add(Icon(Icons.table_chart_outlined));
+    if (hr) icons.add(Icon(Icons.horizontal_rule));
+    return icons;
   }
 }
-
-/// Enum for insert group buttons
-enum InsertButtons { link, picture, video, table, hr }
 
 /// Miscellaneous group
-class Misc extends Toolbar {
-  final List<MiscButtons> buttons;
+class OtherButtons extends Toolbar {
+  final bool fullscreen;
+  final bool codeview;
+  final bool undo;
+  final bool redo;
+  final bool help;
+  final bool copy;
+  final bool paste;
 
-  const Misc({this.buttons = const []});
+  const OtherButtons({
+    this.fullscreen = true,
+    this.codeview = true,
+    this.undo = true,
+    this.redo = true,
+    this.help = true,
+    this.copy = true,
+    this.paste = true,
+  });
 
-  @override
-  String getGroupName() {
-    return "misc";
+  List<Icon> getIcons1() {
+    List<Icon> icons = [];
+    if (fullscreen) icons.add(Icon(Icons.fullscreen));
+    if (codeview) icons.add(Icon(Icons.code));
+    if (undo) icons.add(Icon(Icons.undo));
+    if (redo) icons.add(Icon(Icons.redo));
+    if (help) icons.add(Icon(Icons.help_outline));
+    return icons;
   }
 
-  @override
-  String getButtons({bool listStyles = false}) {
-    if (buttons.isEmpty) {
-      return "['fullscreen', 'codeview', 'undo', 'redo', 'help']";
-    } else {
-      String list = "[";
-      for (MiscButtons e in buttons) {
-        list = list + "'${describeEnum(e)}'" + (buttons.last != e ? ", " : "");
-      }
-      return list + "]";
-    }
+  List<Icon> getIcons2() {
+    List<Icon> icons = [];
+    if (copy) icons.add(Icon(Icons.copy));
+    if (paste) icons.add(Icon(Icons.paste));
+    return icons;
   }
 }
-
-/// Enum for miscellaneous group buttons
-enum MiscButtons { fullscreen, codeview, undo, redo, help }

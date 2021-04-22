@@ -10,11 +10,10 @@ class HtmlEditor extends StatelessWidget {
     Key? key,
     required this.controller,
     this.callbacks,
-    this.hint,
-    this.initialText,
-    this.options = const HtmlEditorOptions(),
+    this.htmlEditorOptions = const HtmlEditorOptions(),
+    this.htmlToolbarOptions = const HtmlToolbarOptions(),
+    this.otherOptions = const OtherOptions(),
     this.plugins = const [],
-    this.toolbar = const [],
   }) : super(key: key);
 
   /// The controller that is passed to the widget, which allows multiple [HtmlEditor]
@@ -25,21 +24,17 @@ class HtmlEditor extends StatelessWidget {
   /// [Callbacks] for more details.
   final Callbacks? callbacks;
 
-  /// Sets the Html editor's hint (text displayed when there is no text in the
-  /// editor).
-  final String? hint;
+  /// Defines options for the html editor
+  final HtmlEditorOptions htmlEditorOptions;
 
-  /// The initial text that is be supplied to the Html editor.
-  final String? initialText;
+  /// Defines options for the editor toolbar
+  final HtmlToolbarOptions htmlToolbarOptions;
 
-  /// Defines miscellaneous options for the editor
-  final HtmlEditorOptions options;
+  /// Defines other options
+  final OtherOptions otherOptions;
 
   /// Sets the list of Summernote plugins enabled in the editor.
   final List<Plugins> plugins;
-
-  /// Sets which options are visible in the toolbar for the editor.
-  final List<Toolbar> toolbar;
 
   @override
   Widget build(BuildContext context) {

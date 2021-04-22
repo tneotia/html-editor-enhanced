@@ -1,3 +1,20 @@
+## [2.0.0] - 2021-04-22
+* Transitioned to fully native controls! These are extremely customizable and have much better UX than the previous controls.
+* [BREAKING] refactored a lot of options into separate constructors
+* [BREAKING] refactored toolbar classes, so toolbar customizations will need updating
+* Added a bunch of interceptors and callbacks for button presses
+* Added the ability to make custom buttons and set their positions
+* Added native support for numerous Summernote plugins
+   * [BREAKING] removed all Summernote plugins except Summernote @ Mention. The package now supports the majority of plugins out of the box.
+   * Reduced package size by removing the Summernote plugin files
+   * Reduced size further by using a stripped-down version of Summernote @ Mention libs
+* Added `execCommand` to controller to help you create custom toolbar buttons
+* Improved automatic height adjustment
+* Bumped dependencies
+* [BREAKING] Require Flutter 2.0.0+
+* As always, see the README for full documentation on these changes
+* See the [Migration Guide](https://github.com/tneotia/html-editor-enhanced/wiki/v2.0.0-Migration-Guide) for help migrating your v1.x.x widget code
+
 ## [1.8.0] - 2021-04-07
 * Add support for `getSuggestionsMobile` (Summernote @ Mentions Plugin) - allows you to programatically return the list of mentions.
    * Only supported on mobile.

@@ -4,6 +4,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart'
     as unsupported;
+import 'package:html_editor_enhanced/src/widgets/toolbar_widget.dart';
 
 /// Controller for mobile
 class HtmlEditorController extends unsupported.HtmlEditorController {
@@ -12,6 +13,9 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     this.processNewLineAsBr = false,
     this.processOutputHtml = true,
   });
+
+  /// Toolbar widget state to call various methods. For internal use only.
+  ToolbarWidgetState? toolbar;
 
   /// Determines whether text processing should happen on input HTML, e.g.
   /// whether a new line should be converted to a <br>.
@@ -35,6 +39,13 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Allows the [InAppWebViewController] for the Html editor to be accessed
   /// outside of the package itself for endless control and customization.
   InAppWebViewController? get editorController => controllerMap[this];
+
+  /// A function to quickly call a document.execCommand function in a readable format
+  void execCommand(String command, {String? argument}) {
+    _evaluateJavascript(
+        source:
+            "document.execCommand('$command', false${argument == null ? "" : ", '$argument'"});");
+  }
 
   /// Gets the text from the editor and returns it as a [String].
   Future<String> getText() async {
@@ -88,11 +99,13 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
   /// disables the Html editor
   void disable() {
+    toolbar!.disable();
     _evaluateJavascript(source: "\$('#summernote-2').summernote('disable');");
   }
 
   /// enables the Html editor
   void enable() {
+    toolbar!.enable();
     _evaluateJavascript(source: "\$('#summernote-2').summernote('enable');");
   }
 
@@ -187,6 +200,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     recalculateHeight();
   }
 
+  /// Helper function to process input html
   String _processHtml({required html}) {
     if (processInputHtml) {
       html = html
@@ -216,4 +230,19 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
           "Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart");
     }
   }
+
+  /// Internal function to change list style on Web
+  void changeListStyle(String changed) {}
+
+  /// Internal function to change line height on Web
+  void changeLineHeight(String changed) {}
+
+  /// Internal function to change text direction on Web
+  void changeTextDirection(String changed) {}
+
+  /// Internal function to change case on Web
+  void changeCase(String changed) {}
+
+  /// Internal function to insert table on Web
+  void insertTable(String dimensions) {}
 }

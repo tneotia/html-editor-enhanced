@@ -1,5 +1,6 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:html_editor_enhanced/src/widgets/toolbar_widget.dart';
 
 /// Fallback controller (should never be used)
 class HtmlEditorController {
@@ -8,6 +9,9 @@ class HtmlEditorController {
     this.processNewLineAsBr = false,
     this.processOutputHtml = true,
   });
+
+  /// Toolbar widget state to call various methods. For internal use only.
+  ToolbarWidgetState? toolbar;
 
   /// Determines whether text processing should happen on input HTML, e.g.
   /// whether a new line should be converted to a <br>.
@@ -50,6 +54,9 @@ class HtmlEditorController {
 
   /// enables the Html editor
   void enable() {}
+
+  /// A function to quickly call a document.execCommand function in a readable format
+  void execCommand(String command, {String? argument}) {}
 
   /// Gets the text from the editor and returns it as a [String].
   Future<String?> getText() => Future.value(null);
@@ -106,4 +113,19 @@ class HtmlEditorController {
 
   /// Undoes the last action
   void undo() {}
+
+  /// Internal function to change list style on Web
+  void changeListStyle(String changed) {}
+
+  /// Internal function to change line height on Web
+  void changeLineHeight(String changed) {}
+
+  /// Internal function to change text direction on Web
+  void changeTextDirection(String changed) {}
+
+  /// Internal function to change case on Web
+  void changeCase(String changed) {}
+
+  /// Internal function to insert table on Web
+  void insertTable(String dimensions) {}
 }
