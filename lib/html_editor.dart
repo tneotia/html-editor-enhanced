@@ -40,11 +40,51 @@ enum ToolbarType { nativeGrid, nativeScrollable }
 /// Note: This is ignored when [ToolbarType.summernote] is set.
 enum ToolbarPosition { aboveEditor, belowEditor }
 
-enum ButtonType { style, bold, italic, underline, clearFormatting, strikethrough,
-    superscript, subscript, foregroundColor, highlightColor, ul, ol, alignLeft,
-    alignCenter, alignRight, alignJustify, increaseIndent, decreaseIndent, ltr, rtl, link,
-    picture, audio, video, otherFile, table, hr, fullscreen, codeview, undo, redo, help, copy, paste }
+enum ButtonType {
+  style,
+  bold,
+  italic,
+  underline,
+  clearFormatting,
+  strikethrough,
+  superscript,
+  subscript,
+  foregroundColor,
+  highlightColor,
+  ul,
+  ol,
+  alignLeft,
+  alignCenter,
+  alignRight,
+  alignJustify,
+  increaseIndent,
+  decreaseIndent,
+  ltr,
+  rtl,
+  link,
+  picture,
+  audio,
+  video,
+  otherFile,
+  table,
+  hr,
+  fullscreen,
+  codeview,
+  undo,
+  redo,
+  help,
+  copy,
+  paste
+}
 
-enum DropdownType { style, fontName, fontSize, fontSizeUnit, listStyles, lineHeight, caseConverter }
+enum DropdownType {
+  style,
+  fontName,
+  fontSize,
+  fontSizeUnit,
+  listStyles,
+  lineHeight,
+  caseConverter
+}
 
 enum InsertFileType { image, audio, video }

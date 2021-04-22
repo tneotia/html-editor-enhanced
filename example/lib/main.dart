@@ -70,34 +70,39 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
               HtmlEditor(
                 controller: controller,
                 htmlEditorOptions: HtmlEditorOptions(
-                    hint: "Your text here...",
-                    shouldEnsureVisible: true,
-                    //initialText: "<p>text content initial, if any</p>",
+                  hint: "Your text here...",
+                  shouldEnsureVisible: true,
+                  //initialText: "<p>text content initial, if any</p>",
                 ),
                 htmlToolbarOptions: HtmlToolbarOptions(
                   toolbarPosition: ToolbarPosition.aboveEditor, //by default
                   toolbarType: ToolbarType.nativeScrollable, //by default
-                  onButtonPressed: (ButtonType type, bool? status, Function()? updateStatus) {
-                      print("button '${describeEnum(type)}' pressed, the current selected status is $status");
-                      return true;
-                  },
-                  onDropdownChanged: (DropdownType type, dynamic changed, Function(dynamic)? updateSelectedItem) {
-                    print("dropdown '${describeEnum(type)}' changed to $changed");
+                  onButtonPressed: (ButtonType type, bool? status,
+                      Function()? updateStatus) {
+                    print(
+                        "button '${describeEnum(type)}' pressed, the current selected status is $status");
                     return true;
                   },
-                  mediaLinkInsertInterceptor: (String url, InsertFileType type) {
+                  onDropdownChanged: (DropdownType type, dynamic changed,
+                      Function(dynamic)? updateSelectedItem) {
+                    print(
+                        "dropdown '${describeEnum(type)}' changed to $changed");
+                    return true;
+                  },
+                  mediaLinkInsertInterceptor:
+                      (String url, InsertFileType type) {
                     print(url);
                     return true;
                   },
-                  mediaUploadInterceptor: (PlatformFile file, InsertFileType type) async {
+                  mediaUploadInterceptor:
+                      (PlatformFile file, InsertFileType type) async {
                     print(file.name); //filename
                     print(file.size); //size in bytes
                     print(file.extension); //file extension (eg jpeg or mp4)
                     return true;
                   },
                 ),
-                otherOptions:
-                    OtherOptions(height: 550),
+                otherOptions: OtherOptions(height: 550),
                 callbacks: Callbacks(onBeforeCommand: (String? currentHtml) {
                   print("html before change is $currentHtml");
                 }, onChange: (String? changed) {
@@ -151,17 +156,16 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                 }),
                 plugins: [
                   SummernoteAtMention(
-                    getSuggestionsMobile: (String value) {
-                      List<String> mentions = ['test1', 'test2', 'test3'];
-                      return mentions
-                          .where((element) => element.contains(value))
-                          .toList();
-                    },
-                    mentionsWeb: ['test1', 'test2', 'test3'],
-                    onSelect: (String value) {
-                      print(value);
-                    }
-                  ),
+                      getSuggestionsMobile: (String value) {
+                        List<String> mentions = ['test1', 'test2', 'test3'];
+                        return mentions
+                            .where((element) => element.contains(value))
+                            .toList();
+                      },
+                      mentionsWeb: ['test1', 'test2', 'test3'],
+                      onSelect: (String value) {
+                        print(value);
+                      }),
                 ],
               ),
               Padding(

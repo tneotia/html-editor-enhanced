@@ -88,7 +88,7 @@ class ListButtons extends Toolbar {
   final bool ul;
   final bool ol;
   final bool listStyles;
-  
+
   const ListButtons({
     this.ul = true,
     this.ol = true,

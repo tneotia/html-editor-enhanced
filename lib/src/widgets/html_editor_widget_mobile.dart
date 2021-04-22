@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:html_editor_enhanced/html_editor.dart' hide HtmlEditorController;
+import 'package:html_editor_enhanced/html_editor.dart'
+    hide HtmlEditorController;
 import 'package:html_editor_enhanced/src/html_editor_controller_mobile.dart';
 import 'package:html_editor_enhanced/src/widgets/toolbar_widget.dart';
 import 'package:html_editor_enhanced/utils/plugins.dart';
@@ -88,7 +89,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
         docHeight = widget.otherOptions.height;
       });
       await controllerMap[widget.controller].evaluateJavascript(
-          source: "\$('div.note-editable').height(${widget.otherOptions.height - (toolbarKey.currentContext?.size?.height ?? 0)});");
+          source:
+              "\$('div.note-editable').height(${widget.otherOptions.height - (toolbarKey.currentContext?.size?.height ?? 0)});");
     }
   }
 
@@ -108,19 +110,26 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
           decoration: widget.otherOptions.decoration,
           child: Column(
             children: [
-              widget.htmlToolbarOptions.toolbarPosition == ToolbarPosition.aboveEditor ?
-              ToolbarWidget(key: toolbarKey, controller: widget.controller, options: widget.htmlToolbarOptions) :
-              Container(height: 0, width: 0),
+              widget.htmlToolbarOptions.toolbarPosition ==
+                      ToolbarPosition.aboveEditor
+                  ? ToolbarWidget(
+                      key: toolbarKey,
+                      controller: widget.controller,
+                      options: widget.htmlToolbarOptions)
+                  : Container(height: 0, width: 0),
               Expanded(
                 child: InAppWebView(
                   initialFile: filePath,
                   onWebViewCreated: (InAppWebViewController controller) {
                     controllerMap[widget.controller] = controller;
-                    controller.addJavaScriptHandler(handlerName: 'FormatSettings', callback: (e) {
-                      Map<String, dynamic> json = e[0] as Map<String, dynamic>;
-                      if (widget.controller.toolbar != null)
-                        widget.controller.toolbar!.updateToolbar(json);
-                    });
+                    controller.addJavaScriptHandler(
+                        handlerName: 'FormatSettings',
+                        callback: (e) {
+                          Map<String, dynamic> json =
+                              e[0] as Map<String, dynamic>;
+                          if (widget.controller.toolbar != null)
+                            widget.controller.toolbar!.updateToolbar(json);
+                        });
                   },
                   initialOptions: InAppWebViewGroupOptions(
                       crossPlatform: InAppWebViewOptions(
@@ -145,7 +154,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                             context.findRenderObject()!,
                           );
                     }
-                    if (widget.htmlEditorOptions.adjustHeightForKeyboard && mounted) {
+                    if (widget.htmlEditorOptions.adjustHeightForKeyboard &&
+                        mounted) {
                       visibleStream.stream.drain();
                       double visibleDecimal = await visibleStream.stream.first;
                       double newHeight = widget.otherOptions.height;
@@ -156,7 +166,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                         //todo add support for traditional summernote controls again?
                         await controller.evaluateJavascript(
                             source:
-                            "\$('div.note-editable').height(${max(docHeight - (toolbarKey.currentContext?.size?.height ?? 0), 30)});");
+                                "\$('div.note-editable').height(${max(docHeight - (toolbarKey.currentContext?.size?.height ?? 0), 30)});");
                       }
                     }
                   },
@@ -353,7 +363,9 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                             window.flutter_inappwebview.callHandler('FormatSettings', message);
                           }
                       """);
-                      controller.evaluateJavascript(source: "document.onselectionchange = onSelectionChange; console.log('done');");
+                      controller.evaluateJavascript(
+                          source:
+                              "document.onselectionchange = onSelectionChange; console.log('done');");
                       if ((Theme.of(context).brightness == Brightness.dark ||
                               widget.htmlEditorOptions.darkMode == true) &&
                           widget.htmlEditorOptions.darkMode != false) {
@@ -364,7 +376,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       }
                       //set the text once the editor is loaded
                       if (widget.htmlEditorOptions.initialText != null)
-                        widget.controller.setText(widget.htmlEditorOptions.initialText!);
+                        widget.controller
+                            .setText(widget.htmlEditorOptions.initialText!);
                       //adjusts the height of the editor when it is loaded
                       if (widget.htmlEditorOptions.autoAdjustHeight) {
                         controller.addJavaScriptHandler(
@@ -374,7 +387,11 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                 resetHeight();
                               } else {
                                 docHeight =
-                                    (double.tryParse(height.first.toString()) ?? widget.otherOptions.height) + (toolbarKey.currentContext?.size?.height ?? 0);
+                                    (double.tryParse(height.first.toString()) ??
+                                            widget.otherOptions.height) +
+                                        (toolbarKey
+                                                .currentContext?.size?.height ??
+                                            0);
                               }
                             });
                         controller.evaluateJavascript(
@@ -424,9 +441,13 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                   },
                 ),
               ),
-              widget.htmlToolbarOptions.toolbarPosition == ToolbarPosition.belowEditor ?
-              ToolbarWidget(key: toolbarKey, controller: widget.controller, options: widget.htmlToolbarOptions) :
-              Container(height: 0, width: 0),
+              widget.htmlToolbarOptions.toolbarPosition ==
+                      ToolbarPosition.belowEditor
+                  ? ToolbarWidget(
+                      key: toolbarKey,
+                      controller: widget.controller,
+                      options: widget.htmlToolbarOptions)
+                  : Container(height: 0, width: 0),
             ],
           ),
         ),

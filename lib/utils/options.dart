@@ -118,7 +118,7 @@ class HtmlToolbarOptions {
     this.renderBorder = false,
     this.textStyle,
     this.separatorWidget =
-      const VerticalDivider(indent: 2, endIndent: 2, color: Colors.grey),
+        const VerticalDivider(indent: 2, endIndent: 2, color: Colors.grey),
     this.renderSeparatorWidget = true,
     this.toolbarItemHeight = 36,
     this.gridViewHorizontalSpacing = 5,
@@ -174,7 +174,8 @@ class HtmlToolbarOptions {
   /// (true = continue with internal handler, false = do not use internal handler)
   ///
   /// If no interceptor is set, the plugin uses the internal handler.
-  final FutureOr<bool> Function(String, InsertFileType)? mediaLinkInsertInterceptor;
+  final FutureOr<bool> Function(String, InsertFileType)?
+      mediaLinkInsertInterceptor;
 
   /// Allows you to intercept any image/video/audio files being inserted into the editor.
   /// The function passes the PlatformFile class, which contains all the file data
@@ -185,7 +186,8 @@ class HtmlToolbarOptions {
   /// (true = continue with internal handler, false = do not use internal handler)
   ///
   /// If no interceptor is set, the plugin uses the internal handler.
-  final FutureOr<bool> Function(PlatformFile, InsertFileType)? mediaUploadInterceptor;
+  final FutureOr<bool> Function(PlatformFile, InsertFileType)?
+      mediaUploadInterceptor;
 
   /// Allows you to intercept any button press. The function passes the ButtonType
   /// enum, which tells you which button was pressed, the current selected status of
@@ -200,7 +202,8 @@ class HtmlToolbarOptions {
   /// (true = continue with internal handler, false = do not use internal handler)
   ///
   /// If no interceptor is set, the plugin uses the internal handler.
-  final FutureOr<bool> Function(ButtonType, bool?, void Function()?)? onButtonPressed;
+  final FutureOr<bool> Function(ButtonType, bool?, void Function()?)?
+      onButtonPressed;
 
   /// Allows you to intercept any dropdown changes. The function passes the
   /// DropdownType enum, which tells you which dropdown was changed,
@@ -214,7 +217,8 @@ class HtmlToolbarOptions {
   /// (true = continue with internal handler, false = do not use internal handler)
   ///
   /// If no interceptor is set, the plugin uses the internal handler.
-  final FutureOr<bool> Function(DropdownType, dynamic, void Function(dynamic)?)? onDropdownChanged;
+  final FutureOr<bool> Function(DropdownType, dynamic, void Function(dynamic)?)?
+      onDropdownChanged;
 
   /// Called when a link is inserted for a file using the "other file" button.
   ///

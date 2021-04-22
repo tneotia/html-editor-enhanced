@@ -181,32 +181,43 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
   /// A function to quickly call a document.execCommand function in a readable format
   void execCommand(String command, {String? argument}) {
-    _evaluateJavascriptWeb(data: {"type": "toIframe: execCommand", "command": command, "argument": argument});
+    _evaluateJavascriptWeb(data: {
+      "type": "toIframe: execCommand",
+      "command": command,
+      "argument": argument
+    });
   }
 
   /// Internal function to change list style on Web
   void changeListStyle(String changed) {
-    _evaluateJavascriptWeb(data: {"type": "toIframe: changeListStyle", "changed": changed});
+    _evaluateJavascriptWeb(
+        data: {"type": "toIframe: changeListStyle", "changed": changed});
   }
 
   /// Internal function to change line height on Web
   void changeLineHeight(String changed) {
-    _evaluateJavascriptWeb(data: {"type": "toIframe: changeLineHeight", "changed": changed});
+    _evaluateJavascriptWeb(
+        data: {"type": "toIframe: changeLineHeight", "changed": changed});
   }
 
   /// Internal function to change text direction on Web
   void changeTextDirection(String direction) {
-    _evaluateJavascriptWeb(data: {"type": "toIframe: changeTextDirection", "direction": direction});
+    _evaluateJavascriptWeb(data: {
+      "type": "toIframe: changeTextDirection",
+      "direction": direction
+    });
   }
 
   /// Internal function to change case on Web
   void changeCase(String changed) {
-    _evaluateJavascriptWeb(data: {"type": "toIframe: changeCase", "case": changed});
+    _evaluateJavascriptWeb(
+        data: {"type": "toIframe: changeCase", "case": changed});
   }
 
   /// Internal function to insert table on Web
   void insertTable(String dimensions) {
-    _evaluateJavascriptWeb(data: {"type": "toIframe: insertTable", "dimensions": dimensions});
+    _evaluateJavascriptWeb(
+        data: {"type": "toIframe: insertTable", "dimensions": dimensions});
   }
 
   /// Add a notification to the bottom of the editor. This is styled similar to

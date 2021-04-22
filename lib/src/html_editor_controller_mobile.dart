@@ -42,7 +42,9 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
   /// A function to quickly call a document.execCommand function in a readable format
   void execCommand(String command, {String? argument}) {
-    _evaluateJavascript(source: "document.execCommand('$command', false${argument == null ? "" : ", '$argument'"});");
+    _evaluateJavascript(
+        source:
+            "document.execCommand('$command', false${argument == null ? "" : ", '$argument'"});");
   }
 
   /// Gets the text from the editor and returns it as a [String].

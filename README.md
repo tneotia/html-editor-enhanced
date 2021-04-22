@@ -946,8 +946,6 @@ If you do find any issues, please report them in the Issues tab and I will see i
 
 2. If you are making a cross platform implementation and are using either the `editorController` getter or the `reloadWeb()` method, use `kIsWeb` in your app to ensure you are calling these in the correct platform.
 
-3. Inline notifications are finnicky on mobile. It seems that adding/removing a notification adds 2 px to the height of the editor, even though the height is recalculated each time. At the moment I have not found a workaround. This behavior is not present on Web, however.
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

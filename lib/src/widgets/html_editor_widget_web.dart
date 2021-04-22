@@ -391,7 +391,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     """;
     String filePath =
         'packages/html_editor_enhanced/assets/summernote-no-plugins.html';
-    if (widget.htmlEditorOptions.filePath != null) filePath = widget.htmlEditorOptions.filePath!;
+    if (widget.htmlEditorOptions.filePath != null)
+      filePath = widget.htmlEditorOptions.filePath!;
     String htmlString = await rootBundle.loadString(filePath);
     htmlString = htmlString
         .replaceFirst("<!--darkCSS-->", darkCSS)
@@ -459,32 +460,37 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           : widget.otherOptions.height,
       child: Column(
         children: <Widget>[
-          widget.htmlToolbarOptions.toolbarPosition == ToolbarPosition.aboveEditor ?
-          ToolbarWidget(key: toolbarKey, controller: widget.controller, options: widget.htmlToolbarOptions) :
-          Container(height: 0, width: 0),
+          widget.htmlToolbarOptions.toolbarPosition ==
+                  ToolbarPosition.aboveEditor
+              ? ToolbarWidget(
+                  key: toolbarKey,
+                  controller: widget.controller,
+                  options: widget.htmlToolbarOptions)
+              : Container(height: 0, width: 0),
           Expanded(
-            child: Directionality(
-              textDirection: TextDirection.ltr,
-              child: FutureBuilder<bool>(
-                future: summernoteInit,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return HtmlElementView(
-                      viewType: createdViewId,
-                    );
-                  } else {
-                    return Container(
-                        height: widget.htmlEditorOptions.autoAdjustHeight
-                            ? actualHeight
-                            : widget.otherOptions.height);
-                  }
-                }
-              )
-            )
-          ),
-          widget.htmlToolbarOptions.toolbarPosition == ToolbarPosition.belowEditor ?
-          ToolbarWidget(key: toolbarKey, controller: widget.controller, options: widget.htmlToolbarOptions) :
-          Container(height: 0, width: 0),
+              child: Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: FutureBuilder<bool>(
+                      future: summernoteInit,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return HtmlElementView(
+                            viewType: createdViewId,
+                          );
+                        } else {
+                          return Container(
+                              height: widget.htmlEditorOptions.autoAdjustHeight
+                                  ? actualHeight
+                                  : widget.otherOptions.height);
+                        }
+                      }))),
+          widget.htmlToolbarOptions.toolbarPosition ==
+                  ToolbarPosition.belowEditor
+              ? ToolbarWidget(
+                  key: toolbarKey,
+                  controller: widget.controller,
+                  options: widget.htmlToolbarOptions)
+              : Container(height: 0, width: 0),
         ],
       ),
     );
@@ -612,7 +618,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           final docHeight = data["height"] ?? actualHeight;
           if ((docHeight != null && docHeight != actualHeight) && mounted) {
             setState(() {
-              actualHeight = docHeight + (toolbarKey.currentContext?.size?.height ?? 0);
+              actualHeight =
+                  docHeight + (toolbarKey.currentContext?.size?.height ?? 0);
             });
           }
         }
