@@ -113,6 +113,10 @@ Additional setup is required on iOS to allow the user to pick files from storage
 
 For images, the package uses `FileType.image`, for video `FileType.video`, for audio `FileType.audio`, and for any other file `FileType.any`. You can just complete setup for the specific buttons you plan to enable in the editor.
 
+#### v2.0.0 Migration Guide:
+
+[Migration Guide](https://github.com/tneotia/html-editor-enhanced/wiki/v2.0.0-Migration-Guide)
+
 ## Basic Usage
 
 ```dart
@@ -903,7 +907,7 @@ class _ExampleState extends State<Example> {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="description" content="Flutter Summernote HTML Editor">
-    <meta name="author" content="xrb21">
+    <meta name="author" content="tneotia">
     <title>Summernote Text Editor HTML</title>
     <script src="assets/packages/html_editor_enhanced/assets/jquery.min.js"></script>
     <link href="assets/packages/html_editor_enhanced/assets/summernote-lite.min.css" rel="stylesheet">

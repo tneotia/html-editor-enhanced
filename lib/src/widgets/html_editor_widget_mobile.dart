@@ -149,13 +149,15 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       visibleStream.stream.drain();
                       double visibleDecimal = await visibleStream.stream.first;
                       double newHeight = widget.otherOptions.height;
-                      setState(() {
-                        docHeight = newHeight * visibleDecimal;
-                      });
-                      //todo add support for traditional summernote controls again?
-                      await controller.evaluateJavascript(
-                          source:
-                          "\$('div.note-editable').height(${max(docHeight - (toolbarKey.currentContext?.size?.height ?? 0), 30)});");
+                      if (visibleDecimal > 0.1) {
+                        setState(() {
+                          docHeight = newHeight * visibleDecimal;
+                        });
+                        //todo add support for traditional summernote controls again?
+                        await controller.evaluateJavascript(
+                            source:
+                            "\$('div.note-editable').height(${max(docHeight - (toolbarKey.currentContext?.size?.height ?? 0), 30)});");
+                      }
                     }
                   },
                   onLoadStop:
@@ -372,7 +374,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                 resetHeight();
                               } else {
                                 docHeight =
-                                    double.tryParse(height.first.toString()) ?? widget.otherOptions.height - (toolbarKey.currentContext?.size?.height ?? 0);
+                                    (double.tryParse(height.first.toString()) ?? widget.otherOptions.height) + (toolbarKey.currentContext?.size?.height ?? 0);
                               }
                             });
                         controller.evaluateJavascript(

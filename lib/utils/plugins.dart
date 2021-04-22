@@ -34,7 +34,7 @@ class SummernoteAtMention extends Plugins {
 
   @override
   String getHeadString() {
-    return "<script src=\"assets/packages/html_editor_enhanced/assets/plugins/summernote-at-mention/bundle.js\"></script>";
+    return "<script src=\"assets/packages/html_editor_enhanced/assets/plugins/summernote-at-mention/summernote-at-mention.js\"></script>";
   }
 
   @override

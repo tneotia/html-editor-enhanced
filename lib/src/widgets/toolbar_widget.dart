@@ -342,7 +342,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           decoration: !widget.options.renderBorder ? null :
           widget.options.dropdownBoxDecoration ?? BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
-              border: Border.all(color: ToggleButtonsTheme.of(context).borderColor ?? Colors.grey[800]!)
+              border: Border.all(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.12))
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
@@ -413,7 +413,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           decoration: !widget.options.renderBorder ? null :
           widget.options.dropdownBoxDecoration ?? BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
-              border: Border.all(color: ToggleButtonsTheme.of(context).borderColor ?? Colors.grey[800]!)
+              border: Border.all(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.12))
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
@@ -458,7 +458,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           decoration: !widget.options.renderBorder ? null :
           widget.options.dropdownBoxDecoration ?? BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
-              border: Border.all(color: ToggleButtonsTheme.of(context).borderColor ?? Colors.grey[800]!)
+              border: Border.all(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.12))
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<double>(
@@ -552,7 +552,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           decoration: !widget.options.renderBorder ? null :
           widget.options.dropdownBoxDecoration ?? BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
-              border: Border.all(color: ToggleButtonsTheme.of(context).borderColor ?? Colors.grey[800]!)
+              border: Border.all(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.12))
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
@@ -890,7 +890,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             decoration: !widget.options.renderBorder ? null :
             widget.options.dropdownBoxDecoration ?? BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor,
-                border: Border.all(color: ToggleButtonsTheme.of(context).borderColor ?? Colors.grey[800]!)
+                border: Border.all(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.12))
             ),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
@@ -1050,7 +1050,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             decoration: !widget.options.renderBorder ? null :
             widget.options.dropdownBoxDecoration ?? BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor,
-                border: Border.all(color: ToggleButtonsTheme.of(context).borderColor ?? Colors.grey[800]!)
+                border: Border.all(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.12))
             ),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<double>(
@@ -1157,7 +1157,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             decoration: !widget.options.renderBorder ? null :
             widget.options.dropdownBoxDecoration ?? BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor,
-                border: Border.all(color: ToggleButtonsTheme.of(context).borderColor ?? Colors.grey[800]!)
+                border: Border.all(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.12))
             ),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
@@ -1324,7 +1324,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                                   openNewTab = !openNewTab;
                                                 });
                                               },
-                                              child: Text("Open in new window"),
+                                              child: Text("Open in new window", style: TextStyle(color: Theme.of(context).textTheme.bodyText1?.color)),
                                             ),
                                           ],
                                         ),
@@ -1409,7 +1409,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                                   });
                                                 }
                                               },
-                                              child: Text("Choose image"),
+                                              child: Text("Choose image", style: TextStyle(color: Theme.of(context).textTheme.bodyText1?.color)),
                                             ),
                                             suffixIcon: result != null ?
                                             IconButton(
@@ -1530,7 +1530,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                                   });
                                                 }
                                               },
-                                              child: Text("Choose audio"),
+                                              child: Text("Choose audio", style: TextStyle(color: Theme.of(context).textTheme.bodyText1?.color)),
                                             ),
                                             suffixIcon: result != null ?
                                             IconButton(
@@ -1651,7 +1651,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                                   });
                                                 }
                                               },
-                                              child: Text("Choose video"),
+                                              child: Text("Choose video", style: TextStyle(color: Theme.of(context).textTheme.bodyText1?.color)),
                                             ),
                                             suffixIcon: result != null ?
                                             IconButton(
@@ -1772,7 +1772,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                                   });
                                                 }
                                               },
-                                              child: Text("Choose file"),
+                                              child: Text("Choose file", style: TextStyle(color: Theme.of(context).textTheme.bodyText1?.color)),
                                             ),
                                             suffixIcon: result != null ?
                                             IconButton(

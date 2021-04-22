@@ -612,7 +612,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           final docHeight = data["height"] ?? actualHeight;
           if ((docHeight != null && docHeight != actualHeight) && mounted) {
             setState(() {
-              actualHeight = docHeight - (toolbarKey.currentContext?.size?.height ?? 0);
+              actualHeight = docHeight + (toolbarKey.currentContext?.size?.height ?? 0);
             });
           }
         }
