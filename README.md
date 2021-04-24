@@ -77,6 +77,8 @@ Note that the API shown in this README.md file shows only a part of the document
 
 - [Notes](#notes)
 
+- [FAQ](#faq)
+
 - [License](#license)
 
 - [Contribution Guide](#contribution-guide)
@@ -220,6 +222,8 @@ Parameter | Type | Default | Description
 **filePath** | `String` | `null` | Allows you to specify your own HTML to be loaded into the webview. You can create a custom page with Summernote, or theoretically load any other editor/HTML.
 **hint** | `String` | empty | Placeholder hint text
 **initialText** | `String` | empty | Initial text content for text editor
+**mobileContextMenu** | `ContextMenu` | `null` | Customize the context menu when a user selects text in the editor. See docs for `ContextMenu` [here](https://inappwebview.dev/docs/context-menu/basic-usage/)
+**mobileInitialScripts** | `UnmodifiableListView<UserScript>` | `null` | Easily inject scripts to perform actions like changing the background color of the editor. See docs for `UserScript` [here](https://inappwebview.dev/docs/javascript/user-scripts/)
 **shouldEnsureVisible** | `bool` | `false` | Scroll the parent `Scrollable` to the top of the editor widget when the webview is focused. Do *not* use this parameter if `HtmlEditor` is not inside a `Scrollable`. See [below](#shouldensurevisible) for more details.
 
 ### Parameters - `HtmlToolbarOptions`
@@ -945,6 +949,20 @@ If you do find any issues, please report them in the Issues tab and I will see i
 1. When switching between dark and light mode, a reload is required for the HTML editor to switch to the correct color scheme. You can implement this programmatically in Flutter Mobile: `<controller name>.editorController.reload()`, or in Flutter Web: `<controller name>.reloadWeb()`. This will reset the editor! You can save the current text, reload, and then set the text if you'd like to maintain the state.
 
 2. If you are making a cross platform implementation and are using either the `editorController` getter or the `reloadWeb()` method, use `kIsWeb` in your app to ensure you are calling these in the correct platform.
+
+## FAQ
+
+<details><summary>View answered questions</summary>
+
+* How can I display the final output of the editor? - Examples given for both raw HTML output and rendered HTML output - https://github.com/tneotia/html-editor-enhanced/issues/2
+
+* How can I set the editor to "fullscreen" by default? - https://github.com/tneotia/html-editor-enhanced/issues/4
+
+* Clicking on the editor makes the cursor appear on the second line relative with the hint. Is there a workaround? - https://github.com/tneotia/html-editor-enhanced/issues/24
+
+* How can I give the editor box a custom background color? - https://github.com/tneotia/html-editor-enhanced/issues/27
+
+</details>
 
 ## License
 

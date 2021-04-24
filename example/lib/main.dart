@@ -204,7 +204,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                         var txt = await controller.getText();
                         if (txt.contains('src=\"data:')) {
                           txt =
-                          '<text removed due to base-64 data, displaying the text could cause the app to crash>';
+                              '<text removed due to base-64 data, displaying the text could cause the app to crash>';
                         }
                         setState(() {
                           result = txt;

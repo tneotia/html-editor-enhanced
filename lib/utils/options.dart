@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 
 /// Options that modify the editor and its behavior
@@ -13,6 +15,8 @@ class HtmlEditorOptions {
     this.filePath,
     this.hint,
     this.initialText,
+    this.mobileContextMenu,
+    this.mobileInitialScripts,
     this.shouldEnsureVisible = false,
   });
 
@@ -56,6 +60,12 @@ class HtmlEditorOptions {
 
   /// The initial text that is be supplied to the Html editor.
   final String? initialText;
+
+  /// Customize the context menu for selected text on mobile
+  final ContextMenu? mobileContextMenu;
+
+  /// Initial JS to inject into the editor.
+  final UnmodifiableListView<UserScript>? mobileInitialScripts;
 
   /// Specifies whether the widget should scroll to reveal the HTML editor when
   /// it is focused or the text content is changed.

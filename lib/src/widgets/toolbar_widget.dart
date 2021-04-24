@@ -124,7 +124,6 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   /// Updates the toolbar from the JS handler on mobile and the onMessage
   /// listener on web
   void updateToolbar(Map<String, dynamic> json) {
-    print(json);
     //get parent element
     String parentElem = json['style'] ?? '';
     //get font name
@@ -160,7 +159,6 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
     }
     //check the font name if it matches one of the predetermined fonts and update the toolbar
     if (['Courier New', 'sans-serif', 'Times New Roman'].contains(fontName)) {
-      print('fired');
       setState(() {
         _fontNameSelectedItem = fontName;
       });

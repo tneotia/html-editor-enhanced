@@ -141,6 +141,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                         useHybridComposition: true,
                         loadWithOverviewMode: true,
                       )),
+                  initialUserScripts: widget.htmlEditorOptions.mobileInitialScripts,
+                  contextMenu: widget.htmlEditorOptions.mobileContextMenu,
                   gestureRecognizers: {
                     Factory<VerticalDragGestureRecognizer>(
                         () => VerticalDragGestureRecognizer())
