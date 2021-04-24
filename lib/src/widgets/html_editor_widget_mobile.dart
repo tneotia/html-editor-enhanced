@@ -145,7 +145,9 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                   contextMenu: widget.htmlEditorOptions.mobileContextMenu,
                   gestureRecognizers: {
                     Factory<VerticalDragGestureRecognizer>(
-                        () => VerticalDragGestureRecognizer())
+                        () => VerticalDragGestureRecognizer()),
+                    Factory<LongPressGestureRecognizer>(
+                        () => LongPressGestureRecognizer(duration: widget.htmlEditorOptions.mobileLongPressDuration)),
                   },
                   onConsoleMessage: (controller, message) {
                     print(message.message);

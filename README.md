@@ -223,6 +223,7 @@ Parameter | Type | Default | Description
 **hint** | `String` | empty | Placeholder hint text
 **initialText** | `String` | empty | Initial text content for text editor
 **mobileContextMenu** | `ContextMenu` | `null` | Customize the context menu when a user selects text in the editor. See docs for `ContextMenu` [here](https://inappwebview.dev/docs/context-menu/basic-usage/)
+**mobileLongPressDuration** | `Duration` | `Duration(milliseconds: 500)` | Set the duration until a long-press is recognized
 **mobileInitialScripts** | `UnmodifiableListView<UserScript>` | `null` | Easily inject scripts to perform actions like changing the background color of the editor. See docs for `UserScript` [here](https://inappwebview.dev/docs/javascript/user-scripts/)
 **shouldEnsureVisible** | `bool` | `false` | Scroll the parent `Scrollable` to the top of the editor widget when the webview is focused. Do *not* use this parameter if `HtmlEditor` is not inside a `Scrollable`. See [below](#shouldensurevisible) for more details.
 

@@ -16,6 +16,7 @@ class HtmlEditorOptions {
     this.hint,
     this.initialText,
     this.mobileContextMenu,
+    this.mobileLongPressDuration,
     this.mobileInitialScripts,
     this.shouldEnsureVisible = false,
   });
@@ -63,6 +64,11 @@ class HtmlEditorOptions {
 
   /// Customize the context menu for selected text on mobile
   final ContextMenu? mobileContextMenu;
+
+  /// Set the duration until a long-press is recognized.
+  ///
+  /// The default value is 500ms.
+  final Duration? mobileLongPressDuration;
 
   /// Initial JS to inject into the editor.
   final UnmodifiableListView<UserScript>? mobileInitialScripts;
