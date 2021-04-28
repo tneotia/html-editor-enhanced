@@ -13,12 +13,12 @@ import 'package:pointer_interceptor/pointer_interceptor.dart';
 class ToolbarWidget extends StatefulWidget {
   /// The [HtmlEditorController] is mainly used to call the [execCommand] method
   final HtmlEditorController controller;
-  final HtmlToolbarOptions options;
+  final HtmlToolbarOptions htmlToolbarOptions;
 
   const ToolbarWidget({
     Key? key,
     required this.controller,
-    required this.options,
+    required this.htmlToolbarOptions,
   }) : super(key: key);
 
   @override
@@ -88,7 +88,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   @override
   void initState() {
     widget.controller.toolbar = this;
-    for (var t in widget.options.defaultToolbarButtons) {
+    for (var t in widget.htmlToolbarOptions.defaultToolbarButtons) {
       if (t is FontButtons) {
         _fontSelected = List<bool>.filled(t.getIcons1().length, false);
         _miscFontSelected = List<bool>.filled(t.getIcons2().length, false);
@@ -242,7 +242,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
     }
     //use the remaining bool lists to update the selected items accordingly
     setState(() {
-      for (var t in widget.options.defaultToolbarButtons) {
+      for (var t in widget.htmlToolbarOptions.defaultToolbarButtons) {
         if (t is FontButtons) {
           for (var i = 0; i < _fontSelected.length; i++) {
             if (t.getIcons1()[i].icon == Icons.format_bold) {
@@ -299,7 +299,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.options.toolbarType == ToolbarType.nativeGrid) {
+    if (widget.htmlToolbarOptions.toolbarType == ToolbarType.nativeGrid) {
       return PointerInterceptor(
         child: AbsorbPointer(
           absorbing: !_enabled,
@@ -308,22 +308,22 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             child: Padding(
               padding: const EdgeInsets.all(5.0),
               child: Wrap(
-                runSpacing: widget.options.gridViewVerticalSpacing,
-                spacing: widget.options.gridViewHorizontalSpacing,
+                runSpacing: widget.htmlToolbarOptions.gridViewVerticalSpacing,
+                spacing: widget.htmlToolbarOptions.gridViewHorizontalSpacing,
                 children: _buildChildren(),
               ),
             ),
           ),
         ),
       );
-    } else {
+    } else if (widget.htmlToolbarOptions.toolbarType == ToolbarType.nativeScrollable) {
       return PointerInterceptor(
         child: AbsorbPointer(
           absorbing: !_enabled,
           child: Opacity(
             opacity: _enabled ? 1 : 0.5,
             child: Container(
-              height: widget.options.toolbarItemHeight + 15,
+              height: widget.htmlToolbarOptions.toolbarItemHeight + 15,
               child: Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: CustomScrollView(
@@ -344,18 +344,19 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         ),
       );
     }
+    return Container(height: 0, width: 0);
   }
 
   List<Widget> _buildChildren() {
     var toolbarChildren = <Widget>[];
-    for (var t in widget.options.defaultToolbarButtons) {
+    for (var t in widget.htmlToolbarOptions.defaultToolbarButtons) {
       if (t is StyleButtons) {
         toolbarChildren.add(Container(
           padding: const EdgeInsets.only(left: 8.0),
-          height: widget.options.toolbarItemHeight,
-          decoration: !widget.options.renderBorder
+          height: widget.htmlToolbarOptions.toolbarItemHeight,
+          decoration: !widget.htmlToolbarOptions.renderBorder
               ? null
-              : widget.options.dropdownBoxDecoration ??
+              : widget.htmlToolbarOptions.dropdownBoxDecoration ??
                   BoxDecoration(
                       color: Theme.of(context).scaffoldBackgroundColor,
                       border: Border.all(
@@ -365,15 +366,15 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                               .withOpacity(0.12))),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
-              elevation: widget.options.dropdownElevation,
-              icon: widget.options.dropdownIcon,
-              iconEnabledColor: widget.options.dropdownIconColor,
-              iconSize: widget.options.dropdownIconSize,
-              itemHeight: widget.options.dropdownItemHeight,
-              focusColor: widget.options.dropdownFocusColor,
-              dropdownColor: widget.options.dropdownBackgroundColor,
+              elevation: widget.htmlToolbarOptions.dropdownElevation,
+              icon: widget.htmlToolbarOptions.dropdownIcon,
+              iconEnabledColor: widget.htmlToolbarOptions.dropdownIconColor,
+              iconSize: widget.htmlToolbarOptions.dropdownIconSize,
+              itemHeight: widget.htmlToolbarOptions.dropdownItemHeight,
+              focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
+              dropdownColor: widget.htmlToolbarOptions.dropdownBackgroundColor,
               //menuMaxHeight: widget.options.dropdownMenuMaxHeight,
-              style: widget.options.textStyle,
+              style: widget.htmlToolbarOptions.textStyle,
               items: [
                 DropdownMenuItem(
                     value: 'p',
@@ -457,7 +458,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
 
                 if (changed != null) {
-                  var proceed = await widget.options.onDropdownChanged?.call(
+                  var proceed = await widget.htmlToolbarOptions.onDropdownChanged?.call(
                           DropdownType.style, changed, updateSelectedItem) ??
                       true;
                   if (proceed) {
@@ -475,10 +476,10 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         if (t.fontName) {
           toolbarChildren.add(Container(
             padding: const EdgeInsets.only(left: 8.0),
-            height: widget.options.toolbarItemHeight,
-            decoration: !widget.options.renderBorder
+            height: widget.htmlToolbarOptions.toolbarItemHeight,
+            decoration: !widget.htmlToolbarOptions.renderBorder
                 ? null
-                : widget.options.dropdownBoxDecoration ??
+                : widget.htmlToolbarOptions.dropdownBoxDecoration ??
                     BoxDecoration(
                         color: Theme.of(context).scaffoldBackgroundColor,
                         border: Border.all(
@@ -488,15 +489,15 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 .withOpacity(0.12))),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
-                elevation: widget.options.dropdownElevation,
-                icon: widget.options.dropdownIcon,
-                iconEnabledColor: widget.options.dropdownIconColor,
-                iconSize: widget.options.dropdownIconSize,
-                itemHeight: widget.options.dropdownItemHeight,
-                focusColor: widget.options.dropdownFocusColor,
-                dropdownColor: widget.options.dropdownBackgroundColor,
+                elevation: widget.htmlToolbarOptions.dropdownElevation,
+                icon: widget.htmlToolbarOptions.dropdownIcon,
+                iconEnabledColor: widget.htmlToolbarOptions.dropdownIconColor,
+                iconSize: widget.htmlToolbarOptions.dropdownIconSize,
+                itemHeight: widget.htmlToolbarOptions.dropdownItemHeight,
+                focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
+                dropdownColor: widget.htmlToolbarOptions.dropdownBackgroundColor,
                 //menuMaxHeight: widget.options.dropdownMenuMaxHeight,
-                style: widget.options.textStyle,
+                style: widget.htmlToolbarOptions.textStyle,
                 items: [
                   DropdownMenuItem(
                     value: 'Courier New',
@@ -528,7 +529,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   }
 
                   if (changed != null) {
-                    var proceed = await widget.options.onDropdownChanged?.call(
+                    var proceed = await widget.htmlToolbarOptions.onDropdownChanged?.call(
                             DropdownType.fontName,
                             changed,
                             updateSelectedItem) ??
@@ -547,10 +548,10 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         if (t.fontSize) {
           toolbarChildren.add(Container(
             padding: const EdgeInsets.only(left: 8.0),
-            height: widget.options.toolbarItemHeight,
-            decoration: !widget.options.renderBorder
+            height: widget.htmlToolbarOptions.toolbarItemHeight,
+            decoration: !widget.htmlToolbarOptions.renderBorder
                 ? null
-                : widget.options.dropdownBoxDecoration ??
+                : widget.htmlToolbarOptions.dropdownBoxDecoration ??
                     BoxDecoration(
                         color: Theme.of(context).scaffoldBackgroundColor,
                         border: Border.all(
@@ -560,15 +561,15 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 .withOpacity(0.12))),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<double>(
-                elevation: widget.options.dropdownElevation,
-                icon: widget.options.dropdownIcon,
-                iconEnabledColor: widget.options.dropdownIconColor,
-                iconSize: widget.options.dropdownIconSize,
-                itemHeight: widget.options.dropdownItemHeight,
-                focusColor: widget.options.dropdownFocusColor,
-                dropdownColor: widget.options.dropdownBackgroundColor,
+                elevation: widget.htmlToolbarOptions.dropdownElevation,
+                icon: widget.htmlToolbarOptions.dropdownIcon,
+                iconEnabledColor: widget.htmlToolbarOptions.dropdownIconColor,
+                iconSize: widget.htmlToolbarOptions.dropdownIconSize,
+                itemHeight: widget.htmlToolbarOptions.dropdownItemHeight,
+                focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
+                dropdownColor: widget.htmlToolbarOptions.dropdownBackgroundColor,
                 //menuMaxHeight: widget.options.dropdownMenuMaxHeight,
-                style: widget.options.textStyle,
+                style: widget.htmlToolbarOptions.textStyle,
                 items: [
                   DropdownMenuItem(
                     value: 1,
@@ -625,7 +626,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
 
                   if (changed != null) {
                     var intChanged = changed.toInt();
-                    var proceed = await widget.options.onDropdownChanged?.call(
+                    var proceed = await widget.htmlToolbarOptions.onDropdownChanged?.call(
                             DropdownType.fontSize,
                             changed,
                             updateSelectedItem) ??
@@ -667,10 +668,10 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         if (t.fontSizeUnit) {
           toolbarChildren.add(Container(
             padding: const EdgeInsets.only(left: 8.0),
-            height: widget.options.toolbarItemHeight,
-            decoration: !widget.options.renderBorder
+            height: widget.htmlToolbarOptions.toolbarItemHeight,
+            decoration: !widget.htmlToolbarOptions.renderBorder
                 ? null
-                : widget.options.dropdownBoxDecoration ??
+                : widget.htmlToolbarOptions.dropdownBoxDecoration ??
                     BoxDecoration(
                         color: Theme.of(context).scaffoldBackgroundColor,
                         border: Border.all(
@@ -680,15 +681,15 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 .withOpacity(0.12))),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
-                elevation: widget.options.dropdownElevation,
-                icon: widget.options.dropdownIcon,
-                iconEnabledColor: widget.options.dropdownIconColor,
-                iconSize: widget.options.dropdownIconSize,
-                itemHeight: widget.options.dropdownItemHeight,
-                focusColor: widget.options.dropdownFocusColor,
-                dropdownColor: widget.options.dropdownBackgroundColor,
+                elevation: widget.htmlToolbarOptions.dropdownElevation,
+                icon: widget.htmlToolbarOptions.dropdownIcon,
+                iconEnabledColor: widget.htmlToolbarOptions.dropdownIconColor,
+                iconSize: widget.htmlToolbarOptions.dropdownIconSize,
+                itemHeight: widget.htmlToolbarOptions.dropdownItemHeight,
+                focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
+                dropdownColor: widget.htmlToolbarOptions.dropdownBackgroundColor,
                 //menuMaxHeight: widget.options.dropdownMenuMaxHeight,
-                style: widget.options.textStyle,
+                style: widget.htmlToolbarOptions.textStyle,
                 items: [
                   DropdownMenuItem(
                     value: 'pt',
@@ -710,7 +711,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   }
 
                   if (changed != null) {
-                    var proceed = await widget.options.onDropdownChanged?.call(
+                    var proceed = await widget.htmlToolbarOptions.onDropdownChanged?.call(
                             DropdownType.fontSizeUnit,
                             changed,
                             updateSelectedItem) ??
@@ -729,22 +730,22 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         if (t.bold || t.italic || t.underline || t.clearAll) {
           toolbarChildren.add(ToggleButtons(
             constraints: BoxConstraints.tightFor(
-              width: widget.options.toolbarItemHeight - 2,
-              height: widget.options.toolbarItemHeight - 2,
+              width: widget.htmlToolbarOptions.toolbarItemHeight - 2,
+              height: widget.htmlToolbarOptions.toolbarItemHeight - 2,
             ),
-            color: widget.options.buttonColor,
-            selectedColor: widget.options.buttonSelectedColor,
-            fillColor: widget.options.buttonFillColor,
-            focusColor: widget.options.buttonFocusColor,
-            highlightColor: widget.options.buttonHighlightColor,
-            hoverColor: widget.options.buttonHoverColor,
-            splashColor: widget.options.buttonSplashColor,
-            selectedBorderColor: widget.options.buttonSelectedBorderColor,
-            borderColor: widget.options.buttonBorderColor,
-            borderRadius: widget.options.buttonBorderRadius,
-            borderWidth: widget.options.buttonBorderWidth,
-            renderBorder: widget.options.renderBorder,
-            textStyle: widget.options.textStyle,
+            color: widget.htmlToolbarOptions.buttonColor,
+            selectedColor: widget.htmlToolbarOptions.buttonSelectedColor,
+            fillColor: widget.htmlToolbarOptions.buttonFillColor,
+            focusColor: widget.htmlToolbarOptions.buttonFocusColor,
+            highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
+            hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
+            splashColor: widget.htmlToolbarOptions.buttonSplashColor,
+            selectedBorderColor: widget.htmlToolbarOptions.buttonSelectedBorderColor,
+            borderColor: widget.htmlToolbarOptions.buttonBorderColor,
+            borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
+            borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
+            renderBorder: widget.htmlToolbarOptions.renderBorder,
+            textStyle: widget.htmlToolbarOptions.textStyle,
             onPressed: (int index) async {
               void updateStatus() {
                 setState(() {
@@ -753,7 +754,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
 
               if (t.getIcons1()[index].icon == Icons.format_bold) {
-                var proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
                         ButtonType.bold, _fontSelected[index], updateStatus) ??
                     true;
                 if (proceed) {
@@ -762,7 +763,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_italic) {
-                var proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
                         ButtonType.italic,
                         _fontSelected[index],
                         updateStatus) ??
@@ -773,7 +774,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_underline) {
-                var proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
                         ButtonType.underline,
                         _fontSelected[index],
                         updateStatus) ??
@@ -784,7 +785,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_clear) {
-                var proceed = await widget.options.onButtonPressed
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.clearFormatting, null, null) ??
                     true;
                 if (proceed) {
@@ -799,22 +800,22 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         if (t.strikethrough || t.superscript || t.subscript) {
           toolbarChildren.add(ToggleButtons(
             constraints: BoxConstraints.tightFor(
-              width: widget.options.toolbarItemHeight - 2,
-              height: widget.options.toolbarItemHeight - 2,
+              width: widget.htmlToolbarOptions.toolbarItemHeight - 2,
+              height: widget.htmlToolbarOptions.toolbarItemHeight - 2,
             ),
-            color: widget.options.buttonColor,
-            selectedColor: widget.options.buttonSelectedColor,
-            fillColor: widget.options.buttonFillColor,
-            focusColor: widget.options.buttonFocusColor,
-            highlightColor: widget.options.buttonHighlightColor,
-            hoverColor: widget.options.buttonHoverColor,
-            splashColor: widget.options.buttonSplashColor,
-            selectedBorderColor: widget.options.buttonSelectedBorderColor,
-            borderColor: widget.options.buttonBorderColor,
-            borderRadius: widget.options.buttonBorderRadius,
-            borderWidth: widget.options.buttonBorderWidth,
-            renderBorder: widget.options.renderBorder,
-            textStyle: widget.options.textStyle,
+            color: widget.htmlToolbarOptions.buttonColor,
+            selectedColor: widget.htmlToolbarOptions.buttonSelectedColor,
+            fillColor: widget.htmlToolbarOptions.buttonFillColor,
+            focusColor: widget.htmlToolbarOptions.buttonFocusColor,
+            highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
+            hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
+            splashColor: widget.htmlToolbarOptions.buttonSplashColor,
+            selectedBorderColor: widget.htmlToolbarOptions.buttonSelectedBorderColor,
+            borderColor: widget.htmlToolbarOptions.buttonBorderColor,
+            borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
+            borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
+            renderBorder: widget.htmlToolbarOptions.renderBorder,
+            textStyle: widget.htmlToolbarOptions.textStyle,
             onPressed: (int index) async {
               void updateStatus() {
                 setState(() {
@@ -823,7 +824,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
 
               if (t.getIcons2()[index].icon == Icons.format_strikethrough) {
-                var proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
                         ButtonType.strikethrough,
                         _miscFontSelected[index],
                         updateStatus) ??
@@ -834,7 +835,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons2()[index].icon == Icons.superscript) {
-                var proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
                         ButtonType.superscript,
                         _miscFontSelected[index],
                         updateStatus) ??
@@ -845,7 +846,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons2()[index].icon == Icons.subscript) {
-                var proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
                         ButtonType.subscript,
                         _miscFontSelected[index],
                         updateStatus) ??
@@ -864,22 +865,22 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       if (t is ColorButtons) {
         toolbarChildren.add(ToggleButtons(
           constraints: BoxConstraints.tightFor(
-            width: widget.options.toolbarItemHeight - 2,
-            height: widget.options.toolbarItemHeight - 2,
+            width: widget.htmlToolbarOptions.toolbarItemHeight - 2,
+            height: widget.htmlToolbarOptions.toolbarItemHeight - 2,
           ),
-          color: widget.options.buttonColor,
-          selectedColor: widget.options.buttonSelectedColor,
-          fillColor: widget.options.buttonFillColor,
-          focusColor: widget.options.buttonFocusColor,
-          highlightColor: widget.options.buttonHighlightColor,
-          hoverColor: widget.options.buttonHoverColor,
-          splashColor: widget.options.buttonSplashColor,
-          selectedBorderColor: widget.options.buttonSelectedBorderColor,
-          borderColor: widget.options.buttonBorderColor,
-          borderRadius: widget.options.buttonBorderRadius,
-          borderWidth: widget.options.buttonBorderWidth,
-          renderBorder: widget.options.renderBorder,
-          textStyle: widget.options.textStyle,
+          color: widget.htmlToolbarOptions.buttonColor,
+          selectedColor: widget.htmlToolbarOptions.buttonSelectedColor,
+          fillColor: widget.htmlToolbarOptions.buttonFillColor,
+          focusColor: widget.htmlToolbarOptions.buttonFocusColor,
+          highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
+          hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
+          splashColor: widget.htmlToolbarOptions.buttonSplashColor,
+          selectedBorderColor: widget.htmlToolbarOptions.buttonSelectedBorderColor,
+          borderColor: widget.htmlToolbarOptions.buttonBorderColor,
+          borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
+          borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
+          renderBorder: widget.htmlToolbarOptions.renderBorder,
+          textStyle: widget.htmlToolbarOptions.textStyle,
           onPressed: (int index) async {
             void updateStatus() {
               setState(() {
@@ -889,7 +890,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
 
             if (_colorSelected[index]) {
               if (t.getIcons()[index].icon == Icons.format_color_text) {
-                var proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
                         ButtonType.foregroundColor,
                         _colorSelected[index],
                         updateStatus) ??
@@ -904,7 +905,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons()[index].icon == Icons.format_color_fill) {
-                var proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
                         ButtonType.highlightColor,
                         _colorSelected[index],
                         updateStatus) ??
@@ -921,13 +922,13 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             } else {
               var proceed = true;
               if (t.getIcons()[index].icon == Icons.format_color_text) {
-                proceed = await widget.options.onButtonPressed?.call(
+                proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
                         ButtonType.foregroundColor,
                         _colorSelected[index],
                         updateStatus) ??
                     true;
               } else if (t.getIcons()[index].icon == Icons.format_color_fill) {
-                proceed = await widget.options.onButtonPressed?.call(
+                proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
                         ButtonType.highlightColor,
                         _colorSelected[index],
                         updateStatus) ??
@@ -1039,22 +1040,22 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         if (t.ul || t.ol) {
           toolbarChildren.add(ToggleButtons(
             constraints: BoxConstraints.tightFor(
-              width: widget.options.toolbarItemHeight - 2,
-              height: widget.options.toolbarItemHeight - 2,
+              width: widget.htmlToolbarOptions.toolbarItemHeight - 2,
+              height: widget.htmlToolbarOptions.toolbarItemHeight - 2,
             ),
-            color: widget.options.buttonColor,
-            selectedColor: widget.options.buttonSelectedColor,
-            fillColor: widget.options.buttonFillColor,
-            focusColor: widget.options.buttonFocusColor,
-            highlightColor: widget.options.buttonHighlightColor,
-            hoverColor: widget.options.buttonHoverColor,
-            splashColor: widget.options.buttonSplashColor,
-            selectedBorderColor: widget.options.buttonSelectedBorderColor,
-            borderColor: widget.options.buttonBorderColor,
-            borderRadius: widget.options.buttonBorderRadius,
-            borderWidth: widget.options.buttonBorderWidth,
-            renderBorder: widget.options.renderBorder,
-            textStyle: widget.options.textStyle,
+            color: widget.htmlToolbarOptions.buttonColor,
+            selectedColor: widget.htmlToolbarOptions.buttonSelectedColor,
+            fillColor: widget.htmlToolbarOptions.buttonFillColor,
+            focusColor: widget.htmlToolbarOptions.buttonFocusColor,
+            highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
+            hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
+            splashColor: widget.htmlToolbarOptions.buttonSplashColor,
+            selectedBorderColor: widget.htmlToolbarOptions.buttonSelectedBorderColor,
+            borderColor: widget.htmlToolbarOptions.buttonBorderColor,
+            borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
+            borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
+            renderBorder: widget.htmlToolbarOptions.renderBorder,
+            textStyle: widget.htmlToolbarOptions.textStyle,
             onPressed: (int index) async {
               void updateStatus() {
                 setState(() {
@@ -1063,7 +1064,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
 
               if (t.getIcons()[index].icon == Icons.format_list_bulleted) {
-                var proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
                         ButtonType.ul, _listSelected[index], updateStatus) ??
                     true;
                 if (proceed) {
@@ -1072,7 +1073,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons()[index].icon == Icons.format_list_numbered) {
-                var proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
                         ButtonType.ol, _listSelected[index], updateStatus) ??
                     true;
                 if (proceed) {
@@ -1088,10 +1089,10 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         if (t.listStyles) {
           toolbarChildren.add(Container(
             padding: const EdgeInsets.only(left: 8.0),
-            height: widget.options.toolbarItemHeight,
-            decoration: !widget.options.renderBorder
+            height: widget.htmlToolbarOptions.toolbarItemHeight,
+            decoration: !widget.htmlToolbarOptions.renderBorder
                 ? null
-                : widget.options.dropdownBoxDecoration ??
+                : widget.htmlToolbarOptions.dropdownBoxDecoration ??
                     BoxDecoration(
                         color: Theme.of(context).scaffoldBackgroundColor,
                         border: Border.all(
@@ -1101,15 +1102,15 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 .withOpacity(0.12))),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
-                elevation: widget.options.dropdownElevation,
-                icon: widget.options.dropdownIcon,
-                iconEnabledColor: widget.options.dropdownIconColor,
-                iconSize: widget.options.dropdownIconSize,
-                itemHeight: widget.options.dropdownItemHeight,
-                focusColor: widget.options.dropdownFocusColor,
-                dropdownColor: widget.options.dropdownBackgroundColor,
+                elevation: widget.htmlToolbarOptions.dropdownElevation,
+                icon: widget.htmlToolbarOptions.dropdownIcon,
+                iconEnabledColor: widget.htmlToolbarOptions.dropdownIconColor,
+                iconSize: widget.htmlToolbarOptions.dropdownIconSize,
+                itemHeight: widget.htmlToolbarOptions.dropdownItemHeight,
+                focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
+                dropdownColor: widget.htmlToolbarOptions.dropdownBackgroundColor,
                 //menuMaxHeight: widget.options.dropdownMenuMaxHeight,
-                style: widget.options.textStyle,
+                style: widget.htmlToolbarOptions.textStyle,
                 items: [
                   DropdownMenuItem(
                     value: 'decimal',
@@ -1156,7 +1157,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   }
 
                   if (changed != null) {
-                    var proceed = await widget.options.onDropdownChanged?.call(
+                    var proceed = await widget.htmlToolbarOptions.onDropdownChanged?.call(
                             DropdownType.listStyles,
                             changed,
                             updateSelectedItem) ??
@@ -1185,22 +1186,22 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         if (t.alignLeft || t.alignCenter || t.alignRight || t.alignJustify) {
           toolbarChildren.add(ToggleButtons(
             constraints: BoxConstraints.tightFor(
-              width: widget.options.toolbarItemHeight - 2,
-              height: widget.options.toolbarItemHeight - 2,
+              width: widget.htmlToolbarOptions.toolbarItemHeight - 2,
+              height: widget.htmlToolbarOptions.toolbarItemHeight - 2,
             ),
-            color: widget.options.buttonColor,
-            selectedColor: widget.options.buttonSelectedColor,
-            fillColor: widget.options.buttonFillColor,
-            focusColor: widget.options.buttonFocusColor,
-            highlightColor: widget.options.buttonHighlightColor,
-            hoverColor: widget.options.buttonHoverColor,
-            splashColor: widget.options.buttonSplashColor,
-            selectedBorderColor: widget.options.buttonSelectedBorderColor,
-            borderColor: widget.options.buttonBorderColor,
-            borderRadius: widget.options.buttonBorderRadius,
-            borderWidth: widget.options.buttonBorderWidth,
-            renderBorder: widget.options.renderBorder,
-            textStyle: widget.options.textStyle,
+            color: widget.htmlToolbarOptions.buttonColor,
+            selectedColor: widget.htmlToolbarOptions.buttonSelectedColor,
+            fillColor: widget.htmlToolbarOptions.buttonFillColor,
+            focusColor: widget.htmlToolbarOptions.buttonFocusColor,
+            highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
+            hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
+            splashColor: widget.htmlToolbarOptions.buttonSplashColor,
+            selectedBorderColor: widget.htmlToolbarOptions.buttonSelectedBorderColor,
+            borderColor: widget.htmlToolbarOptions.buttonBorderColor,
+            borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
+            borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
+            renderBorder: widget.htmlToolbarOptions.renderBorder,
+            textStyle: widget.htmlToolbarOptions.textStyle,
             onPressed: (int index) async {
               void updateStatus() {
                 _alignSelected = List<bool>.filled(t.getIcons1().length, false);
@@ -1210,7 +1211,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
 
               if (t.getIcons1()[index].icon == Icons.format_align_left) {
-                var proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
                         ButtonType.alignLeft,
                         _alignSelected[index],
                         updateStatus) ??
@@ -1221,7 +1222,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_align_center) {
-                var proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
                         ButtonType.alignCenter,
                         _alignSelected[index],
                         updateStatus) ??
@@ -1232,7 +1233,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_align_right) {
-                var proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
                         ButtonType.alignRight,
                         _alignSelected[index],
                         updateStatus) ??
@@ -1243,7 +1244,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_align_justify) {
-                var proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
                         ButtonType.alignJustify,
                         _alignSelected[index],
                         updateStatus) ??
@@ -1261,25 +1262,25 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         if (t.increaseIndent || t.decreaseIndent) {
           toolbarChildren.add(ToggleButtons(
             constraints: BoxConstraints.tightFor(
-              width: widget.options.toolbarItemHeight - 2,
-              height: widget.options.toolbarItemHeight - 2,
+              width: widget.htmlToolbarOptions.toolbarItemHeight - 2,
+              height: widget.htmlToolbarOptions.toolbarItemHeight - 2,
             ),
-            color: widget.options.buttonColor,
-            selectedColor: widget.options.buttonSelectedColor,
-            fillColor: widget.options.buttonFillColor,
-            focusColor: widget.options.buttonFocusColor,
-            highlightColor: widget.options.buttonHighlightColor,
-            hoverColor: widget.options.buttonHoverColor,
-            splashColor: widget.options.buttonSplashColor,
-            selectedBorderColor: widget.options.buttonSelectedBorderColor,
-            borderColor: widget.options.buttonBorderColor,
-            borderRadius: widget.options.buttonBorderRadius,
-            borderWidth: widget.options.buttonBorderWidth,
-            renderBorder: widget.options.renderBorder,
-            textStyle: widget.options.textStyle,
+            color: widget.htmlToolbarOptions.buttonColor,
+            selectedColor: widget.htmlToolbarOptions.buttonSelectedColor,
+            fillColor: widget.htmlToolbarOptions.buttonFillColor,
+            focusColor: widget.htmlToolbarOptions.buttonFocusColor,
+            highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
+            hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
+            splashColor: widget.htmlToolbarOptions.buttonSplashColor,
+            selectedBorderColor: widget.htmlToolbarOptions.buttonSelectedBorderColor,
+            borderColor: widget.htmlToolbarOptions.buttonBorderColor,
+            borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
+            borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
+            renderBorder: widget.htmlToolbarOptions.renderBorder,
+            textStyle: widget.htmlToolbarOptions.textStyle,
             onPressed: (int index) async {
               if (t.getIcons2()[index].icon == Icons.format_indent_increase) {
-                var proceed = await widget.options.onButtonPressed
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.increaseIndent, null, null) ??
                     true;
                 if (proceed) {
@@ -1287,7 +1288,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons2()[index].icon == Icons.format_indent_decrease) {
-                var proceed = await widget.options.onButtonPressed
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.decreaseIndent, null, null) ??
                     true;
                 if (proceed) {
@@ -1302,10 +1303,10 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         if (t.lineHeight) {
           toolbarChildren.add(Container(
             padding: const EdgeInsets.only(left: 8.0),
-            height: widget.options.toolbarItemHeight,
-            decoration: !widget.options.renderBorder
+            height: widget.htmlToolbarOptions.toolbarItemHeight,
+            decoration: !widget.htmlToolbarOptions.renderBorder
                 ? null
-                : widget.options.dropdownBoxDecoration ??
+                : widget.htmlToolbarOptions.dropdownBoxDecoration ??
                     BoxDecoration(
                         color: Theme.of(context).scaffoldBackgroundColor,
                         border: Border.all(
@@ -1315,15 +1316,15 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 .withOpacity(0.12))),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<double>(
-                elevation: widget.options.dropdownElevation,
-                icon: widget.options.dropdownIcon,
-                iconEnabledColor: widget.options.dropdownIconColor,
-                iconSize: widget.options.dropdownIconSize,
-                itemHeight: widget.options.dropdownItemHeight,
-                focusColor: widget.options.dropdownFocusColor,
-                dropdownColor: widget.options.dropdownBackgroundColor,
+                elevation: widget.htmlToolbarOptions.dropdownElevation,
+                icon: widget.htmlToolbarOptions.dropdownIcon,
+                iconEnabledColor: widget.htmlToolbarOptions.dropdownIconColor,
+                iconSize: widget.htmlToolbarOptions.dropdownIconSize,
+                itemHeight: widget.htmlToolbarOptions.dropdownItemHeight,
+                focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
+                dropdownColor: widget.htmlToolbarOptions.dropdownBackgroundColor,
                 //menuMaxHeight: widget.options.dropdownMenuMaxHeight,
-                style: widget.options.textStyle,
+                style: widget.htmlToolbarOptions.textStyle,
                 items: [
                   DropdownMenuItem(
                       value: 1, child: PointerInterceptor(child: Text('1.0'))),
@@ -1365,7 +1366,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   }
 
                   if (changed != null) {
-                    var proceed = await widget.options.onDropdownChanged?.call(
+                    var proceed = await widget.htmlToolbarOptions.onDropdownChanged?.call(
                             DropdownType.lineHeight,
                             changed,
                             updateSelectedItem) ??
@@ -1390,22 +1391,22 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         if (t.textDirection) {
           toolbarChildren.add(ToggleButtons(
             constraints: BoxConstraints.tightFor(
-              width: widget.options.toolbarItemHeight - 2,
-              height: widget.options.toolbarItemHeight - 2,
+              width: widget.htmlToolbarOptions.toolbarItemHeight - 2,
+              height: widget.htmlToolbarOptions.toolbarItemHeight - 2,
             ),
-            color: widget.options.buttonColor,
-            selectedColor: widget.options.buttonSelectedColor,
-            fillColor: widget.options.buttonFillColor,
-            focusColor: widget.options.buttonFocusColor,
-            highlightColor: widget.options.buttonHighlightColor,
-            hoverColor: widget.options.buttonHoverColor,
-            splashColor: widget.options.buttonSplashColor,
-            selectedBorderColor: widget.options.buttonSelectedBorderColor,
-            borderColor: widget.options.buttonBorderColor,
-            borderRadius: widget.options.buttonBorderRadius,
-            borderWidth: widget.options.buttonBorderWidth,
-            renderBorder: widget.options.renderBorder,
-            textStyle: widget.options.textStyle,
+            color: widget.htmlToolbarOptions.buttonColor,
+            selectedColor: widget.htmlToolbarOptions.buttonSelectedColor,
+            fillColor: widget.htmlToolbarOptions.buttonFillColor,
+            focusColor: widget.htmlToolbarOptions.buttonFocusColor,
+            highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
+            hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
+            splashColor: widget.htmlToolbarOptions.buttonSplashColor,
+            selectedBorderColor: widget.htmlToolbarOptions.buttonSelectedBorderColor,
+            borderColor: widget.htmlToolbarOptions.buttonBorderColor,
+            borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
+            borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
+            renderBorder: widget.htmlToolbarOptions.renderBorder,
+            textStyle: widget.htmlToolbarOptions.textStyle,
             onPressed: (int index) async {
               void updateStatus() {
                 _textDirectionSelected = List<bool>.filled(2, false);
@@ -1415,7 +1416,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 });
               }
 
-              var proceed = await widget.options.onButtonPressed?.call(
+              var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
                       index == 0 ? ButtonType.ltr : ButtonType.rtl,
                       _alignSelected[index],
                       updateStatus) ??
@@ -1448,10 +1449,10 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         if (t.caseConverter) {
           toolbarChildren.add(Container(
             padding: const EdgeInsets.only(left: 8.0),
-            height: widget.options.toolbarItemHeight,
-            decoration: !widget.options.renderBorder
+            height: widget.htmlToolbarOptions.toolbarItemHeight,
+            decoration: !widget.htmlToolbarOptions.renderBorder
                 ? null
-                : widget.options.dropdownBoxDecoration ??
+                : widget.htmlToolbarOptions.dropdownBoxDecoration ??
                     BoxDecoration(
                         color: Theme.of(context).scaffoldBackgroundColor,
                         border: Border.all(
@@ -1461,15 +1462,15 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 .withOpacity(0.12))),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
-                elevation: widget.options.dropdownElevation,
-                icon: widget.options.dropdownIcon,
-                iconEnabledColor: widget.options.dropdownIconColor,
-                iconSize: widget.options.dropdownIconSize,
-                itemHeight: widget.options.dropdownItemHeight,
-                focusColor: widget.options.dropdownFocusColor,
-                dropdownColor: widget.options.dropdownBackgroundColor,
+                elevation: widget.htmlToolbarOptions.dropdownElevation,
+                icon: widget.htmlToolbarOptions.dropdownIcon,
+                iconEnabledColor: widget.htmlToolbarOptions.dropdownIconColor,
+                iconSize: widget.htmlToolbarOptions.dropdownIconSize,
+                itemHeight: widget.htmlToolbarOptions.dropdownItemHeight,
+                focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
+                dropdownColor: widget.htmlToolbarOptions.dropdownBackgroundColor,
                 //menuMaxHeight: widget.options.dropdownMenuMaxHeight,
-                style: widget.options.textStyle,
+                style: widget.htmlToolbarOptions.textStyle,
                 items: [
                   DropdownMenuItem(
                     value: 'lower',
@@ -1492,7 +1493,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 value: null,
                 onChanged: (String? changed) async {
                   if (changed != null) {
-                    var proceed = await widget.options.onDropdownChanged
+                    var proceed = await widget.htmlToolbarOptions.onDropdownChanged
                             ?.call(DropdownType.caseConverter, changed, null) ??
                         true;
                     if (proceed) {
@@ -1540,25 +1541,25 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       if (t is InsertButtons) {
         toolbarChildren.add(ToggleButtons(
           constraints: BoxConstraints.tightFor(
-            width: widget.options.toolbarItemHeight - 2,
-            height: widget.options.toolbarItemHeight - 2,
+            width: widget.htmlToolbarOptions.toolbarItemHeight - 2,
+            height: widget.htmlToolbarOptions.toolbarItemHeight - 2,
           ),
-          color: widget.options.buttonColor,
-          selectedColor: widget.options.buttonSelectedColor,
-          fillColor: widget.options.buttonFillColor,
-          focusColor: widget.options.buttonFocusColor,
-          highlightColor: widget.options.buttonHighlightColor,
-          hoverColor: widget.options.buttonHoverColor,
-          splashColor: widget.options.buttonSplashColor,
-          selectedBorderColor: widget.options.buttonSelectedBorderColor,
-          borderColor: widget.options.buttonBorderColor,
-          borderRadius: widget.options.buttonBorderRadius,
-          borderWidth: widget.options.buttonBorderWidth,
-          renderBorder: widget.options.renderBorder,
-          textStyle: widget.options.textStyle,
+          color: widget.htmlToolbarOptions.buttonColor,
+          selectedColor: widget.htmlToolbarOptions.buttonSelectedColor,
+          fillColor: widget.htmlToolbarOptions.buttonFillColor,
+          focusColor: widget.htmlToolbarOptions.buttonFocusColor,
+          highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
+          hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
+          splashColor: widget.htmlToolbarOptions.buttonSplashColor,
+          selectedBorderColor: widget.htmlToolbarOptions.buttonSelectedBorderColor,
+          borderColor: widget.htmlToolbarOptions.buttonBorderColor,
+          borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
+          borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
+          renderBorder: widget.htmlToolbarOptions.renderBorder,
+          textStyle: widget.htmlToolbarOptions.textStyle,
           onPressed: (int index) async {
             if (t.getIcons()[index].icon == Icons.link) {
-              var proceed = await widget.options.onButtonPressed
+              var proceed = await widget.htmlToolbarOptions.onButtonPressed
                       ?.call(ButtonType.link, null, null) ??
                   true;
               if (proceed) {
@@ -1667,7 +1668,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 onPressed: () async {
                                   if (formKey.currentState!.validate()) {
                                     var proceed = await widget
-                                            .options.linkInsertInterceptor
+                                            .htmlToolbarOptions.linkInsertInterceptor
                                             ?.call(
                                                 text.text.isEmpty
                                                     ? url.text
@@ -1697,7 +1698,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
             }
             if (t.getIcons()[index].icon == Icons.image_outlined) {
-              var proceed = await widget.options.onButtonPressed
+              var proceed = await widget.htmlToolbarOptions.onButtonPressed
                       ?.call(ButtonType.picture, null, null) ??
                   true;
               if (proceed) {
@@ -1739,7 +1740,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               type: FileType.image,
                                               withData: true,
                                               allowedExtensions: widget
-                                                  .options.imageExtensions,
+                                                  .htmlToolbarOptions.imageExtensions,
                                             );
                                             if (result?.files.single.name !=
                                                 null) {
@@ -1813,7 +1814,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     var base64Data = base64
                                         .encode(result!.files.single.bytes!);
                                     var proceed = await widget
-                                            .options.mediaUploadInterceptor
+                                            .htmlToolbarOptions.mediaUploadInterceptor
                                             ?.call(result!.files.single,
                                                 InsertFileType.image) ??
                                         true;
@@ -1824,7 +1825,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     Navigator.of(context).pop();
                                   } else {
                                     var proceed = await widget
-                                            .options.mediaLinkInsertInterceptor
+                                            .htmlToolbarOptions.mediaLinkInsertInterceptor
                                             ?.call(url.text,
                                                 InsertFileType.image) ??
                                         true;
@@ -1845,7 +1846,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
             }
             if (t.getIcons()[index].icon == Icons.audiotrack_outlined) {
-              var proceed = await widget.options.onButtonPressed
+              var proceed = await widget.htmlToolbarOptions.onButtonPressed
                       ?.call(ButtonType.audio, null, null) ??
                   true;
               if (proceed) {
@@ -1887,7 +1888,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               type: FileType.audio,
                                               withData: true,
                                               allowedExtensions: widget
-                                                  .options.audioExtensions,
+                                                  .htmlToolbarOptions.audioExtensions,
                                             );
                                             if (result?.files.single.name !=
                                                 null) {
@@ -1961,7 +1962,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     var base64Data = base64
                                         .encode(result!.files.single.bytes!);
                                     var proceed = await widget
-                                            .options.mediaUploadInterceptor
+                                            .htmlToolbarOptions.mediaUploadInterceptor
                                             ?.call(result!.files.single,
                                                 InsertFileType.audio) ??
                                         true;
@@ -1972,7 +1973,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     Navigator.of(context).pop();
                                   } else {
                                     var proceed = await widget
-                                            .options.mediaLinkInsertInterceptor
+                                            .htmlToolbarOptions.mediaLinkInsertInterceptor
                                             ?.call(url.text,
                                                 InsertFileType.audio) ??
                                         true;
@@ -1993,7 +1994,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
             }
             if (t.getIcons()[index].icon == Icons.videocam_outlined) {
-              var proceed = await widget.options.onButtonPressed
+              var proceed = await widget.htmlToolbarOptions.onButtonPressed
                       ?.call(ButtonType.video, null, null) ??
                   true;
               if (proceed) {
@@ -2035,7 +2036,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               type: FileType.video,
                                               withData: true,
                                               allowedExtensions: widget
-                                                  .options.videoExtensions,
+                                                  .htmlToolbarOptions.videoExtensions,
                                             );
                                             if (result?.files.single.name !=
                                                 null) {
@@ -2109,7 +2110,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     var base64Data = base64
                                         .encode(result!.files.single.bytes!);
                                     var proceed = await widget
-                                            .options.mediaUploadInterceptor
+                                            .htmlToolbarOptions.mediaUploadInterceptor
                                             ?.call(result!.files.single,
                                                 InsertFileType.video) ??
                                         true;
@@ -2120,7 +2121,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     Navigator.of(context).pop();
                                   } else {
                                     var proceed = await widget
-                                            .options.mediaLinkInsertInterceptor
+                                            .htmlToolbarOptions.mediaLinkInsertInterceptor
                                             ?.call(url.text,
                                                 InsertFileType.video) ??
                                         true;
@@ -2141,7 +2142,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
             }
             if (t.getIcons()[index].icon == Icons.attach_file) {
-              var proceed = await widget.options.onButtonPressed
+              var proceed = await widget.htmlToolbarOptions.onButtonPressed
                       ?.call(ButtonType.otherFile, null, null) ??
                   true;
               if (proceed) {
@@ -2183,7 +2184,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               type: FileType.any,
                                               withData: true,
                                               allowedExtensions: widget
-                                                  .options.otherFileExtensions,
+                                                  .htmlToolbarOptions.otherFileExtensions,
                                             );
                                             if (result?.files.single.name !=
                                                 null) {
@@ -2254,11 +2255,11 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     });
                                   } else if (filename.text.isNotEmpty &&
                                       result?.files.single.bytes != null) {
-                                    widget.options.onOtherFileUpload
+                                    widget.htmlToolbarOptions.onOtherFileUpload
                                         ?.call(result!.files.single);
                                     Navigator.of(context).pop();
                                   } else {
-                                    widget.options.onOtherFileLinkInsert
+                                    widget.htmlToolbarOptions.onOtherFileLinkInsert
                                         ?.call(url.text);
                                     Navigator.of(context).pop();
                                   }
@@ -2273,7 +2274,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
             }
             if (t.getIcons()[index].icon == Icons.table_chart_outlined) {
-              var proceed = await widget.options.onButtonPressed
+              var proceed = await widget.htmlToolbarOptions.onButtonPressed
                       ?.call(ButtonType.table, null, null) ??
                   true;
               if (proceed) {
@@ -2338,7 +2339,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
             }
             if (t.getIcons()[index].icon == Icons.horizontal_rule) {
-              var proceed = await widget.options.onButtonPressed
+              var proceed = await widget.htmlToolbarOptions.onButtonPressed
                       ?.call(ButtonType.hr, null, null) ??
                   true;
               if (proceed) {
@@ -2354,22 +2355,22 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         if (t.fullscreen || t.codeview || t.undo || t.redo || t.help) {
           toolbarChildren.add(ToggleButtons(
             constraints: BoxConstraints.tightFor(
-              width: widget.options.toolbarItemHeight - 2,
-              height: widget.options.toolbarItemHeight - 2,
+              width: widget.htmlToolbarOptions.toolbarItemHeight - 2,
+              height: widget.htmlToolbarOptions.toolbarItemHeight - 2,
             ),
-            color: widget.options.buttonColor,
-            selectedColor: widget.options.buttonSelectedColor,
-            fillColor: widget.options.buttonFillColor,
-            focusColor: widget.options.buttonFocusColor,
-            highlightColor: widget.options.buttonHighlightColor,
-            hoverColor: widget.options.buttonHoverColor,
-            splashColor: widget.options.buttonSplashColor,
-            selectedBorderColor: widget.options.buttonSelectedBorderColor,
-            borderColor: widget.options.buttonBorderColor,
-            borderRadius: widget.options.buttonBorderRadius,
-            borderWidth: widget.options.buttonBorderWidth,
-            renderBorder: widget.options.renderBorder,
-            textStyle: widget.options.textStyle,
+            color: widget.htmlToolbarOptions.buttonColor,
+            selectedColor: widget.htmlToolbarOptions.buttonSelectedColor,
+            fillColor: widget.htmlToolbarOptions.buttonFillColor,
+            focusColor: widget.htmlToolbarOptions.buttonFocusColor,
+            highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
+            hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
+            splashColor: widget.htmlToolbarOptions.buttonSplashColor,
+            selectedBorderColor: widget.htmlToolbarOptions.buttonSelectedBorderColor,
+            borderColor: widget.htmlToolbarOptions.buttonBorderColor,
+            borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
+            borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
+            renderBorder: widget.htmlToolbarOptions.renderBorder,
+            textStyle: widget.htmlToolbarOptions.textStyle,
             onPressed: (int index) async {
               void updateStatus() {
                 setState(() {
@@ -2378,7 +2379,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
 
               if (t.getIcons1()[index].icon == Icons.fullscreen) {
-                var proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
                         ButtonType.fullscreen,
                         _miscSelected[index],
                         updateStatus) ??
@@ -2389,7 +2390,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons1()[index].icon == Icons.code) {
-                var proceed = await widget.options.onButtonPressed?.call(
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
                         ButtonType.codeview,
                         _miscSelected[index],
                         updateStatus) ??
@@ -2400,7 +2401,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons1()[index].icon == Icons.undo) {
-                var proceed = await widget.options.onButtonPressed
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.undo, null, null) ??
                     true;
                 if (proceed) {
@@ -2408,7 +2409,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons1()[index].icon == Icons.redo) {
-                var proceed = await widget.options.onButtonPressed
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.redo, null, null) ??
                     true;
                 if (proceed) {
@@ -2416,7 +2417,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons1()[index].icon == Icons.help_outline) {
-                var proceed = await widget.options.onButtonPressed
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.help, null, null) ??
                     true;
                 if (proceed) {
@@ -2667,25 +2668,25 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         if (t.copy || t.paste) {
           toolbarChildren.add(ToggleButtons(
             constraints: BoxConstraints.tightFor(
-              width: widget.options.toolbarItemHeight - 2,
-              height: widget.options.toolbarItemHeight - 2,
+              width: widget.htmlToolbarOptions.toolbarItemHeight - 2,
+              height: widget.htmlToolbarOptions.toolbarItemHeight - 2,
             ),
-            color: widget.options.buttonColor,
-            selectedColor: widget.options.buttonSelectedColor,
-            fillColor: widget.options.buttonFillColor,
-            focusColor: widget.options.buttonFocusColor,
-            highlightColor: widget.options.buttonHighlightColor,
-            hoverColor: widget.options.buttonHoverColor,
-            splashColor: widget.options.buttonSplashColor,
-            selectedBorderColor: widget.options.buttonSelectedBorderColor,
-            borderColor: widget.options.buttonBorderColor,
-            borderRadius: widget.options.buttonBorderRadius,
-            borderWidth: widget.options.buttonBorderWidth,
-            renderBorder: widget.options.renderBorder,
-            textStyle: widget.options.textStyle,
+            color: widget.htmlToolbarOptions.buttonColor,
+            selectedColor: widget.htmlToolbarOptions.buttonSelectedColor,
+            fillColor: widget.htmlToolbarOptions.buttonFillColor,
+            focusColor: widget.htmlToolbarOptions.buttonFocusColor,
+            highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
+            hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
+            splashColor: widget.htmlToolbarOptions.buttonSplashColor,
+            selectedBorderColor: widget.htmlToolbarOptions.buttonSelectedBorderColor,
+            borderColor: widget.htmlToolbarOptions.buttonBorderColor,
+            borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
+            borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
+            renderBorder: widget.htmlToolbarOptions.renderBorder,
+            textStyle: widget.htmlToolbarOptions.textStyle,
             onPressed: (int index) async {
               if (t.getIcons2()[index].icon == Icons.copy) {
-                var proceed = await widget.options.onButtonPressed
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.copy, null, null) ??
                     true;
                 if (proceed) {
@@ -2694,7 +2695,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons2()[index].icon == Icons.paste) {
-                var proceed = await widget.options.onButtonPressed
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.paste, null, null) ??
                     true;
                 if (proceed) {
@@ -2712,30 +2713,30 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         }
       }
     }
-    if (widget.options.customToolbarInsertionIndices.isNotEmpty &&
-        widget.options.customToolbarInsertionIndices.length ==
-            widget.options.customToolbarButtons.length) {
+    if (widget.htmlToolbarOptions.customToolbarInsertionIndices.isNotEmpty &&
+        widget.htmlToolbarOptions.customToolbarInsertionIndices.length ==
+            widget.htmlToolbarOptions.customToolbarButtons.length) {
       for (var i = 0;
-          i < widget.options.customToolbarInsertionIndices.length;
+          i < widget.htmlToolbarOptions.customToolbarInsertionIndices.length;
           i++) {
-        if (widget.options.customToolbarInsertionIndices[i] >
+        if (widget.htmlToolbarOptions.customToolbarInsertionIndices[i] >
             toolbarChildren.length) {
           toolbarChildren.insert(
-              toolbarChildren.length, widget.options.customToolbarButtons[i]);
-        } else if (widget.options.customToolbarInsertionIndices[i] < 0) {
-          toolbarChildren.insert(0, widget.options.customToolbarButtons[i]);
+              toolbarChildren.length, widget.htmlToolbarOptions.customToolbarButtons[i]);
+        } else if (widget.htmlToolbarOptions.customToolbarInsertionIndices[i] < 0) {
+          toolbarChildren.insert(0, widget.htmlToolbarOptions.customToolbarButtons[i]);
         } else {
           toolbarChildren.insert(
-              widget.options.customToolbarInsertionIndices[i],
-              widget.options.customToolbarButtons[i]);
+              widget.htmlToolbarOptions.customToolbarInsertionIndices[i],
+              widget.htmlToolbarOptions.customToolbarButtons[i]);
         }
       }
     } else {
-      toolbarChildren.addAll(widget.options.customToolbarButtons);
+      toolbarChildren.addAll(widget.htmlToolbarOptions.customToolbarButtons);
     }
-    if (widget.options.renderSeparatorWidget) {
+    if (widget.htmlToolbarOptions.renderSeparatorWidget) {
       toolbarChildren =
-          intersperse(widget.options.separatorWidget, toolbarChildren).toList();
+          intersperse(widget.htmlToolbarOptions.separatorWidget, toolbarChildren).toList();
     }
     return toolbarChildren;
   }

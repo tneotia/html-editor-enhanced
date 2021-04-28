@@ -69,6 +69,8 @@ Note that the API shown in this README.md file shows only a part of the document
     
     - [`onButtonPressed` and `onDropdownChanged`](#onbuttonpressed-and-ondropdownchanged)
     
+    - [`toolbarPosition: ToolbarPosition.custom`](#custom-toolbar-position-using-toolbarpositioncustom)
+    
   - [`HtmlEditorController` Parameters](#htmleditorcontroller-parameters)
   
     - [`processInputHtml`, `processOutputHtml`, and `processNewLineAsBr`](#processinputhtml-processoutputhtml-and-processnewlineasbr)
@@ -616,6 +618,46 @@ Some buttons and dropdowns, such as copy/paste and the case converter, don't nee
 
 See [below](#example-for-onbuttonpressed-and-ondropdownchanged) for an example.
 
+#### Custom toolbar position using `ToolbarPosition.custom`
+
+You can use `toolbarPosition: ToolbarPosition.custom` and the `ToolbarWidget()` widget to fully customize exactly where you want to place the toolbar. THe possibilities are endless - you could place the toolbar in a sticky header using Slivers, you could decide to show/hide the toolbar whenever you please, or you could make the toolbar into a floating, draggable widget!
+
+`ToolbarWidget()` requires the `HtmlEditorController` you created for the editor itself, along with the `HtmlToolbarOptions` you supplied to the `Html` constructor. These can be simply copy-pasted, no changed necessary.
+
+A basic example where the toolbar is placed in a different location than normal:
+
+```dart
+HtmlEditorController controller = HtmlEditorController();
+Widget column = Column(
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: <Widget>[
+    HtmlEditor(
+      controller: controller,
+      htmlEditorOptions: HtmlEditorOptions(
+        hint: 'Your text here...',
+        shouldEnsureVisible: true,
+        //initialText: "<p>text content initial, if any</p>",
+      ),
+      htmlToolbarOptions: HtmlToolbarOptions(
+        toolbarPosition: ToolbarPosition.custom, //required to place toolbar anywhere!
+        //other options
+      ),
+      otherOptions: OtherOptions(height: 550),
+    ),
+    //other widgets here
+    Widget1(),
+    Widget2(),
+    ToolbarWidget(
+      controller: controller,
+      htmlToolbarOptions: HtmlToolbarOptions(
+        toolbarPosition: ToolbarPosition.custom, //required to place toolbar anywhere!
+        //other options
+      ),
+    )
+  ]
+);
+```
+
 ### `HtmlEditorController` Parameters
 
 #### `processInputHtml`, `processOutputHtml`, and `processNewLineAsBr`
@@ -958,6 +1000,8 @@ If you do find any issues, please report them in the Issues tab and I will see i
 * How can I display the final output of the editor? - Examples given for both raw HTML output and rendered HTML output - https://github.com/tneotia/html-editor-enhanced/issues/2
 
 * How can I set the editor to "fullscreen" by default? - https://github.com/tneotia/html-editor-enhanced/issues/4
+
+* The editor does not accept any key inputs when using the iOS Simulator. How can I fix this? - https://github.com/tneotia/html-editor-enhanced/issues/7
 
 * Clicking on the editor makes the cursor appear on the second line relative with the hint. Is there a workaround? - https://github.com/tneotia/html-editor-enhanced/issues/24
 

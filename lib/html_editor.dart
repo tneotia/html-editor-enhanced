@@ -4,6 +4,7 @@ import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart
     if (dart.library.html) 'package:html_editor_enhanced/src/html_editor_controller_web.dart'
     if (dart.library.io) 'package:html_editor_enhanced/src/html_editor_controller_mobile.dart';
 
+export 'package:html_editor_enhanced/src/widgets/toolbar_widget.dart';
 export 'package:html_editor_enhanced/utils/callbacks.dart';
 export 'package:html_editor_enhanced/utils/toolbar.dart';
 export 'package:html_editor_enhanced/utils/plugins.dart';
@@ -36,9 +37,11 @@ enum NotificationType { info, warning, success, danger, plaintext }
 enum ToolbarType { nativeGrid, nativeScrollable }
 
 /// Manages the position of the toolbar, whether above or below the editor
+/// [custom] - removes the toolbar. This is useful when you want to implement the
+/// toolbar in a custom location using [ToolbarWidget]
 ///
 /// Note: This is ignored when [ToolbarType.summernote] is set.
-enum ToolbarPosition { aboveEditor, belowEditor }
+enum ToolbarPosition { aboveEditor, belowEditor, custom }
 
 enum ButtonType {
   style,

@@ -116,7 +116,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                   ? ToolbarWidget(
                       key: toolbarKey,
                       controller: widget.controller,
-                      options: widget.htmlToolbarOptions)
+                      htmlToolbarOptions: widget.htmlToolbarOptions)
                   : Container(height: 0, width: 0),
               Expanded(
                 child: InAppWebView(
@@ -452,7 +452,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                   ? ToolbarWidget(
                       key: toolbarKey,
                       controller: widget.controller,
-                      options: widget.htmlToolbarOptions)
+                      htmlToolbarOptions: widget.htmlToolbarOptions)
                   : Container(height: 0, width: 0),
             ],
           ),
