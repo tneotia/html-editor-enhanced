@@ -316,7 +316,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           ),
         ),
       );
-    } else if (widget.htmlToolbarOptions.toolbarType == ToolbarType.nativeScrollable) {
+    } else if (widget.htmlToolbarOptions.toolbarType ==
+        ToolbarType.nativeScrollable) {
       return PointerInterceptor(
         child: AbsorbPointer(
           absorbing: !_enabled,
@@ -458,9 +459,12 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
 
                 if (changed != null) {
-                  var proceed = await widget.htmlToolbarOptions.onDropdownChanged?.call(
-                          DropdownType.style, changed, updateSelectedItem) ??
-                      true;
+                  var proceed =
+                      await widget.htmlToolbarOptions.onDropdownChanged?.call(
+                              DropdownType.style,
+                              changed,
+                              updateSelectedItem) ??
+                          true;
                   if (proceed) {
                     widget.controller
                         .execCommand('formatBlock', argument: changed);
@@ -495,7 +499,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 iconSize: widget.htmlToolbarOptions.dropdownIconSize,
                 itemHeight: widget.htmlToolbarOptions.dropdownItemHeight,
                 focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
-                dropdownColor: widget.htmlToolbarOptions.dropdownBackgroundColor,
+                dropdownColor:
+                    widget.htmlToolbarOptions.dropdownBackgroundColor,
                 //menuMaxHeight: widget.options.dropdownMenuMaxHeight,
                 style: widget.htmlToolbarOptions.textStyle,
                 items: [
@@ -529,11 +534,12 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   }
 
                   if (changed != null) {
-                    var proceed = await widget.htmlToolbarOptions.onDropdownChanged?.call(
-                            DropdownType.fontName,
-                            changed,
-                            updateSelectedItem) ??
-                        true;
+                    var proceed =
+                        await widget.htmlToolbarOptions.onDropdownChanged?.call(
+                                DropdownType.fontName,
+                                changed,
+                                updateSelectedItem) ??
+                            true;
                     if (proceed) {
                       widget.controller
                           .execCommand('fontName', argument: changed);
@@ -567,7 +573,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 iconSize: widget.htmlToolbarOptions.dropdownIconSize,
                 itemHeight: widget.htmlToolbarOptions.dropdownItemHeight,
                 focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
-                dropdownColor: widget.htmlToolbarOptions.dropdownBackgroundColor,
+                dropdownColor:
+                    widget.htmlToolbarOptions.dropdownBackgroundColor,
                 //menuMaxHeight: widget.options.dropdownMenuMaxHeight,
                 style: widget.htmlToolbarOptions.textStyle,
                 items: [
@@ -626,11 +633,12 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
 
                   if (changed != null) {
                     var intChanged = changed.toInt();
-                    var proceed = await widget.htmlToolbarOptions.onDropdownChanged?.call(
-                            DropdownType.fontSize,
-                            changed,
-                            updateSelectedItem) ??
-                        true;
+                    var proceed =
+                        await widget.htmlToolbarOptions.onDropdownChanged?.call(
+                                DropdownType.fontSize,
+                                changed,
+                                updateSelectedItem) ??
+                            true;
                     if (proceed) {
                       switch (intChanged) {
                         case 1:
@@ -687,7 +695,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 iconSize: widget.htmlToolbarOptions.dropdownIconSize,
                 itemHeight: widget.htmlToolbarOptions.dropdownItemHeight,
                 focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
-                dropdownColor: widget.htmlToolbarOptions.dropdownBackgroundColor,
+                dropdownColor:
+                    widget.htmlToolbarOptions.dropdownBackgroundColor,
                 //menuMaxHeight: widget.options.dropdownMenuMaxHeight,
                 style: widget.htmlToolbarOptions.textStyle,
                 items: [
@@ -711,11 +720,12 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   }
 
                   if (changed != null) {
-                    var proceed = await widget.htmlToolbarOptions.onDropdownChanged?.call(
-                            DropdownType.fontSizeUnit,
-                            changed,
-                            updateSelectedItem) ??
-                        true;
+                    var proceed =
+                        await widget.htmlToolbarOptions.onDropdownChanged?.call(
+                                DropdownType.fontSizeUnit,
+                                changed,
+                                updateSelectedItem) ??
+                            true;
                     if (proceed) {
                       updateSelectedItem(changed);
                     }
@@ -740,7 +750,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
             hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
             splashColor: widget.htmlToolbarOptions.buttonSplashColor,
-            selectedBorderColor: widget.htmlToolbarOptions.buttonSelectedBorderColor,
+            selectedBorderColor:
+                widget.htmlToolbarOptions.buttonSelectedBorderColor,
             borderColor: widget.htmlToolbarOptions.buttonBorderColor,
             borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
             borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
@@ -754,8 +765,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
 
               if (t.getIcons1()[index].icon == Icons.format_bold) {
-                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
-                        ButtonType.bold, _fontSelected[index], updateStatus) ??
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed
+                        ?.call(ButtonType.bold, _fontSelected[index],
+                            updateStatus) ??
                     true;
                 if (proceed) {
                   widget.controller.execCommand('bold');
@@ -763,10 +775,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_italic) {
-                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
-                        ButtonType.italic,
-                        _fontSelected[index],
-                        updateStatus) ??
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed
+                        ?.call(ButtonType.italic, _fontSelected[index],
+                            updateStatus) ??
                     true;
                 if (proceed) {
                   widget.controller.execCommand('italic');
@@ -774,10 +785,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_underline) {
-                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
-                        ButtonType.underline,
-                        _fontSelected[index],
-                        updateStatus) ??
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed
+                        ?.call(ButtonType.underline, _fontSelected[index],
+                            updateStatus) ??
                     true;
                 if (proceed) {
                   widget.controller.execCommand('underline');
@@ -810,7 +820,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
             hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
             splashColor: widget.htmlToolbarOptions.buttonSplashColor,
-            selectedBorderColor: widget.htmlToolbarOptions.buttonSelectedBorderColor,
+            selectedBorderColor:
+                widget.htmlToolbarOptions.buttonSelectedBorderColor,
             borderColor: widget.htmlToolbarOptions.buttonBorderColor,
             borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
             borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
@@ -824,10 +835,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
 
               if (t.getIcons2()[index].icon == Icons.format_strikethrough) {
-                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
-                        ButtonType.strikethrough,
-                        _miscFontSelected[index],
-                        updateStatus) ??
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed
+                        ?.call(ButtonType.strikethrough,
+                            _miscFontSelected[index], updateStatus) ??
                     true;
                 if (proceed) {
                   widget.controller.execCommand('strikeThrough');
@@ -835,10 +845,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons2()[index].icon == Icons.superscript) {
-                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
-                        ButtonType.superscript,
-                        _miscFontSelected[index],
-                        updateStatus) ??
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed
+                        ?.call(ButtonType.superscript, _miscFontSelected[index],
+                            updateStatus) ??
                     true;
                 if (proceed) {
                   widget.controller.execCommand('superscript');
@@ -846,10 +855,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons2()[index].icon == Icons.subscript) {
-                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
-                        ButtonType.subscript,
-                        _miscFontSelected[index],
-                        updateStatus) ??
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed
+                        ?.call(ButtonType.subscript, _miscFontSelected[index],
+                            updateStatus) ??
                     true;
                 if (proceed) {
                   widget.controller.execCommand('subscript');
@@ -875,7 +883,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
           hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
           splashColor: widget.htmlToolbarOptions.buttonSplashColor,
-          selectedBorderColor: widget.htmlToolbarOptions.buttonSelectedBorderColor,
+          selectedBorderColor:
+              widget.htmlToolbarOptions.buttonSelectedBorderColor,
           borderColor: widget.htmlToolbarOptions.buttonBorderColor,
           borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
           borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
@@ -890,10 +899,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
 
             if (_colorSelected[index]) {
               if (t.getIcons()[index].icon == Icons.format_color_text) {
-                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
-                        ButtonType.foregroundColor,
-                        _colorSelected[index],
-                        updateStatus) ??
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed
+                        ?.call(ButtonType.foregroundColor,
+                            _colorSelected[index], updateStatus) ??
                     true;
                 if (proceed) {
                   widget.controller.execCommand('foreColor',
@@ -905,10 +913,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons()[index].icon == Icons.format_color_fill) {
-                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
-                        ButtonType.highlightColor,
-                        _colorSelected[index],
-                        updateStatus) ??
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed
+                        ?.call(ButtonType.highlightColor, _colorSelected[index],
+                            updateStatus) ??
                     true;
                 if (proceed) {
                   widget.controller.execCommand('hiliteColor',
@@ -1050,7 +1057,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
             hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
             splashColor: widget.htmlToolbarOptions.buttonSplashColor,
-            selectedBorderColor: widget.htmlToolbarOptions.buttonSelectedBorderColor,
+            selectedBorderColor:
+                widget.htmlToolbarOptions.buttonSelectedBorderColor,
             borderColor: widget.htmlToolbarOptions.buttonBorderColor,
             borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
             borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
@@ -1064,8 +1072,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
 
               if (t.getIcons()[index].icon == Icons.format_list_bulleted) {
-                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
-                        ButtonType.ul, _listSelected[index], updateStatus) ??
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed
+                        ?.call(ButtonType.ul, _listSelected[index],
+                            updateStatus) ??
                     true;
                 if (proceed) {
                   widget.controller.execCommand('insertUnorderedList');
@@ -1073,8 +1082,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons()[index].icon == Icons.format_list_numbered) {
-                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
-                        ButtonType.ol, _listSelected[index], updateStatus) ??
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed
+                        ?.call(ButtonType.ol, _listSelected[index],
+                            updateStatus) ??
                     true;
                 if (proceed) {
                   widget.controller.execCommand('insertOrderedList');
@@ -1108,7 +1118,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 iconSize: widget.htmlToolbarOptions.dropdownIconSize,
                 itemHeight: widget.htmlToolbarOptions.dropdownItemHeight,
                 focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
-                dropdownColor: widget.htmlToolbarOptions.dropdownBackgroundColor,
+                dropdownColor:
+                    widget.htmlToolbarOptions.dropdownBackgroundColor,
                 //menuMaxHeight: widget.options.dropdownMenuMaxHeight,
                 style: widget.htmlToolbarOptions.textStyle,
                 items: [
@@ -1157,11 +1168,12 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   }
 
                   if (changed != null) {
-                    var proceed = await widget.htmlToolbarOptions.onDropdownChanged?.call(
-                            DropdownType.listStyles,
-                            changed,
-                            updateSelectedItem) ??
-                        true;
+                    var proceed =
+                        await widget.htmlToolbarOptions.onDropdownChanged?.call(
+                                DropdownType.listStyles,
+                                changed,
+                                updateSelectedItem) ??
+                            true;
                     if (proceed) {
                       if (kIsWeb) {
                         widget.controller.changeListStyle(changed);
@@ -1196,7 +1208,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
             hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
             splashColor: widget.htmlToolbarOptions.buttonSplashColor,
-            selectedBorderColor: widget.htmlToolbarOptions.buttonSelectedBorderColor,
+            selectedBorderColor:
+                widget.htmlToolbarOptions.buttonSelectedBorderColor,
             borderColor: widget.htmlToolbarOptions.buttonBorderColor,
             borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
             borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
@@ -1211,10 +1224,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
 
               if (t.getIcons1()[index].icon == Icons.format_align_left) {
-                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
-                        ButtonType.alignLeft,
-                        _alignSelected[index],
-                        updateStatus) ??
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed
+                        ?.call(ButtonType.alignLeft, _alignSelected[index],
+                            updateStatus) ??
                     true;
                 if (proceed) {
                   widget.controller.execCommand('justifyLeft');
@@ -1222,10 +1234,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_align_center) {
-                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
-                        ButtonType.alignCenter,
-                        _alignSelected[index],
-                        updateStatus) ??
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed
+                        ?.call(ButtonType.alignCenter, _alignSelected[index],
+                            updateStatus) ??
                     true;
                 if (proceed) {
                   widget.controller.execCommand('justifyCenter');
@@ -1233,10 +1244,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_align_right) {
-                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
-                        ButtonType.alignRight,
-                        _alignSelected[index],
-                        updateStatus) ??
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed
+                        ?.call(ButtonType.alignRight, _alignSelected[index],
+                            updateStatus) ??
                     true;
                 if (proceed) {
                   widget.controller.execCommand('justifyRight');
@@ -1244,10 +1254,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons1()[index].icon == Icons.format_align_justify) {
-                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
-                        ButtonType.alignJustify,
-                        _alignSelected[index],
-                        updateStatus) ??
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed
+                        ?.call(ButtonType.alignJustify, _alignSelected[index],
+                            updateStatus) ??
                     true;
                 if (proceed) {
                   widget.controller.execCommand('justifyFull');
@@ -1272,7 +1281,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
             hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
             splashColor: widget.htmlToolbarOptions.buttonSplashColor,
-            selectedBorderColor: widget.htmlToolbarOptions.buttonSelectedBorderColor,
+            selectedBorderColor:
+                widget.htmlToolbarOptions.buttonSelectedBorderColor,
             borderColor: widget.htmlToolbarOptions.buttonBorderColor,
             borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
             borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
@@ -1322,7 +1332,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 iconSize: widget.htmlToolbarOptions.dropdownIconSize,
                 itemHeight: widget.htmlToolbarOptions.dropdownItemHeight,
                 focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
-                dropdownColor: widget.htmlToolbarOptions.dropdownBackgroundColor,
+                dropdownColor:
+                    widget.htmlToolbarOptions.dropdownBackgroundColor,
                 //menuMaxHeight: widget.options.dropdownMenuMaxHeight,
                 style: widget.htmlToolbarOptions.textStyle,
                 items: [
@@ -1366,11 +1377,12 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   }
 
                   if (changed != null) {
-                    var proceed = await widget.htmlToolbarOptions.onDropdownChanged?.call(
-                            DropdownType.lineHeight,
-                            changed,
-                            updateSelectedItem) ??
-                        true;
+                    var proceed =
+                        await widget.htmlToolbarOptions.onDropdownChanged?.call(
+                                DropdownType.lineHeight,
+                                changed,
+                                updateSelectedItem) ??
+                            true;
                     if (proceed) {
                       if (kIsWeb) {
                         widget.controller.changeLineHeight(changed.toString());
@@ -1401,7 +1413,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
             hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
             splashColor: widget.htmlToolbarOptions.buttonSplashColor,
-            selectedBorderColor: widget.htmlToolbarOptions.buttonSelectedBorderColor,
+            selectedBorderColor:
+                widget.htmlToolbarOptions.buttonSelectedBorderColor,
             borderColor: widget.htmlToolbarOptions.buttonBorderColor,
             borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
             borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
@@ -1416,10 +1429,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 });
               }
 
-              var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
-                      index == 0 ? ButtonType.ltr : ButtonType.rtl,
-                      _alignSelected[index],
-                      updateStatus) ??
+              var proceed = await widget.htmlToolbarOptions.onButtonPressed
+                      ?.call(index == 0 ? ButtonType.ltr : ButtonType.rtl,
+                          _alignSelected[index], updateStatus) ??
                   true;
               if (proceed) {
                 if (kIsWeb) {
@@ -1468,7 +1480,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 iconSize: widget.htmlToolbarOptions.dropdownIconSize,
                 itemHeight: widget.htmlToolbarOptions.dropdownItemHeight,
                 focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
-                dropdownColor: widget.htmlToolbarOptions.dropdownBackgroundColor,
+                dropdownColor:
+                    widget.htmlToolbarOptions.dropdownBackgroundColor,
                 //menuMaxHeight: widget.options.dropdownMenuMaxHeight,
                 style: widget.htmlToolbarOptions.textStyle,
                 items: [
@@ -1493,7 +1506,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 value: null,
                 onChanged: (String? changed) async {
                   if (changed != null) {
-                    var proceed = await widget.htmlToolbarOptions.onDropdownChanged
+                    var proceed = await widget
+                            .htmlToolbarOptions.onDropdownChanged
                             ?.call(DropdownType.caseConverter, changed, null) ??
                         true;
                     if (proceed) {
@@ -1551,7 +1565,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
           hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
           splashColor: widget.htmlToolbarOptions.buttonSplashColor,
-          selectedBorderColor: widget.htmlToolbarOptions.buttonSelectedBorderColor,
+          selectedBorderColor:
+              widget.htmlToolbarOptions.buttonSelectedBorderColor,
           borderColor: widget.htmlToolbarOptions.buttonBorderColor,
           borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
           borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
@@ -1668,7 +1683,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 onPressed: () async {
                                   if (formKey.currentState!.validate()) {
                                     var proceed = await widget
-                                            .htmlToolbarOptions.linkInsertInterceptor
+                                            .htmlToolbarOptions
+                                            .linkInsertInterceptor
                                             ?.call(
                                                 text.text.isEmpty
                                                     ? url.text
@@ -1740,7 +1756,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               type: FileType.image,
                                               withData: true,
                                               allowedExtensions: widget
-                                                  .htmlToolbarOptions.imageExtensions,
+                                                  .htmlToolbarOptions
+                                                  .imageExtensions,
                                             );
                                             if (result?.files.single.name !=
                                                 null) {
@@ -1814,7 +1831,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     var base64Data = base64
                                         .encode(result!.files.single.bytes!);
                                     var proceed = await widget
-                                            .htmlToolbarOptions.mediaUploadInterceptor
+                                            .htmlToolbarOptions
+                                            .mediaUploadInterceptor
                                             ?.call(result!.files.single,
                                                 InsertFileType.image) ??
                                         true;
@@ -1825,7 +1843,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     Navigator.of(context).pop();
                                   } else {
                                     var proceed = await widget
-                                            .htmlToolbarOptions.mediaLinkInsertInterceptor
+                                            .htmlToolbarOptions
+                                            .mediaLinkInsertInterceptor
                                             ?.call(url.text,
                                                 InsertFileType.image) ??
                                         true;
@@ -1888,7 +1907,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               type: FileType.audio,
                                               withData: true,
                                               allowedExtensions: widget
-                                                  .htmlToolbarOptions.audioExtensions,
+                                                  .htmlToolbarOptions
+                                                  .audioExtensions,
                                             );
                                             if (result?.files.single.name !=
                                                 null) {
@@ -1962,7 +1982,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     var base64Data = base64
                                         .encode(result!.files.single.bytes!);
                                     var proceed = await widget
-                                            .htmlToolbarOptions.mediaUploadInterceptor
+                                            .htmlToolbarOptions
+                                            .mediaUploadInterceptor
                                             ?.call(result!.files.single,
                                                 InsertFileType.audio) ??
                                         true;
@@ -1973,7 +1994,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     Navigator.of(context).pop();
                                   } else {
                                     var proceed = await widget
-                                            .htmlToolbarOptions.mediaLinkInsertInterceptor
+                                            .htmlToolbarOptions
+                                            .mediaLinkInsertInterceptor
                                             ?.call(url.text,
                                                 InsertFileType.audio) ??
                                         true;
@@ -2036,7 +2058,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               type: FileType.video,
                                               withData: true,
                                               allowedExtensions: widget
-                                                  .htmlToolbarOptions.videoExtensions,
+                                                  .htmlToolbarOptions
+                                                  .videoExtensions,
                                             );
                                             if (result?.files.single.name !=
                                                 null) {
@@ -2110,7 +2133,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     var base64Data = base64
                                         .encode(result!.files.single.bytes!);
                                     var proceed = await widget
-                                            .htmlToolbarOptions.mediaUploadInterceptor
+                                            .htmlToolbarOptions
+                                            .mediaUploadInterceptor
                                             ?.call(result!.files.single,
                                                 InsertFileType.video) ??
                                         true;
@@ -2121,7 +2145,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     Navigator.of(context).pop();
                                   } else {
                                     var proceed = await widget
-                                            .htmlToolbarOptions.mediaLinkInsertInterceptor
+                                            .htmlToolbarOptions
+                                            .mediaLinkInsertInterceptor
                                             ?.call(url.text,
                                                 InsertFileType.video) ??
                                         true;
@@ -2184,7 +2209,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               type: FileType.any,
                                               withData: true,
                                               allowedExtensions: widget
-                                                  .htmlToolbarOptions.otherFileExtensions,
+                                                  .htmlToolbarOptions
+                                                  .otherFileExtensions,
                                             );
                                             if (result?.files.single.name !=
                                                 null) {
@@ -2259,7 +2285,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                         ?.call(result!.files.single);
                                     Navigator.of(context).pop();
                                   } else {
-                                    widget.htmlToolbarOptions.onOtherFileLinkInsert
+                                    widget.htmlToolbarOptions
+                                        .onOtherFileLinkInsert
                                         ?.call(url.text);
                                     Navigator.of(context).pop();
                                   }
@@ -2365,7 +2392,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
             hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
             splashColor: widget.htmlToolbarOptions.buttonSplashColor,
-            selectedBorderColor: widget.htmlToolbarOptions.buttonSelectedBorderColor,
+            selectedBorderColor:
+                widget.htmlToolbarOptions.buttonSelectedBorderColor,
             borderColor: widget.htmlToolbarOptions.buttonBorderColor,
             borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
             borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
@@ -2379,10 +2407,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               }
 
               if (t.getIcons1()[index].icon == Icons.fullscreen) {
-                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
-                        ButtonType.fullscreen,
-                        _miscSelected[index],
-                        updateStatus) ??
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed
+                        ?.call(ButtonType.fullscreen, _miscSelected[index],
+                            updateStatus) ??
                     true;
                 if (proceed) {
                   widget.controller.setFullScreen();
@@ -2390,10 +2417,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 }
               }
               if (t.getIcons1()[index].icon == Icons.code) {
-                var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
-                        ButtonType.codeview,
-                        _miscSelected[index],
-                        updateStatus) ??
+                var proceed = await widget.htmlToolbarOptions.onButtonPressed
+                        ?.call(ButtonType.codeview, _miscSelected[index],
+                            updateStatus) ??
                     true;
                 if (proceed) {
                   widget.controller.toggleCodeView();
@@ -2678,7 +2704,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
             hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
             splashColor: widget.htmlToolbarOptions.buttonSplashColor,
-            selectedBorderColor: widget.htmlToolbarOptions.buttonSelectedBorderColor,
+            selectedBorderColor:
+                widget.htmlToolbarOptions.buttonSelectedBorderColor,
             borderColor: widget.htmlToolbarOptions.buttonBorderColor,
             borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
             borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
@@ -2721,10 +2748,12 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           i++) {
         if (widget.htmlToolbarOptions.customToolbarInsertionIndices[i] >
             toolbarChildren.length) {
+          toolbarChildren.insert(toolbarChildren.length,
+              widget.htmlToolbarOptions.customToolbarButtons[i]);
+        } else if (widget.htmlToolbarOptions.customToolbarInsertionIndices[i] <
+            0) {
           toolbarChildren.insert(
-              toolbarChildren.length, widget.htmlToolbarOptions.customToolbarButtons[i]);
-        } else if (widget.htmlToolbarOptions.customToolbarInsertionIndices[i] < 0) {
-          toolbarChildren.insert(0, widget.htmlToolbarOptions.customToolbarButtons[i]);
+              0, widget.htmlToolbarOptions.customToolbarButtons[i]);
         } else {
           toolbarChildren.insert(
               widget.htmlToolbarOptions.customToolbarInsertionIndices[i],
@@ -2735,8 +2764,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       toolbarChildren.addAll(widget.htmlToolbarOptions.customToolbarButtons);
     }
     if (widget.htmlToolbarOptions.renderSeparatorWidget) {
-      toolbarChildren =
-          intersperse(widget.htmlToolbarOptions.separatorWidget, toolbarChildren).toList();
+      toolbarChildren = intersperse(
+              widget.htmlToolbarOptions.separatorWidget, toolbarChildren)
+          .toList();
     }
     return toolbarChildren;
   }

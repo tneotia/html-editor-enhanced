@@ -1,3 +1,11 @@
+## [2.0.1] - 2021-04-28
+* Added support for setting custom `UserScript`s on the webview (mobile only)
+* Added support for customizing the context menu (menu when user selects text) for the webview (mobile only)
+* Added `LongPressGestureRecognizer` to the webview to allow users to select text via a long press (mobile only)
+    * You can set the duration before the long press is recognized via `HtmlEditorOptions > mobileLongPressDuration`
+* Added support for placing the toolbar wherever using `HtmlToolbarOptions > toolbarPosition: ToolbarPosition.custom`
+* See the README if you'd like to use any of these new features. `UserScript` and the context menu customization have external documentation via flutter_inappwebview - the docs are linked in the README.
+
 ## [2.0.0+1] - 2021-04-22
 * Transitioned to fully native controls! These are extremely customizable and have much better UX than the previous controls.
 * [BREAKING] refactored a lot of options into separate constructors

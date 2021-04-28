@@ -141,13 +141,16 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                         useHybridComposition: true,
                         loadWithOverviewMode: true,
                       )),
-                  initialUserScripts: widget.htmlEditorOptions.mobileInitialScripts,
+                  initialUserScripts:
+                      widget.htmlEditorOptions.mobileInitialScripts,
                   contextMenu: widget.htmlEditorOptions.mobileContextMenu,
                   gestureRecognizers: {
                     Factory<VerticalDragGestureRecognizer>(
                         () => VerticalDragGestureRecognizer()),
-                    Factory<LongPressGestureRecognizer>(
-                        () => LongPressGestureRecognizer(duration: widget.htmlEditorOptions.mobileLongPressDuration)),
+                    Factory<LongPressGestureRecognizer>(() =>
+                        LongPressGestureRecognizer(
+                            duration: widget
+                                .htmlEditorOptions.mobileLongPressDuration)),
                   },
                   onConsoleMessage: (controller, message) {
                     print(message.message);
