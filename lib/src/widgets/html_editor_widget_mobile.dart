@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -12,6 +11,7 @@ import 'package:html_editor_enhanced/html_editor.dart'
     hide HtmlEditorController;
 import 'package:html_editor_enhanced/src/html_editor_controller_mobile.dart';
 import 'package:html_editor_enhanced/src/widgets/toolbar_widget.dart';
+import 'package:html_editor_enhanced/utils/utils.dart';
 import 'package:html_editor_enhanced/utils/plugins.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -86,7 +86,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
   /// resets the height of the editor to the original height
   void resetHeight() async {
     if (mounted) {
-      setState(() {
+      setState(mounted, () {
         docHeight = widget.otherOptions.height;
       });
       await controllerMap[widget.controller].evaluateJavascript(
@@ -168,7 +168,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       var visibleDecimal = await visibleStream.stream.first;
                       var newHeight = widget.otherOptions.height;
                       if (visibleDecimal > 0.1) {
-                        setState(() {
+                        setState(mounted, () {
                           docHeight = newHeight * visibleDecimal;
                         });
                         //todo add support for traditional summernote controls again?
@@ -694,15 +694,5 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
             c.onScroll!.call();
           });
     }
-  }
-
-  /// Generates a random string to be used as the [VisibilityDetector] key.
-  /// Technically this limits the number of editors to a finite number, but
-  /// nobody will be embedding enough editors to reach the theoretical limit
-  /// (yes, this is a challenge ;-) )
-  String getRandString(int len) {
-    var random = Random.secure();
-    var values = List<int>.generate(len, (i) => random.nextInt(255));
-    return base64UrlEncode(values);
   }
 }

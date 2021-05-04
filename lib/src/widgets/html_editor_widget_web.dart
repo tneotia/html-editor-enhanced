@@ -1,12 +1,12 @@
 export 'dart:html';
 
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:html_editor_enhanced/utils/utils.dart';
 import 'package:html_editor_enhanced/src/widgets/toolbar_widget.dart';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
@@ -456,7 +456,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
       });
     ui.platformViewRegistry
         .registerViewFactory(createdViewId, (int viewId) => iframe);
-    setState(() {
+    setState(mounted, () {
       summernoteInit = Future.value(true);
     });
   }
@@ -626,7 +626,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             widget.htmlEditorOptions.autoAdjustHeight) {
           final docHeight = data['height'] ?? actualHeight;
           if ((docHeight != null && docHeight != actualHeight) && mounted) {
-            setState(() {
+            setState(mounted, () {
               actualHeight =
                   docHeight + (toolbarKey.currentContext?.size?.height ?? 0);
             });
@@ -722,15 +722,5 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         }
       }
     });
-  }
-
-  /// Generates a random string to be used as the view ID. Technically this
-  /// limits the number of editors to a finite number, but nobody will be
-  /// embedding enough editors to reach the theoretical limit (yes, this
-  /// is a challenge ;-) )
-  String getRandString(int len) {
-    var random = Random.secure();
-    var values = List<int>.generate(len, (i) => random.nextInt(255));
-    return base64UrlEncode(values);
   }
 }
