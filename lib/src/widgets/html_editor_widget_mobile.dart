@@ -86,12 +86,12 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
   /// resets the height of the editor to the original height
   void resetHeight() async {
     if (mounted) {
-      setState(mounted, () {
+      this.setState(() {
         docHeight = widget.otherOptions.height;
       });
       await controllerMap[widget.controller].evaluateJavascript(
           source:
-              "\$('div.note-editable').height(${widget.otherOptions.height - (toolbarKey.currentContext?.size?.height ?? 0)});");
+              "\$('div.note-editable').outerHeight(${widget.otherOptions.height - (toolbarKey.currentContext?.size?.height ?? 0)});");
     }
   }
 
@@ -107,7 +107,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
           if (!visibleStream.isClosed) visibleStream.add(info.visibleFraction);
         },
         child: Container(
-          height: docHeight + 30,
+          height: docHeight + 10,
           decoration: widget.otherOptions.decoration,
           child: Column(
             children: [
@@ -164,17 +164,18 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                     }
                     if (widget.htmlEditorOptions.adjustHeightForKeyboard &&
                         mounted) {
-                      await visibleStream.stream.drain();
+                      //todo figure out replacement for visibleStream.drain()
+                      //Streambuilder maybe?
                       var visibleDecimal = await visibleStream.stream.first;
                       var newHeight = widget.otherOptions.height;
                       if (visibleDecimal > 0.1) {
-                        setState(mounted, () {
+                        this.setState(() {
                           docHeight = newHeight * visibleDecimal;
                         });
                         //todo add support for traditional summernote controls again?
                         await controller.evaluateJavascript(
                             source:
-                                "\$('div.note-editable').height(${max(docHeight - (toolbarKey.currentContext?.size?.height ?? 0), 30)});");
+                                "\$('div.note-editable').outerHeight(${max(docHeight - (toolbarKey.currentContext?.size?.height ?? 0), 30)});");
                       }
                     }
                   },
