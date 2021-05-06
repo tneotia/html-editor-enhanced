@@ -52,7 +52,6 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Gets the text from the editor and returns it as a [String].
   @override
   Future<String> getText() async {
-    await html.window.onMessage.drain();
     _evaluateJavascriptWeb(data: {'type': 'toIframe: getText'});
     var e = await html.window.onMessage.firstWhere(
         (element) => json.decode(element.data)['type'] == 'toDart: getText');
