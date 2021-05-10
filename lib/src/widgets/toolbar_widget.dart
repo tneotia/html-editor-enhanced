@@ -375,10 +375,13 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               itemHeight: widget.htmlToolbarOptions.dropdownItemHeight,
               focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
               dropdownColor: widget.htmlToolbarOptions.dropdownBackgroundColor,
-              menuDirection: widget.htmlToolbarOptions.dropdownMenuDirection ?? 
-                    (widget.htmlToolbarOptions.toolbarPosition == ToolbarPosition.belowEditor ? DropdownMenuDirection.up : DropdownMenuDirection.down),
+              menuDirection: widget.htmlToolbarOptions.dropdownMenuDirection ??
+                  (widget.htmlToolbarOptions.toolbarPosition ==
+                          ToolbarPosition.belowEditor
+                      ? DropdownMenuDirection.up
+                      : DropdownMenuDirection.down),
               menuMaxHeight: widget.htmlToolbarOptions.dropdownMenuMaxHeight ??
-                MediaQuery.of(context).size.height / 3,
+                  MediaQuery.of(context).size.height / 3,
               style: widget.htmlToolbarOptions.textStyle,
               items: [
                 CustomDropdownMenuItem(
@@ -505,10 +508,15 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
                 dropdownColor:
                     widget.htmlToolbarOptions.dropdownBackgroundColor,
-                menuDirection: widget.htmlToolbarOptions.dropdownMenuDirection ?? 
-                    (widget.htmlToolbarOptions.toolbarPosition == ToolbarPosition.belowEditor ? DropdownMenuDirection.up : DropdownMenuDirection.down),
-                menuMaxHeight: widget.htmlToolbarOptions.dropdownMenuMaxHeight ??
-                  MediaQuery.of(context).size.height / 3,
+                menuDirection:
+                    widget.htmlToolbarOptions.dropdownMenuDirection ??
+                        (widget.htmlToolbarOptions.toolbarPosition ==
+                                ToolbarPosition.belowEditor
+                            ? DropdownMenuDirection.up
+                            : DropdownMenuDirection.down),
+                menuMaxHeight:
+                    widget.htmlToolbarOptions.dropdownMenuMaxHeight ??
+                        MediaQuery.of(context).size.height / 3,
                 style: widget.htmlToolbarOptions.textStyle,
                 items: [
                   CustomDropdownMenuItem(
@@ -582,10 +590,15 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
                 dropdownColor:
                     widget.htmlToolbarOptions.dropdownBackgroundColor,
-                menuDirection: widget.htmlToolbarOptions.dropdownMenuDirection ?? 
-                    (widget.htmlToolbarOptions.toolbarPosition == ToolbarPosition.belowEditor ? DropdownMenuDirection.up : DropdownMenuDirection.down),
-              menuMaxHeight: widget.htmlToolbarOptions.dropdownMenuMaxHeight ??
-                MediaQuery.of(context).size.height / 3,
+                menuDirection:
+                    widget.htmlToolbarOptions.dropdownMenuDirection ??
+                        (widget.htmlToolbarOptions.toolbarPosition ==
+                                ToolbarPosition.belowEditor
+                            ? DropdownMenuDirection.up
+                            : DropdownMenuDirection.down),
+                menuMaxHeight:
+                    widget.htmlToolbarOptions.dropdownMenuMaxHeight ??
+                        MediaQuery.of(context).size.height / 3,
                 style: widget.htmlToolbarOptions.textStyle,
                 items: [
                   CustomDropdownMenuItem(
@@ -707,10 +720,15 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
                 dropdownColor:
                     widget.htmlToolbarOptions.dropdownBackgroundColor,
-                menuDirection: widget.htmlToolbarOptions.dropdownMenuDirection ?? 
-                    (widget.htmlToolbarOptions.toolbarPosition == ToolbarPosition.belowEditor ? DropdownMenuDirection.up : DropdownMenuDirection.down),
-              menuMaxHeight: widget.htmlToolbarOptions.dropdownMenuMaxHeight ??
-                MediaQuery.of(context).size.height / 3,
+                menuDirection:
+                    widget.htmlToolbarOptions.dropdownMenuDirection ??
+                        (widget.htmlToolbarOptions.toolbarPosition ==
+                                ToolbarPosition.belowEditor
+                            ? DropdownMenuDirection.up
+                            : DropdownMenuDirection.down),
+                menuMaxHeight:
+                    widget.htmlToolbarOptions.dropdownMenuMaxHeight ??
+                        MediaQuery.of(context).size.height / 3,
                 style: widget.htmlToolbarOptions.textStyle,
                 items: [
                   CustomDropdownMenuItem(
@@ -1133,10 +1151,15 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
                 dropdownColor:
                     widget.htmlToolbarOptions.dropdownBackgroundColor,
-                menuDirection: widget.htmlToolbarOptions.dropdownMenuDirection ?? 
-                    (widget.htmlToolbarOptions.toolbarPosition == ToolbarPosition.belowEditor ? DropdownMenuDirection.up : DropdownMenuDirection.down),
-              menuMaxHeight: widget.htmlToolbarOptions.dropdownMenuMaxHeight ??
-                MediaQuery.of(context).size.height / 3,
+                menuDirection:
+                    widget.htmlToolbarOptions.dropdownMenuDirection ??
+                        (widget.htmlToolbarOptions.toolbarPosition ==
+                                ToolbarPosition.belowEditor
+                            ? DropdownMenuDirection.up
+                            : DropdownMenuDirection.down),
+                menuMaxHeight:
+                    widget.htmlToolbarOptions.dropdownMenuMaxHeight ??
+                        MediaQuery.of(context).size.height / 3,
                 style: widget.htmlToolbarOptions.textStyle,
                 items: [
                   CustomDropdownMenuItem(
@@ -1350,10 +1373,15 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
                 dropdownColor:
                     widget.htmlToolbarOptions.dropdownBackgroundColor,
-                menuDirection: widget.htmlToolbarOptions.dropdownMenuDirection ?? 
-                    (widget.htmlToolbarOptions.toolbarPosition == ToolbarPosition.belowEditor ? DropdownMenuDirection.up : DropdownMenuDirection.down),
-              menuMaxHeight: widget.htmlToolbarOptions.dropdownMenuMaxHeight ??
-                MediaQuery.of(context).size.height / 3,
+                menuDirection:
+                    widget.htmlToolbarOptions.dropdownMenuDirection ??
+                        (widget.htmlToolbarOptions.toolbarPosition ==
+                                ToolbarPosition.belowEditor
+                            ? DropdownMenuDirection.up
+                            : DropdownMenuDirection.down),
+                menuMaxHeight:
+                    widget.htmlToolbarOptions.dropdownMenuMaxHeight ??
+                        MediaQuery.of(context).size.height / 3,
                 style: widget.htmlToolbarOptions.textStyle,
                 items: [
                   CustomDropdownMenuItem(
@@ -1501,10 +1529,15 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
                 dropdownColor:
                     widget.htmlToolbarOptions.dropdownBackgroundColor,
-                menuDirection: widget.htmlToolbarOptions.dropdownMenuDirection ?? 
-                    (widget.htmlToolbarOptions.toolbarPosition == ToolbarPosition.belowEditor ? DropdownMenuDirection.up : DropdownMenuDirection.down),
-              menuMaxHeight: widget.htmlToolbarOptions.dropdownMenuMaxHeight ??
-                MediaQuery.of(context).size.height / 3,
+                menuDirection:
+                    widget.htmlToolbarOptions.dropdownMenuDirection ??
+                        (widget.htmlToolbarOptions.toolbarPosition ==
+                                ToolbarPosition.belowEditor
+                            ? DropdownMenuDirection.up
+                            : DropdownMenuDirection.down),
+                menuMaxHeight:
+                    widget.htmlToolbarOptions.dropdownMenuMaxHeight ??
+                        MediaQuery.of(context).size.height / 3,
                 style: widget.htmlToolbarOptions.textStyle,
                 items: [
                   CustomDropdownMenuItem(
