@@ -1,3 +1,9 @@
+## [2.1.0] - 2021-05-10
+* Fixed `setState` and `Stream.first` error on page dispose
+* Fixed height adjustment not working
+* Fixed `getText` on Web
+* Improved dropdown UX when `ToolbarPosition.belowEditor` by opening upwards and making it scrollable after a certain height
+
 ## [2.0.1] - 2021-04-28
 * Added support for setting custom `UserScript`s on the webview (mobile only)
 * Added support for customizing the context menu (menu when user selects text) for the webview (mobile only)
