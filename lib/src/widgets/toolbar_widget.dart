@@ -111,13 +111,13 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   }
 
   void disable() {
-    setState(mounted, () {
+    setState(mounted, this.setState, () {
       _enabled = false;
     });
   }
 
   void enable() {
-    setState(mounted, () {
+    setState(mounted, this.setState, () {
       _enabled = true;
     });
   }
@@ -150,44 +150,44 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
     //check the parent element if it matches one of the predetermined styles and update the toolbar
     if (['pre', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
         .contains(parentElem)) {
-      setState(mounted, () {
+      setState(mounted, this.setState, () {
         _fontSelectedItem = parentElem;
       });
     } else {
-      setState(mounted, () {
+      setState(mounted, this.setState, () {
         _fontSelectedItem = 'p';
       });
     }
     //check the font name if it matches one of the predetermined fonts and update the toolbar
     if (['Courier New', 'sans-serif', 'Times New Roman'].contains(fontName)) {
-      setState(mounted, () {
+      setState(mounted, this.setState, () {
         _fontNameSelectedItem = fontName;
       });
     } else {
-      setState(mounted, () {
+      setState(mounted, this.setState, () {
         _fontNameSelectedItem = 'sans-serif';
       });
     }
     //update the fore/back selected color if necessary
     if (colorList[0] != null && colorList[0]!.isNotEmpty) {
-      setState(mounted, () {
+      setState(mounted, this.setState, () {
         var rgb = colorList[0]!.replaceAll('rgb(', '').replaceAll(')', '');
         var rgbList = rgb.split(', ');
         _foreColorSelected = Color.fromRGBO(int.parse(rgbList[0]),
             int.parse(rgbList[1]), int.parse(rgbList[2]), 1);
       });
     } else {
-      setState(mounted, () {
+      setState(mounted, this.setState, () {
         _foreColorSelected = Colors.black;
       });
     }
     if (colorList[1] != null && colorList[1]!.isNotEmpty) {
-      setState(mounted, () {
+      setState(mounted, this.setState, () {
         _backColorSelected =
             Color(int.parse(colorList[1]!, radix: 16) + 0xFF000000);
       });
     } else {
-      setState(mounted, () {
+      setState(mounted, this.setState, () {
         _backColorSelected = Colors.yellow;
       });
     }
@@ -202,7 +202,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       'circle',
       'square'
     ].contains(listType)) {
-      setState(mounted, () {
+      setState(mounted, this.setState, () {
         _listStyleSelectedItem = listType;
       });
     } else {
@@ -216,33 +216,33 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       lineHeights =
           lineHeights.map((e) => e * _actualFontSizeSelectedItem).toList();
       if (lineHeights.contains(lineHeightDouble)) {
-        setState(mounted, () {
+        setState(mounted, this.setState, () {
           _lineHeightSelectedItem =
               lineHeightDouble / _actualFontSizeSelectedItem;
         });
       }
     } else if (lineHeight == 'normal') {
-      setState(mounted, () {
+      setState(mounted, this.setState, () {
         _lineHeightSelectedItem = 1.0;
       });
     }
     //check if the font size matches one of the predetermined sizes and update the toolbar
     if ([1, 2, 3, 4, 5, 6, 7].contains(fontSize)) {
-      setState(mounted, () {
+      setState(mounted, this.setState, () {
         _fontSizeSelectedItem = fontSize;
       });
     }
     if (textDir == 'ltr') {
-      setState(mounted, () {
+      setState(mounted, this.setState, () {
         _textDirectionSelected = [true, false];
       });
     } else if (textDir == 'rtl') {
-      setState(mounted, () {
+      setState(mounted, this.setState, () {
         _textDirectionSelected = [false, true];
       });
     }
     //use the remaining bool lists to update the selected items accordingly
-    setState(mounted, () {
+    setState(mounted, this.setState, () {
       for (var t in widget.htmlToolbarOptions.defaultToolbarButtons) {
         if (t is FontButtons) {
           for (var i = 0; i < _fontSelected.length; i++) {
@@ -366,8 +366,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                               .colorScheme
                               .onSurface
                               .withOpacity(0.12))),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton<String>(
+          child: CustomDropdownButtonHideUnderline(
+            child: CustomDropdownButton<String>(
               elevation: widget.htmlToolbarOptions.dropdownElevation,
               icon: widget.htmlToolbarOptions.dropdownIcon,
               iconEnabledColor: widget.htmlToolbarOptions.dropdownIconColor,
@@ -375,13 +375,16 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               itemHeight: widget.htmlToolbarOptions.dropdownItemHeight,
               focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
               dropdownColor: widget.htmlToolbarOptions.dropdownBackgroundColor,
-              //menuMaxHeight: widget.options.dropdownMenuMaxHeight,
+              menuDirection: widget.htmlToolbarOptions.dropdownMenuDirection ?? 
+                    (widget.htmlToolbarOptions.toolbarPosition == ToolbarPosition.belowEditor ? DropdownMenuDirection.up : DropdownMenuDirection.down),
+              menuMaxHeight: widget.htmlToolbarOptions.dropdownMenuMaxHeight ??
+                MediaQuery.of(context).size.height / 3,
               style: widget.htmlToolbarOptions.textStyle,
               items: [
-                DropdownMenuItem(
+                CustomDropdownMenuItem(
                     value: 'p',
                     child: PointerInterceptor(child: Text('Normal'))),
-                DropdownMenuItem(
+                CustomDropdownMenuItem(
                     value: 'blockquote',
                     child: PointerInterceptor(
                       child: Container(
@@ -394,7 +397,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                               style: TextStyle(
                                   fontFamily: 'times', color: Colors.grey))),
                     )),
-                DropdownMenuItem(
+                CustomDropdownMenuItem(
                     value: 'pre',
                     child: PointerInterceptor(
                       child: Container(
@@ -406,42 +409,42 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                               style: TextStyle(
                                   fontFamily: 'courier', color: Colors.white))),
                     )),
-                DropdownMenuItem(
+                CustomDropdownMenuItem(
                   value: 'h1',
                   child: PointerInterceptor(
                       child: Text('Header 1',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 32))),
                 ),
-                DropdownMenuItem(
+                CustomDropdownMenuItem(
                   value: 'h2',
                   child: PointerInterceptor(
                       child: Text('Header 2',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 24))),
                 ),
-                DropdownMenuItem(
+                CustomDropdownMenuItem(
                   value: 'h3',
                   child: PointerInterceptor(
                       child: Text('Header 3',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18))),
                 ),
-                DropdownMenuItem(
+                CustomDropdownMenuItem(
                   value: 'h4',
                   child: PointerInterceptor(
                       child: Text('Header 4',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16))),
                 ),
-                DropdownMenuItem(
+                CustomDropdownMenuItem(
                   value: 'h5',
                   child: PointerInterceptor(
                       child: Text('Header 5',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 13))),
                 ),
-                DropdownMenuItem(
+                CustomDropdownMenuItem(
                   value: 'h6',
                   child: PointerInterceptor(
                       child: Text('Header 6',
@@ -453,7 +456,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               onChanged: (String? changed) async {
                 void updateSelectedItem(dynamic changed) {
                   if (changed is String) {
-                    setState(mounted, () {
+                    setState(mounted, this.setState, () {
                       _fontSelectedItem = changed;
                     });
                   }
@@ -492,8 +495,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 .colorScheme
                                 .onSurface
                                 .withOpacity(0.12))),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
+            child: CustomDropdownButtonHideUnderline(
+              child: CustomDropdownButton<String>(
                 elevation: widget.htmlToolbarOptions.dropdownElevation,
                 icon: widget.htmlToolbarOptions.dropdownIcon,
                 iconEnabledColor: widget.htmlToolbarOptions.dropdownIconColor,
@@ -502,22 +505,25 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
                 dropdownColor:
                     widget.htmlToolbarOptions.dropdownBackgroundColor,
-                //menuMaxHeight: widget.options.dropdownMenuMaxHeight,
+                menuDirection: widget.htmlToolbarOptions.dropdownMenuDirection ?? 
+                    (widget.htmlToolbarOptions.toolbarPosition == ToolbarPosition.belowEditor ? DropdownMenuDirection.up : DropdownMenuDirection.down),
+                menuMaxHeight: widget.htmlToolbarOptions.dropdownMenuMaxHeight ??
+                  MediaQuery.of(context).size.height / 3,
                 style: widget.htmlToolbarOptions.textStyle,
                 items: [
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 'Courier New',
                     child: PointerInterceptor(
                         child: Text('Courier New',
                             style: TextStyle(fontFamily: 'Courier'))),
                   ),
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 'sans-serif',
                     child: PointerInterceptor(
                         child: Text('Sans Serif',
                             style: TextStyle(fontFamily: 'sans-serif'))),
                   ),
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 'Times New Roman',
                     child: PointerInterceptor(
                         child: Text('Times New Roman',
@@ -528,7 +534,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 onChanged: (String? changed) async {
                   void updateSelectedItem(dynamic changed) async {
                     if (changed is String) {
-                      setState(mounted, () {
+                      setState(mounted, this.setState, () {
                         _fontNameSelectedItem = changed;
                       });
                     }
@@ -566,8 +572,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 .colorScheme
                                 .onSurface
                                 .withOpacity(0.12))),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<double>(
+            child: CustomDropdownButtonHideUnderline(
+              child: CustomDropdownButton<double>(
                 elevation: widget.htmlToolbarOptions.dropdownElevation,
                 icon: widget.htmlToolbarOptions.dropdownIcon,
                 iconEnabledColor: widget.htmlToolbarOptions.dropdownIconColor,
@@ -576,46 +582,49 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
                 dropdownColor:
                     widget.htmlToolbarOptions.dropdownBackgroundColor,
-                //menuMaxHeight: widget.options.dropdownMenuMaxHeight,
+                menuDirection: widget.htmlToolbarOptions.dropdownMenuDirection ?? 
+                    (widget.htmlToolbarOptions.toolbarPosition == ToolbarPosition.belowEditor ? DropdownMenuDirection.up : DropdownMenuDirection.down),
+              menuMaxHeight: widget.htmlToolbarOptions.dropdownMenuMaxHeight ??
+                MediaQuery.of(context).size.height / 3,
                 style: widget.htmlToolbarOptions.textStyle,
                 items: [
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 1,
                     child: PointerInterceptor(
                         child: Text(
                             "${_fontSizeUnitSelectedItem == "px" ? "11" : "8"} $_fontSizeUnitSelectedItem")),
                   ),
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 2,
                     child: PointerInterceptor(
                         child: Text(
                             "${_fontSizeUnitSelectedItem == "px" ? "13" : "10"} $_fontSizeUnitSelectedItem")),
                   ),
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 3,
                     child: PointerInterceptor(
                         child: Text(
                             "${_fontSizeUnitSelectedItem == "px" ? "16" : "12"} $_fontSizeUnitSelectedItem")),
                   ),
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 4,
                     child: PointerInterceptor(
                         child: Text(
                             "${_fontSizeUnitSelectedItem == "px" ? "19" : "14"} $_fontSizeUnitSelectedItem")),
                   ),
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 5,
                     child: PointerInterceptor(
                         child: Text(
                             "${_fontSizeUnitSelectedItem == "px" ? "24" : "18"} $_fontSizeUnitSelectedItem")),
                   ),
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 6,
                     child: PointerInterceptor(
                         child: Text(
                             "${_fontSizeUnitSelectedItem == "px" ? "32" : "24"} $_fontSizeUnitSelectedItem")),
                   ),
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 7,
                     child: PointerInterceptor(
                         child: Text(
@@ -626,7 +635,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 onChanged: (double? changed) async {
                   void updateSelectedItem(dynamic changed) {
                     if (changed is double) {
-                      setState(mounted, () {
+                      setState(mounted, this.setState, () {
                         _fontSizeSelectedItem = changed;
                       });
                     }
@@ -688,8 +697,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 .colorScheme
                                 .onSurface
                                 .withOpacity(0.12))),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
+            child: CustomDropdownButtonHideUnderline(
+              child: CustomDropdownButton<String>(
                 elevation: widget.htmlToolbarOptions.dropdownElevation,
                 icon: widget.htmlToolbarOptions.dropdownIcon,
                 iconEnabledColor: widget.htmlToolbarOptions.dropdownIconColor,
@@ -698,14 +707,17 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
                 dropdownColor:
                     widget.htmlToolbarOptions.dropdownBackgroundColor,
-                //menuMaxHeight: widget.options.dropdownMenuMaxHeight,
+                menuDirection: widget.htmlToolbarOptions.dropdownMenuDirection ?? 
+                    (widget.htmlToolbarOptions.toolbarPosition == ToolbarPosition.belowEditor ? DropdownMenuDirection.up : DropdownMenuDirection.down),
+              menuMaxHeight: widget.htmlToolbarOptions.dropdownMenuMaxHeight ??
+                MediaQuery.of(context).size.height / 3,
                 style: widget.htmlToolbarOptions.textStyle,
                 items: [
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 'pt',
                     child: PointerInterceptor(child: Text('pt')),
                   ),
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 'px',
                     child: PointerInterceptor(child: Text('px')),
                   ),
@@ -714,7 +726,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 onChanged: (String? changed) async {
                   void updateSelectedItem(dynamic changed) {
                     if (changed is String) {
-                      setState(mounted, () {
+                      setState(mounted, this.setState, () {
                         _fontSizeUnitSelectedItem = changed;
                       });
                     }
@@ -760,7 +772,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             textStyle: widget.htmlToolbarOptions.textStyle,
             onPressed: (int index) async {
               void updateStatus() {
-                setState(mounted, () {
+                setState(mounted, this.setState, () {
                   _fontSelected[index] = !_fontSelected[index];
                 });
               }
@@ -830,7 +842,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             textStyle: widget.htmlToolbarOptions.textStyle,
             onPressed: (int index) async {
               void updateStatus() {
-                setState(mounted, () {
+                setState(mounted, this.setState, () {
                   _miscFontSelected[index] = !_miscFontSelected[index];
                 });
               }
@@ -893,7 +905,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           textStyle: widget.htmlToolbarOptions.textStyle,
           onPressed: (int index) async {
             void updateStatus() {
-              setState(mounted, () {
+              setState(mounted, this.setState, () {
                 _colorSelected[index] = !_colorSelected[index];
               });
             }
@@ -978,7 +990,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 onPressed: () {
                                   if (t.getIcons()[index].icon ==
                                       Icons.format_color_text) {
-                                    setState(mounted, () {
+                                    setState(mounted, this.setState, () {
                                       _foreColorSelected = Colors.black;
                                     });
                                     widget.controller.execCommand(
@@ -989,7 +1001,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                   }
                                   if (t.getIcons()[index].icon ==
                                       Icons.format_color_fill) {
-                                    setState(mounted, () {
+                                    setState(mounted, this.setState, () {
                                       _backColorSelected = Colors.yellow;
                                     });
                                     widget.controller.execCommand(
@@ -1010,7 +1022,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                           .toRadixString(16)
                                           .padLeft(6, '0')
                                           .toUpperCase());
-                                  setState(mounted, () {
+                                  setState(mounted, this.setState, () {
                                     _foreColorSelected = newColor;
                                   });
                                 }
@@ -1021,11 +1033,11 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                           .toRadixString(16)
                                           .padLeft(6, '0')
                                           .toUpperCase());
-                                  setState(mounted, () {
+                                  setState(mounted, this.setState, () {
                                     _backColorSelected = newColor;
                                   });
                                 }
-                                setState(mounted, () {
+                                setState(mounted, this.setState, () {
                                   _colorSelected[index] =
                                       !_colorSelected[index];
                                 });
@@ -1067,7 +1079,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             textStyle: widget.htmlToolbarOptions.textStyle,
             onPressed: (int index) async {
               void updateStatus() {
-                setState(mounted, () {
+                setState(mounted, this.setState, () {
                   _listSelected[index] = !_listSelected[index];
                 });
               }
@@ -1111,8 +1123,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 .colorScheme
                                 .onSurface
                                 .withOpacity(0.12))),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
+            child: CustomDropdownButtonHideUnderline(
+              child: CustomDropdownButton<String>(
                 elevation: widget.htmlToolbarOptions.dropdownElevation,
                 icon: widget.htmlToolbarOptions.dropdownIcon,
                 iconEnabledColor: widget.htmlToolbarOptions.dropdownIconColor,
@@ -1121,38 +1133,41 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
                 dropdownColor:
                     widget.htmlToolbarOptions.dropdownBackgroundColor,
-                //menuMaxHeight: widget.options.dropdownMenuMaxHeight,
+                menuDirection: widget.htmlToolbarOptions.dropdownMenuDirection ?? 
+                    (widget.htmlToolbarOptions.toolbarPosition == ToolbarPosition.belowEditor ? DropdownMenuDirection.up : DropdownMenuDirection.down),
+              menuMaxHeight: widget.htmlToolbarOptions.dropdownMenuMaxHeight ??
+                MediaQuery.of(context).size.height / 3,
                 style: widget.htmlToolbarOptions.textStyle,
                 items: [
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 'decimal',
                     child: PointerInterceptor(child: Text('1. Numbered')),
                   ),
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 'lower-alpha',
                     child: PointerInterceptor(child: Text('a. Lower Alpha')),
                   ),
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 'upper-alpha',
                     child: PointerInterceptor(child: Text('A. Upper Alpha')),
                   ),
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 'lower-roman',
                     child: PointerInterceptor(child: Text('i. Lower Roman')),
                   ),
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 'upper-roman',
                     child: PointerInterceptor(child: Text('I. Upper Roman')),
                   ),
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 'disc',
                     child: PointerInterceptor(child: Text('• Disc')),
                   ),
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 'circle',
                     child: PointerInterceptor(child: Text('○ Circle')),
                   ),
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 'square',
                     child: PointerInterceptor(child: Text('■ Square')),
                   ),
@@ -1162,7 +1177,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 onChanged: (String? changed) async {
                   void updateSelectedItem(dynamic changed) {
                     if (changed is String) {
-                      setState(mounted, () {
+                      setState(mounted, this.setState, () {
                         _listStyleSelectedItem = changed;
                       });
                     }
@@ -1219,7 +1234,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             onPressed: (int index) async {
               void updateStatus() {
                 _alignSelected = List<bool>.filled(t.getIcons1().length, false);
-                setState(mounted, () {
+                setState(mounted, this.setState, () {
                   _alignSelected[index] = !_alignSelected[index];
                 });
               }
@@ -1325,8 +1340,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 .colorScheme
                                 .onSurface
                                 .withOpacity(0.12))),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<double>(
+            child: CustomDropdownButtonHideUnderline(
+              child: CustomDropdownButton<double>(
                 elevation: widget.htmlToolbarOptions.dropdownElevation,
                 icon: widget.htmlToolbarOptions.dropdownIcon,
                 iconEnabledColor: widget.htmlToolbarOptions.dropdownIconColor,
@@ -1335,43 +1350,46 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
                 dropdownColor:
                     widget.htmlToolbarOptions.dropdownBackgroundColor,
-                //menuMaxHeight: widget.options.dropdownMenuMaxHeight,
+                menuDirection: widget.htmlToolbarOptions.dropdownMenuDirection ?? 
+                    (widget.htmlToolbarOptions.toolbarPosition == ToolbarPosition.belowEditor ? DropdownMenuDirection.up : DropdownMenuDirection.down),
+              menuMaxHeight: widget.htmlToolbarOptions.dropdownMenuMaxHeight ??
+                MediaQuery.of(context).size.height / 3,
                 style: widget.htmlToolbarOptions.textStyle,
                 items: [
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                       value: 1, child: PointerInterceptor(child: Text('1.0'))),
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 1.2,
                     child: PointerInterceptor(child: Text('1.2')),
                   ),
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 1.4,
                     child: PointerInterceptor(child: Text('1.4')),
                   ),
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 1.5,
                     child: PointerInterceptor(child: Text('1.5')),
                   ),
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 1.6,
                     child: PointerInterceptor(child: Text('1.6')),
                   ),
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 1.8,
                     child: PointerInterceptor(child: Text('1.8')),
                   ),
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 2,
                     child: PointerInterceptor(child: Text('2.0')),
                   ),
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                       value: 3, child: PointerInterceptor(child: Text('3.0'))),
                 ],
                 value: _lineHeightSelectedItem,
                 onChanged: (double? changed) async {
                   void updateSelectedItem(dynamic changed) {
                     if (changed is double) {
-                      setState(mounted, () {
+                      setState(mounted, this.setState, () {
                         _lineHeightSelectedItem = changed;
                       });
                     }
@@ -1424,7 +1442,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             onPressed: (int index) async {
               void updateStatus() {
                 _textDirectionSelected = List<bool>.filled(2, false);
-                setState(mounted, () {
+                setState(mounted, this.setState, () {
                   _textDirectionSelected[index] =
                       !_textDirectionSelected[index];
                 });
@@ -1473,8 +1491,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 .colorScheme
                                 .onSurface
                                 .withOpacity(0.12))),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
+            child: CustomDropdownButtonHideUnderline(
+              child: CustomDropdownButton<String>(
                 elevation: widget.htmlToolbarOptions.dropdownElevation,
                 icon: widget.htmlToolbarOptions.dropdownIcon,
                 iconEnabledColor: widget.htmlToolbarOptions.dropdownIconColor,
@@ -1483,22 +1501,25 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
                 dropdownColor:
                     widget.htmlToolbarOptions.dropdownBackgroundColor,
-                //menuMaxHeight: widget.options.dropdownMenuMaxHeight,
+                menuDirection: widget.htmlToolbarOptions.dropdownMenuDirection ?? 
+                    (widget.htmlToolbarOptions.toolbarPosition == ToolbarPosition.belowEditor ? DropdownMenuDirection.up : DropdownMenuDirection.down),
+              menuMaxHeight: widget.htmlToolbarOptions.dropdownMenuMaxHeight ??
+                MediaQuery.of(context).size.height / 3,
                 style: widget.htmlToolbarOptions.textStyle,
                 items: [
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 'lower',
                     child: PointerInterceptor(child: Text('lowercase')),
                   ),
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 'sentence',
                     child: PointerInterceptor(child: Text('Sentence case')),
                   ),
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 'title',
                     child: PointerInterceptor(child: Text('Title Case')),
                   ),
-                  DropdownMenuItem(
+                  CustomDropdownMenuItem(
                     value: 'upper',
                     child: PointerInterceptor(child: Text('UPPERCASE')),
                   ),
@@ -2402,7 +2423,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             textStyle: widget.htmlToolbarOptions.textStyle,
             onPressed: (int index) async {
               void updateStatus() {
-                setState(mounted, () {
+                setState(mounted, this.setState, () {
                   _miscSelected[index] = !_miscSelected[index];
                 });
               }

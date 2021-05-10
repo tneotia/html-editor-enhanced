@@ -276,6 +276,7 @@ Parameter | Type | Default
 **dropdownItemHeight** | `double` | `kMinInteractiveDimension` (`48`)
 **dropdownFocusColor** | `Color` | `null` 
 **dropdownBackgroundColor** | `Color` | `null` 
+**dropdownMenuDirection** | `DropdownMenuDirection` | `null`
 **dropdownMenuMaxHeight** | `double` | `null` 
 **dropdownBoxDecoration** | `BoxDecoration` | `null`
 

@@ -456,7 +456,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
       });
     ui.platformViewRegistry
         .registerViewFactory(createdViewId, (int viewId) => iframe);
-    setState(mounted, () {
+    setState(mounted, this.setState, () {
       summernoteInit = Future.value(true);
     });
   }
@@ -626,7 +626,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             widget.htmlEditorOptions.autoAdjustHeight) {
           final docHeight = data['height'] ?? actualHeight;
           if ((docHeight != null && docHeight != actualHeight) && mounted) {
-            setState(mounted, () {
+            setState(mounted, this.setState, () {
               actualHeight =
                   docHeight + (toolbarKey.currentContext?.size?.height ?? 0);
             });

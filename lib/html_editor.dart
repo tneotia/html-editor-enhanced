@@ -43,6 +43,7 @@ enum ToolbarType { nativeGrid, nativeScrollable }
 /// Note: This is ignored when [ToolbarType.summernote] is set.
 enum ToolbarPosition { aboveEditor, belowEditor, custom }
 
+/// Returns the type of button pressed in the `onButtonPressed` function
 enum ButtonType {
   style,
   bold,
@@ -80,6 +81,7 @@ enum ButtonType {
   paste
 }
 
+/// Returns the type of dropdown changed in the `onDropdownChanged` function
 enum DropdownType {
   style,
   fontName,
@@ -90,4 +92,8 @@ enum DropdownType {
   caseConverter
 }
 
+/// Sets the direction the dropdown menu opens
+enum DropdownMenuDirection { down, up }
+
+/// Returns the type of file inserted in `onLinkInsertInt
 enum InsertFileType { image, audio, video }

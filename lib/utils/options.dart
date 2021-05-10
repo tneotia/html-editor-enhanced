@@ -118,6 +118,7 @@ class HtmlToolbarOptions {
     this.dropdownItemHeight = kMinInteractiveDimension,
     this.dropdownFocusColor,
     this.dropdownBackgroundColor,
+    this.dropdownMenuDirection,
     this.dropdownMenuMaxHeight,
     this.dropdownBoxDecoration,
     this.buttonColor,
@@ -323,6 +324,10 @@ class HtmlToolbarOptions {
   final double dropdownItemHeight;
   final Color? dropdownFocusColor;
   final Color? dropdownBackgroundColor;
+  /// Set the menu opening direction for the dropdown. Only useful when using
+  /// [ToolbarPosition.custom] since the toolbar otherwise automatically
+  /// determines the correct direction.
+  final DropdownMenuDirection? dropdownMenuDirection;
   final double? dropdownMenuMaxHeight;
   final BoxDecoration? dropdownBoxDecoration;
 
