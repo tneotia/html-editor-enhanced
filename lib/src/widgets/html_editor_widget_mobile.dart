@@ -164,8 +164,6 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                     }
                     if (widget.htmlEditorOptions.adjustHeightForKeyboard &&
                         mounted) {
-                      //todo figure out replacement for visibleStream.drain()
-                      //Streambuilder maybe?
                       var visibleDecimal = await visibleStream.stream.first;
                       var newHeight = widget.otherOptions.height;
                       if (visibleDecimal > 0.1) {

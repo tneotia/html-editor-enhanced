@@ -285,11 +285,12 @@ class _DropdownMenuState<T> extends State<_DropdownMenu<T>> {
             type: MaterialType.transparency,
             textStyle: route.style,
             child: ScrollConfiguration(
-              behavior: ScrollConfiguration.of(context).copyWith(
+              //todo
+              behavior: ScrollConfiguration.of(context)/*.copyWith(
                 overscroll: false,
                 physics: const ClampingScrollPhysics(),
                 platform: Theme.of(context).platform,
-              ),
+              )*/,
               child: PrimaryScrollController(
                 controller: widget.route.scrollController!,
                 child: Scrollbar(
