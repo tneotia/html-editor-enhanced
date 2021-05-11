@@ -111,7 +111,7 @@ More is on the way! File a feature request or contribute to the project if you'd
 
 ## Setup
 
-Add `html_editor_enhanced: ^2.1.0` as dependency to your pubspec.yaml.
+Add `html_editor_enhanced: ^2.1.0+1` as dependency to your pubspec.yaml.
 
 Additional setup is required on iOS to allow the user to pick files from storage. See [here](https://github.com/miguelpruivo/flutter_file_picker/wiki/Setup#--ios) for more details. 
 

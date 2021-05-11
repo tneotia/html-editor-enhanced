@@ -1,3 +1,6 @@
+## [2.1.0+1] - 2021-05-11
+* Hotfix for `copyWith` not defined for `ScrollBehavior` in v2.1.0
+
 ## [2.1.0] - 2021-05-10
 * Fixed `setState` and `Stream.first` error on page dispose
 * Fixed height adjustment not working
