@@ -1647,6 +1647,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                             (BuildContext context, StateSetter setState) {
                           return AlertDialog(
                             title: Text('Insert Link'),
+                            scrollable: true,
                             content: Form(
                               key: formKey,
                               child: Column(
@@ -1786,6 +1787,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                             (BuildContext context, StateSetter setState) {
                           return AlertDialog(
                             title: Text('Insert Image'),
+                            scrollable: true,
                             content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1937,6 +1939,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                             (BuildContext context, StateSetter setState) {
                           return AlertDialog(
                             title: Text('Insert Audio'),
+                            scrollable: true,
                             content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -2088,6 +2091,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                             (BuildContext context, StateSetter setState) {
                           return AlertDialog(
                             title: Text('Insert Video'),
+                            scrollable: true,
                             content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -2239,6 +2243,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                             (BuildContext context, StateSetter setState) {
                           return AlertDialog(
                             title: Text('Insert File'),
+                            scrollable: true,
                             content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -2370,6 +2375,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                             (BuildContext context, StateSetter setState) {
                           return AlertDialog(
                             title: Text('Insert Table'),
+                            scrollable: true,
                             content: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 mainAxisAlignment:
@@ -2510,6 +2516,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                               (BuildContext context, StateSetter setState) {
                             return AlertDialog(
                               title: Text('Help'),
+                              scrollable: true,
                               content: Container(
                                 height: MediaQuery.of(context).size.height / 2,
                                 child: SingleChildScrollView(
