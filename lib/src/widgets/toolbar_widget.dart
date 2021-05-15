@@ -352,7 +352,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   List<Widget> _buildChildren() {
     var toolbarChildren = <Widget>[];
     for (var t in widget.htmlToolbarOptions.defaultToolbarButtons) {
-      if (t is StyleButtons) {
+      if (t is StyleButtons && t.style) {
         toolbarChildren.add(Container(
           padding: const EdgeInsets.only(left: 8.0),
           height: widget.htmlToolbarOptions.toolbarItemHeight,
@@ -901,7 +901,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           ));
         }
       }
-      if (t is ColorButtons) {
+      if (t is ColorButtons && (t.foregroundColor || t.highlightColor)) {
         toolbarChildren.add(ToggleButtons(
           constraints: BoxConstraints.tightFor(
             width: widget.htmlToolbarOptions.toolbarItemHeight - 2,
@@ -1607,7 +1607,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           ));
         }
       }
-      if (t is InsertButtons) {
+      if (t is InsertButtons &&
+          (t.audio || t.video || t.otherFile || t.picture || t.link || t.hr || t.table)) {
         toolbarChildren.add(ToggleButtons(
           constraints: BoxConstraints.tightFor(
             width: widget.htmlToolbarOptions.toolbarItemHeight - 2,
