@@ -243,7 +243,7 @@ class HtmlToolbarOptions {
   /// provide this callback when using the button.
   ///
   /// The function passes the URL of the file inserted.
-  final Function(String)? onOtherFileLinkInsert;
+  final void Function(String)? onOtherFileLinkInsert;
 
   /// Called when a file is uploaded using the "other file" button.
   ///
@@ -252,7 +252,7 @@ class HtmlToolbarOptions {
   ///
   /// The function passes the PlatformFile class, which contains all the file data
   /// including name, size, type, Uint8List bytes, etc.
-  final Function(PlatformFile)? onOtherFileUpload;
+  final void Function(PlatformFile)? onOtherFileUpload;
 
   /// Allows you to set the allowed extensions when a user inserts a file other
   /// than image/audio/video

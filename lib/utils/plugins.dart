@@ -26,7 +26,7 @@ class SummernoteAtMention extends Plugins {
   final List<String>? mentionsWeb;
 
   /// Callback to run code when a mention is selected
-  final Function(String)? onSelect;
+  final void Function(String)? onSelect;
 
   const SummernoteAtMention(
       {this.getSuggestionsMobile, this.mentionsWeb, this.onSelect})

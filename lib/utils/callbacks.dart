@@ -28,7 +28,7 @@ class Callbacks {
   /// unclear which commands this will fire before.
   ///
   /// This function will return the current HTML in the editor as an argument.
-  Function(String?)? onBeforeCommand;
+  void Function(String?)? onBeforeCommand;
 
   /// Called whenever the HTML content of the editor is changed and the editor
   /// is in rich text view.
@@ -39,7 +39,7 @@ class Callbacks {
   /// will also trigger this callback.
   ///
   /// This function will return the current HTML in the editor as an argument.
-  Function(String?)? onChange;
+  void Function(String?)? onChange;
 
   /// Called whenever the code of the editor is changed and the editor
   /// is in code view.
@@ -50,11 +50,11 @@ class Callbacks {
   /// will also trigger this callback.
   ///
   /// This function will return the current code in the codeview as an argument.
-  Function(String?)? onChangeCodeview;
+  void Function(String?)? onChangeCodeview;
 
   /// Called whenever a dialog is shown in the editor. The dialogs will be either
   /// the link, image, video, or help dialogs.
-  Function()? onDialogShown;
+  void Function()? onDialogShown;
 
   /// Called whenever the enter/return key is pressed and the editor
   /// is in rich text view. There is currently no way to detect enter/return
@@ -62,12 +62,12 @@ class Callbacks {
   ///
   /// Note: The onChange callback will also be triggered at the same time as
   /// this callback, please design your implementation accordingly.
-  Function()? onEnter;
+  void Function()? onEnter;
 
   /// Called whenever the rich text field gains focus. This will not be called
   /// when the code view editor gains focus, instead use [onBlurCodeview] for
   /// that.
-  Function()? onFocus;
+  void Function()? onFocus;
 
   /// Called whenever either the rich text field or the codeview field loses
   /// focus. This will also be triggered when switching from the rich text editor
@@ -77,7 +77,7 @@ class Callbacks {
   /// the webview or dismissing the keyboard does not trigger this callback.
   /// This callback will only be triggered if the user taps on an empty space
   /// in the toolbar or switches the view mode of the editor.
-  Function()? onBlur;
+  void Function()? onBlur;
 
   /// Called whenever the code view either gains or loses focus (the Summernote
   /// docs say this will only be called when the code view loses focus but
@@ -88,7 +88,7 @@ class Callbacks {
   /// the webview or dismissing the keyboard does not trigger this callback.
   /// This callback will only be triggered if the user taps on an empty space
   /// in the toolbar or switches the view mode of the editor.
-  Function()? onBlurCodeview;
+  void Function()? onBlurCodeview;
 
   /// Called whenever an image is inserted via a link. The function passes the
   /// URL of the image inserted into the editor.
@@ -97,7 +97,7 @@ class Callbacks {
   /// insertion handler! This means you must manually insert the image using
   /// [controller.insertNetworkImage] in your callback function, otherwise
   /// nothing will be inserted into the editor!
-  Function(String?)? onImageLinkInsert;
+  void Function(String?)? onImageLinkInsert;
 
   /// Called whenever an image is inserted via upload. The function passes the
   /// [FileUpload] class, containing the filename, size, MIME type, base64 data,
@@ -108,12 +108,12 @@ class Callbacks {
   /// the image using [controller.insertNetworkImage] (for uploaded images) or
   /// [controller.insertHtml] (for base64 data) in your callback function,
   /// otherwise nothing will be inserted into the editor!
-  Function(FileUpload)? onImageUpload;
+  void Function(FileUpload)? onImageUpload;
 
   /// Called whenever an image is failed to be inserted via upload. The function
   /// passes the [FileUpload] class, containing the filename, size, MIME type,
   /// base64 data, and last modified information so you can do error handling.
-  Function(FileUpload?, String?, UploadError)? onImageUploadError;
+  void Function(FileUpload?, String?, UploadError)? onImageUploadError;
 
   /// Called whenever [InAppWebViewController.onLoadStop] is fired on mobile
   /// or when the [IFrameElement.onLoad] stream is fired on web. Note that this
@@ -121,7 +121,7 @@ class Callbacks {
   ///
   /// You can use this method to set certain properties - e.g. set the editor
   /// to fullscreen mode - as soon as the editor is ready to accept these commands.
-  Function()? onInit;
+  void Function()? onInit;
 
   /// Called whenever a key is released and the editor is in rich text view.
   ///
@@ -131,7 +131,7 @@ class Callbacks {
   /// on Android, you will only ever receive 229, 8 (backspace), or 13 (enter)
   /// as a keycode. 8 and 13 only seem to be returned when the editor is empty
   /// and those keys are released.
-  Function(int?)? onKeyUp;
+  void Function(int?)? onKeyUp;
 
   /// Called whenever a key is downed and the editor is in rich text view.
   ///
@@ -141,20 +141,20 @@ class Callbacks {
   /// on Android, you will only ever receive 229, 8 (backspace), or 13 (enter)
   /// as a keycode. 8 and 13 only seem to be returned when the editor is empty
   /// and those keys are downed.
-  Function(int?)? onKeyDown;
+  void Function(int?)? onKeyDown;
 
   /// Called whenever the mouse/finger is released and the editor is in rich text view.
-  Function()? onMouseUp;
+  void Function()? onMouseUp;
 
   /// Called whenever the mouse/finger is downed and the editor is in rich text view.
-  Function()? onMouseDown;
+  void Function()? onMouseDown;
 
   /// Called whenever text is pasted into the rich text field. This will not be
   /// called when text is pasted into the code view editor.
   ///
   /// Note: This will not be called when programmatically inserting HTML into
   /// the editor with [HtmlEditor.insertHtml].
-  Function()? onPaste;
+  void Function()? onPaste;
 
   /// Called whenever the editor is scrolled and it is in rich text view.
   /// Editor scrolled is considered to be the editor box only, not the webview
@@ -165,5 +165,5 @@ class Callbacks {
   ///
   /// Note: This function will be repeatedly called while the editor is scrolled.
   /// Make sure to factor that into your implementation.
-  Function()? onScroll;
+  void Function()? onScroll;
 }
