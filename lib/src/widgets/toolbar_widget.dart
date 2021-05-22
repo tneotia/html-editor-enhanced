@@ -1608,7 +1608,13 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         }
       }
       if (t is InsertButtons &&
-          (t.audio || t.video || t.otherFile || t.picture || t.link || t.hr || t.table)) {
+          (t.audio ||
+              t.video ||
+              t.otherFile ||
+              t.picture ||
+              t.link ||
+              t.hr ||
+              t.table)) {
         toolbarChildren.add(ToggleButtons(
           constraints: BoxConstraints.tightFor(
             width: widget.htmlToolbarOptions.toolbarItemHeight - 2,

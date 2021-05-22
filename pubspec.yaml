@@ -1,7 +1,7 @@
 name: html_editor_enhanced
 description: HTML rich text editor for Android, iOS, and Web, using the Summernote library.
   Enhanced with highly customizable widget-based controls, bug fixes, callbacks, dark mode, and more.
-version: 2.1.0+1
+version: 2.1.1
 homepage: https://github.com/tneotia/html-editor-enhanced
 
 environment:
@@ -19,7 +19,7 @@ dependencies:
   visibility_detector: ^0.2.0
   # plugin to get when the keyboard is hidden via back (Android)
   # or "done" (iOS) to reset the editor's height
-  flutter_keyboard_visibility: ^5.0.1
+  flutter_keyboard_visibility: ^5.0.2
   # plugin to show a color picker for foreground/highlight color
   flutter_colorpicker: ^0.4.0
   # plugin to get files from filesystem

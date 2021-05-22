@@ -1,3 +1,9 @@
+## [2.1.1] - 2021-05-22
+* Fixed bottom overflow error on `AlertDialog`s if the screen size is small
+* Fixed `StyleButtons(style: false)` would not remove the style dropdown
+* Fixed JS/Dart communication hiccup on Web (make sure `postMessage` data is not null)
+* Code cleanup
+
 ## [2.1.0+1] - 2021-05-11
 * Hotfix for `copyWith` not defined for `ScrollBehavior` in v2.1.0
 
