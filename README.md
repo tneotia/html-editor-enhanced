@@ -1007,6 +1007,20 @@ If you do find any issues, please report them in the Issues tab and I will see i
 * Clicking on the editor makes the cursor appear on the second line relative with the hint. Is there a workaround? - https://github.com/tneotia/html-editor-enhanced/issues/24
 
 * How can I give the editor box a custom background color? - https://github.com/tneotia/html-editor-enhanced/issues/27
+  
+* I see a file upload button in the top left of my application on Web. How can I remove it? - https://github.com/tneotia/html-editor-enhanced/issues/28
+  
+* I can't tap drawer items above the text editor on Web. How can I fix this? - https://github.com/tneotia/html-editor-enhanced/issues/30
+  
+* How can I remove the "dragbar" at the bottom of the editor? - https://github.com/tneotia/html-editor-enhanced/issues/42
+  
+* How can I detect if an image has been deleted from the editor? - https://github.com/tneotia/html-editor-enhanced/issues/43
+  
+* How can I handle editor focus? - https://github.com/tneotia/html-editor-enhanced/issues/47
+  
+* How can I set the default text direction for the editor content? - https://github.com/tneotia/html-editor-enhanced/issues/49
+  
+* How can I handle relative URLs for images in my initial text? - https://github.com/tneotia/html-editor-enhanced/issues/50
 
 </details>
 
