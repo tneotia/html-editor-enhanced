@@ -1827,7 +1827,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                                 null) {
                                               setState(() {
                                                 filename.text =
-                                                    result!.files.single.name!;
+                                                    result!.files.single.name;
                                               });
                                             }
                                           },
@@ -1979,7 +1979,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                                 null) {
                                               setState(() {
                                                 filename.text =
-                                                    result!.files.single.name!;
+                                                    result!.files.single.name;
                                               });
                                             }
                                           },
@@ -2131,7 +2131,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                                 null) {
                                               setState(() {
                                                 filename.text =
-                                                    result!.files.single.name!;
+                                                    result!.files.single.name;
                                               });
                                             }
                                           },
@@ -2283,7 +2283,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                                 null) {
                                               setState(() {
                                                 filename.text =
-                                                    result!.files.single.name!;
+                                                    result!.files.single.name;
                                               });
                                             }
                                           },
