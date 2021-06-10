@@ -40,10 +40,20 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   @override
   final bool processOutputHtml;
 
+  /// Manages the [InAppWebViewController] for the [HtmlEditorController]
+  InAppWebViewController? _editorController;
+
   /// Allows the [InAppWebViewController] for the Html editor to be accessed
   /// outside of the package itself for endless control and customization.
   @override
-  InAppWebViewController? get editorController => controllerMap[this];
+  // ignore: unnecessary_getters_setters
+  InAppWebViewController? get editorController => _editorController;
+
+  /// Internal method to set the [InAppWebViewController] when webview initialization
+  /// is complete
+  @override
+  // ignore: unnecessary_getters_setters
+  set editorController(InAppWebViewController? controller) => _editorController = controller;
 
   /// A function to quickly call a document.execCommand function in a readable format
   @override
@@ -247,7 +257,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Helper function to evaluate JS and check the current environment
   dynamic _evaluateJavascript({required source}) async {
     if (!kIsWeb) {
-      if (controllerMap[this] == null || await editorController!.isLoading()) {
+      if (editorController == null || await editorController!.isLoading()) {
         throw Exception(
             'HTML editor is still loading, please wait before evaluating this JS: $source!');
       }

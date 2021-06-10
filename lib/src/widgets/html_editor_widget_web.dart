@@ -61,7 +61,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   void initState() {
     actualHeight = widget.otherOptions.height;
     createdViewId = getRandString(10);
-    controllerMap[widget.controller] = createdViewId;
+    widget.controller.viewId = createdViewId;
     initSummernote();
     super.initState();
   }

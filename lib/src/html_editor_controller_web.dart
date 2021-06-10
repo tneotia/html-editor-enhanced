@@ -8,6 +8,7 @@ import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart'
     as unsupported;
 import 'package:html_editor_enhanced/src/widgets/toolbar_widget.dart';
+import 'package:meta/meta.dart';
 
 /// Controller for web
 class HtmlEditorController extends unsupported.HtmlEditorController {
@@ -43,11 +44,14 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   @override
   final bool processOutputHtml;
 
-  /// Allows the [InAppWebViewController] for the Html editor to be accessed
-  /// outside of the package itself for endless control and customization.
+  /// Manages the view ID for the [HtmlEditorController] on web
+  String? _viewId;
+
+  /// Internal method to set the view ID when iframe initialization
+  /// is complete
   @override
-  InAppWebViewController? get editorController => throw Exception(
-      'Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart and check kIsWeb before accessing this getter');
+  @internal
+  set viewId(String? viewId) => _viewId = viewId;
 
   /// Gets the text from the editor and returns it as a [String].
   @override
@@ -290,7 +294,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Helper function to run javascript and check current environment
   void _evaluateJavascriptWeb({required Map<String, Object?> data}) async {
     if (kIsWeb) {
-      data['view'] = controllerMap[this];
+      data['view'] = _viewId;
       final jsonEncoder = JsonEncoder();
       var json = jsonEncoder.convert(data);
       html.window.postMessage(json, '*');

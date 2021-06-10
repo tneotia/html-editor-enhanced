@@ -1,6 +1,7 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/src/widgets/toolbar_widget.dart';
+import 'package:meta/meta.dart';
 
 /// Fallback controller (should never be used)
 class HtmlEditorController {
@@ -11,6 +12,7 @@ class HtmlEditorController {
   });
 
   /// Toolbar widget state to call various methods. For internal use only.
+  @internal
   ToolbarWidgetState? toolbar;
 
   /// Determines whether text processing should happen on input HTML, e.g.
@@ -35,6 +37,16 @@ class HtmlEditorController {
   /// Allows the [InAppWebViewController] for the Html editor to be accessed
   /// outside of the package itself for endless control and customization.
   InAppWebViewController? get editorController => null;
+
+  /// Internal method to set the [InAppWebViewController] when webview initialization
+  /// is complete
+  @internal
+  set editorController(InAppWebViewController? controller) => {};
+
+  /// Internal method to set the view ID when iframe initialization
+  /// is complete
+  @internal
+  set viewId(String? viewId) => {};
 
   /// Add a notification to the bottom of the editor. This is styled similar to
   /// Bootstrap alerts. You can set the HTML to be displayed in the alert,
@@ -115,17 +127,22 @@ class HtmlEditorController {
   void undo() {}
 
   /// Internal function to change list style on Web
+  @internal
   void changeListStyle(String changed) {}
 
   /// Internal function to change line height on Web
+  @internal
   void changeLineHeight(String changed) {}
 
   /// Internal function to change text direction on Web
+  @internal
   void changeTextDirection(String changed) {}
 
   /// Internal function to change case on Web
+  @internal
   void changeCase(String changed) {}
 
   /// Internal function to insert table on Web
+  @internal
   void insertTable(String dimensions) {}
 }
