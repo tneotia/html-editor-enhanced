@@ -293,7 +293,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       summernoteCallbacks = summernoteCallbacks + '}';
                       await controller.evaluateJavascript(source: """
                           \$('#summernote-2').summernote({
-                              placeholder: "${widget.htmlEditorOptions.hint}",
+                              placeholder: "${widget.htmlEditorOptions.hint ?? ""}",
                               tabsize: 2,
                               height: ${widget.otherOptions.height - (toolbarKey.currentContext?.size?.height ?? 0)},
                               toolbar: $summernoteToolbar
