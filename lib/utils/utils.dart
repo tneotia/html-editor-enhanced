@@ -40,6 +40,51 @@ String getRandString(int len) {
   return base64UrlEncode(values);
 }
 
+/// Class that helps pass editor settings to the [onSettingsChange] callback
+class EditorSettings {
+  String parentElement;
+  String fontName;
+  double fontSize;
+  bool isBold;
+  bool isItalic;
+  bool isUnderline;
+  bool isStrikethrough;
+  bool isSuperscript;
+  bool isSubscript;
+  Color foregroundColor;
+  Color backgroundColor;
+  bool isUl;
+  bool isOl;
+  bool isAlignLeft;
+  bool isAlignCenter;
+  bool isAlignRight;
+  bool isAlignJustify;
+  double lineHeight;
+  TextDirection textDirection;
+
+  EditorSettings({
+    required this.parentElement,
+    required this.fontName,
+    required this.fontSize,
+    required this.isBold,
+    required this.isItalic,
+    required this.isUnderline,
+    required this.isStrikethrough,
+    required this.isSuperscript,
+    required this.isSubscript,
+    required this.foregroundColor,
+    required this.backgroundColor,
+    required this.isUl,
+    required this.isOl,
+    required this.isAlignLeft,
+    required this.isAlignCenter,
+    required this.isAlignRight,
+    required this.isAlignJustify,
+    required this.lineHeight,
+    required this.textDirection,
+  });
+}
+
 /// The following code contains all the code necessary for custom dropdowns.
 /// It is really long because dropdowns utilize a bunch of private classes that
 /// must be copy pasted.

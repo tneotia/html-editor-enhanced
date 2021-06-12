@@ -1,11 +1,13 @@
 import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:html_editor_enhanced/utils/utils.dart';
 
 /// Manages all the callback functions the library provides
 class Callbacks {
   Callbacks({
     this.onBeforeCommand,
-    this.onChange,
+    this.onChangeContent,
     this.onChangeCodeview,
+    this.onChangeSelection,
     this.onDialogShown,
     this.onEnter,
     this.onFocus,
@@ -39,7 +41,7 @@ class Callbacks {
   /// will also trigger this callback.
   ///
   /// This function will return the current HTML in the editor as an argument.
-  void Function(String?)? onChange;
+  void Function(String?)? onChangeContent;
 
   /// Called whenever the code of the editor is changed and the editor
   /// is in code view.
@@ -51,6 +53,13 @@ class Callbacks {
   ///
   /// This function will return the current code in the codeview as an argument.
   void Function(String?)? onChangeCodeview;
+
+  /// Called whenever the selection area of the editor is changed.
+  ///
+  /// It passes all the editor settings at the current selection as an argument.
+  /// This can be used in custom toolbar item implementations, to update your
+  /// toolbar item UI when the editor formatting changes.
+  void Function(EditorSettings)? onChangeSelection;
 
   /// Called whenever a dialog is shown in the editor. The dialogs will be either
   /// the link, image, video, or help dialogs.

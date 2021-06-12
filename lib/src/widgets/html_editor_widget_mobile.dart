@@ -114,7 +114,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                   ? ToolbarWidget(
                       key: toolbarKey,
                       controller: widget.controller,
-                      htmlToolbarOptions: widget.htmlToolbarOptions)
+                      htmlToolbarOptions: widget.htmlToolbarOptions,
+                      callbacks: widget.callbacks)
                   : Container(height: 0, width: 0),
               Expanded(
                 child: InAppWebView(
@@ -125,6 +126,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                         handlerName: 'FormatSettings',
                         callback: (e) {
                           var json = e[0] as Map<String, dynamic>;
+                          print(json);
                           if (widget.controller.toolbar != null) {
                             widget.controller.toolbar!.updateToolbar(json);
                           }
@@ -304,7 +306,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                           });
                           
                           \$('#summernote-2').on('summernote.change', function(_, contents, \$editable) {
-                            window.flutter_inappwebview.callHandler('onChange', contents);
+                            window.flutter_inappwebview.callHandler('onChangeContent', contents);
                           });
                       
                           function onSelectionChange() {
@@ -430,7 +432,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       }
                       //add onChange handler
                       controller.addJavaScriptHandler(
-                          handlerName: 'onChange',
+                          handlerName: 'onChangeContent',
                           callback: (contents) {
                             if (widget.htmlEditorOptions.shouldEnsureVisible &&
                                 Scrollable.of(context) != null) {
@@ -439,8 +441,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                   );
                             }
                             if (widget.callbacks != null &&
-                                widget.callbacks!.onChange != null) {
-                              widget.callbacks!.onChange!
+                                widget.callbacks!.onChangeContent != null) {
+                              widget.callbacks!.onChangeContent!
                                   .call(contents.first.toString());
                             }
                           });
@@ -453,7 +455,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                   ? ToolbarWidget(
                       key: toolbarKey,
                       controller: widget.controller,
-                      htmlToolbarOptions: widget.htmlToolbarOptions)
+                      htmlToolbarOptions: widget.htmlToolbarOptions,
+                      callbacks: widget.callbacks)
                   : Container(height: 0, width: 0),
             ],
           ),

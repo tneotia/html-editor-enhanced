@@ -339,8 +339,9 @@ Every callback is defined as a `Function(<parameters in some cases>)`. See the [
 Callback | Parameter(s) | Description
 ------------ | ------------- | -------------
 **onBeforeCommand** | `String` | Called before certain commands are called (like undo and redo), passes the HTML in the editor before the command is called
-**onChange** | `String` | Called when the content of the editor changes, passes the current HTML in the editor
+**onChangeContent** | `String` | Called when the content of the editor changes, passes the current HTML in the editor
 **onChangeCodeview** | `String` | Called when the content of the codeview changes, passes the current code in the codeview
+**onChangeSelection** | `EditorSettings` | Called when the current selection of the editor changes, passes all editor settings (e.g. bold/italic/underline, color, text direction, etc).
 **onDialogShown** | N/A | Called when either the image, link, video, or help dialogs are shown
 **onEnter** | N/A | Called when enter/return is pressed
 **onFocus** | N/A | Called when the rich text field gains focus

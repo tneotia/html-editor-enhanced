@@ -181,7 +181,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           });
           
           \$('#summernote-2').on('summernote.change', function(_, contents, \$editable) {
-            window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onChange", "contents": contents}), "*");
+            window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onChangeContent", "contents": contents}), "*");
           });
         });
        
@@ -431,11 +431,11 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         html.window.onMessage.listen((event) {
           var data = json.decode(event.data);
           if (data['type'] != null &&
-              data['type'].contains('toDart: onChange') &&
+              data['type'].contains('toDart: onChangeContent') &&
               data['view'] == createdViewId) {
             if (widget.callbacks != null &&
-                widget.callbacks!.onChange != null) {
-              widget.callbacks!.onChange!.call(data['contents']);
+                widget.callbacks!.onChangeContent != null) {
+              widget.callbacks!.onChangeContent!.call(data['contents']);
             }
             if (widget.htmlEditorOptions.shouldEnsureVisible &&
                 Scrollable.of(context) != null) {
@@ -474,7 +474,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
               ? ToolbarWidget(
                   key: toolbarKey,
                   controller: widget.controller,
-                  htmlToolbarOptions: widget.htmlToolbarOptions)
+                  htmlToolbarOptions: widget.htmlToolbarOptions,
+                  callbacks: widget.callbacks)
               : Container(height: 0, width: 0),
           Expanded(
               child: Directionality(
@@ -498,7 +499,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
               ? ToolbarWidget(
                   key: toolbarKey,
                   controller: widget.controller,
-                  htmlToolbarOptions: widget.htmlToolbarOptions)
+                  htmlToolbarOptions: widget.htmlToolbarOptions,
+                  callbacks: widget.callbacks)
               : Container(height: 0, width: 0),
         ],
       ),
@@ -635,8 +637,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         if (data['type'].contains('onBeforeCommand')) {
           c.onBeforeCommand!.call(data['contents']);
         }
-        if (data['type'].contains('onChange')) {
-          c.onChange!.call(data['contents']);
+        if (data['type'].contains('onChangeContent')) {
+          c.onChangeContent!.call(data['contents']);
         }
         if (data['type'].contains('onChangeCodeview')) {
           c.onChangeCodeview!.call(data['contents']);

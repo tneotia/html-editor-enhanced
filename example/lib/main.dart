@@ -105,10 +105,13 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                 otherOptions: OtherOptions(height: 550),
                 callbacks: Callbacks(onBeforeCommand: (String? currentHtml) {
                   print('html before change is $currentHtml');
-                }, onChange: (String? changed) {
+                }, onChangeContent: (String? changed) {
                   print('content changed to $changed');
                 }, onChangeCodeview: (String? changed) {
                   print('code changed to $changed');
+                }, onChangeSelection: (EditorSettings settings) {
+                  print('parent element is ${settings.parentElement}');
+                  print('font name is ${settings.fontName}');
                 }, onDialogShown: () {
                   print('dialog shown');
                 }, onEnter: () {
