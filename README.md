@@ -150,44 +150,6 @@ The current workaround is to build and/or run your Web app with `flutter run --w
 
 Follow https://github.com/flutter/flutter/issues/80524 for updates on a potential fix, in the meantime the above solution should resolve the majority of the flickering issues.
 
-### Important note about toolbar buttons:
-
-It is *highly recommended* to pick and choose which buttons you'd like to show - pretty much every single button is shown by default, and this might be overwhelming for users. You can do this like so:
-
-```dart
-import 'package:html_editor/html_editor.dart';
-
-HtmlEditorController controller = HtmlEditorController();
-
-@override Widget build(BuildContext context) {
-    return HtmlEditor(
-        controller: controller, //required
-        htmlEditorOptions: HtmlEditorOptions(
-          hint: "Your text here...",
-          //initalText: "text content initial, if any",
-        ),   
-        htmlToolbarOptions: HtmlToolbarOptions(
-          defaultToolbarButtons: [
-            //add constructors here and set buttons to false, e.g.
-            ParagraphButtons(lineHeight: false, caseConverter: false)
-          ]
-        ),   
-        otherOptions: OtherOptions(
-          height: 400,
-        ),
-    );
-}
-```
-
-Please note: You cannot just add the constructor of the button group you'd like to remove buttons from. If you do this, then the plugin will only show buttons from that specific button group. You must add all the other constructors in, and you can leave them blank: `[ListButtons(), ParagraphButtons()]` etc.
-
-More details available [below](#toolbar)
-
-When you want to get text from the editor:
-```dart
-final txt = await controller.getText();
-```
-
 ## API Reference
 
 For the full API reference, see [here](https://pub.dev/documentation/html_editor_enhanced/latest/).
@@ -422,7 +384,7 @@ Support picture files (jpg, png, gif, wvg, webp), audio files (mp3, ogg, oga), a
 
 This list is not final, more can be added. If there's a specific plugin you'd like to see support for, please file a feature request!
 
-Every plugin except Summernote At Mention is activated by default. They can be disabled by modifying the toolbar items, see [above](#toolbar) for details.
+No plugins are activated activated by default. They can be activated by modifying the toolbar items, see [above](#toolbar) for details.
 
 To activate Summernote At Mention:
 
