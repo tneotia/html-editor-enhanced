@@ -227,6 +227,7 @@ Parameter | Type | Default | Description
 **mobileContextMenu** | `ContextMenu` | `null` | Customize the context menu when a user selects text in the editor. See docs for `ContextMenu` [here](https://inappwebview.dev/docs/context-menu/basic-usage/)
 **mobileLongPressDuration** | `Duration` | `Duration(milliseconds: 500)` | Set the duration until a long-press is recognized
 **mobileInitialScripts** | `UnmodifiableListView<UserScript>` | `null` | Easily inject scripts to perform actions like changing the background color of the editor. See docs for `UserScript` [here](https://inappwebview.dev/docs/javascript/user-scripts/)
+**webInitialScripts** | `UnmodifiableListView<WebScript>` | `null` | Easily inject scripts to perform actions like changing the background color of the editor. See [below](#webinitialscripts) for more details.
 **shouldEnsureVisible** | `bool` | `false` | Scroll the parent `Scrollable` to the top of the editor widget when the webview is focused. Do *not* use this parameter if `HtmlEditor` is not inside a `Scrollable`. See [below](#shouldensurevisible) for more details.
 
 ### Parameters - `HtmlToolbarOptions`
@@ -523,6 +524,22 @@ You can only use this parameter if your `HtmlEditor` is inside a `Scrollview`, o
 This is useful in cases where the page is a `SingleChildScrollView` or something similar with multiple widgets (eg a form). When the user is going through the different fields, it will pop the webview into view, just like a `TextField` would scroll into in view if text is being typed inside it. 
 
 See [below](#example-for-shouldensurevisible) for an example with a good way to use this.
+
+#### `webInitialScripts`
+
+This parameter allows you to specify custom JavaScript for the editor on Web. These can be called at any point in time using `controller.evaluateJavascriptWeb`.
+
+You must add these scripts using the `WebScript` class, which takes a `name` and a `script` argument. `name` *must* be a unique identifier, otherwise your desired script may not be executed. Pass your JavaScript code in the `script` argument.
+
+The package supports returning values from JavaScript as well. You should run `var result = await controller.evaluateJavascriptWeb(<name>, hasReturnValue: true);`.
+
+To get the return value, you must add the following at the end of your JavaScript:
+
+```javascript
+window.parent.postMessage(JSON.stringify({"type": "toDart: <WebScript name goes here>", <add any other params you wish to return here>}), "*");
+```
+
+You can view a complete example [below](#example-for-webinitialscripts)
 
 ### `HtmlToolbarOptions` parameters
 
@@ -981,6 +998,85 @@ class _ExampleState extends State<Example> {
 </style>
 </body>
 </html>
+```
+
+</details>
+
+### Example for `webInitialScripts`:
+
+<details><summary>View code</summary>
+
+```dart
+  String result = '';
+  final HtmlEditorController controller = HtmlEditorController();
+  final FocusNode node = FocusNode();
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        if (!kIsWeb) {
+          controller.clearFocus();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+          elevation: 0,
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              HtmlEditor(
+                controller: controller,
+                htmlEditorOptions: HtmlEditorOptions(
+                  darkMode: false,
+                  webInitialScripts: UnmodifiableListView([
+                    WebScript(name: "editorBG", script: "document.getElementsByClassName('note-editable')[0].style.backgroundColor='blue';"),
+                    WebScript(name: "height", script: """
+                      var height = document.body.scrollHeight;
+                      window.parent.postMessage(JSON.stringify({"type": "toDart: height", "height": height}), "*");
+                    """),
+                  ])
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    TextButton(
+                      style: TextButton.styleFrom(
+                          backgroundColor: Colors.blueGrey),
+                      onPressed: () {
+                        controller.evaluateJavascriptWeb("editorBG");
+                      },
+                      child:
+                          Text('Change Background', style: TextStyle(color: Colors.white)),
+                    ),
+                    SizedBox(
+                      width: 16,
+                    ),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                          backgroundColor: Colors.blueGrey),
+                      onPressed: () async {
+                        var result = await controller.evaluateJavascriptWeb("height", hasReturnValue: true);
+                        print(result); // prints "{type: toDart: height, height: 561}"
+                      },
+                      child:
+                          Text('Get Height', style: TextStyle(color: Colors.white)),
+                    ),
+                  ]
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 ```
 
 </details>

@@ -216,6 +216,18 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     });
   }
 
+  /// A function to execute JS passed as a [WebScript] to the editor. This should
+  /// only be used on Flutter Web.
+  @override
+  Future<dynamic> evaluateJavascriptWeb(String name, {bool hasReturnValue = false}) async {
+    _evaluateJavascriptWeb(data: {'type': 'toIframe: $name'});
+    if (hasReturnValue) {
+      var e = await html.window.onMessage.firstWhere(
+              (element) => json.decode(element.data)['type'] == 'toDart: $name');
+      return json.decode(e.data);
+    }
+  }
+
   /// Internal function to change list style on Web
   @override
   void changeListStyle(String changed) {

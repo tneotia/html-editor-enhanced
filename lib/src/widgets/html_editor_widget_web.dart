@@ -167,6 +167,16 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     if (widget.callbacks != null) {
       jsCallbacks = getJsCallbacks(widget.callbacks!);
     }
+    var userScripts = '';
+    if (widget.htmlEditorOptions.webInitialScripts != null) {
+      widget.htmlEditorOptions.webInitialScripts!.forEach((element) {
+        userScripts = userScripts + '''
+          if (data["type"].includes("${element.name}")) {
+            ${element.script}
+          }
+        ''' + '\n';
+      });
+    }
     var summernoteScripts = """
       <script type="text/javascript">
         \$(document).ready(function () {
@@ -321,6 +331,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
               if (data["type"].includes("insertTable")) {
                 \$('#summernote-2').summernote('insertTable', data["dimensions"]);
               }
+              $userScripts
             }
           }
         }

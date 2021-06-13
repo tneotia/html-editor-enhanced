@@ -85,6 +85,22 @@ class EditorSettings {
   });
 }
 
+/// Class to create a script that can be run on Flutter Web.
+///
+/// [name] provides a unique identifier for the script. Note: It must be unique!
+/// Otherwise your script may not be called when using [controller.evaluateJavascriptWeb].
+/// [script] provides the script itself. If you'd like to return a value back to
+/// Dart, you can do that via a postMessage call (see the README for an example).
+class WebScript {
+  String name;
+  String script;
+
+  WebScript({
+    required this.name,
+    required this.script,
+  }) : assert(name.isNotEmpty && script.isNotEmpty);
+}
+
 /// The following code contains all the code necessary for custom dropdowns.
 /// It is really long because dropdowns utilize a bunch of private classes that
 /// must be copy pasted.

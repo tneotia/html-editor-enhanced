@@ -18,6 +18,7 @@ class HtmlEditorOptions {
     this.mobileContextMenu,
     this.mobileLongPressDuration,
     this.mobileInitialScripts,
+    this.webInitialScripts,
     this.shouldEnsureVisible = false,
   });
 
@@ -72,6 +73,10 @@ class HtmlEditorOptions {
 
   /// Initial JS to inject into the editor.
   final UnmodifiableListView<UserScript>? mobileInitialScripts;
+
+  /// Initial JS to add to the editor. These can be called at any time using
+  /// [controller.evaluateJavascriptWeb]
+  final UnmodifiableListView<WebScript>? webInitialScripts;
 
   /// Specifies whether the widget should scroll to reveal the HTML editor when
   /// it is focused or the text content is changed.
