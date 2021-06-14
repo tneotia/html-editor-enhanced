@@ -10,6 +10,7 @@ their current selection (e.g. tap on a different word, create a new node, select
 * Fixed minor bug with automatic height adjustment on mobile
 * Added new `ToolbarType.nativeExpandable` which allows the user to switch between the 
 scrollview or gridview toolbar on the fly
+* Support setting the `inputmode` for the editor, which changes the virtual keyboard display on mobile devices (e.g. number pad, email keyboard, etc)
 * [BREAKING] renamed `onChange` callback to `onChangeContent`
 * [BREAKING] disabled a lot of the buttons by default, now only around half of the editor buttons
 are enabled to improve the UX. You can still re-enable the rest if you want.
