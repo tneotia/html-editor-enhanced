@@ -61,6 +61,8 @@ Note that the API shown in this README.md file shows only a part of the document
   
     - [`shouldEnsureVisible`](#shouldensurevisible)
     
+    - [`webInitialScripts`](#webinitialscripts)
+    
   - [`HtmlToolbarOptions` Parameters](#htmltoolbaroptions-parameters)
   
     - [`customToolbarButtons` and `customToolbarButtonsInsertionIndices`](#customtoolbarbuttons-and-customtoolbarbuttonsinsertionindices)
@@ -95,7 +97,7 @@ Note that the API shown in this README.md file shows only a part of the document
 
 4. It doesn't use a local server to load the HTML code containing the editor. Instead, this package simply loads the HTML file, which improves performance and the editor's startup time.
 
-5. It uses a `StatelessWidget`. You don't have to fiddle around with `GlobalKey`s to access methods, instead you can simply call `<controller name>.<method name>` anywhere you want.
+5. It uses a controller-based API. You don't have to fiddle around with `GlobalKey`s to access methods, instead you can simply call `<controller name>.<method name>` anywhere you want.
 
 6. It has support for many of Summernote's methods
 
@@ -111,7 +113,7 @@ More is on the way! File a feature request or contribute to the project if you'd
 
 ## Setup
 
-Add `html_editor_enhanced: ^2.1.1` as dependency to your pubspec.yaml.
+Add `html_editor_enhanced: ^2.2.0` as dependency to your pubspec.yaml.
 
 Additional setup is required on iOS to allow the user to pick files from storage. See [here](https://github.com/miguelpruivo/flutter_file_picker/wiki/Setup#--ios) for more details. 
 

@@ -1,3 +1,20 @@
+## [2.2.0] - 2021-06-14
+* Fixed null safety warnings due to latest `file_picker` version
+* Potentially fixed editor controller creating a new instance on widget rebuild
+* Fixed issue where custom HTML files would have custom JS replaced with built-in JS
+* Fixed darkMode not applying when `filePath` is used on Android
+* Fixed "null" text showing as the hint when no hint is given
+* Added new `onChangeSelection` callback that passes the editor settings whenever the user changes
+their current selection (e.g. tap on a different word, create a new node, select text, etc)
+* Added support for custom JS injection on Flutter Web
+* Fixed minor bug with automatic height adjustment on mobile
+* Added new `ToolbarType.nativeExpandable` which allows the user to switch between the 
+scrollview or gridview toolbar on the fly
+* [BREAKING] renamed `onChange` callback to `onChangeContent`
+* [BREAKING] disabled a lot of the buttons by default, now only around half of the editor buttons
+are enabled to improve the UX. You can still re-enable the rest if you want.
+* [BREAKING] min Flutter version requirement bumped to 2.2.0
+
 ## [2.1.1] - 2021-05-22
 * Fixed bottom overflow error on `AlertDialog`s if the screen size is small
 * Fixed `StyleButtons(style: false)` would not remove the style dropdown
