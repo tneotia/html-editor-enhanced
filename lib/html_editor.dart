@@ -27,9 +27,11 @@ enum NotificationType { info, warning, success, danger, plaintext }
 /// Manages the way the toolbar displays:
 /// [nativeGrid] - a grid view (non scrollable) of all the buttons
 /// [nativeScrollable] - a scrollable one-line view of all the buttons
+/// [nativeExpandable] - has an icon to switch between grid and scrollable formats
+/// on the fly
 /// [summernote] - uses the default summernote buttons (no native controls and
 /// reduced feature support) //todo
-enum ToolbarType { nativeGrid, nativeScrollable }
+enum ToolbarType { nativeGrid, nativeScrollable, nativeExpandable }
 
 /// Manages the position of the toolbar, whether above or below the editor
 /// [custom] - removes the toolbar. This is useful when you want to implement the

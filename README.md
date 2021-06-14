@@ -204,6 +204,7 @@ Parameter | Type | Default | Description
 **defaultToolbarButtons** | `List<Toolbar>` | (all constructors active) | Allows you to hide/show certain buttons or certain groups of buttons
 **otherFileExtensions** | `List<String>` | `null` | Allowed extensions when inserting files other than image/audio/video
 **imageExtensions** | `List<String>` | `null` | Allowed extensions when inserting images
+**initiallyExpanded** | `bool` | `false` | Sets whether the toolbar is initially expanded or not when using `ToolbarType.nativeExpandable`
 **linkInsertInterceptor** | `FutureOr<bool> Function(String, String, bool)` | `null` | Intercept any links inserted into the editor. The function passes the display text, the URL, and whether it opens a new tab.
 **mediaLinkInsertInterceptor** | `FutureOr<bool> Function(String, InsertFileType)` | `null` | Intercept any media links inserted into the editor. The function passes the URL and `InsertFileType` which indicates which file type was inserted
 **mediaUploadInterceptor** | `FutureOr<bool> Function(PlatformFile, InsertFileType)` | `null` | Intercept any media files inserted into the editor. The function passes `PlatformFile` which holds all relevant file data, and `InsertFileType` which indicates which file type was inserted.
@@ -212,7 +213,7 @@ Parameter | Type | Default | Description
 **onOtherFileLinkInsert** | `Function(String)` | `null` | Intercept file link inserts other than image/audio/video. This handler is required when using the other file button, as the package has no built-in handlers
 **onOtherFileUpload** | `Function(PlatformFile)` | `null` | Intercept file uploads other than image/audio/video. This handler is required when using the other file button, as the package has no built-in handlers
 **otherFileExtensions** | `List<String>` | `null` | Allowed extensions when inserting files other than image/audio/video
-**toolbarType** | `ToolbarType` | `ToolbarType.nativeScrollable` | Customize how the toolbar is displayed (gridview or scrollable)
+**toolbarType** | `ToolbarType` | `ToolbarType.nativeScrollable` | Customize how the toolbar is displayed (gridview, scrollable, or expandable)
 **toolbarPosition** | `ToolbarPosition` | `ToolbarPosition.aboveEditor` | Set where the toolbar is displayed (above or below the editor)
 **videoExtensions** | `List<String>` | `null` | Allowed extensions when inserting videos
 

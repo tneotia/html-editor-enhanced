@@ -101,6 +101,51 @@ class WebScript {
   }) : assert(name.isNotEmpty && script.isNotEmpty);
 }
 
+/// Delegate for the icon that controls the expansion status of the toolbar
+class ExpandIconDelegate extends SliverPersistentHeaderDelegate {
+  final double? _size;
+  final bool _isExpanded;
+  final void Function() _setState;
+
+  ExpandIconDelegate(this._size, this._isExpanded, this._setState);
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      height: _size,
+      width: _size,
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: IconButton(
+        constraints: BoxConstraints(
+          maxHeight: _size!,
+          maxWidth: _size!,
+        ),
+        iconSize: _size! * 3 / 5,
+        icon: Icon(
+          _isExpanded
+              ? Icons.expand_less
+              : Icons.expand_more,
+          color: Colors.grey,
+        ),
+        onPressed: () async {
+          _setState.call();
+        },
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => _size!;
+
+  @override
+  double get minExtent => _size!;
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
+    return true;
+  }
+}
+
 /// The following code contains all the code necessary for custom dropdowns.
 /// It is really long because dropdowns utilize a bunch of private classes that
 /// must be copy pasted.

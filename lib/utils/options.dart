@@ -105,6 +105,7 @@ class HtmlToolbarOptions {
     ],
     this.otherFileExtensions,
     this.imageExtensions,
+    this.initiallyExpanded = false,
     this.linkInsertInterceptor,
     this.mediaLinkInsertInterceptor,
     this.mediaUploadInterceptor,
@@ -175,6 +176,15 @@ class HtmlToolbarOptions {
   ///
   /// By default any image extension is allowed.
   final List<String>? imageExtensions;
+
+  /// Allows you to set whether the toolbar starts out expanded (in gridview)
+  /// or contracted (in scrollview).
+  ///
+  /// By default it starts out contracted.
+  ///
+  /// This option only works when you have set [toolbarType] to
+  /// [ToolbarType.nativeExpandable].
+  final bool initiallyExpanded;
 
   /// Allows you to intercept any links being inserted into the editor. The
   /// function passes the display text, the URL itself, and whether the
