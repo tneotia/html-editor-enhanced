@@ -100,8 +100,14 @@ class HtmlToolbarOptions {
       FontButtons(clearAll: false),
       ColorButtons(),
       ListButtons(listStyles: false),
-      ParagraphButtons(textDirection: false, lineHeight: false, caseConverter: false),
-      InsertButtons(video: false, audio: false, table: false, hr: false, otherFile: false),
+      ParagraphButtons(
+          textDirection: false, lineHeight: false, caseConverter: false),
+      InsertButtons(
+          video: false,
+          audio: false,
+          table: false,
+          hr: false,
+          otherFile: false),
     ],
     this.otherFileExtensions,
     this.imageExtensions,

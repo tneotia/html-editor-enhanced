@@ -396,12 +396,12 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                 resetHeight();
                               } else {
                                 setState(mounted, this.setState, () {
-                                  docHeight =
-                                      (double.tryParse(height.first.toString()) ??
+                                  docHeight = (double.tryParse(
+                                              height.first.toString()) ??
                                           widget.otherOptions.height) +
-                                          (toolbarKey
+                                      (toolbarKey
                                               .currentContext?.size?.height ??
-                                              0);
+                                          0);
                                 });
                               }
                             });

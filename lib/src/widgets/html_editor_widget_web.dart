@@ -170,11 +170,13 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     var userScripts = '';
     if (widget.htmlEditorOptions.webInitialScripts != null) {
       widget.htmlEditorOptions.webInitialScripts!.forEach((element) {
-        userScripts = userScripts + '''
+        userScripts = userScripts +
+            '''
           if (data["type"].includes("${element.name}")) {
             ${element.script}
           }
-        ''' + '\n';
+        ''' +
+            '\n';
       });
     }
     var summernoteScripts = """

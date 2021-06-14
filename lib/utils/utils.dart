@@ -110,7 +110,8 @@ class ExpandIconDelegate extends SliverPersistentHeaderDelegate {
   ExpandIconDelegate(this._size, this._isExpanded, this._setState);
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
       height: _size,
       width: _size,
@@ -122,9 +123,7 @@ class ExpandIconDelegate extends SliverPersistentHeaderDelegate {
         ),
         iconSize: _size! * 3 / 5,
         icon: Icon(
-          _isExpanded
-              ? Icons.expand_less
-              : Icons.expand_more,
+          _isExpanded ? Icons.expand_less : Icons.expand_more,
           color: Colors.grey,
         ),
         onPressed: () async {
