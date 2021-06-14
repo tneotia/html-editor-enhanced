@@ -15,6 +15,7 @@ class HtmlEditorOptions {
     this.filePath,
     this.hint,
     this.initialText,
+    this.inputType = HtmlInputType.text,
     this.mobileContextMenu,
     this.mobileLongPressDuration,
     this.mobileInitialScripts,
@@ -62,6 +63,13 @@ class HtmlEditorOptions {
 
   /// The initial text that is be supplied to the Html editor.
   final String? initialText;
+
+  /// Changes the display of the virtual keyboard on mobile devices.
+  ///
+  /// See [HtmlInputType] for the supported modes.
+  ///
+  /// The default value is [HtmlInputType.text] (the standard virtual keyboard)
+  final HtmlInputType inputType;
 
   /// Customize the context menu for selected text on mobile
   final ContextMenu? mobileContextMenu;

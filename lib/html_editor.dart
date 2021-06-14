@@ -94,3 +94,6 @@ enum DropdownMenuDirection { down, up }
 
 /// Returns the type of file inserted in `onLinkInsertInt
 enum InsertFileType { image, audio, video }
+
+/// Sets how the virtual keyboard appears on mobile devices
+enum HtmlInputType { decimal, email, numeric, tel, url, text }

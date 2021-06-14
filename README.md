@@ -188,6 +188,7 @@ Parameter | Type | Default | Description
 **filePath** | `String` | `null` | Allows you to specify your own HTML to be loaded into the webview. You can create a custom page with Summernote, or theoretically load any other editor/HTML.
 **hint** | `String` | empty | Placeholder hint text
 **initialText** | `String` | empty | Initial text content for text editor
+**inputType** | `HtmlInputType` | `HtmlInputType.text` | Allows you to set how the virtual keyboard displays for the editor on mobile devices
 **mobileContextMenu** | `ContextMenu` | `null` | Customize the context menu when a user selects text in the editor. See docs for `ContextMenu` [here](https://inappwebview.dev/docs/context-menu/basic-usage/)
 **mobileLongPressDuration** | `Duration` | `Duration(milliseconds: 500)` | Set the duration until a long-press is recognized
 **mobileInitialScripts** | `UnmodifiableListView<UserScript>` | `null` | Easily inject scripts to perform actions like changing the background color of the editor. See docs for `UserScript` [here](https://inappwebview.dev/docs/javascript/user-scripts/)
