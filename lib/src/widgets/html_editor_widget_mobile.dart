@@ -163,7 +163,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                           );
                     }
                     if (widget.htmlEditorOptions.adjustHeightForKeyboard &&
-                        mounted) {
+                        mounted && !visibleStream.isClosed) {
                       var visibleDecimal = await visibleStream.stream.first;
                       var newHeight = widget.otherOptions.height;
                       if (visibleDecimal > 0.1) {
