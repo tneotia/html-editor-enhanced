@@ -88,9 +88,13 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   /// Masks the toolbar with a grey color if false
   bool _enabled = true;
 
+  /// Tracks the expanded status of the toolbar
+  bool _isExpanded = false;
+
   @override
   void initState() {
     widget.controller.toolbar = this;
+    _isExpanded = widget.htmlToolbarOptions.initiallyExpanded;
     for (var t in widget.htmlToolbarOptions.defaultToolbarButtons) {
       if (t is FontButtons) {
         _fontSelected = List<bool>.filled(t.getIcons1().length, false);
@@ -299,8 +303,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       }
     });
     if (widget.callbacks?.onChangeSelection != null) {
-      widget.callbacks!.onChangeSelection!.call(
-        EditorSettings(
+      widget.callbacks!.onChangeSelection!.call(EditorSettings(
           parentElement: parentElem,
           fontName: fontName,
           fontSize: fontSize,
@@ -319,9 +322,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           isAlignRight: alignList[2] ?? false,
           isAlignJustify: alignList[3] ?? false,
           lineHeight: _lineHeightSelectedItem,
-          textDirection: textDir == 'rtl' ? TextDirection.rtl : TextDirection.ltr
-        )
-      );
+          textDirection:
+              textDir == 'rtl' ? TextDirection.rtl : TextDirection.ltr));
     }
   }
 
@@ -368,6 +370,98 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   ],
                 ),
               ),
+            ),
+          ),
+        ),
+      );
+    } else if (widget.htmlToolbarOptions.toolbarType ==
+        ToolbarType.nativeExpandable) {
+      return PointerInterceptor(
+        child: AbsorbPointer(
+          absorbing: !_enabled,
+          child: Opacity(
+            opacity: _enabled ? 1 : 0.5,
+            child: Container(
+              constraints: BoxConstraints(
+                maxHeight: _isExpanded
+                    ? MediaQuery.of(context).size.height
+                    : widget.htmlToolbarOptions.toolbarItemHeight + 15,
+              ),
+              child: _isExpanded
+                  ? Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Wrap(
+                        runSpacing:
+                            widget.htmlToolbarOptions.gridViewVerticalSpacing,
+                        spacing:
+                            widget.htmlToolbarOptions.gridViewHorizontalSpacing,
+                        children: _buildChildren()
+                          ..insert(
+                              0,
+                              Container(
+                                height:
+                                    widget.htmlToolbarOptions.toolbarItemHeight,
+                                child: IconButton(
+                                  icon: Icon(
+                                    _isExpanded
+                                        ? Icons.expand_less
+                                        : Icons.expand_more,
+                                    color: Colors.grey,
+                                  ),
+                                  onPressed: () async {
+                                    setState(mounted, this.setState, () {
+                                      _isExpanded = !_isExpanded;
+                                    });
+                                    await Future.delayed(
+                                        Duration(milliseconds: 100));
+                                    if (kIsWeb) {
+                                      widget.controller.recalculateHeight();
+                                    } else {
+                                      await widget.controller.editorController!
+                                          .evaluateJavascript(
+                                              source:
+                                                  "var height = \$('div.note-editable').outerHeight(true); window.flutter_inappwebview.callHandler('setHeight', height);");
+                                    }
+                                  },
+                                ),
+                              )),
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: CustomScrollView(
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        slivers: [
+                          SliverPersistentHeader(
+                            pinned: true,
+                            delegate: ExpandIconDelegate(
+                                widget.htmlToolbarOptions.toolbarItemHeight,
+                                _isExpanded, () async {
+                              setState(mounted, this.setState, () {
+                                _isExpanded = !_isExpanded;
+                              });
+                              await Future.delayed(Duration(milliseconds: 100));
+                              if (kIsWeb) {
+                                widget.controller.recalculateHeight();
+                              } else {
+                                await widget.controller.editorController!
+                                    .evaluateJavascript(
+                                        source:
+                                            "var height = \$('div.note-editable').outerHeight(true); window.flutter_inappwebview.callHandler('setHeight', height);");
+                              }
+                            }),
+                          ),
+                          SliverFillRemaining(
+                            hasScrollBody: false,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: _buildChildren(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
             ),
           ),
         ),

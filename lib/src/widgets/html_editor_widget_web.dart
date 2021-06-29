@@ -170,11 +170,13 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     var userScripts = '';
     if (widget.htmlEditorOptions.webInitialScripts != null) {
       widget.htmlEditorOptions.webInitialScripts!.forEach((element) {
-        userScripts = userScripts + '''
+        userScripts = userScripts +
+            '''
           if (data["type"].includes("${element.name}")) {
             ${element.script}
           }
-        ''' + '\n';
+        ''' +
+            '\n';
       });
     }
     var summernoteScripts = """
@@ -196,7 +198,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         });
        
         window.parent.addEventListener('message', handleMessage, false);
-        document.onselectionchange = onSelectionChange; 
+        document.onselectionchange = onSelectionChange;
         console.log('done');
       
         function handleMessage(e) {
@@ -210,6 +212,9 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
               if (data["type"].includes("getHeight")) {
                 var height = document.body.scrollHeight;
                 window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: htmlHeight", "height": height}), "*");
+              }
+              if (data["type"].includes("setInputType")) {
+                document.getElementsByClassName('note-editable')[0].setAttribute('inputmode', '${describeEnum(widget.htmlEditorOptions.inputType)}');
               }
               if (data["type"].includes("setText")) {
                 \$('#summernote-2').summernote('code', data["text"]);
@@ -436,9 +441,13 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         }
         var data = <String, Object>{'type': 'toIframe: getHeight'};
         data['view'] = createdViewId;
+        var data2 = <String, Object>{'type': 'toIframe: setInputType'};
+        data2['view'] = createdViewId;
         final jsonEncoder = JsonEncoder();
         var jsonStr = jsonEncoder.convert(data);
+        var jsonStr2 = jsonEncoder.convert(data2);
         html.window.postMessage(jsonStr, '*');
+        html.window.postMessage(jsonStr2, '*');
         html.window.onMessage.listen((event) {
           var data = json.decode(event.data);
           if (data['type'] != null &&

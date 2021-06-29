@@ -61,6 +61,8 @@ Note that the API shown in this README.md file shows only a part of the document
   
     - [`shouldEnsureVisible`](#shouldensurevisible)
     
+    - [`webInitialScripts`](#webinitialscripts)
+    
   - [`HtmlToolbarOptions` Parameters](#htmltoolbaroptions-parameters)
   
     - [`customToolbarButtons` and `customToolbarButtonsInsertionIndices`](#customtoolbarbuttons-and-customtoolbarbuttonsinsertionindices)
@@ -95,7 +97,7 @@ Note that the API shown in this README.md file shows only a part of the document
 
 4. It doesn't use a local server to load the HTML code containing the editor. Instead, this package simply loads the HTML file, which improves performance and the editor's startup time.
 
-5. It uses a `StatelessWidget`. You don't have to fiddle around with `GlobalKey`s to access methods, instead you can simply call `<controller name>.<method name>` anywhere you want.
+5. It uses a controller-based API. You don't have to fiddle around with `GlobalKey`s to access methods, instead you can simply call `<controller name>.<method name>` anywhere you want.
 
 6. It has support for many of Summernote's methods
 
@@ -111,7 +113,7 @@ More is on the way! File a feature request or contribute to the project if you'd
 
 ## Setup
 
-Add `html_editor_enhanced: ^2.1.1` as dependency to your pubspec.yaml.
+Add `html_editor_enhanced: ^2.2.0` as dependency to your pubspec.yaml.
 
 Additional setup is required on iOS to allow the user to pick files from storage. See [here](https://github.com/miguelpruivo/flutter_file_picker/wiki/Setup#--ios) for more details. 
 
@@ -186,6 +188,7 @@ Parameter | Type | Default | Description
 **filePath** | `String` | `null` | Allows you to specify your own HTML to be loaded into the webview. You can create a custom page with Summernote, or theoretically load any other editor/HTML.
 **hint** | `String` | empty | Placeholder hint text
 **initialText** | `String` | empty | Initial text content for text editor
+**inputType** | `HtmlInputType` | `HtmlInputType.text` | Allows you to set how the virtual keyboard displays for the editor on mobile devices
 **mobileContextMenu** | `ContextMenu` | `null` | Customize the context menu when a user selects text in the editor. See docs for `ContextMenu` [here](https://inappwebview.dev/docs/context-menu/basic-usage/)
 **mobileLongPressDuration** | `Duration` | `Duration(milliseconds: 500)` | Set the duration until a long-press is recognized
 **mobileInitialScripts** | `UnmodifiableListView<UserScript>` | `null` | Easily inject scripts to perform actions like changing the background color of the editor. See docs for `UserScript` [here](https://inappwebview.dev/docs/javascript/user-scripts/)
@@ -204,6 +207,7 @@ Parameter | Type | Default | Description
 **defaultToolbarButtons** | `List<Toolbar>` | (all constructors active) | Allows you to hide/show certain buttons or certain groups of buttons
 **otherFileExtensions** | `List<String>` | `null` | Allowed extensions when inserting files other than image/audio/video
 **imageExtensions** | `List<String>` | `null` | Allowed extensions when inserting images
+**initiallyExpanded** | `bool` | `false` | Sets whether the toolbar is initially expanded or not when using `ToolbarType.nativeExpandable`
 **linkInsertInterceptor** | `FutureOr<bool> Function(String, String, bool)` | `null` | Intercept any links inserted into the editor. The function passes the display text, the URL, and whether it opens a new tab.
 **mediaLinkInsertInterceptor** | `FutureOr<bool> Function(String, InsertFileType)` | `null` | Intercept any media links inserted into the editor. The function passes the URL and `InsertFileType` which indicates which file type was inserted
 **mediaUploadInterceptor** | `FutureOr<bool> Function(PlatformFile, InsertFileType)` | `null` | Intercept any media files inserted into the editor. The function passes `PlatformFile` which holds all relevant file data, and `InsertFileType` which indicates which file type was inserted.
@@ -212,7 +216,7 @@ Parameter | Type | Default | Description
 **onOtherFileLinkInsert** | `Function(String)` | `null` | Intercept file link inserts other than image/audio/video. This handler is required when using the other file button, as the package has no built-in handlers
 **onOtherFileUpload** | `Function(PlatformFile)` | `null` | Intercept file uploads other than image/audio/video. This handler is required when using the other file button, as the package has no built-in handlers
 **otherFileExtensions** | `List<String>` | `null` | Allowed extensions when inserting files other than image/audio/video
-**toolbarType** | `ToolbarType` | `ToolbarType.nativeScrollable` | Customize how the toolbar is displayed (gridview or scrollable)
+**toolbarType** | `ToolbarType` | `ToolbarType.nativeScrollable` | Customize how the toolbar is displayed (gridview, scrollable, or expandable)
 **toolbarPosition** | `ToolbarPosition` | `ToolbarPosition.aboveEditor` | Set where the toolbar is displayed (above or below the editor)
 **videoExtensions** | `List<String>` | `null` | Allowed extensions when inserting videos
 
@@ -1065,7 +1069,7 @@ If you do find any issues, please report them in the Issues tab and I will see i
 
 * Clicking on the editor makes the cursor appear on the second line relative with the hint. Is there a workaround? - https://github.com/tneotia/html-editor-enhanced/issues/24
 
-* How can I give the editor box a custom background color? - https://github.com/tneotia/html-editor-enhanced/issues/27
+* How can I give the editor box a custom background color on mobile? - https://github.com/tneotia/html-editor-enhanced/issues/27
   
 * I see a file upload button in the top left of my application on Web. How can I remove it? - https://github.com/tneotia/html-editor-enhanced/issues/28
   
@@ -1081,6 +1085,10 @@ If you do find any issues, please report them in the Issues tab and I will see i
   
 * How can I handle relative URLs for images in my initial text? - https://github.com/tneotia/html-editor-enhanced/issues/50
 
+* How can I give the editor box a custom background color on web? - https://github.com/tneotia/html-editor-enhanced/issues/57
+  
+* How can I create a toolbar dropdown for custom fonts? - https://github.com/tneotia/html-editor-enhanced/issues/59
+  
 </details>
 
 ## License

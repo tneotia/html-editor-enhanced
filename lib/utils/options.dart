@@ -15,6 +15,7 @@ class HtmlEditorOptions {
     this.filePath,
     this.hint,
     this.initialText,
+    this.inputType = HtmlInputType.text,
     this.mobileContextMenu,
     this.mobileLongPressDuration,
     this.mobileInitialScripts,
@@ -63,6 +64,13 @@ class HtmlEditorOptions {
   /// The initial text that is be supplied to the Html editor.
   final String? initialText;
 
+  /// Changes the display of the virtual keyboard on mobile devices.
+  ///
+  /// See [HtmlInputType] for the supported modes.
+  ///
+  /// The default value is [HtmlInputType.text] (the standard virtual keyboard)
+  final HtmlInputType inputType;
+
   /// Customize the context menu for selected text on mobile
   final ContextMenu? mobileContextMenu;
 
@@ -100,11 +108,18 @@ class HtmlToolbarOptions {
       FontButtons(clearAll: false),
       ColorButtons(),
       ListButtons(listStyles: false),
-      ParagraphButtons(textDirection: false, lineHeight: false, caseConverter: false),
-      InsertButtons(video: false, audio: false, table: false, hr: false, otherFile: false),
+      ParagraphButtons(
+          textDirection: false, lineHeight: false, caseConverter: false),
+      InsertButtons(
+          video: false,
+          audio: false,
+          table: false,
+          hr: false,
+          otherFile: false),
     ],
     this.otherFileExtensions,
     this.imageExtensions,
+    this.initiallyExpanded = false,
     this.linkInsertInterceptor,
     this.mediaLinkInsertInterceptor,
     this.mediaUploadInterceptor,
@@ -175,6 +190,15 @@ class HtmlToolbarOptions {
   ///
   /// By default any image extension is allowed.
   final List<String>? imageExtensions;
+
+  /// Allows you to set whether the toolbar starts out expanded (in gridview)
+  /// or contracted (in scrollview).
+  ///
+  /// By default it starts out contracted.
+  ///
+  /// This option only works when you have set [toolbarType] to
+  /// [ToolbarType.nativeExpandable].
+  final bool initiallyExpanded;
 
   /// Allows you to intercept any links being inserted into the editor. The
   /// function passes the display text, the URL itself, and whether the
