@@ -508,31 +508,31 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 CustomDropdownMenuItem(
                     value: 'p',
                     child: PointerInterceptor(child: Text('Normal'))),
-                CustomDropdownMenuItem(
-                    value: 'blockquote',
-                    child: PointerInterceptor(
-                      child: Container(
-                          decoration: BoxDecoration(
-                              border: Border(
-                                  left: BorderSide(
-                                      color: Colors.grey, width: 3.0))),
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Text('Quote',
-                              style: TextStyle(
-                                  fontFamily: 'times', color: Colors.grey))),
-                    )),
-                CustomDropdownMenuItem(
-                    value: 'pre',
-                    child: PointerInterceptor(
-                      child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Colors.grey),
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Text('Code',
-                              style: TextStyle(
-                                  fontFamily: 'courier', color: Colors.white))),
-                    )),
+                // CustomDropdownMenuItem(
+                //     value: 'blockquote',
+                //     child: PointerInterceptor(
+                //       child: Container(
+                //           decoration: BoxDecoration(
+                //               border: Border(
+                //                   left: BorderSide(
+                //                       color: Colors.grey, width: 3.0))),
+                //           padding: EdgeInsets.symmetric(horizontal: 10.0),
+                //           child: Text('Quote',
+                //               style: TextStyle(
+                //                   fontFamily: 'times', color: Colors.grey))),
+                //     )),
+                // CustomDropdownMenuItem(
+                //     value: 'pre',
+                //     child: PointerInterceptor(
+                //       child: Container(
+                //           decoration: BoxDecoration(
+                //               borderRadius: BorderRadius.circular(5),
+                //               color: Colors.grey),
+                //           padding: EdgeInsets.symmetric(horizontal: 10.0),
+                //           child: Text('Code',
+                //               style: TextStyle(
+                //                   fontFamily: 'courier', color: Colors.white))),
+                //     )),
                 CustomDropdownMenuItem(
                   value: 'h1',
                   child: PointerInterceptor(
@@ -554,27 +554,27 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18))),
                 ),
-                CustomDropdownMenuItem(
-                  value: 'h4',
-                  child: PointerInterceptor(
-                      child: Text('Header 4',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16))),
-                ),
-                CustomDropdownMenuItem(
-                  value: 'h5',
-                  child: PointerInterceptor(
-                      child: Text('Header 5',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 13))),
-                ),
-                CustomDropdownMenuItem(
-                  value: 'h6',
-                  child: PointerInterceptor(
-                      child: Text('Header 6',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 11))),
-                ),
+                // CustomDropdownMenuItem(
+                //   value: 'h4',
+                //   child: PointerInterceptor(
+                //       child: Text('Header 4',
+                //           style: TextStyle(
+                //               fontWeight: FontWeight.bold, fontSize: 16))),
+                // ),
+                // CustomDropdownMenuItem(
+                //   value: 'h5',
+                //   child: PointerInterceptor(
+                //       child: Text('Header 5',
+                //           style: TextStyle(
+                //               fontWeight: FontWeight.bold, fontSize: 13))),
+                // ),
+                // CustomDropdownMenuItem(
+                //   value: 'h6',
+                //   child: PointerInterceptor(
+                //       child: Text('Header 6',
+                //           style: TextStyle(
+                //               fontWeight: FontWeight.bold, fontSize: 11))),
+                // ),
               ],
               value: _fontSelectedItem,
               onChanged: (String? changed) async {
