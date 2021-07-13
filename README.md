@@ -322,6 +322,7 @@ Callback | Parameter(s) | Description
 **onKeyUp** | `int` | Called when a key is released, passes the keycode of the released key
 **onMouseDown** | N/A | Called when the mouse/finger is downed
 **onMouseUp** | N/A | Called when the mouse/finger is released
+**onNavigationRequestMobile** | `String` | Called when the URL of the webview is about to change on mobile only
 **onPaste** | N/A | Called when content is pasted into the editor
 **onScroll** | N/A | Called when editor box is scrolled
 

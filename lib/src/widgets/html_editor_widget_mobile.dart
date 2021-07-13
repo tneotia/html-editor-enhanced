@@ -136,6 +136,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       crossPlatform: InAppWebViewOptions(
                         javaScriptEnabled: true,
                         transparentBackground: true,
+                        useShouldOverrideUrlLoading: true,
                       ),
                       android: AndroidInAppWebViewOptions(
                         useHybridComposition: true,
@@ -151,6 +152,13 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                         LongPressGestureRecognizer(
                             duration: widget
                                 .htmlEditorOptions.mobileLongPressDuration)),
+                  },
+                  shouldOverrideUrlLoading: (controller, action) async {
+                    if (!action.request.url.toString().contains(filePath)) {
+                      return (await widget.callbacks?.onNavigationRequestMobile?.call(action.request.url.toString()))
+                          ?? NavigationActionPolicy.ALLOW;
+                    }
+                    return NavigationActionPolicy.ALLOW;
                   },
                   onConsoleMessage: (controller, message) {
                     print(message.message);
