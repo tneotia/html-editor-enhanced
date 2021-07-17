@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:html_editor_enhanced/utils/flat_icon_new_icons.dart';
 import 'package:html_editor_enhanced/utils/utils.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
@@ -252,18 +253,18 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       for (var t in widget.htmlToolbarOptions.defaultToolbarButtons) {
         if (t is FontButtons) {
           for (var i = 0; i < _fontSelected.length; i++) {
-            if (t.getIcons1()[i].icon == Icons.format_bold) {
+            if (t.getIcons1()[i].icon == FlatIcon.bold) {
               _fontSelected[i] = fontList[0] ?? false;
             }
-            if (t.getIcons1()[i].icon == Icons.format_italic) {
+            if (t.getIcons1()[i].icon == FlatIcon.italic) {
               _fontSelected[i] = fontList[1] ?? false;
             }
-            if (t.getIcons1()[i].icon == Icons.format_underline) {
+            if (t.getIcons1()[i].icon == FlatIcon.underline_text) {
               _fontSelected[i] = fontList[2] ?? false;
             }
           }
           for (var i = 0; i < _miscFontSelected.length; i++) {
-            if (t.getIcons2()[i].icon == Icons.format_strikethrough) {
+            if (t.getIcons2()[i].icon == FlatIcon.strikethrough) {
               _miscFontSelected[i] = miscFontList[0] ?? false;
             }
             if (t.getIcons2()[i].icon == Icons.superscript) {
@@ -276,10 +277,10 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         }
         if (t is ListButtons) {
           for (var i = 0; i < _listSelected.length; i++) {
-            if (t.getIcons()[i].icon == Icons.format_list_bulleted) {
+            if (t.getIcons()[i].icon == FlatIcon.bullet_list) {
               _listSelected[i] = paragraphList[0] ?? false;
             }
-            if (t.getIcons()[i].icon == Icons.format_list_numbered) {
+            if (t.getIcons()[i].icon == FlatIcon.number) {
               _listSelected[i] = paragraphList[1] ?? false;
             }
           }
@@ -916,7 +917,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 });
               }
 
-              if (t.getIcons1()[index].icon == Icons.format_bold) {
+              if (t.getIcons1()[index].icon == FlatIcon.bold) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.bold, _fontSelected[index],
                             updateStatus) ??
@@ -926,7 +927,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   updateStatus();
                 }
               }
-              if (t.getIcons1()[index].icon == Icons.format_italic) {
+              if (t.getIcons1()[index].icon == FlatIcon.italic) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.italic, _fontSelected[index],
                             updateStatus) ??
@@ -936,7 +937,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   updateStatus();
                 }
               }
-              if (t.getIcons1()[index].icon == Icons.format_underline) {
+              if (t.getIcons1()[index].icon == FlatIcon.underline_text) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.underline, _fontSelected[index],
                             updateStatus) ??
@@ -986,7 +987,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 });
               }
 
-              if (t.getIcons2()[index].icon == Icons.format_strikethrough) {
+              if (t.getIcons2()[index].icon == FlatIcon.strikethrough) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.strikethrough,
                             _miscFontSelected[index], updateStatus) ??
@@ -1223,7 +1224,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 });
               }
 
-              if (t.getIcons()[index].icon == Icons.format_list_bulleted) {
+              if (t.getIcons()[index].icon == FlatIcon.bullet_list) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.ul, _listSelected[index],
                             updateStatus) ??
@@ -1233,7 +1234,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   updateStatus();
                 }
               }
-              if (t.getIcons()[index].icon == Icons.format_list_numbered) {
+              if (t.getIcons()[index].icon == FlatIcon.number) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.ol, _listSelected[index],
                             updateStatus) ??
@@ -1756,7 +1757,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           renderBorder: widget.htmlToolbarOptions.renderBorder,
           textStyle: widget.htmlToolbarOptions.textStyle,
           onPressed: (int index) async {
-            if (t.getIcons()[index].icon == Icons.link) {
+            if (t.getIcons()[index].icon == FlatIcon.link) {
               var proceed = await widget.htmlToolbarOptions.onButtonPressed
                       ?.call(ButtonType.link, null, null) ??
                   true;

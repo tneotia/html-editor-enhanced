@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:html_editor_enhanced/utils/flat_icon_new_icons.dart';
 
 /// Abstract class that all the toolbar classes extend
 abstract class Toolbar {
@@ -49,16 +50,17 @@ class FontButtons extends Toolbar {
 
   List<Icon> getIcons1() {
     var icons = <Icon>[];
-    if (bold) icons.add(Icon(Icons.format_bold,color: Color(0xff8f8f8f),));
-    if (italic) icons.add(Icon(Icons.format_italic,color: Color(0xff8f8f8f),));
-    if (underline) icons.add(Icon(Icons.format_underline,color: Color(0xff8f8f8f),));
+    if (bold) icons.add(Icon(FlatIcon.bold));
+    if (italic) icons.add(Icon(FlatIcon.italic));
+    if (underline) icons.add(Icon(FlatIcon.underline_text));
     if (clearAll) icons.add(Icon(Icons.format_clear));
     return icons;
   }
 
   List<Icon> getIcons2() {
     var icons = <Icon>[];
-    if (strikethrough) icons.add(Icon(Icons.format_strikethrough,color: Color(0xff8f8f8f),));
+    // if (strikethrough) icons.add(Icon(Icons.format_strikethrough));
+    if (strikethrough) icons.add(Icon(FlatIcon.strikethrough));
     if (superscript) icons.add(Icon(Icons.superscript));
     if (subscript) icons.add(Icon(Icons.subscript));
     return icons;
@@ -97,8 +99,8 @@ class ListButtons extends Toolbar {
 
   List<Icon> getIcons() {
     var icons = <Icon>[];
-    if (ul) icons.add(Icon(Icons.format_list_bulleted,color: Color(0xff8f8f8f),));
-    if (ol) icons.add(Icon(Icons.format_list_numbered,color: Color(0xff8f8f8f),));
+    if (ul) icons.add(Icon(FlatIcon.bullet_list));
+    if (ol) icons.add(Icon(FlatIcon.number));
     return icons;
   }
 }
@@ -166,7 +168,7 @@ class InsertButtons extends Toolbar {
 
   List<Icon> getIcons() {
     var icons = <Icon>[];
-    if (link) icons.add(Icon(Icons.link));
+    if (link) icons.add(Icon(FlatIcon.link));
     if (picture) icons.add(Icon(Icons.image_outlined));
     if (audio) icons.add(Icon(Icons.audiotrack_outlined));
     if (video) icons.add(Icon(Icons.videocam_outlined));
