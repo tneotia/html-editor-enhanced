@@ -259,7 +259,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             if (t.getIcons1()[i].icon == FlatIcon.italic) {
               _fontSelected[i] = fontList[1] ?? false;
             }
-            if (t.getIcons1()[i].icon == FlatIcon.underline_text) {
+            if (t.getIcons1()[i].icon == FlatIcon.underline) {
               _fontSelected[i] = fontList[2] ?? false;
             }
           }
@@ -537,23 +537,23 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 CustomDropdownMenuItem(
                   value: 'h1',
                   child: PointerInterceptor(
-                      child: Text('Header 1',
+                      child: Text('H1',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 32))),
+                              fontWeight: FontWeight.bold, fontSize: 32,color: Color(0xff6A6A6A),))),
                 ),
                 CustomDropdownMenuItem(
                   value: 'h2',
                   child: PointerInterceptor(
-                      child: Text('Header 2',
+                      child: Text('H2',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 24))),
+                              fontWeight: FontWeight.bold, fontSize: 24,color: Color(0xff6A6A6A),))),
                 ),
                 CustomDropdownMenuItem(
                   value: 'h3',
                   child: PointerInterceptor(
-                      child: Text('Header 3',
+                      child: Text('H3',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18))),
+                              fontWeight: FontWeight.bold, fontSize: 18,color: Color(0xff6A6A6A),))),
                 ),
                 // CustomDropdownMenuItem(
                 //   value: 'h4',
@@ -937,7 +937,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   updateStatus();
                 }
               }
-              if (t.getIcons1()[index].icon == FlatIcon.underline_text) {
+              if (t.getIcons1()[index].icon == FlatIcon.underline) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.underline, _fontSelected[index],
                             updateStatus) ??
