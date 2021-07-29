@@ -539,7 +539,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   child: PointerInterceptor(
                       child: Text('H1',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 32,color: Color(0xff6A6A6A),))),
+                              fontWeight: FontWeight.bold, fontSize: 28,color: Color(0xff6A6A6A),))),
                 ),
                 CustomDropdownMenuItem(
                   value: 'h2',
