@@ -1094,6 +1094,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                     true;
               }
               if (proceed) {
+                await SystemChannels.textInput.invokeMethod('TextInput.hide');
                 await showDialog(
                     context: context,
                     builder: (BuildContext context) {
