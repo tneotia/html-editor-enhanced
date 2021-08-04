@@ -191,7 +191,13 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                     var maximumFileSize = 10485760;
                     if (url.contains(filePath)) {
                       var summernoteToolbar = '[\n';
-                      var summernoteCallbacks = 'callbacks: {';
+                      var summernoteCallbacks = '''callbacks: {
+                          onKeydown: function(e) {
+                              var chars = \$(".note-editable").text();
+                              var totalChars = chars.length;
+                              window.flutter_inappwebview.callHandler('totalChars', totalChars);
+                          },
+                      ''';
                       if (widget.plugins.isNotEmpty) {
                         summernoteToolbar = summernoteToolbar + "['plugins', [";
                         for (var p in widget.plugins) {
@@ -432,6 +438,11 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                           }
                         });
                       }
+                      widget.controller.editorController!.addJavaScriptHandler(
+                          handlerName: 'totalChars',
+                          callback: (keyCode) {
+                            widget.controller.characterCount = keyCode.first as int;
+                          });
                       //initialize callbacks
                       if (widget.callbacks != null && !callbacksInitialized) {
                         addJSCallbacks(widget.callbacks!);

@@ -34,6 +34,19 @@ class HtmlEditorController {
   /// The default value is true.
   final bool processOutputHtml;
 
+  /// Internally tracks the character count in the editor
+  int _characterCount = 0;
+
+  /// Gets the current character count
+  // ignore: unnecessary_getters_setters
+  int get characterCount => _characterCount;
+
+  @internal
+  /// Sets the current character count. Marked as internal method - this should
+  /// not be used outside of the package itself.
+  // ignore: unnecessary_getters_setters
+  set characterCount(int count) => _characterCount = count;
+
   /// Allows the [InAppWebViewController] for the Html editor to be accessed
   /// outside of the package itself for endless control and customization.
   InAppWebViewController? get editorController => null;
