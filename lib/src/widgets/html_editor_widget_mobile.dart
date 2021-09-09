@@ -102,7 +102,12 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
       child: VisibilityDetector(
         key: Key(key),
         onVisibilityChanged: (VisibilityInfo info) async {
-          if (!visibleStream.isClosed) visibleStream.add(info.visibleFraction);
+          if (!visibleStream.isClosed) {
+            visibleStream.add(info.visibleFraction == 1
+                ? (info.size.height / widget.otherOptions.height).clamp(0, 1)
+                : info.visibleFraction
+            );
+          }
         },
         child: Container(
           height: docHeight + 10,
