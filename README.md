@@ -1070,7 +1070,7 @@ If you do find any issues, please report them in the Issues tab and I will see i
 
 * Clicking on the editor makes the cursor appear on the second line relative with the hint. Is there a workaround? - https://github.com/tneotia/html-editor-enhanced/issues/24
 
-* How can I give the editor box a custom background color? - https://github.com/tneotia/html-editor-enhanced/issues/27
+* How can I give the editor box a custom background color on mobile? - https://github.com/tneotia/html-editor-enhanced/issues/27
   
 * I see a file upload button in the top left of my application on Web. How can I remove it? - https://github.com/tneotia/html-editor-enhanced/issues/28
   
@@ -1086,6 +1086,10 @@ If you do find any issues, please report them in the Issues tab and I will see i
   
 * How can I handle relative URLs for images in my initial text? - https://github.com/tneotia/html-editor-enhanced/issues/50
 
+* How can I give the editor box a custom background color on web? - https://github.com/tneotia/html-editor-enhanced/issues/57
+  
+* How can I create a toolbar dropdown for custom fonts? - https://github.com/tneotia/html-editor-enhanced/issues/59
+  
 </details>
 
 ## License

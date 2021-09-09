@@ -60,6 +60,10 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
   /// the editor when the keyboard is visible.
   GlobalKey toolbarKey = GlobalKey();
 
+  /// Variable to cache the viewable size of the editor to update it in case
+  /// the editor is focused much after its visibility changes
+  double? cachedVisibleDecimal;
+
   @override
   void initState() {
     docHeight = widget.otherOptions.height;
@@ -102,7 +106,15 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
       child: VisibilityDetector(
         key: Key(key),
         onVisibilityChanged: (VisibilityInfo info) async {
-          if (!visibleStream.isClosed) visibleStream.add(info.visibleFraction);
+          if (!visibleStream.isClosed) {
+            cachedVisibleDecimal = info.visibleFraction == 1
+                ? (info.size.height / widget.otherOptions.height).clamp(0, 1)
+                : info.visibleFraction;
+            visibleStream.add(info.visibleFraction == 1
+                ? (info.size.height / widget.otherOptions.height).clamp(0, 1)
+                : info.visibleFraction
+            );
+          }
         },
         child: Container(
           height: docHeight + 10,
@@ -172,6 +184,16 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                     }
                     if (widget.htmlEditorOptions.adjustHeightForKeyboard &&
                         mounted && !visibleStream.isClosed) {
+                      /// this is a workaround so jumping between focus on different
+                      /// editable elements still resizes the editor
+                      if ((cachedVisibleDecimal ?? 0) > 0.1) {
+                        this.setState(() {
+                          docHeight = widget.otherOptions.height * cachedVisibleDecimal!;
+                        });
+                        await controller.evaluateJavascript(
+                            source:
+                            "\$('div.note-editable').outerHeight(${max(docHeight - (toolbarKey.currentContext?.size?.height ?? 0), 30)});");
+                      }
                       var visibleDecimal = await visibleStream.stream.first;
                       var newHeight = widget.otherOptions.height;
                       if (visibleDecimal > 0.1) {
