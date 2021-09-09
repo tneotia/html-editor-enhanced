@@ -148,6 +148,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       crossPlatform: InAppWebViewOptions(
                         javaScriptEnabled: true,
                         transparentBackground: true,
+                        useShouldOverrideUrlLoading: true,
                       ),
                       android: AndroidInAppWebViewOptions(
                         useHybridComposition: true,
@@ -164,6 +165,13 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                             duration: widget
                                 .htmlEditorOptions.mobileLongPressDuration)),
                   },
+                  shouldOverrideUrlLoading: (controller, action) async {
+                    if (!action.request.url.toString().contains(filePath)) {
+                      return (await widget.callbacks?.onNavigationRequestMobile?.call(action.request.url.toString()))
+                          ?? NavigationActionPolicy.ALLOW;
+                    }
+                    return NavigationActionPolicy.ALLOW;
+                  },
                   onConsoleMessage: (controller, message) {
                     print(message.message);
                   },
@@ -175,7 +183,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                           );
                     }
                     if (widget.htmlEditorOptions.adjustHeightForKeyboard &&
-                        mounted) {
+                        mounted && !visibleStream.isClosed) {
                       /// this is a workaround so jumping between focus on different
                       /// editable elements still resizes the editor
                       if ((cachedVisibleDecimal ?? 0) > 0.1) {
@@ -205,7 +213,13 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                     var maximumFileSize = 10485760;
                     if (url.contains(filePath)) {
                       var summernoteToolbar = '[\n';
-                      var summernoteCallbacks = 'callbacks: {';
+                      var summernoteCallbacks = '''callbacks: {
+                          onKeydown: function(e) {
+                              var chars = \$(".note-editable").text();
+                              var totalChars = chars.length;
+                              window.flutter_inappwebview.callHandler('totalChars', totalChars);
+                          },
+                      ''';
                       if (widget.plugins.isNotEmpty) {
                         summernoteToolbar = summernoteToolbar + "['plugins', [";
                         for (var p in widget.plugins) {
@@ -446,6 +460,11 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                           }
                         });
                       }
+                      widget.controller.editorController!.addJavaScriptHandler(
+                          handlerName: 'totalChars',
+                          callback: (keyCode) {
+                            widget.controller.characterCount = keyCode.first as int;
+                          });
                       //initialize callbacks
                       if (widget.callbacks != null && !callbacksInitialized) {
                         addJSCallbacks(widget.callbacks!);

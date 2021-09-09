@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/utils/utils.dart';
 
@@ -21,6 +24,7 @@ class Callbacks {
     this.onKeyDown,
     this.onMouseUp,
     this.onMouseDown,
+    this.onNavigationRequestMobile,
     this.onPaste,
     this.onScroll,
   });
@@ -157,6 +161,13 @@ class Callbacks {
 
   /// Called whenever the mouse/finger is downed and the editor is in rich text view.
   void Function()? onMouseDown;
+
+  /// Called right before the URL of the webview is changed on mobile. This allows
+  /// you to prevent URLs from loading, or launch them externally, for example.
+  ///
+  /// This function passes the URL to be loaded, and you must return a
+  /// `NavigationActionPolicy` to tell the webview what to do.
+  FutureOr<NavigationActionPolicy> Function(String)? onNavigationRequestMobile;
 
   /// Called whenever text is pasted into the rich text field. This will not be
   /// called when text is pasted into the code view editor.

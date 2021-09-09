@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:file_picker/file_picker.dart';
 
@@ -146,12 +147,16 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                   }
                 }, onKeyDown: (int? keyCode) {
                   print('$keyCode key downed');
+                  print('current character count: ${controller.characterCount}');
                 }, onKeyUp: (int? keyCode) {
                   print('$keyCode key released');
                 }, onMouseDown: () {
                   print('mouse downed');
                 }, onMouseUp: () {
                   print('mouse released');
+                }, onNavigationRequestMobile: (String url) {
+                  print(url);
+                  return NavigationActionPolicy.ALLOW;
                 }, onPaste: () {
                   print('pasted into editor');
                 }, onScroll: () {

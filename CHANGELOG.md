@@ -1,3 +1,7 @@
+## [2.2.0+1] - 2021-06-15 (BETA)
+* Updated `flutter_colorpicker` to the latest version to fix deprecations on Flutter beta+
+* [NOTE] Do not use this version on Flutter stable!
+
 ## [2.2.0] - 2021-06-14
 * Fixed null safety warnings due to latest `file_picker` version
 * Potentially fixed editor controller creating a new instance on widget rebuild
