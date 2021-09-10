@@ -113,7 +113,7 @@ More is on the way! File a feature request or contribute to the project if you'd
 
 ## Setup
 
-Add `html_editor_enhanced: ^2.2.0` as dependency to your pubspec.yaml.
+Add `html_editor_enhanced: ^2.3.0` as dependency to your pubspec.yaml.
 
 Additional setup is required on iOS to allow the user to pick files from storage. See [here](https://github.com/miguelpruivo/flutter_file_picker/wiki/Setup#--ios) for more details. 
 
@@ -322,16 +322,19 @@ Callback | Parameter(s) | Description
 **onKeyUp** | `int` | Called when a key is released, passes the keycode of the released key
 **onMouseDown** | N/A | Called when the mouse/finger is downed
 **onMouseUp** | N/A | Called when the mouse/finger is released
+**onNavigationRequestMobile** | `String` | Called when the URL of the webview is about to change on mobile only
 **onPaste** | N/A | Called when content is pasted into the editor
 **onScroll** | N/A | Called when editor box is scrolled
 
 ### Getters
 
-Currently, the package has one getter: `<controller name>.editorController`. This returns the `InAppWebViewController`, which manages the webview that displays the editor.
+1) `<controller name>.editorController`. This returns the `InAppWebViewController`, which manages the webview that displays the editor.
 
 This is extremely powerful, as it allows you to create your own custom methods and implementations directly in your app. See [`flutter_inappwebview`](https://github.com/pichillilorenzo/flutter_inappwebview) for documentation on the controller.
 
 This getter *should not* be used in Flutter Web. If you are making a cross platform implementation, please use `kIsWeb` to check the current platform in your code.
+
+2) `<controller name>.characterCount`. This returns the number of text characters in the editor.
 
 ### Toolbar
 
@@ -1088,6 +1091,28 @@ If you do find any issues, please report them in the Issues tab and I will see i
 * How can I give the editor box a custom background color on web? - https://github.com/tneotia/html-editor-enhanced/issues/57
   
 * How can I create a toolbar dropdown for custom fonts? - https://github.com/tneotia/html-editor-enhanced/issues/59
+  
+* How can I translate things like dialog text? - https://github.com/tneotia/html-editor-enhanced/issues/69
+  
+* How can I disable copy/paste buttons from the toolbar? - https://github.com/tneotia/html-editor-enhanced/issues/71
+  
+* How can I extract image tag from the editor HTML? - https://github.com/tneotia/html-editor-enhanced/issues/72
+
+* How can I use LaTeX or math formulas in the editor? - https://github.com/tneotia/html-editor-enhanced/issues/74
+
+* How can I make a custom button outside of the toolbar to make text bold? - https://github.com/tneotia/html-editor-enhanced/issues/81
+
+* How can I style the `<blockquote>` element differently? - https://github.com/tneotia/html-editor-enhanced/issues/83
+
+* How can I set image width to 100% by default? - https://github.com/tneotia/html-editor-enhanced/issues/86
+
+* How can I override link opening on mobile? - https://github.com/tneotia/html-editor-enhanced/issues/88
+
+* How can I set the initial font family in the editor? - https://github.com/tneotia/html-editor-enhanced/issues/93
+
+* How can I change background color of toolbar only? - https://github.com/tneotia/html-editor-enhanced/issues/94
+
+* How can I pick images from gallery directly without showing the dialog? - https://github.com/tneotia/html-editor-enhanced/issues/97
   
 </details>
 

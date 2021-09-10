@@ -68,7 +68,13 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
 
   void initSummernote() async {
     var headString = '';
-    var summernoteCallbacks = 'callbacks: {';
+    var summernoteCallbacks = '''callbacks: {
+        onKeydown: function(e) {
+            var chars = \$(".note-editable").text();
+            var totalChars = chars.length;
+            window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: characterCount", "totalChars": totalChars}), "*");
+        },
+    ''';
     var maximumFileSize = 10485760;
     for (var p in widget.plugins) {
       headString = headString + p.getHeadString() + '\n';
@@ -741,6 +747,9 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         }
         if (data['type'].contains('onScroll')) {
           c.onScroll!.call();
+        }
+        if (data['type'].contains('characterCount')) {
+          widget.controller.characterCount = data['totalChars'];
         }
       }
     });
