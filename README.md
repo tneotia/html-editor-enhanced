@@ -1108,7 +1108,7 @@ If you do find any issues, please report them in the Issues tab and I will see i
 
 * How can I override link opening on mobile? - https://github.com/tneotia/html-editor-enhanced/issues/88
 
-* How can I set the initial font family in the editor? - https://github.com/tneotia/html-editor-enhanced/issues/93
+* How can I set the initial font family in the editor? - https://github.com/tneotia/html-editor-enhanced/issues/125
 
 * How can I change background color of toolbar only? - https://github.com/tneotia/html-editor-enhanced/issues/94
 
