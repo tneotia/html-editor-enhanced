@@ -1092,6 +1092,28 @@ If you do find any issues, please report them in the Issues tab and I will see i
   
 * How can I create a toolbar dropdown for custom fonts? - https://github.com/tneotia/html-editor-enhanced/issues/59
   
+* How can I translate things like dialog text? - https://github.com/tneotia/html-editor-enhanced/issues/69
+  
+* How can I disable copy/paste buttons from the toolbar? - https://github.com/tneotia/html-editor-enhanced/issues/71
+  
+* How can I extract image tag from the editor HTML? - https://github.com/tneotia/html-editor-enhanced/issues/72
+
+* How can I use LaTeX or math formulas in the editor? - https://github.com/tneotia/html-editor-enhanced/issues/74
+
+* How can I make a custom button outside of the toolbar to make text bold? - https://github.com/tneotia/html-editor-enhanced/issues/81
+
+* How can I style the `<blockquote>` element differently? - https://github.com/tneotia/html-editor-enhanced/issues/83
+
+* How can I set image width to 100% by default? - https://github.com/tneotia/html-editor-enhanced/issues/86
+
+* How can I override link opening on mobile? - https://github.com/tneotia/html-editor-enhanced/issues/88
+
+* How can I set the initial font family in the editor? - https://github.com/tneotia/html-editor-enhanced/issues/93
+
+* How can I change background color of toolbar only? - https://github.com/tneotia/html-editor-enhanced/issues/94
+
+* How can I pick images from gallery directly without showing the dialog? - https://github.com/tneotia/html-editor-enhanced/issues/97
+  
 </details>
 
 ## License
