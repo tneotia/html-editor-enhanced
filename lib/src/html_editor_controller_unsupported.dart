@@ -42,6 +42,7 @@ class HtmlEditorController {
   int get characterCount => _characterCount;
 
   @internal
+
   /// Sets the current character count. Marked as internal method - this should
   /// not be used outside of the package itself.
   // ignore: unnecessary_getters_setters

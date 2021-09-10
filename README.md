@@ -113,7 +113,7 @@ More is on the way! File a feature request or contribute to the project if you'd
 
 ## Setup
 
-Add `html_editor_enhanced: ^2.2.0` as dependency to your pubspec.yaml.
+Add `html_editor_enhanced: ^2.3.0` as dependency to your pubspec.yaml.
 
 Additional setup is required on iOS to allow the user to pick files from storage. See [here](https://github.com/miguelpruivo/flutter_file_picker/wiki/Setup#--ios) for more details. 
 
@@ -328,11 +328,13 @@ Callback | Parameter(s) | Description
 
 ### Getters
 
-Currently, the package has one getter: `<controller name>.editorController`. This returns the `InAppWebViewController`, which manages the webview that displays the editor.
+1) `<controller name>.editorController`. This returns the `InAppWebViewController`, which manages the webview that displays the editor.
 
 This is extremely powerful, as it allows you to create your own custom methods and implementations directly in your app. See [`flutter_inappwebview`](https://github.com/pichillilorenzo/flutter_inappwebview) for documentation on the controller.
 
 This getter *should not* be used in Flutter Web. If you are making a cross platform implementation, please use `kIsWeb` to check the current platform in your code.
+
+2) `<controller name>.characterCount`. This returns the number of text characters in the editor.
 
 ### Toolbar
 

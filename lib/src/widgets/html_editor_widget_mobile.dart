@@ -112,8 +112,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                 : info.visibleFraction;
             visibleStream.add(info.visibleFraction == 1
                 ? (info.size.height / widget.otherOptions.height).clamp(0, 1)
-                : info.visibleFraction
-            );
+                : info.visibleFraction);
           }
         },
         child: Container(
@@ -167,8 +166,9 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                   },
                   shouldOverrideUrlLoading: (controller, action) async {
                     if (!action.request.url.toString().contains(filePath)) {
-                      return (await widget.callbacks?.onNavigationRequestMobile?.call(action.request.url.toString()))
-                          ?? NavigationActionPolicy.ALLOW;
+                      return (await widget.callbacks?.onNavigationRequestMobile
+                              ?.call(action.request.url.toString())) ??
+                          NavigationActionPolicy.ALLOW;
                     }
                     return NavigationActionPolicy.ALLOW;
                   },
@@ -183,16 +183,18 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                           );
                     }
                     if (widget.htmlEditorOptions.adjustHeightForKeyboard &&
-                        mounted && !visibleStream.isClosed) {
+                        mounted &&
+                        !visibleStream.isClosed) {
                       /// this is a workaround so jumping between focus on different
                       /// editable elements still resizes the editor
                       if ((cachedVisibleDecimal ?? 0) > 0.1) {
                         this.setState(() {
-                          docHeight = widget.otherOptions.height * cachedVisibleDecimal!;
+                          docHeight = widget.otherOptions.height *
+                              cachedVisibleDecimal!;
                         });
                         await controller.evaluateJavascript(
                             source:
-                            "\$('div.note-editable').outerHeight(${max(docHeight - (toolbarKey.currentContext?.size?.height ?? 0), 30)});");
+                                "\$('div.note-editable').outerHeight(${max(docHeight - (toolbarKey.currentContext?.size?.height ?? 0), 30)});");
                       }
                       var visibleDecimal = await visibleStream.stream.first;
                       var newHeight = widget.otherOptions.height;
@@ -463,7 +465,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       widget.controller.editorController!.addJavaScriptHandler(
                           handlerName: 'totalChars',
                           callback: (keyCode) {
-                            widget.controller.characterCount = keyCode.first as int;
+                            widget.controller.characterCount =
+                                keyCode.first as int;
                           });
                       //initialize callbacks
                       if (widget.callbacks != null && !callbacksInitialized) {

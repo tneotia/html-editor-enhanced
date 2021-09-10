@@ -147,7 +147,8 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                   }
                 }, onKeyDown: (int? keyCode) {
                   print('$keyCode key downed');
-                  print('current character count: ${controller.characterCount}');
+                  print(
+                      'current character count: ${controller.characterCount}');
                 }, onKeyUp: (int? keyCode) {
                   print('$keyCode key released');
                 }, onMouseDown: () {
