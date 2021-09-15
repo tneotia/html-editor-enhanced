@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:html_editor_enhanced/utils/flat_icon1.dart';
 import 'package:html_editor_enhanced/utils/flat_icon_new_icons.dart';
 import 'package:html_editor_enhanced/utils/utils.dart';
 import 'package:numberpicker/numberpicker.dart';
@@ -253,10 +254,10 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       for (var t in widget.htmlToolbarOptions.defaultToolbarButtons) {
         if (t is FontButtons) {
           for (var i = 0; i < _fontSelected.length; i++) {
-            if (t.getIcons1()[i].icon == FlatIcon.bold) {
+            if (t.getIcons1()[i].icon == FlatIcon1.bold) {
               _fontSelected[i] = fontList[0] ?? false;
             }
-            if (t.getIcons1()[i].icon == FlatIcon.italic) {
+            if (t.getIcons1()[i].icon == FlatIcon1.italic) {
               _fontSelected[i] = fontList[1] ?? false;
             }
             if (t.getIcons1()[i].icon == FlatIcon.underline) {
@@ -264,7 +265,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             }
           }
           for (var i = 0; i < _miscFontSelected.length; i++) {
-            if (t.getIcons2()[i].icon == FlatIcon.strikethrough) {
+            if (t.getIcons2()[i].icon == FlatIcon1.strikethrough) {
               _miscFontSelected[i] = miscFontList[0] ?? false;
             }
             if (t.getIcons2()[i].icon == Icons.superscript) {
@@ -277,26 +278,26 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         }
         if (t is ListButtons) {
           for (var i = 0; i < _listSelected.length; i++) {
-            if (t.getIcons()[i].icon == FlatIcon.bullet_list) {
+            if (t.getIcons()[i].icon == FlatIcon1.bullet_list) {
               _listSelected[i] = paragraphList[0] ?? false;
             }
-            if (t.getIcons()[i].icon == FlatIcon.number) {
+            if (t.getIcons()[i].icon == FlatIcon1.number) {
               _listSelected[i] = paragraphList[1] ?? false;
             }
           }
         }
         if (t is ParagraphButtons) {
           for (var i = 0; i < _alignSelected.length; i++) {
-            if (t.getIcons1()[i].icon == Icons.format_align_left) {
+            if (t.getIcons1()[i].icon == FlatIcon1.align_left) {
               _alignSelected[i] = alignList[0] ?? false;
             }
-            if (t.getIcons1()[i].icon == Icons.format_align_center) {
+            if (t.getIcons1()[i].icon == FlatIcon1.align_center) {
               _alignSelected[i] = alignList[1] ?? false;
             }
-            if (t.getIcons1()[i].icon == Icons.format_align_right) {
+            if (t.getIcons1()[i].icon == FlatIcon1.align_right) {
               _alignSelected[i] = alignList[2] ?? false;
             }
-            if (t.getIcons1()[i].icon == Icons.format_align_justify) {
+            if (t.getIcons1()[i].icon == FlatIcon1.justification) {
               _alignSelected[i] = alignList[3] ?? false;
             }
           }
@@ -917,7 +918,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 });
               }
 
-              if (t.getIcons1()[index].icon == FlatIcon.bold) {
+              if (t.getIcons1()[index].icon == FlatIcon1.bold) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.bold, _fontSelected[index],
                             updateStatus) ??
@@ -927,7 +928,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   updateStatus();
                 }
               }
-              if (t.getIcons1()[index].icon == FlatIcon.italic) {
+              if (t.getIcons1()[index].icon == FlatIcon1.italic) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.italic, _fontSelected[index],
                             updateStatus) ??
@@ -987,7 +988,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 });
               }
 
-              if (t.getIcons2()[index].icon == FlatIcon.strikethrough) {
+              if (t.getIcons2()[index].icon == FlatIcon1.strikethrough) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.strikethrough,
                             _miscFontSelected[index], updateStatus) ??
@@ -1227,7 +1228,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 });
               }
 
-              if (t.getIcons()[index].icon == FlatIcon.bullet_list) {
+              if (t.getIcons()[index].icon == FlatIcon1.bullet_list) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.ul, _listSelected[index],
                             updateStatus) ??
@@ -1237,7 +1238,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   updateStatus();
                 }
               }
-              if (t.getIcons()[index].icon == FlatIcon.number) {
+              if (t.getIcons()[index].icon == FlatIcon1.number) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.ol, _listSelected[index],
                             updateStatus) ??
@@ -1387,7 +1388,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 });
               }
 
-              if (t.getIcons1()[index].icon == Icons.format_align_left) {
+              if (t.getIcons1()[index].icon == FlatIcon1.align_left) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.alignLeft, _alignSelected[index],
                             updateStatus) ??
@@ -1397,7 +1398,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   updateStatus();
                 }
               }
-              if (t.getIcons1()[index].icon == Icons.format_align_center) {
+              if (t.getIcons1()[index].icon == FlatIcon1.align_center) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.alignCenter, _alignSelected[index],
                             updateStatus) ??
@@ -1407,7 +1408,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   updateStatus();
                 }
               }
-              if (t.getIcons1()[index].icon == Icons.format_align_right) {
+              if (t.getIcons1()[index].icon == FlatIcon1.align_right) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.alignRight, _alignSelected[index],
                             updateStatus) ??
@@ -1417,7 +1418,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   updateStatus();
                 }
               }
-              if (t.getIcons1()[index].icon == Icons.format_align_justify) {
+              if (t.getIcons1()[index].icon == FlatIcon1.justification) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.alignJustify, _alignSelected[index],
                             updateStatus) ??
@@ -2619,7 +2620,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   updateStatus();
                 }
               }
-              if (t.getIcons1()[index].icon == Icons.undo) {
+              if (t.getIcons1()[index].icon == FlatIcon1.undo) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.undo, null, null) ??
                     true;
@@ -2627,7 +2628,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   widget.controller.undo();
                 }
               }
-              if (t.getIcons1()[index].icon == Icons.redo) {
+              if (t.getIcons1()[index].icon == FlatIcon1.redo) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.redo, null, null) ??
                     true;

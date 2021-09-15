@@ -7,7 +7,6 @@ class FlatIcon {
   static const String _kFontPkg = 'html_editor_enhanced';
 
   static const IconData paste = IconData(0xf102, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData transfer = IconData(0xf103, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData bullet_list = IconData(0xf104, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData number = IconData(0xf105, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData bold = IconData(0xf106, fontFamily: _kFontFam, fontPackage: _kFontPkg);

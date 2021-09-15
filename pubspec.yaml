@@ -81,6 +81,9 @@ flutter:
     - family: FlatIconNew
       fonts:
         - asset: packages/html_editor_enhanced/assets/font/FlatIconNew.ttf
+    - family: FlatIconNew1
+      fonts:
+        - asset: packages/html_editor_enhanced/assets/font/FlatIcon1.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

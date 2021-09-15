@@ -1440,9 +1440,8 @@ a.note-dropdown-item,a.note-dropdown-item:hover {
   color: #047bf8;
 }
 
-.note-editor .note-editing-area .note-editable span {
-  color: #a975ff;
-  background-color: rgba(169,117,255,.1);
+.note-editor .note-editing-area .note-editable .upbase-mention {
+  color: #047bf8;
   border-radius: .3rem;
   padding: .1rem .3rem;
 }
