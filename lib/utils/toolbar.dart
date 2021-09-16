@@ -56,7 +56,7 @@ class FontButtons extends Toolbar {
     var icons = <Icon>[];
     if (bold) icons.add(Icon(FlatIcon1.bold,color: colorIcon,size: sizeIcon,));
     if (italic) icons.add(Icon(FlatIcon1.italic,color: colorIcon,size: sizeIcon,));
-    if (underline) icons.add(Icon(FlatIcon.underline,color: colorIcon,size: sizeIcon,));
+    if (underline) icons.add(Icon(FlatIcon.underline,color: colorIcon,size: 18,));
     if (clearAll) icons.add(Icon(Icons.format_clear));
     return icons;
   }
