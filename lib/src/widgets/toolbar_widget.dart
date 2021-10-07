@@ -5,10 +5,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/utils/flat_icon1.dart';
 import 'package:html_editor_enhanced/utils/flat_icon_new_icons.dart';
+import 'package:html_editor_enhanced/utils/flutter_icon.dart';
 import 'package:html_editor_enhanced/utils/utils.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
@@ -261,7 +261,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             if (t.getIcons1()[i].icon == FlatIcon1.italic) {
               _fontSelected[i] = fontList[1] ?? false;
             }
-            if (t.getIcons1()[i].icon == Icons.format_underline) {
+            if (t.getIcons1()[i].icon == FlutterIcon.underline) {
               _fontSelected[i] = fontList[2] ?? false;
             }
           }
@@ -939,7 +939,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   updateStatus();
                 }
               }
-              if (t.getIcons1()[index].icon == Icons.format_underline) {
+              if (t.getIcons1()[index].icon == FlutterIcon.underline) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.underline, _fontSelected[index],
                             updateStatus) ??

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced/utils/flat_icon1.dart';
 import 'package:html_editor_enhanced/utils/flat_icon_new_icons.dart';
+import 'package:html_editor_enhanced/utils/flutter_icon.dart';
 
 /// Abstract class that all the toolbar classes extend
 abstract class Toolbar {
@@ -56,7 +57,7 @@ class FontButtons extends Toolbar {
     var icons = <Icon>[];
     if (bold) icons.add(Icon(FlatIcon1.bold,color: colorIcon,size: sizeIcon,));
     if (italic) icons.add(Icon(FlatIcon1.italic,color: colorIcon,size: sizeIcon,));
-    if (underline) icons.add(Icon(Icons.format_underline,color: colorIcon,size: sizeIcon,));
+    if (underline) icons.add(Icon(FlutterIcon.underline,color: colorIcon,size: sizeIcon,));
     if (clearAll) icons.add(Icon(Icons.format_clear));
     return icons;
   }
