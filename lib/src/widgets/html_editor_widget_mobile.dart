@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -7,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:html_editor_enhanced/html_editor.dart' hide NavigationActionPolicy, UserScript, ContextMenu;
 import 'package:html_editor_enhanced/src/widgets/toolbar_widget.dart';
 import 'package:html_editor_enhanced/utils/utils.dart';
 import 'package:html_editor_enhanced/utils/plugins.dart';
@@ -154,8 +155,10 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                         loadWithOverviewMode: true,
                       )),
                   initialUserScripts:
-                      widget.htmlEditorOptions.mobileInitialScripts,
-                  contextMenu: widget.htmlEditorOptions.mobileContextMenu,
+                      widget.htmlEditorOptions.mobileInitialScripts
+                        as UnmodifiableListView<UserScript>?,
+                  contextMenu: widget.htmlEditorOptions.mobileContextMenu
+                    as ContextMenu?,
                   gestureRecognizers: {
                     Factory<VerticalDragGestureRecognizer>(
                         () => VerticalDragGestureRecognizer()),
@@ -167,8 +170,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                   shouldOverrideUrlLoading: (controller, action) async {
                     if (!action.request.url.toString().contains(filePath)) {
                       return (await widget.callbacks?.onNavigationRequestMobile
-                              ?.call(action.request.url.toString())) ??
-                          NavigationActionPolicy.ALLOW;
+                              ?.call(action.request.url.toString()))
+                      as NavigationActionPolicy? ?? NavigationActionPolicy.ALLOW;
                     }
                     return NavigationActionPolicy.ALLOW;
                   },

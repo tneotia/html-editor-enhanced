@@ -3,7 +3,6 @@ import 'dart:collection';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 
 /// Options that modify the editor and its behavior

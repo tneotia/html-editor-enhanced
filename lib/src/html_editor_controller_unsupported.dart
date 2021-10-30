@@ -1,4 +1,3 @@
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/src/widgets/toolbar_widget.dart';
 import 'package:meta/meta.dart';
@@ -49,12 +48,12 @@ class HtmlEditorController {
 
   /// Allows the [InAppWebViewController] for the Html editor to be accessed
   /// outside of the package itself for endless control and customization.
-  InAppWebViewController? get editorController => null;
+  dynamic get editorController => null;
 
   /// Internal method to set the [InAppWebViewController] when webview initialization
   /// is complete
   @internal
-  set editorController(InAppWebViewController? controller) => {};
+  set editorController(dynamic controller) => {};
 
   /// Internal method to set the view ID when iframe initialization
   /// is complete

@@ -53,8 +53,8 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// is complete
   @override
   // ignore: unnecessary_getters_setters
-  set editorController(InAppWebViewController? controller) =>
-      _editorController = controller;
+  set editorController(dynamic controller) =>
+      _editorController = controller as InAppWebViewController?;
 
   /// A function to quickly call a document.execCommand function in a readable format
   @override
