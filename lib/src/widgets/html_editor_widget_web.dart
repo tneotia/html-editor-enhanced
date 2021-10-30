@@ -195,6 +195,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             disableGrammar: false,
             spellCheck: ${widget.htmlEditorOptions.spellCheck},
             maximumFileSize: $maximumFileSize,
+            ${widget.htmlEditorOptions.customOptions}
             $summernoteCallbacks
           });
           
