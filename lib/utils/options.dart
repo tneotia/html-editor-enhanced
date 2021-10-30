@@ -11,6 +11,7 @@ class HtmlEditorOptions {
   const HtmlEditorOptions({
     this.autoAdjustHeight = true,
     this.adjustHeightForKeyboard = true,
+    this.characterLimit,
     this.customOptions = '',
     this.darkMode,
     this.filePath,
@@ -43,6 +44,8 @@ class HtmlEditorOptions {
   /// The default value is true. It is recommended to leave this as true because
   /// it significantly improves the UX.
   final bool autoAdjustHeight;
+
+  final int? characterLimit;
 
   /// Set custom options for the summernote editor by using their syntax.
   ///

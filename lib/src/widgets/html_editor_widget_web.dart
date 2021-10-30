@@ -72,6 +72,24 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         onKeydown: function(e) {
             var chars = \$(".note-editable").text();
             var totalChars = chars.length;
+            ${widget.htmlEditorOptions.characterLimit != null ? '''allowedKeys = (
+                e.which === 8 ||  /* BACKSPACE */
+                e.which === 35 || /* END */
+                e.which === 36 || /* HOME */
+                e.which === 37 || /* LEFT */
+                e.which === 38 || /* UP */
+                e.which === 39 || /* RIGHT*/
+                e.which === 40 || /* DOWN */
+                e.which === 46 || /* DEL*/
+                e.ctrlKey === true && e.which === 65 || /* CTRL + A */
+                e.ctrlKey === true && e.which === 88 || /* CTRL + X */
+                e.ctrlKey === true && e.which === 67 || /* CTRL + C */
+                e.ctrlKey === true && e.which === 86 || /* CTRL + V */
+                e.ctrlKey === true && e.which === 90    /* CTRL + Z */
+            );
+            if (!allowedKeys && \$(e.target).text().length >= ${widget.htmlEditorOptions.characterLimit}) {
+                e.preventDefault();
+            }''' : ''}
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: characterCount", "totalChars": totalChars}), "*");
         },
     ''';
