@@ -483,10 +483,20 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         final jsonEncoder = JsonEncoder();
         var jsonStr = jsonEncoder.convert(data);
         var jsonStr2 = jsonEncoder.convert(data2);
-        html.window.postMessage(jsonStr, '*');
-        html.window.postMessage(jsonStr2, '*');
         html.window.onMessage.listen((event) {
           var data = json.decode(event.data);
+          if (data['type'] != null &&
+              data['type'].contains('toDart: htmlHeight') &&
+              data['view'] == createdViewId &&
+              widget.htmlEditorOptions.autoAdjustHeight) {
+            final docHeight = data['height'] ?? actualHeight;
+            if ((docHeight != null && docHeight != actualHeight) && mounted) {
+              setState(mounted, this.setState, () {
+                actualHeight =
+                    docHeight + (toolbarKey.currentContext?.size?.height ?? 0);
+              });
+            }
+          }
           if (data['type'] != null &&
               data['type'].contains('toDart: onChangeContent') &&
               data['view'] == createdViewId) {
@@ -510,6 +520,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             }
           }
         });
+        html.window.postMessage(jsonStr, '*');
+        html.window.postMessage(jsonStr2, '*');
       });
     ui.platformViewRegistry
         .registerViewFactory(createdViewId, (int viewId) => iframe);
@@ -681,16 +693,6 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
       if (data['type'] != null &&
           data['type'].contains('toDart:') &&
           data['view'] == createdViewId) {
-        if (data['type'].contains('htmlHeight') &&
-            widget.htmlEditorOptions.autoAdjustHeight) {
-          final docHeight = data['height'] ?? actualHeight;
-          if ((docHeight != null && docHeight != actualHeight) && mounted) {
-            setState(mounted, this.setState, () {
-              actualHeight =
-                  docHeight + (toolbarKey.currentContext?.size?.height ?? 0);
-            });
-          }
-        }
         if (data['type'].contains('onBeforeCommand')) {
           c.onBeforeCommand!.call(data['contents']);
         }
