@@ -21,6 +21,7 @@ class HtmlEditorOptions {
     this.mobileInitialScripts,
     this.webInitialScripts,
     this.shouldEnsureVisible = false,
+    this.spellCheck = false,
   });
 
   /// The editor will automatically adjust its height when the keyboard is active
@@ -94,6 +95,11 @@ class HtmlEditorOptions {
   /// SingleChildScrollView, etc.) for this to work. Otherwise, nothing will
   /// happen.
   final bool shouldEnsureVisible;
+
+  /// Specify whether or not the editor should spellcheck its contents.
+  ///
+  /// Default value is false.
+  final bool spellCheck;
 }
 
 /// Options that modify the toolbar and its behavior

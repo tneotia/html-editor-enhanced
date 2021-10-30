@@ -193,7 +193,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             tabsize: 2,
             height: ${widget.otherOptions.height},
             disableGrammar: false,
-            spellCheck: false,
+            spellCheck: ${widget.htmlEditorOptions.spellCheck},
             maximumFileSize: $maximumFileSize,
             $summernoteCallbacks
           });

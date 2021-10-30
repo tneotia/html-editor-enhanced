@@ -338,7 +338,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                               height: ${widget.otherOptions.height - (toolbarKey.currentContext?.size?.height ?? 0)},
                               toolbar: $summernoteToolbar
                               disableGrammar: false,
-                              spellCheck: false,
+                              spellCheck: ${widget.htmlEditorOptions.spellCheck},
                               maximumFileSize: $maximumFileSize,
                               $summernoteCallbacks
                           });
