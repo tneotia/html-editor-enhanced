@@ -68,6 +68,18 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     return text;
   }
 
+  @override
+  Future<String> getSelectedTextWeb({bool withHtmlTags = false}) async {
+    if (withHtmlTags) {
+      _evaluateJavascriptWeb(data: {'type': 'toIframe: getSelectedTextHtml'});
+    } else {
+      _evaluateJavascriptWeb(data: {'type': 'toIframe: getSelectedText'});
+    }
+    var e = await html.window.onMessage.firstWhere(
+            (element) => json.decode(element.data)['type'] == 'toDart: getSelectedText');
+    return json.decode(e.data)['text'];
+  }
+
   /// Sets the text of the editor. Some pre-processing is applied to convert
   /// [String] elements like "\n" to HTML elements.
   @override

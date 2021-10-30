@@ -342,6 +342,18 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
               if (data["type"].includes("insertTable")) {
                 \$('#summernote-2').summernote('insertTable', data["dimensions"]);
               }
+              if (data["type"].includes("getSelectedTextHtml")) {
+                var range = window.getSelection().getRangeAt(0);
+                var content = range.cloneContents();
+                var span = document.createElement('span');
+                  
+                span.appendChild(content);
+                var htmlContent = span.innerHTML;
+                
+                window.parent.postMessage(JSON.stringify({"type": "toDart: getSelectedText", "text": htmlContent}), "*");
+              } else if (data["type"].includes("getSelectedText")) {
+                window.parent.postMessage(JSON.stringify({"type": "toDart: getSelectedText", "text": window.getSelection().toString()}), "*");
+              }
               $userScripts
             }
           }

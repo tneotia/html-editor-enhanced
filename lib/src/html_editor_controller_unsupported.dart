@@ -41,11 +41,10 @@ class HtmlEditorController {
   // ignore: unnecessary_getters_setters
   int get characterCount => _characterCount;
 
-  @internal
-
   /// Sets the current character count. Marked as internal method - this should
   /// not be used outside of the package itself.
   // ignore: unnecessary_getters_setters
+  @internal
   set characterCount(int count) => _characterCount = count;
 
   /// Allows the [InAppWebViewController] for the Html editor to be accessed
@@ -92,6 +91,14 @@ class HtmlEditorController {
 
   /// Gets the text from the editor and returns it as a [String].
   Future<String> getText() => Future.value('');
+
+  /// Gets the selected HTML from the editor. You should use
+  /// [controller.editorController.getSelectedText()] on mobile.
+  ///
+  /// [withHtmlTags] may not work properly when the selected text is entirely
+  /// within one HTML tag. However if the selected text spans multiple different
+  /// tags, it should work as expected.
+  Future<String> getSelectedTextWeb({bool withHtmlTags = false}) => Future.value('');
 
   /// Insert HTML at the position of the cursor in the editor
   /// Note: This method should not be used for plaintext strings
