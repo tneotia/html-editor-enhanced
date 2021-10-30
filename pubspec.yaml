@@ -21,7 +21,7 @@ dependencies:
   # or "done" (iOS) to reset the editor's height
   flutter_keyboard_visibility: ^5.0.3
   # plugin to show a color picker for foreground/highlight color
-  flutter_colorpicker: ^0.4.0
+  flutter_colorpicker: ^0.6.0
   # plugin to get files from filesystem
   file_picker: ^4.0.2
   # plugin to show a scrollable number picker for inserting tables
