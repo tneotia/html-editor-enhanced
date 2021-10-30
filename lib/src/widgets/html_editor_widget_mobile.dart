@@ -185,6 +185,26 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                     if (widget.htmlEditorOptions.adjustHeightForKeyboard &&
                         mounted &&
                         !visibleStream.isClosed) {
+                      Future<void> setHeightJS() async {
+                        await controller.evaluateJavascript(
+                            source: """
+                                \$('div.note-editable').outerHeight(${max(docHeight - (toolbarKey.currentContext?.size?.height ?? 0), 30)});
+                                // from https://stackoverflow.com/a/67152280
+                                var selection = window.getSelection();
+                                if (selection.rangeCount) {
+                                  var firstRange = selection.getRangeAt(0);
+                                  if (firstRange.commonAncestorContainer !== document) {
+                                    var tempAnchorEl = document.createElement('br');
+                                    firstRange.insertNode(tempAnchorEl);
+                                    tempAnchorEl.scrollIntoView({
+                                      block: 'end',
+                                    });
+                                    tempAnchorEl.remove();
+                                  }
+                                }
+                              """);
+                      }
+
                       /// this is a workaround so jumping between focus on different
                       /// editable elements still resizes the editor
                       if ((cachedVisibleDecimal ?? 0) > 0.1) {
@@ -192,9 +212,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                           docHeight = widget.otherOptions.height *
                               cachedVisibleDecimal!;
                         });
-                        await controller.evaluateJavascript(
-                            source:
-                                "\$('div.note-editable').outerHeight(${max(docHeight - (toolbarKey.currentContext?.size?.height ?? 0), 30)});");
+                        await setHeightJS();
                       }
                       var visibleDecimal = await visibleStream.stream.first;
                       var newHeight = widget.otherOptions.height;
@@ -203,9 +221,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                           docHeight = newHeight * visibleDecimal;
                         });
                         //todo add support for traditional summernote controls again?
-                        await controller.evaluateJavascript(
-                            source:
-                                "\$('div.note-editable').outerHeight(${max(docHeight - (toolbarKey.currentContext?.size?.height ?? 0), 30)});");
+                        await setHeightJS();
                       }
                     }
                   },
