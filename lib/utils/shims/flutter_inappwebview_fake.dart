@@ -33,8 +33,7 @@ class ContextMenu {
   ///Event fired when the context menu for this WebView is being built.
   ///
   ///[hitTestResult] represents the hit result for hitting an HTML elements.
-  final void Function(dynamic hitTestResult)?
-  onCreateContextMenu;
+  final void Function(dynamic hitTestResult)? onCreateContextMenu;
 
   ///Event fired when the context menu for this WebView is being hidden.
   final void Function()? onHideContextMenu;
@@ -43,7 +42,7 @@ class ContextMenu {
   ///
   ///[contextMenuItemClicked] represents the [ContextMenuItem] clicked.
   final void Function(ContextMenuItem contextMenuItemClicked)?
-  onContextMenuActionItemClicked;
+      onContextMenuActionItemClicked;
 
   ///Context menu options.
   final ContextMenuOptions? options;
@@ -53,10 +52,10 @@ class ContextMenu {
 
   ContextMenu(
       {this.menuItems = const [],
-        this.onCreateContextMenu,
-        this.onHideContextMenu,
-        this.options,
-        this.onContextMenuActionItemClicked});
+      this.onCreateContextMenu,
+      this.onHideContextMenu,
+      this.options,
+      this.onContextMenuActionItemClicked});
 
   Map<String, dynamic> toMap() {
     return {
@@ -206,10 +205,10 @@ class UserScript {
 
   UserScript(
       {this.groupName,
-        required this.source,
-        required this.injectionTime,
-        this.iosForMainFrameOnly = true,
-        ContentWorld? contentWorld}) {
+      required this.source,
+      required this.injectionTime,
+      this.iosForMainFrameOnly = true,
+      ContentWorld? contentWorld}) {
     this.contentWorld = contentWorld ?? ContentWorld.PAGE;
   }
 
@@ -261,7 +260,7 @@ class ContentWorld {
   ///The default world for clients.
   // ignore: non_constant_identifier_names
   static final ContentWorld DEFAULT_CLIENT =
-  ContentWorld.world(name: 'defaultClient');
+      ContentWorld.world(name: 'defaultClient');
 
   ///The content world for the current webpage’s content.
   ///This property contains the content world for scripts that the current webpage executes.

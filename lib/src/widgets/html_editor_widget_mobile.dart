@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:html_editor_enhanced/html_editor.dart' hide NavigationActionPolicy, UserScript, ContextMenu;
+import 'package:html_editor_enhanced/html_editor.dart'
+    hide NavigationActionPolicy, UserScript, ContextMenu;
 import 'package:html_editor_enhanced/src/widgets/toolbar_widget.dart';
 import 'package:html_editor_enhanced/utils/utils.dart';
 import 'package:html_editor_enhanced/utils/plugins.dart';
@@ -156,9 +157,9 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       )),
                   initialUserScripts:
                       widget.htmlEditorOptions.mobileInitialScripts
-                        as UnmodifiableListView<UserScript>?,
+                          as UnmodifiableListView<UserScript>?,
                   contextMenu: widget.htmlEditorOptions.mobileContextMenu
-                    as ContextMenu?,
+                      as ContextMenu?,
                   gestureRecognizers: {
                     Factory<VerticalDragGestureRecognizer>(
                         () => VerticalDragGestureRecognizer()),
@@ -170,8 +171,9 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                   shouldOverrideUrlLoading: (controller, action) async {
                     if (!action.request.url.toString().contains(filePath)) {
                       return (await widget.callbacks?.onNavigationRequestMobile
-                              ?.call(action.request.url.toString()))
-                      as NavigationActionPolicy? ?? NavigationActionPolicy.ALLOW;
+                                  ?.call(action.request.url.toString()))
+                              as NavigationActionPolicy? ??
+                          NavigationActionPolicy.ALLOW;
                     }
                     return NavigationActionPolicy.ALLOW;
                   },
@@ -189,8 +191,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                         mounted &&
                         !visibleStream.isClosed) {
                       Future<void> setHeightJS() async {
-                        await controller.evaluateJavascript(
-                            source: """
+                        await controller.evaluateJavascript(source: """
                                 \$('div.note-editable').outerHeight(${max(docHeight - (toolbarKey.currentContext?.size?.height ?? 0), 30)});
                                 // from https://stackoverflow.com/a/67152280
                                 var selection = window.getSelection();

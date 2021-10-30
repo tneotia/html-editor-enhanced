@@ -97,7 +97,8 @@ class HtmlEditorController {
   /// [withHtmlTags] may not work properly when the selected text is entirely
   /// within one HTML tag. However if the selected text spans multiple different
   /// tags, it should work as expected.
-  Future<String> getSelectedTextWeb({bool withHtmlTags = false}) => Future.value('');
+  Future<String> getSelectedTextWeb({bool withHtmlTags = false}) =>
+      Future.value('');
 
   /// Insert HTML at the position of the cursor in the editor
   /// Note: This method should not be used for plaintext strings

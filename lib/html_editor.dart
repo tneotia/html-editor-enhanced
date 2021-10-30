@@ -18,7 +18,7 @@ export 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart
     if (dart.library.io) 'package:html_editor_enhanced/src/html_editor_controller_mobile.dart';
 
 export 'package:html_editor_enhanced/utils/shims/flutter_inappwebview_fake.dart'
-  if (dart.library.io) 'package:flutter_inappwebview/flutter_inappwebview.dart';
+    if (dart.library.io) 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 /// Defines the 3 different cases for file insertion failing
 enum UploadError { unsupportedFile, exceededMaxSize, jsException }

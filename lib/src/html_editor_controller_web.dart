@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:html' as html;
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart'
     as unsupported;
@@ -75,8 +74,8 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     } else {
       _evaluateJavascriptWeb(data: {'type': 'toIframe: getSelectedText'});
     }
-    var e = await html.window.onMessage.firstWhere(
-            (element) => json.decode(element.data)['type'] == 'toDart: getSelectedText');
+    var e = await html.window.onMessage.firstWhere((element) =>
+        json.decode(element.data)['type'] == 'toDart: getSelectedText');
     return json.decode(e.data)['text'];
   }
 
