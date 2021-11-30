@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
@@ -207,7 +206,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
-                          backgroundColor: Theme.of(context).accentColor),
+                          backgroundColor: Theme.of(context).colorScheme.secondary),
                       onPressed: () async {
                         var txt = await controller.getText();
                         if (txt.contains('src=\"data:')) {
@@ -228,7 +227,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
-                          backgroundColor: Theme.of(context).accentColor),
+                          backgroundColor: Theme.of(context).colorScheme.secondary),
                       onPressed: () {
                         controller.redo();
                       },
@@ -263,7 +262,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
-                          backgroundColor: Theme.of(context).accentColor),
+                          backgroundColor: Theme.of(context).colorScheme.secondary),
                       onPressed: () async {
                         controller.enable();
                       },
@@ -283,7 +282,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                   children: <Widget>[
                     TextButton(
                       style: TextButton.styleFrom(
-                          backgroundColor: Theme.of(context).accentColor),
+                          backgroundColor: Theme.of(context).colorScheme.secondary),
                       onPressed: () {
                         controller.insertText('Google');
                       },
@@ -295,7 +294,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
-                          backgroundColor: Theme.of(context).accentColor),
+                          backgroundColor: Theme.of(context).colorScheme.secondary),
                       onPressed: () {
                         controller.insertHtml(
                             '''<p style="color: blue">Google in blue</p>''');
@@ -313,7 +312,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                   children: <Widget>[
                     TextButton(
                       style: TextButton.styleFrom(
-                          backgroundColor: Theme.of(context).accentColor),
+                          backgroundColor: Theme.of(context).colorScheme.secondary),
                       onPressed: () async {
                         controller.insertLink(
                             'Google linked', 'https://google.com', true);
@@ -328,7 +327,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
-                          backgroundColor: Theme.of(context).accentColor),
+                          backgroundColor: Theme.of(context).colorScheme.secondary),
                       onPressed: () {
                         controller.insertNetworkImage(
                             'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png',
@@ -376,7 +375,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
-                          backgroundColor: Theme.of(context).accentColor),
+                          backgroundColor: Theme.of(context).colorScheme.secondary),
                       onPressed: () async {
                         controller.addNotification(
                             'Success notification', NotificationType.success);
@@ -391,7 +390,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
-                          backgroundColor: Theme.of(context).accentColor),
+                          backgroundColor: Theme.of(context).colorScheme.secondary),
                       onPressed: () {
                         controller.addNotification(
                             'Danger notification', NotificationType.danger);
@@ -425,7 +424,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
-                          backgroundColor: Theme.of(context).accentColor),
+                          backgroundColor: Theme.of(context).colorScheme.secondary),
                       onPressed: () async {
                         controller.removeNotification();
                       },
