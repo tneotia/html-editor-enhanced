@@ -13,6 +13,7 @@ class HtmlEditorOptions {
     this.characterLimit,
     this.customOptions = '',
     this.darkMode,
+    this.disabled = false,
     this.filePath,
     this.hint,
     this.initialText,
@@ -57,6 +58,10 @@ class HtmlEditorOptions {
   ///
   /// The default value is null (switches with system).
   final bool? darkMode;
+
+  /// Disable the editor immediately after startup. You can re-enable the editor
+  /// by calling [controller.enable()].
+  final bool disabled;
 
   /// Specify the file path to your custom html editor code.
   ///

@@ -57,6 +57,9 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   /// the editor when the keyboard is visible.
   GlobalKey toolbarKey = GlobalKey();
 
+  /// Tracks whether the editor was disabled onInit (to avoid re-disabling on reload)
+  bool alreadyDisabled = false;
+
   @override
   void initState() {
     actualHeight = widget.otherOptions.height;
@@ -470,6 +473,10 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
       ..srcdoc = htmlString
       ..style.border = 'none'
       ..onLoad.listen((event) async {
+        if (widget.htmlEditorOptions.disabled && !alreadyDisabled) {
+          widget.controller.disable();
+          alreadyDisabled = true;
+        }
         if (widget.callbacks != null && widget.callbacks!.onInit != null) {
           widget.callbacks!.onInit!.call();
         }

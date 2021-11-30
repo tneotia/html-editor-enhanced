@@ -507,6 +507,10 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                             widget.controller.characterCount =
                                 keyCode.first as int;
                           });
+                      //disable editor if necessary
+                      if (widget.htmlEditorOptions.disabled && !callbacksInitialized) {
+                        widget.controller.disable();
+                      }
                       //initialize callbacks
                       if (widget.callbacks != null && !callbacksInitialized) {
                         addJSCallbacks(widget.callbacks!);
