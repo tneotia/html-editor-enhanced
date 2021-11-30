@@ -934,8 +934,6 @@ a.note-dropdown-item,a.note-dropdown-item:hover {
 }
 
 .note-editor.note-airframe .note-editing-area .note-editable,.note-editor.note-frame .note-editing-area .note-editable {
-  background-color: #fff;
-  color: #000;
   padding: 10px;
   overflow: auto;
   word-wrap: break-word;
