@@ -1043,9 +1043,15 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           renderBorder: widget.htmlToolbarOptions.renderBorder,
           textStyle: widget.htmlToolbarOptions.textStyle,
           onPressed: (int index) async {
-            void updateStatus() {
+            void updateStatus(Color? color) {
               setState(mounted, this.setState, () {
                 _colorSelected[index] = !_colorSelected[index];
+                if (color != null && t.getIcons()[index].icon == Icons.format_color_text) {
+                  _foreColorSelected = color;
+                }
+                if (color != null && t.getIcons()[index].icon == Icons.format_color_fill) {
+                  _backColorSelected = color;
+                }
               });
             }
 
@@ -1061,7 +1067,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                           .toRadixString(16)
                           .padLeft(6, '0')
                           .toUpperCase());
-                  updateStatus();
+                  updateStatus(null);
                 }
               }
               if (t.getIcons()[index].icon == Icons.format_color_fill) {
@@ -1075,7 +1081,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                           .toRadixString(16)
                           .padLeft(6, '0')
                           .toUpperCase());
-                  updateStatus();
+                  updateStatus(null);
                 }
               }
             } else {

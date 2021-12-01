@@ -77,7 +77,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                   toolbarPosition: ToolbarPosition.aboveEditor, //by default
                   toolbarType: ToolbarType.nativeScrollable, //by default
                   onButtonPressed: (ButtonType type, bool? status,
-                      Function()? updateStatus) {
+                      Function? updateStatus) {
                     print(
                         "button '${describeEnum(type)}' pressed, the current selected status is $status");
                     return true;
