@@ -4,7 +4,6 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart'
     as unsupported;
-import 'package:html_editor_enhanced/src/widgets/toolbar_widget.dart';
 
 /// Controller for mobile
 class HtmlEditorController extends unsupported.HtmlEditorController {
@@ -53,8 +52,8 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// is complete
   @override
   // ignore: unnecessary_getters_setters
-  set editorController(InAppWebViewController? controller) =>
-      _editorController = controller;
+  set editorController(dynamic controller) =>
+      _editorController = controller as InAppWebViewController?;
 
   /// A function to quickly call a document.execCommand function in a readable format
   @override

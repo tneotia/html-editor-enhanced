@@ -3,7 +3,6 @@ import 'dart:collection';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 
 /// Options that modify the editor and its behavior
@@ -11,7 +10,10 @@ class HtmlEditorOptions {
   const HtmlEditorOptions({
     this.autoAdjustHeight = true,
     this.adjustHeightForKeyboard = true,
+    this.characterLimit,
+    this.customOptions = '',
     this.darkMode,
+    this.disabled = false,
     this.filePath,
     this.hint,
     this.initialText,
@@ -21,6 +23,7 @@ class HtmlEditorOptions {
     this.mobileInitialScripts,
     this.webInitialScripts,
     this.shouldEnsureVisible = false,
+    this.spellCheck = false,
   });
 
   /// The editor will automatically adjust its height when the keyboard is active
@@ -42,11 +45,23 @@ class HtmlEditorOptions {
   /// it significantly improves the UX.
   final bool autoAdjustHeight;
 
+  final int? characterLimit;
+
+  /// Set custom options for the summernote editor by using their syntax.
+  ///
+  /// Please ensure your syntax is correct (and add a comma at the end of your
+  /// string!) otherwise the editor may not load.
+  final String customOptions;
+
   /// Sets the editor to dark mode. `null` - switches with system, `false` -
   /// always light, `true` - always dark.
   ///
   /// The default value is null (switches with system).
   final bool? darkMode;
+
+  /// Disable the editor immediately after startup. You can re-enable the editor
+  /// by calling [controller.enable()].
+  final bool disabled;
 
   /// Specify the file path to your custom html editor code.
   ///
@@ -94,6 +109,11 @@ class HtmlEditorOptions {
   /// SingleChildScrollView, etc.) for this to work. Otherwise, nothing will
   /// happen.
   final bool shouldEnsureVisible;
+
+  /// Specify whether or not the editor should spellcheck its contents.
+  ///
+  /// Default value is false.
+  final bool spellCheck;
 }
 
 /// Options that modify the toolbar and its behavior
@@ -247,7 +267,7 @@ class HtmlToolbarOptions {
   /// (true = continue with internal handler, false = do not use internal handler)
   ///
   /// If no interceptor is set, the plugin uses the internal handler.
-  final FutureOr<bool> Function(ButtonType, bool?, void Function()?)?
+  final FutureOr<bool> Function(ButtonType, bool?, Function?)?
       onButtonPressed;
 
   /// Allows you to intercept any dropdown changes. The function passes the

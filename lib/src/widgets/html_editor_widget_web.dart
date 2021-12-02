@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/utils/utils.dart';
-import 'package:html_editor_enhanced/src/widgets/toolbar_widget.dart';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 import 'package:html_editor_enhanced/utils/shims/dart_ui.dart' as ui;
@@ -57,6 +56,9 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   /// the editor when the keyboard is visible.
   GlobalKey toolbarKey = GlobalKey();
 
+  /// Tracks whether the editor was disabled onInit (to avoid re-disabling on reload)
+  bool alreadyDisabled = false;
+
   @override
   void initState() {
     actualHeight = widget.otherOptions.height;
@@ -72,6 +74,24 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         onKeydown: function(e) {
             var chars = \$(".note-editable").text();
             var totalChars = chars.length;
+            ${widget.htmlEditorOptions.characterLimit != null ? '''allowedKeys = (
+                e.which === 8 ||  /* BACKSPACE */
+                e.which === 35 || /* END */
+                e.which === 36 || /* HOME */
+                e.which === 37 || /* LEFT */
+                e.which === 38 || /* UP */
+                e.which === 39 || /* RIGHT*/
+                e.which === 40 || /* DOWN */
+                e.which === 46 || /* DEL*/
+                e.ctrlKey === true && e.which === 65 || /* CTRL + A */
+                e.ctrlKey === true && e.which === 88 || /* CTRL + X */
+                e.ctrlKey === true && e.which === 67 || /* CTRL + C */
+                e.ctrlKey === true && e.which === 86 || /* CTRL + V */
+                e.ctrlKey === true && e.which === 90    /* CTRL + Z */
+            );
+            if (!allowedKeys && \$(e.target).text().length >= ${widget.htmlEditorOptions.characterLimit}) {
+                e.preventDefault();
+            }''' : ''}
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: characterCount", "totalChars": totalChars}), "*");
         },
     ''';
@@ -193,8 +213,9 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             tabsize: 2,
             height: ${widget.otherOptions.height},
             disableGrammar: false,
-            spellCheck: false,
+            spellCheck: ${widget.htmlEditorOptions.spellCheck},
             maximumFileSize: $maximumFileSize,
+            ${widget.htmlEditorOptions.customOptions}
             $summernoteCallbacks
           });
           
@@ -342,6 +363,18 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
               if (data["type"].includes("insertTable")) {
                 \$('#summernote-2').summernote('insertTable', data["dimensions"]);
               }
+              if (data["type"].includes("getSelectedTextHtml")) {
+                var range = window.getSelection().getRangeAt(0);
+                var content = range.cloneContents();
+                var span = document.createElement('span');
+                  
+                span.appendChild(content);
+                var htmlContent = span.innerHTML;
+                
+                window.parent.postMessage(JSON.stringify({"type": "toDart: getSelectedText", "text": htmlContent}), "*");
+              } else if (data["type"].includes("getSelectedText")) {
+                window.parent.postMessage(JSON.stringify({"type": "toDart: getSelectedText", "text": window.getSelection().toString()}), "*");
+              }
               $userScripts
             }
           }
@@ -439,6 +472,10 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
       ..srcdoc = htmlString
       ..style.border = 'none'
       ..onLoad.listen((event) async {
+        if (widget.htmlEditorOptions.disabled && !alreadyDisabled) {
+          widget.controller.disable();
+          alreadyDisabled = true;
+        }
         if (widget.callbacks != null && widget.callbacks!.onInit != null) {
           widget.callbacks!.onInit!.call();
         }
@@ -452,10 +489,20 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         final jsonEncoder = JsonEncoder();
         var jsonStr = jsonEncoder.convert(data);
         var jsonStr2 = jsonEncoder.convert(data2);
-        html.window.postMessage(jsonStr, '*');
-        html.window.postMessage(jsonStr2, '*');
         html.window.onMessage.listen((event) {
           var data = json.decode(event.data);
+          if (data['type'] != null &&
+              data['type'].contains('toDart: htmlHeight') &&
+              data['view'] == createdViewId &&
+              widget.htmlEditorOptions.autoAdjustHeight) {
+            final docHeight = data['height'] ?? actualHeight;
+            if ((docHeight != null && docHeight != actualHeight) && mounted) {
+              setState(mounted, this.setState, () {
+                actualHeight =
+                    docHeight + (toolbarKey.currentContext?.size?.height ?? 0);
+              });
+            }
+          }
           if (data['type'] != null &&
               data['type'].contains('toDart: onChangeContent') &&
               data['view'] == createdViewId) {
@@ -479,6 +526,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             }
           }
         });
+        html.window.postMessage(jsonStr, '*');
+        html.window.postMessage(jsonStr2, '*');
       });
     ui.platformViewRegistry
         .registerViewFactory(createdViewId, (int viewId) => iframe);
@@ -650,16 +699,6 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
       if (data['type'] != null &&
           data['type'].contains('toDart:') &&
           data['view'] == createdViewId) {
-        if (data['type'].contains('htmlHeight') &&
-            widget.htmlEditorOptions.autoAdjustHeight) {
-          final docHeight = data['height'] ?? actualHeight;
-          if ((docHeight != null && docHeight != actualHeight) && mounted) {
-            setState(mounted, this.setState, () {
-              actualHeight =
-                  docHeight + (toolbarKey.currentContext?.size?.height ?? 0);
-            });
-          }
-        }
         if (data['type'].contains('onBeforeCommand')) {
           c.onBeforeCommand!.call(data['contents']);
         }

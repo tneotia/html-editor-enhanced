@@ -113,7 +113,7 @@ More is on the way! File a feature request or contribute to the project if you'd
 
 ## Setup
 
-Add `html_editor_enhanced: ^2.3.0` as dependency to your pubspec.yaml.
+Add `html_editor_enhanced: ^2.4.0` as dependency to your pubspec.yaml.
 
 Additional setup is required on iOS to allow the user to pick files from storage. See [here](https://github.com/miguelpruivo/flutter_file_picker/wiki/Setup#--ios) for more details. 
 
@@ -184,6 +184,8 @@ Parameter | Type | Default | Description
 ------------ | ------------- | ------------- | -------------
 **autoAdjustHeight** | `bool` | `true` | Automatically adjust the height of the text editor by analyzing the HTML height once the editor is loaded. Recommended value: `true`.  See [below](#autoadjustheight) for more details.
 **adjustHeightForKeyboard** | `bool` | `true` | Adjust the height of the editor if the keyboard is active and it overlaps the editor to prevent the overlap. Recommended value: `true`, only works on mobile.  See [below](#adjustheightforkeyboard) for more details.
+**characterLimit** | `int` | `null` | Sets the character limit for the editor. When reaching the limit the user will not be allowed to type anymore.
+**customOptions** | `String` | `null` | Provide custom options for Summernote initialization using the Summernote syntax (see [here](https://summernote.org/deep-dive/#initialization-options)
 **darkMode** | `bool` | `null` | Sets the status of dark mode - `false`: always light, `null`: follow system, `true`: always dark
 **filePath** | `String` | `null` | Allows you to specify your own HTML to be loaded into the webview. You can create a custom page with Summernote, or theoretically load any other editor/HTML.
 **hint** | `String` | empty | Placeholder hint text
@@ -194,6 +196,7 @@ Parameter | Type | Default | Description
 **mobileInitialScripts** | `UnmodifiableListView<UserScript>` | `null` | Easily inject scripts to perform actions like changing the background color of the editor. See docs for `UserScript` [here](https://inappwebview.dev/docs/javascript/user-scripts/)
 **webInitialScripts** | `UnmodifiableListView<WebScript>` | `null` | Easily inject scripts to perform actions like changing the background color of the editor. See [below](#webinitialscripts) for more details.
 **shouldEnsureVisible** | `bool` | `false` | Scroll the parent `Scrollable` to the top of the editor widget when the webview is focused. Do *not* use this parameter if `HtmlEditor` is not inside a `Scrollable`. See [below](#shouldensurevisible) for more details.
+**spellCheck** | `bool` | `false` | Specify whether or not to use spellcheck in the editor and underline wrong spellings.
 
 ### Parameters - `HtmlToolbarOptions`
 
@@ -283,6 +286,7 @@ Method | Argument(s) | Returned Value(s) | Description
 **enable()** | N/A | N/A | Enables the editor
 **execCommand()** | `String` command, `String` argument (optional) | N/A | Allows you to run any `execCommand` command easily. See the [MDN Docs](https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand) for usage.
 **getText()** | N/A | `Future<String>` | Returns the current HTML in the editor
+**getSelectedTextWeb()** | `bool` (optional) | `Future<String>` | Get the currently selected text in the editor, with or without the HTML tags. Do *not* use this method in Flutter Mobile.
 **insertHtml()** | `String` | N/A | Inserts the provided HTML string into the editor at the current cursor position. Do *not* use this method for plaintext strings.
 **insertLink()** | `String` text, `String` url, `bool` isNewWindow | N/A | Inserts a hyperlink using the provided text and url into the editor at the current cursor position. `isNewWindow` defines whether a new browser window is launched if the link is tapped.
 **insertNetworkImage()** | `String` url, `String` filename (optional) | N/A | Inserts an image using the provided url and optional filename into the editor at the current cursor position. The image must be accessible via a URL.

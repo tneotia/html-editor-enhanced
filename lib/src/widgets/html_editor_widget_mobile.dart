@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -7,10 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:html_editor_enhanced/src/widgets/toolbar_widget.dart';
+import 'package:html_editor_enhanced/html_editor.dart'
+    hide NavigationActionPolicy, UserScript, ContextMenu;
 import 'package:html_editor_enhanced/utils/utils.dart';
-import 'package:html_editor_enhanced/utils/plugins.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 /// The HTML Editor widget itself, for mobile (uses InAppWebView)
@@ -154,8 +154,10 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                         loadWithOverviewMode: true,
                       )),
                   initialUserScripts:
-                      widget.htmlEditorOptions.mobileInitialScripts,
-                  contextMenu: widget.htmlEditorOptions.mobileContextMenu,
+                      widget.htmlEditorOptions.mobileInitialScripts
+                          as UnmodifiableListView<UserScript>?,
+                  contextMenu: widget.htmlEditorOptions.mobileContextMenu
+                      as ContextMenu?,
                   gestureRecognizers: {
                     Factory<VerticalDragGestureRecognizer>(
                         () => VerticalDragGestureRecognizer()),
@@ -167,7 +169,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                   shouldOverrideUrlLoading: (controller, action) async {
                     if (!action.request.url.toString().contains(filePath)) {
                       return (await widget.callbacks?.onNavigationRequestMobile
-                              ?.call(action.request.url.toString())) ??
+                                  ?.call(action.request.url.toString()))
+                              as NavigationActionPolicy? ??
                           NavigationActionPolicy.ALLOW;
                     }
                     return NavigationActionPolicy.ALLOW;
@@ -185,6 +188,25 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                     if (widget.htmlEditorOptions.adjustHeightForKeyboard &&
                         mounted &&
                         !visibleStream.isClosed) {
+                      Future<void> setHeightJS() async {
+                        await controller.evaluateJavascript(source: """
+                                \$('div.note-editable').outerHeight(${max(docHeight - (toolbarKey.currentContext?.size?.height ?? 0), 30)});
+                                // from https://stackoverflow.com/a/67152280
+                                var selection = window.getSelection();
+                                if (selection.rangeCount) {
+                                  var firstRange = selection.getRangeAt(0);
+                                  if (firstRange.commonAncestorContainer !== document) {
+                                    var tempAnchorEl = document.createElement('br');
+                                    firstRange.insertNode(tempAnchorEl);
+                                    tempAnchorEl.scrollIntoView({
+                                      block: 'end',
+                                    });
+                                    tempAnchorEl.remove();
+                                  }
+                                }
+                              """);
+                      }
+
                       /// this is a workaround so jumping between focus on different
                       /// editable elements still resizes the editor
                       if ((cachedVisibleDecimal ?? 0) > 0.1) {
@@ -192,9 +214,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                           docHeight = widget.otherOptions.height *
                               cachedVisibleDecimal!;
                         });
-                        await controller.evaluateJavascript(
-                            source:
-                                "\$('div.note-editable').outerHeight(${max(docHeight - (toolbarKey.currentContext?.size?.height ?? 0), 30)});");
+                        await setHeightJS();
                       }
                       var visibleDecimal = await visibleStream.stream.first;
                       var newHeight = widget.otherOptions.height;
@@ -203,9 +223,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                           docHeight = newHeight * visibleDecimal;
                         });
                         //todo add support for traditional summernote controls again?
-                        await controller.evaluateJavascript(
-                            source:
-                                "\$('div.note-editable').outerHeight(${max(docHeight - (toolbarKey.currentContext?.size?.height ?? 0), 30)});");
+                        await setHeightJS();
                       }
                     }
                   },
@@ -219,6 +237,24 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                           onKeydown: function(e) {
                               var chars = \$(".note-editable").text();
                               var totalChars = chars.length;
+                              ${widget.htmlEditorOptions.characterLimit != null ? '''allowedKeys = (
+                                  e.which === 8 ||  /* BACKSPACE */
+                                  e.which === 35 || /* END */
+                                  e.which === 36 || /* HOME */
+                                  e.which === 37 || /* LEFT */
+                                  e.which === 38 || /* UP */
+                                  e.which === 39 || /* RIGHT*/
+                                  e.which === 40 || /* DOWN */
+                                  e.which === 46 || /* DEL*/
+                                  e.ctrlKey === true && e.which === 65 || /* CTRL + A */
+                                  e.ctrlKey === true && e.which === 88 || /* CTRL + X */
+                                  e.ctrlKey === true && e.which === 67 || /* CTRL + C */
+                                  e.ctrlKey === true && e.which === 86 || /* CTRL + V */
+                                  e.ctrlKey === true && e.which === 90    /* CTRL + Z */
+                              );
+                              if (!allowedKeys && \$(e.target).text().length >= ${widget.htmlEditorOptions.characterLimit}) {
+                                  e.preventDefault();
+                              }''' : ''}
                               window.flutter_inappwebview.callHandler('totalChars', totalChars);
                           },
                       ''';
@@ -338,8 +374,9 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                               height: ${widget.otherOptions.height - (toolbarKey.currentContext?.size?.height ?? 0)},
                               toolbar: $summernoteToolbar
                               disableGrammar: false,
-                              spellCheck: false,
+                              spellCheck: ${widget.htmlEditorOptions.spellCheck},
                               maximumFileSize: $maximumFileSize,
+                              ${widget.htmlEditorOptions.customOptions}
                               $summernoteCallbacks
                           });
                           
@@ -468,6 +505,10 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                             widget.controller.characterCount =
                                 keyCode.first as int;
                           });
+                      //disable editor if necessary
+                      if (widget.htmlEditorOptions.disabled && !callbacksInitialized) {
+                        widget.controller.disable();
+                      }
                       //initialize callbacks
                       if (widget.callbacks != null && !callbacksInitialized) {
                         addJSCallbacks(widget.callbacks!);
