@@ -3,11 +3,9 @@ import 'dart:convert';
 import 'dart:html' as html;
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart'
     as unsupported;
-import 'package:html_editor_enhanced/src/widgets/toolbar_widget.dart';
 import 'package:meta/meta.dart';
 
 /// Controller for web
@@ -66,6 +64,18 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
             text == '<p><br></p>' ||
             text == '<p><br/></p>')) text = '';
     return text;
+  }
+
+  @override
+  Future<String> getSelectedTextWeb({bool withHtmlTags = false}) async {
+    if (withHtmlTags) {
+      _evaluateJavascriptWeb(data: {'type': 'toIframe: getSelectedTextHtml'});
+    } else {
+      _evaluateJavascriptWeb(data: {'type': 'toIframe: getSelectedText'});
+    }
+    var e = await html.window.onMessage.firstWhere((element) =>
+        json.decode(element.data)['type'] == 'toDart: getSelectedText');
+    return json.decode(e.data)['text'];
   }
 
   /// Sets the text of the editor. Some pre-processing is applied to convert
