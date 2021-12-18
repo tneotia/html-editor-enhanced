@@ -31,7 +31,6 @@ dependencies:
   pedantic: ^1.11.1
   # plugin for @internal annotation
   meta: '>=1.0.0 <2.0.0'
-  flutter_svg: ^0.22.0
 
 dev_dependencies:
   flutter_test:
