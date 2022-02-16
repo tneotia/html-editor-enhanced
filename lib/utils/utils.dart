@@ -12,7 +12,9 @@ import 'package:html_editor_enhanced/utils/shims/dart_ui.dart';
 void setState(
     bool mounted, void Function(Function()) setState, void Function() fn) {
   if (mounted) {
-    setState.call(fn);
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      setState.call(fn);
+    });
   }
 }
 

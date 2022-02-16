@@ -10,6 +10,7 @@ import 'package:html_editor_enhanced/utils/utils.dart';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 import 'package:html_editor_enhanced/utils/shims/dart_ui.dart' as ui;
+import 'package:async/async.dart';
 
 /// The HTML Editor widget itself, for web (uses IFrameElement)
 class HtmlEditorWidget extends StatefulWidget {
@@ -21,7 +22,6 @@ class HtmlEditorWidget extends StatefulWidget {
     required this.htmlEditorOptions,
     required this.htmlToolbarOptions,
     required this.otherOptions,
-    required this.initBC,
   }) : super(key: key);
 
   final HtmlEditorController controller;
@@ -30,7 +30,6 @@ class HtmlEditorWidget extends StatefulWidget {
   final HtmlEditorOptions htmlEditorOptions;
   final HtmlToolbarOptions htmlToolbarOptions;
   final OtherOptions otherOptions;
-  final BuildContext initBC;
 
   @override
   _HtmlEditorWidgetWebState createState() => _HtmlEditorWidgetWebState();
@@ -41,6 +40,8 @@ class HtmlEditorWidget extends StatefulWidget {
 /// A stateful widget is necessary here, otherwise the IFrameElement will be
 /// rebuilt excessively, hurting performance
 class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
+  final memoizer = AsyncMemoizer();
+
   /// The view ID for the IFrameElement. Must be unique.
   late String createdViewId;
 
@@ -61,14 +62,13 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
 
   @override
   void initState() {
+    super.initState();
     actualHeight = widget.otherOptions.height;
     createdViewId = getRandString(10);
     widget.controller.viewId = createdViewId;
-    initSummernote();
-    super.initState();
   }
 
-  void initSummernote() async {
+  Future<void> initSummernote(BuildContext context) async {
     var headString = '';
     var summernoteCallbacks = '''callbacks: {
         onKeydown: function(e) {
@@ -183,7 +183,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     }
     summernoteCallbacks = summernoteCallbacks + '}';
     var darkCSS = '';
-    if ((Theme.of(widget.initBC).brightness == Brightness.dark ||
+    if ((Theme.of(context).brightness == Brightness.dark ||
             widget.htmlEditorOptions.darkMode == true) &&
         widget.htmlEditorOptions.darkMode != false) {
       darkCSS =
@@ -464,7 +464,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             '"assets/packages/html_editor_enhanced/assets/summernote-lite.min.js"');
     if (widget.callbacks != null) addJSListener(widget.callbacks!);
     final iframe = html.IFrameElement()
-      ..width = MediaQuery.of(widget.initBC).size.width.toString() //'800'
+      ..width = MediaQuery.of(context).size.width.toString() //'800'
       ..height = widget.htmlEditorOptions.autoAdjustHeight
           ? actualHeight.toString()
           : widget.otherOptions.height.toString()
@@ -531,6 +531,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
       });
     ui.platformViewRegistry
         .registerViewFactory(createdViewId, (int viewId) => iframe);
+
     setState(mounted, this.setState, () {
       summernoteInit = Future.value(true);
     });
@@ -538,48 +539,57 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: widget.htmlEditorOptions.autoAdjustHeight
-          ? actualHeight
-          : widget.otherOptions.height,
-      child: Column(
-        children: <Widget>[
-          widget.htmlToolbarOptions.toolbarPosition ==
-                  ToolbarPosition.aboveEditor
-              ? ToolbarWidget(
-                  key: toolbarKey,
-                  controller: widget.controller,
-                  htmlToolbarOptions: widget.htmlToolbarOptions,
-                  callbacks: widget.callbacks)
-              : Container(height: 0, width: 0),
-          Expanded(
-              child: Directionality(
-                  textDirection: TextDirection.ltr,
-                  child: FutureBuilder<bool>(
-                      future: summernoteInit,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return HtmlElementView(
-                            viewType: createdViewId,
-                          );
-                        } else {
-                          return Container(
-                              height: widget.htmlEditorOptions.autoAdjustHeight
-                                  ? actualHeight
-                                  : widget.otherOptions.height);
-                        }
-                      }))),
-          widget.htmlToolbarOptions.toolbarPosition ==
-                  ToolbarPosition.belowEditor
-              ? ToolbarWidget(
-                  key: toolbarKey,
-                  controller: widget.controller,
-                  htmlToolbarOptions: widget.htmlToolbarOptions,
-                  callbacks: widget.callbacks)
-              : Container(height: 0, width: 0),
-        ],
-      ),
-    );
+    return FutureBuilder<void>(
+        future: memoizer.runOnce(() => initSummernote(context)),
+        builder: (context, state) {
+          if (state.hasError) return ErrorWidget(state.error!);
+          if (state.connectionState != ConnectionState.done) {
+            return SizedBox.shrink();
+          }
+          return Container(
+            height: widget.htmlEditorOptions.autoAdjustHeight
+                ? actualHeight
+                : widget.otherOptions.height,
+            child: Column(
+              children: <Widget>[
+                widget.htmlToolbarOptions.toolbarPosition ==
+                        ToolbarPosition.aboveEditor
+                    ? ToolbarWidget(
+                        key: toolbarKey,
+                        controller: widget.controller,
+                        htmlToolbarOptions: widget.htmlToolbarOptions,
+                        callbacks: widget.callbacks)
+                    : Container(height: 0, width: 0),
+                Expanded(
+                    child: Directionality(
+                        textDirection: TextDirection.ltr,
+                        child: FutureBuilder<bool>(
+                            future: summernoteInit,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return HtmlElementView(
+                                  viewType: createdViewId,
+                                );
+                              } else {
+                                return Container(
+                                    height: widget
+                                            .htmlEditorOptions.autoAdjustHeight
+                                        ? actualHeight
+                                        : widget.otherOptions.height);
+                              }
+                            }))),
+                widget.htmlToolbarOptions.toolbarPosition ==
+                        ToolbarPosition.belowEditor
+                    ? ToolbarWidget(
+                        key: toolbarKey,
+                        controller: widget.controller,
+                        htmlToolbarOptions: widget.htmlToolbarOptions,
+                        callbacks: widget.callbacks)
+                    : Container(height: 0, width: 0),
+              ],
+            ),
+          );
+        });
   }
 
   /// Adds the callbacks the user set into JavaScript
