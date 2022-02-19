@@ -46,7 +46,6 @@ class HtmlEditor extends StatelessWidget {
         htmlEditorOptions: htmlEditorOptions,
         htmlToolbarOptions: htmlToolbarOptions,
         otherOptions: otherOptions,
-        initBC: context,
       );
     } else {
       return Text(

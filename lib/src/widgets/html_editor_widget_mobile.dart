@@ -66,6 +66,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
 
   @override
   void initState() {
+    super.initState();
     docHeight = widget.otherOptions.height;
     key = getRandString(10);
     if (widget.htmlEditorOptions.filePath != null) {
@@ -76,7 +77,6 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
     } else {
       filePath = 'packages/html_editor_enhanced/assets/summernote.html';
     }
-    super.initState();
   }
 
   @override
@@ -150,7 +150,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                         useShouldOverrideUrlLoading: true,
                       ),
                       android: AndroidInAppWebViewOptions(
-                        useHybridComposition: widget.htmlEditorOptions.androidUseHybridComposition,
+                        useHybridComposition: widget
+                            .htmlEditorOptions.androidUseHybridComposition,
                         loadWithOverviewMode: true,
                       )),
                   initialUserScripts:
@@ -506,7 +507,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                 keyCode.first as int;
                           });
                       //disable editor if necessary
-                      if (widget.htmlEditorOptions.disabled && !callbacksInitialized) {
+                      if (widget.htmlEditorOptions.disabled &&
+                          !callbacksInitialized) {
                         widget.controller.disable();
                       }
                       //initialize callbacks
