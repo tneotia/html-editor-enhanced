@@ -48,11 +48,6 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   /// The actual height of the editor, used to automatically set the height
   late double actualHeight;
 
-  /// A Future that is observed by the [FutureBuilder]. We don't use a function
-  /// as the Future on the [FutureBuilder] because when the widget is rebuilt,
-  /// the function may be excessively called, hurting performance.
-  Future<bool>? summernoteInit;
-
   /// Helps get the height of the toolbar to accurately adjust the height of
   /// the editor when the keyboard is visible.
   GlobalKey toolbarKey = GlobalKey();
@@ -531,10 +526,6 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
       });
     ui.platformViewRegistry
         .registerViewFactory(createdViewId, (int viewId) => iframe);
-
-    setState(mounted, this.setState, () {
-      summernoteInit = Future.value(true);
-    });
   }
 
   @override
@@ -544,7 +535,10 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         builder: (context, state) {
           if (state.hasError) return ErrorWidget(state.error!);
           if (state.connectionState != ConnectionState.done) {
-            return SizedBox.shrink();
+            return Container(
+                height: widget.htmlEditorOptions.autoAdjustHeight
+                    ? actualHeight
+                    : widget.otherOptions.height);
           }
           return Container(
             height: widget.htmlEditorOptions.autoAdjustHeight
@@ -561,23 +555,13 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                         callbacks: widget.callbacks)
                     : Container(height: 0, width: 0),
                 Expanded(
-                    child: Directionality(
-                        textDirection: TextDirection.ltr,
-                        child: FutureBuilder<bool>(
-                            future: summernoteInit,
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return HtmlElementView(
-                                  viewType: createdViewId,
-                                );
-                              } else {
-                                return Container(
-                                    height: widget
-                                            .htmlEditorOptions.autoAdjustHeight
-                                        ? actualHeight
-                                        : widget.otherOptions.height);
-                              }
-                            }))),
+                  child: Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: HtmlElementView(
+                      viewType: createdViewId,
+                    ),
+                  ),
+                ),
                 widget.htmlToolbarOptions.toolbarPosition ==
                         ToolbarPosition.belowEditor
                     ? ToolbarWidget(
