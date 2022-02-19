@@ -236,7 +236,10 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                 window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: htmlHeight", "height": height}), "*");
               }
               if (data["type"].includes("setInputType")) {
-                document.getElementsByClassName('note-editable')[0].setAttribute('inputmode', '${describeEnum(widget.htmlEditorOptions.inputType)}');
+                const editable = document.getElementsByClassName('note-editable')[0];
+                if (editable) {
+                  editable.setAttribute('inputmode', '${describeEnum(widget.htmlEditorOptions.inputType)}');
+                }                
               }
               if (data["type"].includes("setText")) {
                 \$('#summernote-2').summernote('code', data["text"]);
@@ -528,52 +531,57 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         .registerViewFactory(createdViewId, (int viewId) => iframe);
   }
 
+/*
+   
+ */
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<void>(
-        future: memoizer.runOnce(() => initSummernote(context)),
-        builder: (context, state) {
-          if (state.hasError) return ErrorWidget(state.error!);
-          if (state.connectionState != ConnectionState.done) {
-            return Container(
-                height: widget.htmlEditorOptions.autoAdjustHeight
-                    ? actualHeight
-                    : widget.otherOptions.height);
-          }
-          return Container(
-            height: widget.htmlEditorOptions.autoAdjustHeight
-                ? actualHeight
-                : widget.otherOptions.height,
-            child: Column(
-              children: <Widget>[
-                widget.htmlToolbarOptions.toolbarPosition ==
-                        ToolbarPosition.aboveEditor
-                    ? ToolbarWidget(
-                        key: toolbarKey,
-                        controller: widget.controller,
-                        htmlToolbarOptions: widget.htmlToolbarOptions,
-                        callbacks: widget.callbacks)
-                    : Container(height: 0, width: 0),
-                Expanded(
-                  child: Directionality(
-                    textDirection: TextDirection.ltr,
-                    child: HtmlElementView(
-                      viewType: createdViewId,
-                    ),
-                  ),
-                ),
-                widget.htmlToolbarOptions.toolbarPosition ==
-                        ToolbarPosition.belowEditor
-                    ? ToolbarWidget(
-                        key: toolbarKey,
-                        controller: widget.controller,
-                        htmlToolbarOptions: widget.htmlToolbarOptions,
-                        callbacks: widget.callbacks)
-                    : Container(height: 0, width: 0),
-              ],
+    return Container(
+      height: widget.htmlEditorOptions.autoAdjustHeight
+          ? actualHeight
+          : widget.otherOptions.height,
+      child: Column(
+        children: <Widget>[
+          widget.htmlToolbarOptions.toolbarPosition ==
+                  ToolbarPosition.aboveEditor
+              ? ToolbarWidget(
+                  key: toolbarKey,
+                  controller: widget.controller,
+                  htmlToolbarOptions: widget.htmlToolbarOptions,
+                  callbacks: widget.callbacks)
+              : Container(height: 0, width: 0),
+          Expanded(
+            child: Directionality(
+              textDirection: TextDirection.ltr,
+              child: FutureBuilder<void>(
+                future: memoizer.runOnce(() => initSummernote(context)),
+                builder: (context, state) {
+                  if (state.hasError) return ErrorWidget(state.error!);
+                  if (state.connectionState != ConnectionState.done) {
+                    return Container(
+                      height: widget.htmlEditorOptions.autoAdjustHeight
+                          ? actualHeight
+                          : widget.otherOptions.height,
+                    );
+                  }
+                  return HtmlElementView(
+                    viewType: createdViewId,
+                  );
+                },
+              ),
             ),
-          );
-        });
+          ),
+          widget.htmlToolbarOptions.toolbarPosition ==
+                  ToolbarPosition.belowEditor
+              ? ToolbarWidget(
+                  key: toolbarKey,
+                  controller: widget.controller,
+                  htmlToolbarOptions: widget.htmlToolbarOptions,
+                  callbacks: widget.callbacks)
+              : Container(height: 0, width: 0),
+        ],
+      ),
+    );
   }
 
   /// Adds the callbacks the user set into JavaScript
