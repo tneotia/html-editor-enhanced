@@ -19,6 +19,7 @@ class HtmlEditorWidget extends StatefulWidget {
     Key? key,
     required this.controller,
     this.callbacks,
+    this.lang = 'en',
     required this.plugins,
     required this.htmlEditorOptions,
     required this.htmlToolbarOptions,
@@ -27,6 +28,7 @@ class HtmlEditorWidget extends StatefulWidget {
 
   final HtmlEditorController controller;
   final Callbacks? callbacks;
+  final String? lang;
   final List<Plugins> plugins;
   final HtmlEditorOptions htmlEditorOptions;
   final HtmlToolbarOptions htmlToolbarOptions;
@@ -93,7 +95,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
       });
       await widget.controller.editorController!.evaluateJavascript(
           source:
-              "\$('div.note-editable').outerHeight(${widget.otherOptions.height - (toolbarKey.currentContext?.size?.height ?? 0)});");
+              "\$('div.fr-box.fr-basic').outerHeight(${widget.otherOptions.height - (toolbarKey.currentContext?.size?.height ?? 0)});");
     }
   }
 
@@ -150,7 +152,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                         useShouldOverrideUrlLoading: true,
                       ),
                       android: AndroidInAppWebViewOptions(
-                        useHybridComposition: widget.htmlEditorOptions.androidUseHybridComposition,
+                        useHybridComposition: widget
+                            .htmlEditorOptions.androidUseHybridComposition,
                         loadWithOverviewMode: true,
                       )),
                   initialUserScripts:
@@ -374,6 +377,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                               height: ${widget.otherOptions.height - (toolbarKey.currentContext?.size?.height ?? 0)},
                               toolbar: $summernoteToolbar
                               disableGrammar: false,
+                              lang: "${widget.lang}",
                               spellCheck: ${widget.htmlEditorOptions.spellCheck},
                               maximumFileSize: $maximumFileSize,
                               ${widget.htmlEditorOptions.customOptions}
@@ -506,7 +510,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                 keyCode.first as int;
                           });
                       //disable editor if necessary
-                      if (widget.htmlEditorOptions.disabled && !callbacksInitialized) {
+                      if (widget.htmlEditorOptions.disabled &&
+                          !callbacksInitialized) {
                         widget.controller.disable();
                       }
                       //initialize callbacks
