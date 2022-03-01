@@ -91,8 +91,11 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
   void resetHeight() async {
     if (mounted) {
       this.setState(() {
+        print("setState 高さだよ ${widget.otherOptions.height}");
         docHeight = widget.otherOptions.height;
       });
+      print(
+          "高さだよ ${widget.otherOptions.height - (toolbarKey.currentContext?.size?.height ?? 0)}");
       await widget.controller.editorController!.evaluateJavascript(
           source:
               "\$('div.fr-box.fr-basic').outerHeight(${widget.otherOptions.height - (toolbarKey.currentContext?.size?.height ?? 0)});");
@@ -193,20 +196,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                         !visibleStream.isClosed) {
                       Future<void> setHeightJS() async {
                         await controller.evaluateJavascript(source: """
-                                \$('div.note-editable').outerHeight(${max(docHeight - (toolbarKey.currentContext?.size?.height ?? 0), 30)});
-                                // from https://stackoverflow.com/a/67152280
-                                var selection = window.getSelection();
-                                if (selection.rangeCount) {
-                                  var firstRange = selection.getRangeAt(0);
-                                  if (firstRange.commonAncestorContainer !== document) {
-                                    var tempAnchorEl = document.createElement('br');
-                                    firstRange.insertNode(tempAnchorEl);
-                                    tempAnchorEl.scrollIntoView({
-                                      block: 'end',
-                                    });
-                                    tempAnchorEl.remove();
-                                  }
-                                }
+                                \$('div.fr-box.fr-basic').outerHeight(${max(docHeight - (toolbarKey.currentContext?.size?.height ?? 0), 30)});
                               """);
                       }
 
@@ -372,6 +362,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       summernoteCallbacks = summernoteCallbacks + '}';
                       await controller.evaluateJavascript(source: """
                           \ new FroalaEditor("#edit", {
+                              quickInsertEnabled: false,
                               attribution: false,
                               charCounterCount: false,
                               placeholderText: "${widget.htmlEditorOptions.hint ?? ""}",
