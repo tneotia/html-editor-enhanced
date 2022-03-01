@@ -389,26 +389,6 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                               $summernoteCallbacks
                           });
                       """);
-                      print("""
-                          \ new FroalaEditor("#edit", {
-                              attribution: false,
-                              charCounterCount: false,
-                              placeholderText: "${widget.htmlEditorOptions.hint ?? ""}",
-                              height: ${widget.otherOptions.height - (toolbarKey.currentContext?.size?.height ?? 0)},
-                              toolbar: $summernoteToolbar
-                              disableGrammar: false,
-                              quickInsertEnabled: false,
-                              spellCheck: ${widget.htmlEditorOptions.spellCheck},
-                              maximumFileSize: $maximumFileSize,
-                              events: {
-                                "codeView.update": () => {
-                                   window.flutter_inappwebview.callHandler('onChangeContent', this.editor.html.get());
-                                }
-                              },
-                              ${widget.htmlEditorOptions.customOptions}
-                              $summernoteCallbacks
-                          });
-                      """);
                       if ((Theme.of(context).brightness == Brightness.dark ||
                               widget.htmlEditorOptions.darkMode == true) &&
                           widget.htmlEditorOptions.darkMode != false) {

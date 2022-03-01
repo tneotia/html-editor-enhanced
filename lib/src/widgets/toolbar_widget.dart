@@ -1046,10 +1046,12 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             void updateStatus(Color? color) {
               setState(mounted, this.setState, () {
                 _colorSelected[index] = !_colorSelected[index];
-                if (color != null && t.getIcons()[index].icon == Icons.format_color_text) {
+                if (color != null &&
+                    t.getIcons()[index].icon == Icons.format_color_text) {
                   _foreColorSelected = color;
                 }
-                if (color != null && t.getIcons()[index].icon == Icons.format_color_fill) {
+                if (color != null &&
+                    t.getIcons()[index].icon == Icons.format_color_fill) {
                   _backColorSelected = color;
                 }
               });
@@ -1795,7 +1797,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                         child: StatefulBuilder(builder:
                             (BuildContext context, StateSetter setState) {
                           return AlertDialog(
-                            title: Text('Insert Link'),
+                            title: Text('URLの挿入'),
                             scrollable: true,
                             content: Form(
                               key: formKey,
@@ -1803,7 +1805,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('Text to display',
+                                    Text('表示テキスト',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold)),
                                     SizedBox(height: 10),
@@ -1935,13 +1937,13 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                         child: StatefulBuilder(builder:
                             (BuildContext context, StateSetter setState) {
                           return AlertDialog(
-                            title: Text('Insert Image'),
+                            title: Text('画像の挿入'),
                             scrollable: true,
                             content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Select from files',
+                                  Text('ファイルから選択',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold)),
                                   SizedBox(height: 10),
@@ -1973,7 +1975,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               });
                                             }
                                           },
-                                          child: Text('Choose image',
+                                          child: Text('画像の選択',
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .textTheme
@@ -2391,13 +2393,13 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                         child: StatefulBuilder(builder:
                             (BuildContext context, StateSetter setState) {
                           return AlertDialog(
-                            title: Text('Insert File'),
+                            title: Text('ファイルの挿入'),
                             scrollable: true,
                             content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Select from files',
+                                  Text('ファイルから選択',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold)),
                                   SizedBox(height: 10),
@@ -2429,7 +2431,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               });
                                             }
                                           },
-                                          child: Text('Choose file',
+                                          child: Text('ファイルの選択',
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .textTheme
