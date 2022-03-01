@@ -11,6 +11,7 @@ class HtmlEditor extends StatelessWidget {
     Key? key,
     required this.controller,
     this.callbacks,
+    this.lang,
     this.htmlEditorOptions = const HtmlEditorOptions(),
     this.htmlToolbarOptions = const HtmlToolbarOptions(),
     this.otherOptions = const OtherOptions(),
@@ -24,6 +25,8 @@ class HtmlEditor extends StatelessWidget {
   /// Sets & activates Summernote's callbacks. See the functions available in
   /// [Callbacks] for more details.
   final Callbacks? callbacks;
+
+  final String? lang;
 
   /// Defines options for the html editor
   final HtmlEditorOptions htmlEditorOptions;
@@ -44,6 +47,7 @@ class HtmlEditor extends StatelessWidget {
         key: key,
         controller: controller,
         callbacks: callbacks,
+        lang: lang,
         plugins: plugins,
         htmlEditorOptions: htmlEditorOptions,
         htmlToolbarOptions: htmlToolbarOptions,

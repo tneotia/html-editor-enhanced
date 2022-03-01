@@ -102,7 +102,8 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Clears the editor of any text.
   @override
   void clear() {
-    _evaluateJavascript(source: "\$('#summernote-2').summernote('reset');");
+    _evaluateJavascript(
+        source: "\$('#edit')[0]['data-froala.editor'].html.set(" ");");
   }
 
   /// Sets the hint for the editor.
@@ -117,7 +118,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   @override
   void toggleCodeView() {
     _evaluateJavascript(
-        source: "\$('#summernote-2').summernote('codeview.toggle');");
+        source: "\$('#edit')[0]['data-froala.editor'].codeView.toggle();;");
   }
 
   /// disables the Html editor
@@ -151,7 +152,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   @override
   void insertText(String text) {
     _evaluateJavascript(
-        source: "\$('#summernote-2').summernote('insertText', '$text');");
+        source: "\$('#edit').froalaEditor('insertText', '$text');");
   }
 
   /// Insert HTML at the position of the cursor in the editor
@@ -159,8 +160,9 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   @override
   void insertHtml(String html) {
     html = _processHtml(html: html);
+
     _evaluateJavascript(
-        source: "\$('#summernote-2').summernote('pasteHTML', '$html');");
+        source: "\$('#edit')[0]['data-froala.editor'].html.insert('$html');");
   }
 
   /// Insert a network image at the position of the cursor in the editor

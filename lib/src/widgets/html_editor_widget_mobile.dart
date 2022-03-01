@@ -371,90 +371,44 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       summernoteToolbar = summernoteToolbar + '],';
                       summernoteCallbacks = summernoteCallbacks + '}';
                       await controller.evaluateJavascript(source: """
-                          \$('#summernote-2').summernote({
-                              placeholder: "${widget.htmlEditorOptions.hint ?? ""}",
-                              tabsize: 2,
+                          \ new FroalaEditor("#edit", {
+                              attribution: false,
+                              charCounterCount: false,
+                              placeholderText: "${widget.htmlEditorOptions.hint ?? ""}",
                               height: ${widget.otherOptions.height - (toolbarKey.currentContext?.size?.height ?? 0)},
                               toolbar: $summernoteToolbar
                               disableGrammar: false,
-                              lang: "${widget.lang}",
                               spellCheck: ${widget.htmlEditorOptions.spellCheck},
                               maximumFileSize: $maximumFileSize,
+                              events: {
+                                "codeView.update": () => {
+                                   window.flutter_inappwebview.callHandler('onChangeContent', 'updated!!!!');
+                                }
+                              },
                               ${widget.htmlEditorOptions.customOptions}
                               $summernoteCallbacks
                           });
-                          
-                          \$('#summernote-2').on('summernote.change', function(_, contents, \$editable) {
-                            window.flutter_inappwebview.callHandler('onChangeContent', contents);
-                          });
-                      
-                          function onSelectionChange() {
-                            let {anchorNode, anchorOffset, focusNode, focusOffset} = document.getSelection();
-                            var isBold = false;
-                            var isItalic = false;
-                            var isUnderline = false;
-                            var isStrikethrough = false;
-                            var isSuperscript = false;
-                            var isSubscript = false;
-                            var isUL = false;
-                            var isOL = false;
-                            var isLeft = false;
-                            var isRight = false;
-                            var isCenter = false;
-                            var isFull = false;
-                            var parent;
-                            var fontName;
-                            var fontSize = 16;
-                            var foreColor = "000000";
-                            var backColor = "FFFF00";
-                            var focusNode2 = \$(window.getSelection().focusNode);
-                            var parentList = focusNode2.closest("div.note-editable ol, div.note-editable ul");
-                            var parentListType = parentList.css('list-style-type');
-                            var lineHeight = \$(focusNode.parentNode).css('line-height');
-                            var direction = \$(focusNode.parentNode).css('direction');
-                            if (document.queryCommandState) {
-                              isBold = document.queryCommandState('bold');
-                              isItalic = document.queryCommandState('italic');
-                              isUnderline = document.queryCommandState('underline');
-                              isStrikethrough = document.queryCommandState('strikeThrough');
-                              isSuperscript = document.queryCommandState('superscript');
-                              isSubscript = document.queryCommandState('subscript');
-                              isUL = document.queryCommandState('insertUnorderedList');
-                              isOL = document.queryCommandState('insertOrderedList');
-                              isLeft = document.queryCommandState('justifyLeft');
-                              isRight = document.queryCommandState('justifyRight');
-                              isCenter = document.queryCommandState('justifyCenter');
-                              isFull = document.queryCommandState('justifyFull');
-                            }
-                            if (document.queryCommandValue) {
-                              parent = document.queryCommandValue('formatBlock');
-                              fontSize = document.queryCommandValue('fontSize');
-                              foreColor = document.queryCommandValue('foreColor');
-                              backColor = document.queryCommandValue('hiliteColor');
-                              fontName = document.queryCommandValue('fontName');
-                            }
-                            var message = {
-                              'style': parent,
-                              'fontName': fontName,
-                              'fontSize': fontSize,
-                              'font': [isBold, isItalic, isUnderline],
-                              'miscFont': [isStrikethrough, isSuperscript, isSubscript],
-                              'color': [foreColor, backColor],
-                              'paragraph': [isUL, isOL],
-                              'listStyle': parentListType,
-                              'align': [isLeft, isCenter, isRight, isFull],
-                              'lineHeight': lineHeight,
-                              'direction': direction,
-                            };
-                            window.flutter_inappwebview.callHandler('FormatSettings', message);
-                          }
                       """);
-                      await controller.evaluateJavascript(
-                          source:
-                              "document.onselectionchange = onSelectionChange; console.log('done');");
-                      await controller.evaluateJavascript(
-                          source:
-                              "document.getElementsByClassName('note-editable')[0].setAttribute('inputmode', '${describeEnum(widget.htmlEditorOptions.inputType)}');");
+                      print("""
+                          \ new FroalaEditor("#edit", {
+                              attribution: false,
+                              charCounterCount: false,
+                              placeholderText: "${widget.htmlEditorOptions.hint ?? ""}",
+                              height: ${widget.otherOptions.height - (toolbarKey.currentContext?.size?.height ?? 0)},
+                              toolbar: $summernoteToolbar
+                              disableGrammar: false,
+                              quickInsertEnabled: false,
+                              spellCheck: ${widget.htmlEditorOptions.spellCheck},
+                              maximumFileSize: $maximumFileSize,
+                              events: {
+                                "codeView.update": () => {
+                                   window.flutter_inappwebview.callHandler('onChangeContent', this.editor.html.get());
+                                }
+                              },
+                              ${widget.htmlEditorOptions.customOptions}
+                              $summernoteCallbacks
+                          });
+                      """);
                       if ((Theme.of(context).brightness == Brightness.dark ||
                               widget.htmlEditorOptions.darkMode == true) &&
                           widget.htmlEditorOptions.darkMode != false) {
