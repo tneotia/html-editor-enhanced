@@ -61,6 +61,9 @@ class EditorSettings {
   bool isAlignJustify;
   double lineHeight;
   TextDirection textDirection;
+  bool isParentTitle;
+  bool isParentCode;
+  bool isParentInfobox;
 
   EditorSettings({
     required this.parentElement,
@@ -82,6 +85,9 @@ class EditorSettings {
     required this.isAlignJustify,
     required this.lineHeight,
     required this.textDirection,
+    required this.isParentTitle,
+    required this.isParentCode,
+    required this.isParentInfobox,
   });
 }
 
@@ -170,7 +176,7 @@ class _DropdownMenuPainter extends CustomPainter {
     this.selectedIndex,
     required this.resize,
     required this.getSelectedItemOffset,
-  })  : _painter = BoxDecoration(
+  })   : _painter = BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(2.0),
           boxShadow: kElevationToShadow[elevation],
@@ -795,7 +801,7 @@ class CustomDropdownButton<T> extends StatefulWidget {
     this.dropdownColor,
     this.menuMaxHeight,
     required this.menuDirection,
-  })  : assert(
+  })   : assert(
           items == null ||
               items.isEmpty ||
               value == null ||

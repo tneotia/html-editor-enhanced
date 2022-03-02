@@ -147,6 +147,12 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
     var paragraphList = (json['paragraph'] as List<dynamic>).cast<bool?>();
     //get justify status
     var alignList = (json['align'] as List<dynamic>).cast<bool?>();
+    //get parentTitle status
+    var parentTitle = (json['parentTitle'] as Map)['length'] == 1;
+    //get parentTitle status
+    var parentCode = (json['parentCode'] as Map)['length'] == 1;
+    //get parentInfobox status
+    var parentInfobox = (json['parentInfobox'] as Map)['length'] == 1;
     //get line height
     String lineHeight = json['lineHeight'] ?? '';
     //get list icon type
@@ -321,6 +327,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           isAlignCenter: alignList[1] ?? false,
           isAlignRight: alignList[2] ?? false,
           isAlignJustify: alignList[3] ?? false,
+          isParentTitle: parentTitle,
+          isParentCode: parentCode,
+          isParentInfobox: parentInfobox,
           lineHeight: _lineHeightSelectedItem,
           textDirection:
               textDir == 'rtl' ? TextDirection.rtl : TextDirection.ltr));

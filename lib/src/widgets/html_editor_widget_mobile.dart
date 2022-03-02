@@ -91,11 +91,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
   void resetHeight() async {
     if (mounted) {
       this.setState(() {
-        print("setState 高さだよ ${widget.otherOptions.height}");
         docHeight = widget.otherOptions.height;
       });
-      print(
-          "高さだよ ${widget.otherOptions.height - (toolbarKey.currentContext?.size?.height ?? 0)}");
       await widget.controller.editorController!.evaluateJavascript(
           source:
               "\$('div.fr-box.fr-basic').outerHeight(${widget.otherOptions.height - (toolbarKey.currentContext?.size?.height ?? 0)});");
@@ -361,25 +358,237 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       summernoteToolbar = summernoteToolbar + '],';
                       summernoteCallbacks = summernoteCallbacks + '}';
                       await controller.evaluateJavascript(source: """
-                          \ new FroalaEditor("#edit", {
+                          const self = this;
+                          new FroalaEditor("#edit", {
                               quickInsertEnabled: false,
                               attribution: false,
                               charCounterCount: false,
+                              linkAlwaysBlank: true,
+                              pastePlain: true,
+                              pasteDeniedAttrs: ["id", "style"],
+                              pasteDeniedTags: ["h1", "h2", "h3", "h4", "header", "body"],
+                              linkAutoPrefix: "https://",
                               placeholderText: "${widget.htmlEditorOptions.hint ?? ""}",
                               height: ${widget.otherOptions.height - (toolbarKey.currentContext?.size?.height ?? 0)},
-                              toolbar: $summernoteToolbar
-                              disableGrammar: false,
+                              attribution: false,
                               spellCheck: ${widget.htmlEditorOptions.spellCheck},
-                              maximumFileSize: $maximumFileSize,
+                              fileMaxSize: 20 * 1024 * 1024,
                               events: {
-                                "codeView.update": () => {
-                                   window.flutter_inappwebview.callHandler('onChangeContent', 'updated!!!!');
-                                }
+                                "paste.afterCleanup": function (clipboard_html) {
+                                  // pasteされた内容にURLが含まれる場合はaタグに変換
+                                  var content = self
+                                    .unescapeHTML(clipboard_html);
+                                  return content;
+                                },
                               },
                               ${widget.htmlEditorOptions.customOptions}
                               $summernoteCallbacks
                           });
+
+                          FroalaEditor.RegisterCommand("title", {
+                            title: "",
+                            icon: "",
+                            focus: true,
+                            undo: true,
+                            refreshAfterCallback: true,
+                            callback: function () {
+                              let txt = this.html.getSelected();
+                              if (
+                                this.selection.blocks().length != 0 &&
+                                this.selection.blocks()[0].className == "title"
+                              ) {
+                                this.node.clearAttributes(this.selection.blocks()[0]);
+                                return;
+                              }
+
+                              if (
+                                this.selection.text() === undefined ||
+                                this.selection.text() == ""
+                              ) {
+                                this.html.insert('<div class="title"></div><p></p>');
+                                return;
+                              }
+
+                              this.html.insert('<div class="title"></div><p>' + txt + "</p>");
+                            },
+                          });
+
+                          FroalaEditor.RegisterCommand("codeTag", {
+                            title: "codeタグ",
+                            icon: "code",
+                            focus: true,
+                            undo: true,
+                            callback: function () {
+                              if (
+                                this.selection.get().focusNode &&
+                                this.selection.get().focusNode.tagName == "CODE"
+                              ) {
+                                const parentNode = this.selection.get().focusNode.parentNode;
+                                this.node.clearAttributes(parentNode);
+                                this.selection.get().focusNode.remove();
+                                return;
+                              }
+
+                              const parentNode = this.node.blockParent(this.selection.blocks()[0]);
+                              if (
+                                (parentNode !== null && parentNode.tagName == "CODE") ||
+                                (this.selection.blocks()[0] &&
+                                  this.selection.blocks()[0].tagName == "CODE")
+                              ) {
+                                const parentNode = this.selection.blocks()[0].parentNode;
+                                this.node.clearAttributes(parentNode);
+                                const contents = this.selection.blocks()[0].childNodes;
+                                this.selection.blocks()[0].remove();
+                                this.html.insert(
+                                  Array.from(contents)
+                                    .map((x) => (x.outerHTML ? x.outerHTML : x.textContent))
+                                    .join("")
+                                );
+                                return;
+                              }
+
+                              if (
+                                this.selection.text() === undefined ||
+                                this.selection.text() == ""
+                              ) {
+                                this.html.insert(
+                                  '<div class="fr-inner"><code class="fr-deletable fr-inner"><br></code></div><br>'
+                                );
+                              } else {
+                                let txt = this.html.getSelected();
+                                this.html.insert(
+                                  '<div class="fr-inner"><code class="fr-deletable">' +
+                                    txt +
+                                    "</code></div><br>"
+                                );
+                              }
+                            },
+                          });
+
+                          FroalaEditor.RegisterCommand("infobox", {
+                            title: "囲み枠",
+                            focus: true,
+                            undo: true,
+                            callback: function () {
+                              let txt = this.html.getSelected();
+                              const parentNode = this.node.blockParent(this.selection.blocks()[0]);
+                              if (txt.match(\/<div class="infobox">.*<\\/div>\/) && parentNode == null) {
+                                this.node.clearAttributes(this.selection.element());
+                                const parentNode = this.node.blockParent(this.selection.element());
+                                this.node.clearAttributes(parentNode);
+                                return;
+                              }
+                              if (
+                                parentNode != null &&
+                                parentNode.outerHTML.match(\/<div class="infobox">.*<\\/div>\/)
+                              ) {
+                                const superParentNode = parentNode.parentNode;
+                                this.node.clearAttributes(parentNode);
+                                this.node.clearAttributes(superParentNode);
+                                return;
+                              }
+
+                              if (
+                                this.selection.text() === undefined ||
+                                this.selection.text() == ""
+                              ) {
+                                this.html.insert(
+                                  '<div class="fr-inner"><div class="infobox"><p></p></div></div><p></p>'
+                                );
+                                return;
+                              }
+
+                              this.html.insert(
+                                '<div class="fr-inner"><div class="infobox">' +
+                                  txt +
+                                  "</div></div><p></p>"
+                              );
+                            },
+                          });
+
+                          function unescapeHTML(str) {
+                            if (typeof str !== "string") return str;
+                            var patterns = {
+                              "&lt;": "<",
+                              "&gt;": ">",
+                              "&amp;": "&",
+                              "&quot;": '"',
+                              "&#x27;": "'",
+                              "&#x60;": "`",
+                            };
+
+                            return str.replace(/&(lt|gt|amp|quot|#x27|#x60);/g, function (match) {
+                              return patterns[match];
+                            });
+                          };
+
+                          function onSelectionChange() {
+                            let {anchorNode, anchorOffset, focusNode, focusOffset} = document.getSelection();
+                            var isBold = false;
+                            var isItalic = false;
+                            var isUnderline = false;
+                            var isStrikethrough = false;
+                            var isSuperscript = false;
+                            var isSubscript = false;
+                            var isUL = false;
+                            var isOL = false;
+                            var isLeft = false;
+                            var isRight = false;
+                            var isCenter = false;
+                            var isFull = false;
+                            var parent;
+                            var fontName;
+                            var fontSize = 16;
+                            var foreColor = "000000";
+                            var backColor = "FFFF00";
+                            var focusNode2 = \$(window.getSelection().focusNode);
+                            var parentTitle = \$(focusNode2.closest(".title"));
+                            var parentCode = \$(focusNode2.closest("code"));
+                            var parentInfobox = \$(focusNode2.closest(".infobox"));
+                            var lineHeight = \$(focusNode.parentNode).css('line-height');
+                            var direction = \$(focusNode.parentNode).css('direction');
+                            if (document.queryCommandState) {
+                              isBold = document.queryCommandState('bold');
+                              isItalic = document.queryCommandState('italic');
+                              isUnderline = document.queryCommandState('underline');
+                              isStrikethrough = document.queryCommandState('strikeThrough');
+                              isSuperscript = document.queryCommandState('superscript');
+                              isSubscript = document.queryCommandState('subscript');
+                              isUL = document.queryCommandState('insertUnorderedList');
+                              isOL = document.queryCommandState('insertOrderedList');
+                              isLeft = document.queryCommandState('justifyLeft');
+                              isRight = document.queryCommandState('justifyRight');
+                              isCenter = document.queryCommandState('justifyCenter');
+                              isFull = document.queryCommandState('justifyFull');
+                            }
+                            if (document.queryCommandValue) {
+                              parent = document.queryCommandValue('formatBlock');
+                              fontSize = document.queryCommandValue('fontSize');
+                              foreColor = document.queryCommandValue('foreColor');
+                              backColor = document.queryCommandValue('hiliteColor');
+                              fontName = document.queryCommandValue('fontName');
+                            }
+                            var message = {
+                              'style': parent,
+                              'fontName': fontName,
+                              'fontSize': fontSize,
+                              'font': [isBold, isItalic, isUnderline],
+                              'miscFont': [isStrikethrough, isSuperscript, isSubscript],
+                              'color': [foreColor, backColor],
+                              'paragraph': [isUL, isOL],
+                              'align': [isLeft, isCenter, isRight, isFull],
+                              'lineHeight': lineHeight,
+                              'direction': direction,
+                              'parentTitle': parentTitle,
+                              'parentCode': parentCode,
+                              'parentInfobox': parentInfobox
+                            };
+                            window.flutter_inappwebview.callHandler('FormatSettings', message);
+                          }
                       """);
+                      await controller.evaluateJavascript(
+                          source:
+                              "document.onselectionchange = onSelectionChange; console.log('done');");
                       if ((Theme.of(context).brightness == Brightness.dark ||
                               widget.htmlEditorOptions.darkMode == true) &&
                           widget.htmlEditorOptions.darkMode != false) {
@@ -487,6 +696,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
 
   /// adds the callbacks set by the user into the scripts
   void addJSCallbacks(Callbacks c) {
+    print(c.toString());
     if (c.onBeforeCommand != null) {
       widget.controller.editorController!.evaluateJavascript(source: """
           \$('#summernote-2').on('summernote.before.command', function(_, contents) {

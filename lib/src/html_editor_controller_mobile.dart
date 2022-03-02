@@ -119,7 +119,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   @override
   void toggleCodeView() {
     _evaluateJavascript(
-        source: "\$('#edit')[0]['data-froala.editor'].codeView.toggle();;");
+        source: "\$('#edit')[0]['data-froala.editor'].codeView.toggle();");
   }
 
   /// disables the Html editor
@@ -164,6 +164,13 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
     _evaluateJavascript(
         source: "\$('#edit')[0]['data-froala.editor'].html.insert('$html');");
+  }
+
+  @override
+  void insertTag(String className) {
+    _evaluateJavascript(
+        source:
+            "\$('#edit')[0]['data-froala.editor'].commands.exec('$className');");
   }
 
   /// Insert a network image at the position of the cursor in the editor
