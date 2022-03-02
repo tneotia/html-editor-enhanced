@@ -67,7 +67,8 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   @override
   Future<String> getText() async {
     var text = await _evaluateJavascript(
-        source: "\$('#summernote-2').summernote('code');") as String?;
+            source: "\$('#edit')[0]['data-froala.editor'].html.get(true);")
+        as String?;
     if (processOutputHtml &&
         (text == null ||
             text.isEmpty ||
