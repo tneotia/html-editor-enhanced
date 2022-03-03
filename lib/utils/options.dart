@@ -25,6 +25,7 @@ class HtmlEditorOptions {
     this.webInitialScripts,
     this.shouldEnsureVisible = false,
     this.spellCheck = false,
+    this.mentionList = const [],
   });
 
   /// The editor will automatically adjust its height when the keyboard is active
@@ -124,6 +125,8 @@ class HtmlEditorOptions {
   ///
   /// Default value is false.
   final bool spellCheck;
+
+  final List<Map<String, dynamic>> mentionList;
 }
 
 /// Options that modify the toolbar and its behavior
@@ -277,8 +280,7 @@ class HtmlToolbarOptions {
   /// (true = continue with internal handler, false = do not use internal handler)
   ///
   /// If no interceptor is set, the plugin uses the internal handler.
-  final FutureOr<bool> Function(ButtonType, bool?, Function?)?
-      onButtonPressed;
+  final FutureOr<bool> Function(ButtonType, bool?, Function?)? onButtonPressed;
 
   /// Allows you to intercept any dropdown changes. The function passes the
   /// DropdownType enum, which tells you which dropdown was changed,

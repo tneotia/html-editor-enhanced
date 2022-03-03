@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -359,6 +360,34 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       summernoteCallbacks = summernoteCallbacks + '}';
                       await controller.evaluateJavascript(source: """
                           const self = this;
+                          var tribute = new Tribute({
+                            values: ${jsonEncode(widget.htmlEditorOptions.mentionList)},
+                            selectTemplate: function(item) {
+                              //@のリストから選択時に挿入するためのtemplateを生成する
+                              return generateToHtml(
+                                item.original.value,
+                                item.original.icon,
+                                item.original.key,
+                                item.original.rank
+                              );
+                            }
+                          });
+
+                          function generateToHtml(uid, icon, name, rank) {
+                            return (
+                              '<ul class="to_userinfo fr-deletable"><li contenteditable="false"><span class="badge is_to" uid="' +
+                              uid +
+                              '">@</span> <img src="' +
+                              icon +
+                              '" alt="" class="user_proficon"> <a href="/user_profile/' +
+                              uid +
+                              '" class="username"> ' +
+                              name +
+                              "(" +
+                              rank +
+                              ")</a>さん</small></li></ul>"
+                            );
+                          };
                           new FroalaEditor("#edit", {
                               quickInsertEnabled: false,
                               attribution: false,
@@ -374,6 +403,17 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                               spellCheck: ${widget.htmlEditorOptions.spellCheck},
                               fileMaxSize: 20 * 1024 * 1024,
                               events: {
+                                initialized: function() {
+                                  var editor = this;
+
+                                  tribute.attach(editor.el);
+
+                                  editor.events.on('keydown', function(e) {
+                                    if (e.which == FroalaEditor.KEYCODE.ENTER && tribute.isActive) {
+                                      return false;
+                                    }
+                                  }, true);
+                                },
                                 "paste.afterCleanup": function (clipboard_html) {
                                   // pasteされた内容にURLが含まれる場合はaタグに変換
                                   var content = self
