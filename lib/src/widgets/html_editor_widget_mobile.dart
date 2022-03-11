@@ -303,58 +303,6 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                               },
                             """;
                         }
-                        if (widget.callbacks!.onImageUpload != null) {
-                          summernoteCallbacks = summernoteCallbacks +
-                              """
-                              onImageUpload: function(files) {
-                                var reader = new FileReader();
-                                var base64 = "<an error occurred>";
-                                reader.onload = function (_) {
-                                  base64 = reader.result;
-                                  var newObject = {
-                                     'lastModified': files[0].lastModified,
-                                     'lastModifiedDate': files[0].lastModifiedDate,
-                                     'name': files[0].name,
-                                     'size': files[0].size,
-                                     'type': files[0].type,
-                                     'base64': base64
-                                  };
-                                  window.flutter_inappwebview.callHandler('onImageUpload', JSON.stringify(newObject));
-                                };
-                                reader.onerror = function (_) {
-                                  var newObject = {
-                                     'lastModified': files[0].lastModified,
-                                     'lastModifiedDate': files[0].lastModifiedDate,
-                                     'name': files[0].name,
-                                     'size': files[0].size,
-                                     'type': files[0].type,
-                                     'base64': base64
-                                  };
-                                  window.flutter_inappwebview.callHandler('onImageUpload', JSON.stringify(newObject));
-                                };
-                                reader.readAsDataURL(files[0]);
-                              },
-                            """;
-                        }
-                        if (widget.callbacks!.onImageUploadError != null) {
-                          summernoteCallbacks = summernoteCallbacks +
-                              """
-                                onImageUploadError: function(file, error) {
-                                  if (typeof file === 'string') {
-                                    window.flutter_inappwebview.callHandler('onImageUploadError', file, error);
-                                  } else {
-                                    var newObject = {
-                                       'lastModified': file.lastModified,
-                                       'lastModifiedDate': file.lastModifiedDate,
-                                       'name': file.name,
-                                       'size': file.size,
-                                       'type': file.type,
-                                    };
-                                    window.flutter_inappwebview.callHandler('onImageUploadError', JSON.stringify(newObject), error);
-                                  }
-                                },
-                            """;
-                        }
                       }
                       summernoteToolbar = summernoteToolbar + '],';
                       summernoteCallbacks = summernoteCallbacks + '}';
@@ -420,6 +368,13 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                     .unescapeHTML(clipboard_html);
                                   return content;
                                 },
+                                'contentChanged': function () {
+                                  // Do something here.
+                                  // this is the editor instance.
+                                  console.log('onChangeContent');
+                                  console.log(this.html.get(true));
+                                  window.flutter_inappwebview.callHandler('onChangeContent', this.html.get(true));
+                                }
                               },
                               ${widget.htmlEditorOptions.customOptions}
                               $summernoteCallbacks
@@ -838,13 +793,6 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
           handlerName: 'onBeforeCommand',
           callback: (contents) {
             c.onBeforeCommand!.call(contents.first.toString());
-          });
-    }
-    if (c.onChangeCodeview != null) {
-      widget.controller.editorController!.addJavaScriptHandler(
-          handlerName: 'onChangeCodeview',
-          callback: (contents) {
-            c.onChangeCodeview!.call(contents.first.toString());
           });
     }
     if (c.onDialogShown != null) {
