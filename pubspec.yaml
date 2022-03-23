@@ -6,7 +6,7 @@ homepage: https://github.com/tneotia/html-editor-enhanced
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
-  flutter: ">=2.2.0"
+  flutter: ">=2.10.0"
 
 dependencies:
   flutter:
@@ -17,16 +17,16 @@ dependencies:
   visibility_detector: ^0.2.2
   # plugin to get when the keyboard is hidden via back (Android)
   # or "done" (iOS) to reset the editor's height
-  flutter_keyboard_visibility: ^5.1.0
+  flutter_keyboard_visibility: ^5.2.0
   # plugin to show a color picker for foreground/highlight color
-  flex_color_picker: ^2.1.2
+  flex_color_picker: ^2.3.1
   # plugin to get files from filesystem
-  file_picker: ^4.2.0
+  file_picker: ^4.5.1
   # plugin to show a scrollable number picker for inserting tables
   numberpicker: ^2.1.1
   # plugin to allow dropdowns and dialogs to be interactable when displaying over the editor
   # related to https://github.com/flutter/flutter/issues/54027
-  pointer_interceptor: ^0.9.0+1
+  pointer_interceptor: ^0.9.3
   # plugin to help maintain effective Dart standards
   pedantic: ^1.11.1
   # plugin for @internal annotation
