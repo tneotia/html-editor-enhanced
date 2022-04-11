@@ -82,9 +82,10 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// [String] elements like "\n" to HTML elements.
   @override
   void setText(String text) {
-    text = _processHtml(html: text);
+    print("\$('#edit')[0]['data-froala.editor'].html.insert(\"$text\", true);");
     _evaluateJavascript(
-        source: "\$('#summernote-2').summernote('code', '$text');");
+        source:
+            "\$('#edit')[0]['data-froala.editor'].html.insert(\"$text\", true);");
   }
 
   /// Sets the editor to full-screen mode.
