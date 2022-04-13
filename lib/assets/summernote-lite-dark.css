@@ -8,9 +8,11 @@ input, select, textarea, .CodeMirror, .note-editable, [class^="note-icon-"], .ca
 button > b, button > code, button > var, button > kbd, button > samp, button > small, button > ins, button > del, button > p, button > i {
     color: #fff !important;
 }
+/*
 textarea:focus, input:focus, span, label, .note-status-output {
     color: #fff !important;
 }
+*/
 .note-icon-font {
 	color: #000 !important;
 }

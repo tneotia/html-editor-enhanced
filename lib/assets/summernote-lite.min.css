@@ -1421,15 +1421,15 @@ a.note-dropdown-item,a.note-dropdown-item:hover {
 }
 
 .note-editor .note-editing-area .note-editable table {
-  width: 100%;
+  /* width: 100%; */
   border-collapse: collapse;
 }
 
 .note-editor .note-editing-area .note-editable table td,.note-editor .note-editing-area .note-editable table th {
-  border: 1px solid #ececec;
+  /* border: 1px solid #ececec; */
   padding: 5px 3px;
 }
-
+/*
 .note-editor .note-editing-area .note-editable a {
   background-color: inherit;
   text-decoration: inherit;
@@ -1443,7 +1443,7 @@ a.note-dropdown-item,a.note-dropdown-item:hover {
   text-decoration: underline;
   outline: 0;
 }
-
+*/
 .note-editor .note-editing-area .note-editable figure {
   margin: 0;
 }
