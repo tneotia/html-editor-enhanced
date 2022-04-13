@@ -22,6 +22,7 @@ class HtmlEditorWidget extends StatefulWidget {
     required this.htmlToolbarOptions,
     required this.otherOptions,
     required this.initBC,
+    this.blockQuotedContent,
   }) : super(key: key);
 
   final HtmlEditorController controller;
@@ -31,6 +32,7 @@ class HtmlEditorWidget extends StatefulWidget {
   final HtmlToolbarOptions htmlToolbarOptions;
   final OtherOptions otherOptions;
   final BuildContext initBC;
+  final String? blockQuotedContent;
 
   @override
   _HtmlEditorWidgetWebState createState() => _HtmlEditorWidgetWebState();
@@ -456,6 +458,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         .replaceFirst('<!--darkCSS-->', darkCSS)
         .replaceFirst('<!--headString-->', headString)
         .replaceFirst('<!--summernoteScripts-->', summernoteScripts)
+        .replaceFirst('<!--blockQuotedContent-->', widget.blockQuotedContent ?? '')
         .replaceFirst('"jquery.min.js"',
             '"assets/packages/html_editor_enhanced/assets/jquery.min.js"')
         .replaceFirst('"summernote-lite.min.css"',
