@@ -377,6 +377,39 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
               } else if (data["type"].includes("getSelectedText")) {
                 window.parent.postMessage(JSON.stringify({"type": "toDart: getSelectedText", "text": window.getSelection().toString()}), "*");
               }
+              
+              if (data["type"].includes("insertSignature")) {
+                var nodeSignature = document.getElementsByClassName('tmail-signature');
+                if (nodeSignature.length <= 0) {
+                  var nodeEditor = document.getElementsByClassName('note-editable')[0];
+                  var tagTop = document.createElement('br');
+                  tagTop.setAttribute('class', 'tmail-break-tag');
+                  nodeEditor.appendChild(tagTop);
+                  var divSignature = document.createElement('div');
+                  divSignature.setAttribute('class', 'tmail-signature');
+                  divSignature.innerHTML = data['signature'];
+                  nodeEditor.appendChild(divSignature);
+                  var tagBottom = document.createElement('br');
+                  tagBottom.setAttribute('class', 'tmail-break-tag');
+                  nodeEditor.appendChild(tagBottom);
+                } else {
+                  nodeSignature[0].innerHTML = data['signature'];
+                }
+                
+                const contentsEditor = document.getElementsByClassName('note-editable')[0].innerHTML;
+                window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onChangeContent", "contents": contentsEditor}), "*");
+              }
+              
+              if (data["type"].includes("removeSignature")) {
+                var nodeSignature = document.getElementsByClassName('tmail-signature');
+                if (nodeSignature.length > 0) {
+                  nodeSignature[0].remove();
+                }
+                document.querySelectorAll(".tmail-break-tag").forEach(el => el.remove());
+
+                var contentsEditor = document.getElementsByClassName('note-editable')[0].innerHTML;
+                window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onChangeContent", "contents": contentsEditor}), "*");
+              }
               $userScripts
             }
           }

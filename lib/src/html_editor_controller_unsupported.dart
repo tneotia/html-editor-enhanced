@@ -171,4 +171,10 @@ class HtmlEditorController {
   /// Internal function to insert table on Web
   @internal
   void insertTable(String dimensions) {}
+
+  /// Insert signature for compose email
+  void insertSignature(String signature) {}
+
+  /// Remove signature from compose email
+  void removeSignature() {}
 }

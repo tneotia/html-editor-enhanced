@@ -288,4 +288,10 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Internal function to insert table on Web
   @override
   void insertTable(String dimensions) {}
+
+  @override
+  void insertSignature(String signature) {}
+
+  @override
+  void removeSignature() {}
 }
