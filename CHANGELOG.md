@@ -1,3 +1,14 @@
+## [2.5.0] - 2022-06-04
+* Support Flutter 3.0 (remove warnings) (@Cteq3132)
+* [BREAKING] Support modifying `foreColorSelected` and `backColorSelected` when using a custom dialog for font coloring
+   * If you are using a custom `updateStatus` function for the font coloring, that function is now defined as `updateStatus(Color)`
+* Added `disabled` parameter to automatically disable editor on initial load
+* Fixed white background color appearing sometimes when pressing backspace on text
+* Added `useHybridComposition` parameter in case devs want to disable this behavior (improves animations of app)
+* [WEB] Fixed editor height being 0 when `initialText` is `null` (@dab246)
+* Migrated example to Android embedding V2
+* Removed woff fonts to allow iOS App Store submissions
+
 ## [2.4.0] - 2021-10-30
 * Improved color picker
    * Added scrollable support to picker

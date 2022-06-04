@@ -113,7 +113,7 @@ More is on the way! File a feature request or contribute to the project if you'd
 
 ## Setup
 
-Add `html_editor_enhanced: ^2.4.0` as dependency to your pubspec.yaml.
+Add `html_editor_enhanced: ^2.5.0` as dependency to your pubspec.yaml.
 
 Make sure to declare internet support inside `AndroidManifest.xml`: `<uses-permission android:name="android.permission.INTERNET"/>`
 
