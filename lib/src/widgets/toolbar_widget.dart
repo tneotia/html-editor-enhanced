@@ -1046,10 +1046,12 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
             void updateStatus(Color? color) {
               setState(mounted, this.setState, () {
                 _colorSelected[index] = !_colorSelected[index];
-                if (color != null && t.getIcons()[index].icon == Icons.format_color_text) {
+                if (color != null &&
+                    t.getIcons()[index].icon == Icons.format_color_text) {
                   _foreColorSelected = color;
                 }
-                if (color != null && t.getIcons()[index].icon == Icons.format_color_fill) {
+                if (color != null &&
+                    t.getIcons()[index].icon == Icons.format_color_fill) {
                   _backColorSelected = color;
                 }
               });

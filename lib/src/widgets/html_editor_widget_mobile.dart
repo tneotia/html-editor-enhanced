@@ -150,7 +150,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                         useShouldOverrideUrlLoading: true,
                       ),
                       android: AndroidInAppWebViewOptions(
-                        useHybridComposition: widget.htmlEditorOptions.androidUseHybridComposition,
+                        useHybridComposition: widget
+                            .htmlEditorOptions.androidUseHybridComposition,
                         loadWithOverviewMode: true,
                       )),
                   initialUserScripts:
@@ -506,7 +507,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                 keyCode.first as int;
                           });
                       //disable editor if necessary
-                      if (widget.htmlEditorOptions.disabled && !callbacksInitialized) {
+                      if (widget.htmlEditorOptions.disabled &&
+                          !callbacksInitialized) {
                         widget.controller.disable();
                       }
                       //initialize callbacks

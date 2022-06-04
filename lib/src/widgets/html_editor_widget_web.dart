@@ -497,10 +497,12 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
               data['view'] == createdViewId &&
               widget.htmlEditorOptions.autoAdjustHeight) {
             final docHeight = data['height'] ?? actualHeight;
-            if ((docHeight != null && docHeight != actualHeight) && mounted && docHeight > 0) {
+            if ((docHeight != null && docHeight != actualHeight) &&
+                mounted &&
+                docHeight > 0) {
               setState(mounted, this.setState, () {
-                  actualHeight =
-                      docHeight + (toolbarKey.currentContext?.size?.height ?? 0);
+                actualHeight =
+                    docHeight + (toolbarKey.currentContext?.size?.height ?? 0);
               });
             }
           }

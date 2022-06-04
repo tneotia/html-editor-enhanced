@@ -277,8 +277,7 @@ class HtmlToolbarOptions {
   /// (true = continue with internal handler, false = do not use internal handler)
   ///
   /// If no interceptor is set, the plugin uses the internal handler.
-  final FutureOr<bool> Function(ButtonType, bool?, Function?)?
-      onButtonPressed;
+  final FutureOr<bool> Function(ButtonType, bool?, Function?)? onButtonPressed;
 
   /// Allows you to intercept any dropdown changes. The function passes the
   /// DropdownType enum, which tells you which dropdown was changed,
