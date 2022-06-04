@@ -26,11 +26,15 @@ dependencies:
   numberpicker: ^2.1.1
   # plugin to allow dropdowns and dialogs to be interactable when displaying over the editor
   # related to https://github.com/flutter/flutter/issues/54027
-  pointer_interceptor: ^0.9.3+2
+  # pinned to 0.9.1 because of issues with CanvasKit in the latest versions
+  pointer_interceptor: 0.9.1
   # plugin to help maintain effective Dart standards
   pedantic: ^1.11.1
   # plugin for @internal annotation
   meta: '>=1.0.0 <2.0.0'
+
+dependency_overrides:
+  pointer_interceptor: 0.9.1
 
 dev_dependencies:
   flutter_test:
@@ -51,8 +55,6 @@ flutter:
     - packages/html_editor_enhanced/jquery.min.js
     - packages/html_editor_enhanced/assets/font/summernote.eot
     - packages/html_editor_enhanced/assets/font/summernote.ttf
-    - packages/html_editor_enhanced/assets/font/summernote.woff
-    - packages/html_editor_enhanced/assets/font/summernote.woff2
     - packages/html_editor_enhanced/assets/plugins/summernote-at-mention/summernote-at-mention.js
   # This section identifies this Flutter project as a plugin project.
   # The 'pluginClass' and Android 'package' identifiers should not ordinarily
