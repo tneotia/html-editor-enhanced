@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -119,6 +118,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
           }
         },
         child: Container(
+          clipBehavior: Clip.antiAlias,
           height: docHeight + 10,
           decoration: widget.otherOptions.decoration,
           child: Column(
