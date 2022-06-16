@@ -1850,42 +1850,6 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                         return null;
                                       },
                                     ),
-                                    Row(
-                                      children: <Widget>[
-                                        SizedBox(
-                                          height: 48.0,
-                                          width: 24.0,
-                                          child: Checkbox(
-                                            value: openNewTab,
-                                            activeColor: Color(0xFF827250),
-                                            onChanged: (bool? value) {
-                                              setState(() {
-                                                openNewTab = value!;
-                                              });
-                                            },
-                                          ),
-                                        ),
-                                        ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                              primary: Theme.of(context)
-                                                  .dialogBackgroundColor,
-                                              padding: EdgeInsets.only(
-                                                  left: 5, right: 5),
-                                              elevation: 0.0),
-                                          onPressed: () {
-                                            setState(() {
-                                              openNewTab = !openNewTab;
-                                            });
-                                          },
-                                          child: Text('Open in new window',
-                                              style: TextStyle(
-                                                  color: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyText1
-                                                      ?.color)),
-                                        ),
-                                      ],
-                                    ),
                                   ]),
                             ),
                             actions: [
@@ -1956,55 +1920,69 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold)),
                                   SizedBox(height: 10),
-                                  TextFormField(
-                                      controller: filename,
-                                      readOnly: true,
-                                      decoration: InputDecoration(
-                                        prefixIcon: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                              primary: Theme.of(context)
-                                                  .dialogBackgroundColor,
-                                              padding: EdgeInsets.only(
-                                                  left: 5, right: 5),
-                                              elevation: 0.0),
-                                          onPressed: () async {
-                                            result = await FilePicker.platform
-                                                .pickFiles(
-                                              type: FileType.image,
-                                              withData: true,
-                                              allowedExtensions: widget
-                                                  .htmlToolbarOptions
-                                                  .imageExtensions,
-                                            );
-                                            if (result?.files.single.name !=
-                                                null) {
-                                              setState(() {
-                                                filename.text =
-                                                    result!.files.single.name;
-                                              });
-                                            }
-                                          },
-                                          child: Text('画像の選択',
-                                              style: TextStyle(
-                                                  color: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyText1
-                                                      ?.color)),
-                                        ),
-                                        suffixIcon: result != null
-                                            ? IconButton(
-                                                icon: Icon(Icons.close),
-                                                onPressed: () {
+                                  SizedBox(
+                                      height: 30,
+                                      width: 110,
+                                      child: TextFormField(
+                                          controller: filename,
+                                          readOnly: true,
+                                          decoration: InputDecoration(
+                                            prefixIcon: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  side: BorderSide(
+                                                    color: Colors.grey, //枠線!
+                                                    width: 1, //枠線！
+                                                  ),
+                                                  primary: Theme.of(context)
+                                                      .dialogBackgroundColor,
+                                                  padding: EdgeInsets.only(
+                                                      left: 5, right: 5),
+                                                  elevation: 0.0),
+                                              onPressed: () async {
+                                                result = await FilePicker
+                                                    .platform
+                                                    .pickFiles(
+                                                  type: FileType.image,
+                                                  withData: true,
+                                                  allowedExtensions: widget
+                                                      .htmlToolbarOptions
+                                                      .imageExtensions,
+                                                );
+                                                if (result?.files.single.name !=
+                                                    null) {
                                                   setState(() {
-                                                    result = null;
-                                                    filename.text = '';
+                                                    filename.text = result!
+                                                        .files.single.name;
                                                   });
-                                                })
-                                            : Container(height: 0, width: 0),
-                                        errorText: validateFailed,
-                                        errorMaxLines: 2,
-                                        border: InputBorder.none,
-                                      )),
+                                                }
+                                              },
+                                              child: Row(children: [
+                                                Icon(Icons.attach_file,
+                                                    color: Colors.grey,
+                                                    size: 20),
+                                                Text('画像の選択',
+                                                    style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyText1
+                                                            ?.color))
+                                              ]),
+                                            ),
+                                            suffixIcon: result != null
+                                                ? IconButton(
+                                                    icon: Icon(Icons.close),
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        result = null;
+                                                        filename.text = '';
+                                                      });
+                                                    })
+                                                : Container(
+                                                    height: 0, width: 0),
+                                            errorText: validateFailed,
+                                            errorMaxLines: 2,
+                                            border: InputBorder.none,
+                                          ))),
                                   SizedBox(height: 20),
                                   Text('URL',
                                       style: TextStyle(

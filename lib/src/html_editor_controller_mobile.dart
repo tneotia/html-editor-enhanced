@@ -185,13 +185,9 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Insert a link at the position of the cursor in the editor
   @override
   void insertLink(String text, String url, bool isNewWindow) {
-    _evaluateJavascript(source: """
-    \$('#summernote-2').summernote('createLink', {
-        text: "$text",
-        url: '$url',
-        isNewWindow: $isNewWindow
-      });
-    """);
+    _evaluateJavascript(
+        source:
+            "\$('#edit')[0]['data-froala.editor'].link.insert('$url', '$text', {'target': '_blank', 'rel': 'nofollow'});");
   }
 
   /// Clears the focus from the webview by hiding the keyboard, calling the
