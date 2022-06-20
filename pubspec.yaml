@@ -17,7 +17,7 @@ dependencies:
   visibility_detector: ^0.2.2
   # plugin to get when the keyboard is hidden via back (Android)
   # or "done" (iOS) to reset the editor's height
-  flutter_keyboard_visibility: ^5.1.0
+  flutter_keyboard_visibility: 5.3.0
   # plugin to show a color picker for foreground/highlight color
   flex_color_picker: ^2.1.2
   # plugin to get files from filesystem
@@ -54,6 +54,7 @@ flutter:
     - packages/html_editor_enhanced/assets/font/summernote.woff
     - packages/html_editor_enhanced/assets/font/summernote.woff2
     - packages/html_editor_enhanced/assets/plugins/summernote-at-mention/summernote-at-mention.js
+    - packages/html_editor_enhanced/assets/plugins/summernote-cleaner/summernote-cleaner.js
   # This section identifies this Flutter project as a plugin project.
   # The 'pluginClass' and Android 'package' identifiers should not ordinarily
   # be modified. They are used by the tooling to maintain consistency when

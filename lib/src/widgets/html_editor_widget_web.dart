@@ -6,6 +6,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:html_editor_enhanced/utils/plugins/summernote_at_mention.dart';
+import 'package:html_editor_enhanced/utils/plugins/summernote_cleaner.dart';
 import 'package:html_editor_enhanced/utils/utils.dart';
 import 'package:html_editor_enhanced/src/widgets/toolbar_widget.dart';
 // ignore: avoid_web_libraries_in_flutter
@@ -122,6 +124,33 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             }
           });
         }
+      }
+      if (p is SummernoteCleaner) {
+        summernoteCallbacks = summernoteCallbacks +
+            '''
+            \nsummernoteCleaner: {
+              getSuggestions: (value) => {
+                const mentions = ${p.getMentionsWeb()};
+                return mentions.filter((mention) => {
+                  return mention.includes(value);
+                });
+              },
+              onSelect: (value) => {
+                window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onSelectMention", "value": value}), "*");
+              },
+            },
+          ''';
+        // if (p.onSelect != null) {
+        //   html.window.onMessage.listen((event) {
+        //     var data = json.decode(event.data);
+        //     if (data['type'] != null &&
+        //         data['type'].contains('toDart:') &&
+        //         data['view'] == createdViewId &&
+        //         data['type'].contains('onSelectMention')) {
+        //       p.onSelect!.call(data['value']);
+        //     }
+        //   });
+        // }
       }
     }
     if (widget.callbacks != null) {

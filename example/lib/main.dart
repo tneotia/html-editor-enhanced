@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:html_editor_enhanced/utils/plugins/summernote_at_mention.dart';
+import 'package:html_editor_enhanced/utils/plugins/summernote_cleaner.dart';
 
 void main() => runApp(HtmlEditorExampleApp());
 
@@ -70,6 +72,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
               HtmlEditor(
                 controller: controller,
                 htmlEditorOptions: HtmlEditorOptions(
+                  darkMode: true,
                   hint: 'Your text here...',
                   shouldEnsureVisible: true,
                   //initialText: "<p>text content initial, if any</p>",
@@ -77,6 +80,13 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                 htmlToolbarOptions: HtmlToolbarOptions(
                   toolbarPosition: ToolbarPosition.aboveEditor, //by default
                   toolbarType: ToolbarType.nativeScrollable, //by default
+                  defaultToolbarButtons: [
+                    const FontButtons(
+                      clearAll: false,
+                      subscript: false,
+                      superscript: false,
+                    ),
+                  ],
                   onButtonPressed: (ButtonType type, bool? status,
                       Function()? updateStatus) {
                     print(
@@ -164,16 +174,18 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                 }),
                 plugins: [
                   SummernoteAtMention(
-                      getSuggestionsMobile: (String value) {
-                        var mentions = <String>['test1', 'test2', 'test3'];
-                        return mentions
-                            .where((element) => element.contains(value))
-                            .toList();
-                      },
-                      mentionsWeb: ['test1', 'test2', 'test3'],
-                      onSelect: (String value) {
-                        print(value);
-                      }),
+                    getSuggestionsMobile: (String value) {
+                      var mentions = <String>['test1', 'test2', 'test3'];
+                      return mentions
+                          .where((element) => element.contains(value))
+                          .toList();
+                    },
+                    mentionsWeb: ['test1', 'test2', 'test3'],
+                    onSelect: (String value) {
+                      print(value);
+                    },
+                  ),
+                  SummernoteCleaner.byDefault(),
                 ],
               ),
               Padding(
