@@ -1,5 +1,4 @@
 import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:html_editor_enhanced/src/widgets/toolbar_widget.dart';
 import 'package:meta/meta.dart';
 
 /// Fallback controller (should never be used)

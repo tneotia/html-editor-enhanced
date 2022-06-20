@@ -1,4 +1,5 @@
-import 'package:flutter/foundation.dart';
+export 'package:html_editor_enhanced/utils/plugins/summernote_at_mention.dart';
+export 'package:html_editor_enhanced/utils/plugins/summernote_cleaner.dart';
 
 /// Abstract class that all the plguin classes extend
 abstract class Plugins {

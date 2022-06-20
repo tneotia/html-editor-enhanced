@@ -10,11 +10,9 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:html_editor_enhanced/html_editor.dart'
     hide NavigationActionPolicy, UserScript, ContextMenu;
-import 'package:html_editor_enhanced/src/widgets/toolbar_widget.dart';
-import 'package:html_editor_enhanced/utils/plugins/summernote_at_mention.dart';
-import 'package:html_editor_enhanced/utils/plugins/summernote_cleaner.dart';
+
 import 'package:html_editor_enhanced/utils/utils.dart';
-import 'package:html_editor_enhanced/utils/plugins.dart';
+
 import 'package:visibility_detector/visibility_detector.dart';
 
 /// The HTML Editor widget itself, for mobile (uses InAppWebView)
@@ -325,9 +323,9 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                             summernoteCleanerOptions = '''
                               cleaner: {
                                 action: '${plugin.action}',
-                                keepTagContents: ${plugin.keepTagContents?.map((element) => '\'${element}\'').toList()},
-                                badTags: ${plugin.badTags?.map((element) => '\'${element}\'').toList()},
-                                badAttributes: ${plugin.badAttributes?.map((element) => '\'${element}\'').toList()},
+                                keepTagContents: ${plugin.keepTagContents?.map((element) => '\'$element\'').toList()},
+                                badTags: ${plugin.badTags?.map((element) => '\'$element\'').toList()},
+                                badAttributes: ${plugin.badAttributes?.map((element) => '\'$element\'').toList()},
                               },
                             ''';
                             // controller.addJavaScriptHandler(

@@ -6,10 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:html_editor_enhanced/utils/plugins/summernote_at_mention.dart';
-import 'package:html_editor_enhanced/utils/plugins/summernote_cleaner.dart';
 import 'package:html_editor_enhanced/utils/utils.dart';
-import 'package:html_editor_enhanced/src/widgets/toolbar_widget.dart';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 import 'package:html_editor_enhanced/utils/shims/dart_ui.dart' as ui;
