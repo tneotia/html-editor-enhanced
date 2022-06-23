@@ -1922,7 +1922,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                   SizedBox(height: 10),
                                   SizedBox(
                                       height: 30,
-                                      width: 110,
+                                      width: 130,
                                       child: TextFormField(
                                           controller: filename,
                                           readOnly: true,
@@ -1968,21 +1968,24 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                                             ?.color))
                                               ]),
                                             ),
-                                            suffixIcon: result != null
-                                                ? IconButton(
-                                                    icon: Icon(Icons.close),
-                                                    onPressed: () {
-                                                      setState(() {
-                                                        result = null;
-                                                        filename.text = '';
-                                                      });
-                                                    })
-                                                : Container(
-                                                    height: 0, width: 0),
-                                            errorText: validateFailed,
+                                            suffixIcon:
+                                                Container(height: 0, width: 0),
+                                            errorText: '',
                                             errorMaxLines: 2,
                                             border: InputBorder.none,
                                           ))),
+                                  if (filename.text != '')
+                                    Row(children: [
+                                      Text(filename.text),
+                                      IconButton(
+                                          icon: Icon(Icons.close),
+                                          onPressed: () {
+                                            setState(() {
+                                              result = null;
+                                              filename.text = '';
+                                            });
+                                          })
+                                    ]),
                                   SizedBox(height: 20),
                                   Text('URL',
                                       style: TextStyle(
@@ -2001,25 +2004,24 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                   ),
                                 ]),
                             actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text('Cancel'),
+                              ElevatedButton(
+                                child: const Text("Cancel"),
+                                style: ElevatedButton.styleFrom(
+                                    primary: Colors.red.shade400),
+                                onPressed: () => Navigator.pop(context),
                               ),
-                              TextButton(
+                              ElevatedButton(
                                 onPressed: () async {
                                   if (filename.text.isEmpty &&
                                       url.text.isEmpty) {
                                     setState(() {
-                                      validateFailed =
-                                          'Please either choose an image or enter an image URL!';
+                                      validateFailed = 'アップロードする画像が選択されていません。';
                                     });
                                   } else if (filename.text.isNotEmpty &&
                                       url.text.isNotEmpty) {
                                     setState(() {
                                       validateFailed =
-                                          'Please input either an image or an image URL, not both!';
+                                          '「ファイルから選択」と「URL」どちらも選択されています。';
                                     });
                                   } else if (filename.text.isNotEmpty &&
                                       result?.files.single.bytes != null) {
@@ -2435,7 +2437,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                                   });
                                                 })
                                             : Container(height: 0, width: 0),
-                                        errorText: validateFailed,
+                                        errorText: '',
                                         errorMaxLines: 2,
                                         border: InputBorder.none,
                                       )),
@@ -2468,14 +2470,13 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                   if (filename.text.isEmpty &&
                                       url.text.isEmpty) {
                                     setState(() {
-                                      validateFailed =
-                                          'Please either choose a file or enter a file URL!';
+                                      validateFailed = 'ファイルが選択されていません。';
                                     });
                                   } else if (filename.text.isNotEmpty &&
                                       url.text.isNotEmpty) {
                                     setState(() {
                                       validateFailed =
-                                          'Please input either a file or a file URL, not both!';
+                                          'ファイルから選択とURLでのアップロードがどちらも指定されています。どちらかのみ画像を指定してください。';
                                     });
                                   } else if (filename.text.isNotEmpty &&
                                       result?.files.single.bytes != null) {
