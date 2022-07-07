@@ -19,7 +19,7 @@ class HtmlEditorWidget extends StatefulWidget {
     Key? key,
     required this.controller,
     this.callbacks,
-    this.lang = 'en',
+    this.lang = 'ja',
     required this.plugins,
     required this.htmlEditorOptions,
     required this.htmlToolbarOptions,
@@ -337,18 +337,17 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                             );
                           };
                           new FroalaEditor("#edit", {
+                              language: 'ja',
                               quickInsertEnabled: false,
-                              attribution: false,
                               charCounterCount: false,
                               linkAlwaysBlank: true,
-                              pastePlain: true,
                               pasteDeniedAttrs: ["id", "style"],
                               pasteDeniedTags: ["h1", "h2", "h3", "h4", "header", "body"],
                               linkAutoPrefix: "https://",
                               placeholderText: "${widget.htmlEditorOptions.hint ?? ""}",
                               height: ${widget.otherOptions.height - (toolbarKey.currentContext?.size?.height ?? 0)},
                               attribution: false,
-                              spellCheck: ${widget.htmlEditorOptions.spellCheck},
+                              spellCheck: false,
                               fileMaxSize: 20 * 1024 * 1024,
                               events: {
                                 initialized: function() {
@@ -362,6 +361,10 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                     }
                                   }, true);
                                 },
+                                "paste.after": function () {
+                                  var editor = this;
+                                  editor.cursor.del();
+                                },
                                 "paste.afterCleanup": function (clipboard_html) {
                                   // pasteされた内容にURLが含まれる場合はaタグに変換
                                   var content = self
@@ -371,9 +374,9 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                 'contentChanged': function () {
                                   // Do something here.
                                   // this is the editor instance.
-                                  console.log('onChangeContent');
-                                  console.log(this.html.get(true));
                                   window.flutter_inappwebview.callHandler('onChangeContent', this.html.get(true));
+                                  var height = document.body.scrollHeight;
+                                  window.flutter_inappwebview.callHandler('setHeight', height);
                                 }
                               },
                               ${widget.htmlEditorOptions.customOptions}
