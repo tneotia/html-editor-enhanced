@@ -362,8 +362,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                   }, true);
                                 },
                                 "paste.after": function () {
-                                  var editor = this;
-                                  editor.cursor.del();
+                                  var height = document.body.scrollHeight;
+                                  window.flutter_inappwebview.callHandler('setHeight', height);
                                 },
                                 "paste.afterCleanup": function (clipboard_html) {
                                   // pasteされた内容にURLが含まれる場合はaタグに変換
@@ -375,8 +375,6 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                   // Do something here.
                                   // this is the editor instance.
                                   window.flutter_inappwebview.callHandler('onChangeContent', this.html.get(true));
-                                  var height = document.body.scrollHeight;
-                                  window.flutter_inappwebview.callHandler('setHeight', height);
                                 }
                               },
                               ${widget.htmlEditorOptions.customOptions}
