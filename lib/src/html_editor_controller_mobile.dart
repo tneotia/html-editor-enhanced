@@ -82,10 +82,11 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// [String] elements like "\n" to HTML elements.
   @override
   void setText(String text) {
-    print("\$('#edit')[0]['data-froala.editor'].html.insert(\"$text\", true);");
+    print(
+        """\$('#edit')[0]['data-froala.editor'].html.insert('$text', true);""");
     _evaluateJavascript(
         source:
-            "\$('#edit')[0]['data-froala.editor'].html.insert(\"$text\", true);");
+            """\$('#edit')[0]['data-froala.editor'].html.insert('$text', true);""");
   }
 
   /// Sets the editor to full-screen mode.
@@ -164,14 +165,15 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     html = _processHtml(html: html);
 
     _evaluateJavascript(
-        source: "\$('#edit')[0]['data-froala.editor'].html.insert('$html');");
+        source:
+            """\$('#edit')[0]['data-froala.editor'].html.insert('$html');""");
   }
 
   @override
   void insertTag(String className) {
     _evaluateJavascript(
         source:
-            "\$('#edit')[0]['data-froala.editor'].commands.exec('$className');");
+            """\$('#edit')[0]['data-froala.editor'].commands.exec('$className');""");
   }
 
   /// Insert a network image at the position of the cursor in the editor
