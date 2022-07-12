@@ -189,6 +189,7 @@ class HtmlToolbarOptions {
     this.toolbarItemHeight = 36,
     this.gridViewHorizontalSpacing = 5,
     this.gridViewVerticalSpacing = 5,
+    this.alignButton,
   });
 
   /// Allows you to set the allowed extensions when a user inserts an audio file
@@ -403,6 +404,9 @@ class HtmlToolbarOptions {
   final Color? buttonSelectedBorderColor;
   final BorderRadius? buttonBorderRadius;
   final double? buttonBorderWidth;
+  /// Align button toolbar
+  /// Only use when ToolbarType == nativeGrid
+  final Alignment? alignButton;
 }
 
 /// Other options such as the height of the widget and the decoration surrounding it
