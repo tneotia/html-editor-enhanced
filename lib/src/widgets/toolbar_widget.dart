@@ -91,6 +91,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   /// Tracks the expanded status of the toolbar
   bool _isExpanded = false;
 
+  /// 画像のアップロード中
+  bool _isSendingImage = false;
+
   @override
   void initState() {
     widget.controller.toolbar = this;
@@ -2012,6 +2015,10 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                               ),
                               ElevatedButton(
                                 onPressed: () async {
+                                  if (_isSendingImage) {
+                                    return;
+                                  }
+
                                   if (filename.text.isEmpty &&
                                       url.text.isEmpty) {
                                     setState(() {
@@ -2025,6 +2032,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     });
                                   } else if (filename.text.isNotEmpty &&
                                       result?.files.single.bytes != null) {
+                                    setState(() {
+                                      _isSendingImage = true;
+                                    });
                                     var base64Data = base64
                                         .encode(result!.files.single.bytes!);
                                     var proceed = await widget
@@ -2051,8 +2061,12 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     }
                                     Navigator.of(context).pop();
                                   }
+
+                                  setState(() {
+                                      _isSendingImage = false;
+                                  });
                                 },
-                                child: Text('OK'),
+                                child: _isSendingImage ? SizedBox(width: 20,height: 20, child: CircularProgressIndicator(color: Colors.white)) : Text('OK'),
                               )
                             ],
                           );
