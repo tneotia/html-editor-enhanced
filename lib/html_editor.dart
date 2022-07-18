@@ -34,7 +34,7 @@ enum NotificationType { info, warning, success, danger, plaintext }
 /// on the fly
 /// [summernote] - uses the default summernote buttons (no native controls and
 /// reduced feature support) //todo
-enum ToolbarType { nativeGrid, nativeScrollable, nativeExpandable }
+enum ToolbarType { nativeGrid, nativeScrollable, nativeExpandable, hide }
 
 /// Manages the position of the toolbar, whether above or below the editor
 /// [custom] - removes the toolbar. This is useful when you want to implement the
