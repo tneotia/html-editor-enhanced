@@ -25,6 +25,7 @@ class HtmlEditorOptions {
     this.webInitialScripts,
     this.shouldEnsureVisible = false,
     this.spellCheck = false,
+    this.customBodyCssStyle = '',
   });
 
   /// The editor will automatically adjust its height when the keyboard is active
@@ -124,6 +125,9 @@ class HtmlEditorOptions {
   ///
   /// Default value is false.
   final bool spellCheck;
+
+  /// Set css for body editor
+  final String customBodyCssStyle;
 }
 
 /// Options that modify the toolbar and its behavior
