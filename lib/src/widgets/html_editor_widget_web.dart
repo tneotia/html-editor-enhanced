@@ -251,6 +251,10 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
               if (data["type"].includes("setFullScreen")) {
                 \$("#summernote-2").summernote("fullscreen.toggle");
               }
+              if (data["type"].includes("isFullScreen")) {
+                var changed = \$('#summernote-2').summernote('fullscreen.isFullscreen');
+                window.parent.postMessage(JSON.stringify({"type": "toDart: isFullScreen", "value": changed}), "*");
+              }
               if (data["type"].includes("setFocus")) {
                 \$('#summernote-2').summernote('focus');
               }
@@ -262,6 +266,10 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
               }
               if (data["type"].includes("toggleCodeview")) {
                 \$('#summernote-2').summernote('codeview.toggle');
+              }
+              if (data["type"].includes("isActivatedCodeView")) {
+                var changed = \$('#summernote-2').summernote('codeview.isActivated');
+                window.parent.postMessage(JSON.stringify({"type": "toDart: isActivatedCodeView", "value": changed}), "*");
               }
               if (data["type"].includes("disable")) {
                 \$('#summernote-2').summernote('disable');

@@ -142,12 +142,18 @@ class HtmlEditorController {
   /// Sets the editor to full-screen mode.
   void setFullScreen() {}
 
+  /// isFullScreen mode in the Html editor
+  Future<bool> isFullScreen() => Future.value(false);
+
   /// Sets the text of the editor. Some pre-processing is applied to convert
   /// [String] elements like "\n" to HTML elements.
   void setText(String text) {}
 
   /// toggles the codeview in the Html editor
   void toggleCodeView() {}
+
+  /// isActivated the codeView in the Html editor
+  Future<bool> isActivatedCodeView() => Future.value(false);
 
   /// Undoes the last action
   void undo() {}

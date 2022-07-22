@@ -92,6 +92,16 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     _evaluateJavascriptWeb(data: {'type': 'toIframe: setFullScreen'});
   }
 
+  /// isFullScreen mode in the Html editor
+  @override
+  Future<bool> isFullScreen() async {
+    _evaluateJavascriptWeb(data: {'type': 'toIframe: isFullScreen'});
+    var e = await html.window.onMessage.firstWhere(
+        (element) => json.decode(element.data)['type'] == 'toDart: isFullScreen');
+    bool value = json.decode(e.data)['value'];
+    return value;
+  }
+
   /// Sets the focus to the editor.
   @override
   void setFocus() {
@@ -115,6 +125,16 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   @override
   void toggleCodeView() {
     _evaluateJavascriptWeb(data: {'type': 'toIframe: toggleCodeview'});
+  }
+
+  /// isActivated the codeView in the Html editor
+  @override
+  Future<bool> isActivatedCodeView() async {
+    _evaluateJavascriptWeb(data: {'type': 'toIframe: isActivatedCodeView'});
+    var e = await html.window.onMessage.firstWhere(
+        (element) => json.decode(element.data)['type'] == 'toDart: isActivatedCodeView');
+    bool isActivated = json.decode(e.data)['value'];
+    return isActivated;
   }
 
   /// disables the Html editor
