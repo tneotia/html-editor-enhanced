@@ -140,7 +140,6 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                         handlerName: 'FormatSettings',
                         callback: (e) {
                           var json = e[0] as Map<String, dynamic>;
-                          print(json);
                           if (widget.controller.toolbar != null) {
                             widget.controller.toolbar!.updateToolbar(json);
                           }
@@ -179,9 +178,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                     }
                     return NavigationActionPolicy.ALLOW;
                   },
-                  onConsoleMessage: (controller, message) {
-                    print(message.message);
-                  },
+                  onConsoleMessage: (controller, message) {},
                   onWindowFocus: (controller) async {
                     if (widget.htmlEditorOptions.shouldEnsureVisible &&
                         Scrollable.of(context) != null) {
@@ -308,34 +305,6 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       summernoteCallbacks = summernoteCallbacks + '}';
                       await controller.evaluateJavascript(source: """
                           const self = this;
-                          var tribute = new Tribute({
-                            values: ${jsonEncode(widget.htmlEditorOptions.mentionList)},
-                            selectTemplate: function(item) {
-                              //@のリストから選択時に挿入するためのtemplateを生成する
-                              return generateToHtml(
-                                item.original.value,
-                                item.original.icon,
-                                item.original.key,
-                                item.original.rank
-                              );
-                            }
-                          });
-
-                          function generateToHtml(uid, icon, name, rank) {
-                            return (
-                              '<ul class="to_userinfo fr-deletable"><li contenteditable="false"><span class="badge is_to" uid="' +
-                              uid +
-                              '">@</span> <img src="' +
-                              icon +
-                              '" alt="" class="user_proficon"> <a href="/user_profile/' +
-                              uid +
-                              '" class="username"> ' +
-                              name +
-                              "(" +
-                              rank +
-                              ")</a>さん</small></li></ul>"
-                            );
-                          };
                           new FroalaEditor("#edit", {
                               language: 'ja',
                               quickInsertEnabled: false,
@@ -352,18 +321,11 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                               events: {
                                 initialized: function() {
                                   var editor = this;
-
-                                  tribute.attach(editor.el);
-
-                                  editor.events.on('keydown', function(e) {
-                                    if (e.which == FroalaEditor.KEYCODE.ENTER && tribute.isActive) {
-                                      return false;
-                                    }
-                                  }, true);
                                 },
                                 "paste.after": function () {
                                   var height = document.body.scrollHeight;
                                   window.flutter_inappwebview.callHandler('setHeight', height);
+                                  window.flutter_inappwebview.callHandler('onPaste', 'fired');
                                 },
                                 "paste.afterCleanup": function (clipboard_html) {
                                   // pasteされた内容にURLが含まれる場合はaタグに変換
@@ -692,7 +654,6 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
 
   /// adds the callbacks set by the user into the scripts
   void addJSCallbacks(Callbacks c) {
-    print(c.toString());
     if (c.onBeforeCommand != null) {
       widget.controller.editorController!.evaluateJavascript(source: """
           \$('#summernote-2').on('summernote.before.command', function(_, contents) {
