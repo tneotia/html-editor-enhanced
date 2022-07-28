@@ -331,7 +331,44 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                   // pasteされた内容にURLが含まれる場合はaタグに変換
                                   var content = self
                                     .unescapeHTML(clipboard_html);
-                                  return content;
+
+                                  const htmlToNode = function (htmlStr) {
+                                    var getNodes = (str) =>
+                                      new DOMParser().parseFromString(str, "text/html").body.childNodes;
+                                    var controlsNodes = getNodes(htmlStr);
+
+                                    return controlsNodes;
+                                  }
+
+                                  const node = htmlToNode(content);
+
+                                  //余分なdivタグを削除する
+                                  const checkChildNode = function (node) {
+                                    for (let index = 0; index < node.children.length; index++) {
+                                      const childElement = node.children[index];
+                                      checkChildNode(childElement);
+                                    }
+
+                                    node.removeAttribute("style");
+                                    if (
+                                      node.parentNode.tagName == "DIV" &&
+                                      node.tagName == "DIV" &&
+                                      node.className == ""
+                                    ) {
+                                      const fragment = document.createDocumentFragment();
+                                      while (node.firstChild) {
+                                        fragment.appendChild(node.firstChild);
+                                      }
+                                      node.parentNode.replaceChild(fragment, node);
+                                    }
+                                  };
+                                  node.forEach((e) => {
+                                    checkChildNode(e);
+                                  });
+
+                                  return Array.from(node)
+                                    .map((e) => e.outerHTML)
+                                    .join("");
                                 },
                                 'contentChanged': function () {
                                   // Do something here.
