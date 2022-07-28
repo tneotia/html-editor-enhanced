@@ -349,7 +349,6 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                       checkChildNode(childElement);
                                     }
 
-                                    node.removeAttribute("style");
                                     if (
                                       node.parentNode.tagName == "DIV" &&
                                       node.tagName == "DIV" &&
