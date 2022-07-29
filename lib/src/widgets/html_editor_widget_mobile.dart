@@ -329,8 +329,16 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                 },
                                 "paste.afterCleanup": function (clipboard_html) {
                                   // pasteされた内容にURLが含まれる場合はaタグに変換
+                                  
                                   var content = self
-                                    .unescapeHTML(clipboard_html);
+                                    .unescapeHTML(clipboard_html).replace(
+                                      /<p>(https?:\/\/[-_.!~*'()a-zA-Z0-9;/?:@&=+\$,%#\u3000-\u30FE\u4E00-\u9FA0\uFF01-\uFFE3]+)<\/p>/g,
+                                      '<p><a href="\$1">\$1</a></p>'
+                                    );
+                                  content = content.replace(
+                                    /(^https?:\/\/[-_.!~*'()a-zA-Z0-9;/?:@&=+\$,%#\u3000-\u30FE\u4E00-\u9FA0\uFF01-\uFFE3]+)/g,
+                                    '<a href="\$1">\$1</a>'
+                                  );
 
                                   const htmlToNode = function (htmlStr) {
                                     var getNodes = (str) =>
