@@ -331,12 +331,13 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                   // pasteされた内容にURLが含まれる場合はaタグに変換
                                   
                                   var content = self
-                                    .unescapeHTML(clipboard_html).replace(
-                                      /<p>(https?:\/\/[-_.!~*'()a-zA-Z0-9;/?:@&=+\$,%#\u3000-\u30FE\u4E00-\u9FA0\uFF01-\uFFE3]+)<\/p>/g,
+                                    .unescapeHTML(clipboard_html);
+                                    content.replace(
+                                      /<p>(https?:\\/\\/[-_.!~*'()a-zA-Z0-9;/?:@&=+\$,%#\\u3000-\\u30FE\\u4E00-\\u9FA0\\uFF01-\\uFFE3]+)<\\/p>/g,
                                       '<p><a href="\$1">\$1</a></p>'
                                     );
                                   content = content.replace(
-                                    /(^https?:\/\/[-_.!~*'()a-zA-Z0-9;/?:@&=+\$,%#\u3000-\u30FE\u4E00-\u9FA0\uFF01-\uFFE3]+)/g,
+                                    /(^https?:\\/\\/[-_.!~*'()a-zA-Z0-9;/?:@&=+\$,%#\\u3000-\\u30FE\\u4E00-\\u9FA0\\uFF01-\\uFFE3]+)/g,
                                     '<a href="\$1">\$1</a>'
                                   );
 
@@ -633,6 +634,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                             KeyboardVisibilityController();
                         keyboardVisibilityController.onChange
                             .listen((bool visible) {
+                          // print('keyboard $visible');
                           if (!visible && mounted) {
                             controller.clearFocus();
                             resetHeight();
