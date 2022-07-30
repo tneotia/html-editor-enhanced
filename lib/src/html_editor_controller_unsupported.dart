@@ -117,6 +117,10 @@ class HtmlEditorController {
   /// This method will not do anything if [autoAdjustHeight] is turned off.
   void recalculateHeight() {}
 
+  /// Set the height of the editor scale with the height of the html content
+  /// Adapt the webview height to the height of the html content
+  void recalculateHeightWithNoScroll() {}
+
   /// Redoes the last action
   void redo() {}
 

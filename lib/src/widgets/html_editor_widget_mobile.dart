@@ -18,6 +18,7 @@ class HtmlEditorWidget extends StatefulWidget {
   HtmlEditorWidget({
     Key? key,
     required this.controller,
+    required this.onScrollToTop,
     this.callbacks,
     required this.plugins,
     required this.htmlEditorOptions,
@@ -26,6 +27,7 @@ class HtmlEditorWidget extends StatefulWidget {
   }) : super(key: key);
 
   final HtmlEditorController controller;
+  final VoidCallback onScrollToTop;
   final Callbacks? callbacks;
   final List<Plugins> plugins;
   final HtmlEditorOptions htmlEditorOptions;
@@ -45,6 +47,9 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
 
   /// The height of the document loaded in the editor
   late double docHeight;
+
+  /// The  initial height of the document loaded in the editor
+  late double initialdocHeight;
 
   /// The file path to the html code
   late String filePath;
@@ -67,6 +72,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
   @override
   void initState() {
     docHeight = widget.otherOptions.height;
+    initialdocHeight = widget.otherOptions.height;
+    print("initial doc height: $initialdocHeight");
     key = getRandString(10);
     if (widget.htmlEditorOptions.filePath != null) {
       filePath = widget.htmlEditorOptions.filePath!;
@@ -87,6 +94,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
 
   /// resets the height of the editor to the original height
   void resetHeight() async {
+    print("resetting height");
     if (mounted) {
       this.setState(() {
         docHeight = widget.otherOptions.height;
@@ -488,18 +496,45 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                             source:
                                 "var height = document.body.scrollHeight; window.flutter_inappwebview.callHandler('setHeight', height);");
                       }
+
+                      controller.addJavaScriptHandler(
+                          handlerName: 'recalculateHeightWithNoScroll',
+                          callback: (height) {
+                            print("initialdocHeight ${initialdocHeight}");
+                            print("height ${height.first}");
+                            if (height.first > initialdocHeight) {
+                              int newHeight = height.first - 22;
+                              setState(mounted, this.setState, () {
+                                docHeight =
+                                    double.tryParse(newHeight.toString()) ?? 0;
+                              });
+                            } else {
+                              docHeight = initialdocHeight;
+                            }
+                          });
                       //reset the editor's height if the keyboard disappears at any point
-                      if (widget.htmlEditorOptions.adjustHeightForKeyboard) {
-                        var keyboardVisibilityController =
-                            KeyboardVisibilityController();
-                        keyboardVisibilityController.onChange
-                            .listen((bool visible) {
-                          if (!visible && mounted) {
-                            controller.clearFocus();
-                            resetHeight();
+                      // if (widget.htmlEditorOptions.adjustHeightForKeyboard) {
+                      var keyboardVisibilityController =
+                          KeyboardVisibilityController();
+                      keyboardVisibilityController.onChange
+                          .listen((bool visible) async {
+                        if (!visible && mounted) {
+                          controller.clearFocus();
+                          await controller.evaluateJavascript(
+                              source:
+                                  "var height = document.querySelector('div.note-editable').scrollHeight; window.flutter_inappwebview.callHandler('recalculateHeightWithNoScroll', height);");
+                          // resetHeight();
+                        } else {
+                          if (mounted) {
+                            print("Keyboard opened");
+                            await controller.evaluateJavascript(
+                                source:
+                                    "var height = document.querySelector('div.note-editable').scrollHeight; window.flutter_inappwebview.callHandler('recalculateHeightWithNoScroll', height);");
+                            widget.onScrollToTop();
                           }
-                        });
-                      }
+                        }
+                      });
+                      // }
                       widget.controller.editorController!.addJavaScriptHandler(
                           handlerName: 'totalChars',
                           callback: (keyCode) {

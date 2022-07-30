@@ -6,6 +6,7 @@ class HtmlEditor extends StatelessWidget {
   HtmlEditor({
     Key? key,
     required this.controller,
+    required this.onScrollToTop,
     this.callbacks,
     this.htmlEditorOptions = const HtmlEditorOptions(),
     this.htmlToolbarOptions = const HtmlToolbarOptions(),
@@ -16,6 +17,9 @@ class HtmlEditor extends StatelessWidget {
   /// The controller that is passed to the widget, which allows multiple [HtmlEditor]
   /// widgets to be used on the same page independently.
   final HtmlEditorController controller;
+
+  /// Scroll to top callback
+  final VoidCallback onScrollToTop;
 
   /// Sets & activates Summernote's callbacks. See the functions available in
   /// [Callbacks] for more details.
