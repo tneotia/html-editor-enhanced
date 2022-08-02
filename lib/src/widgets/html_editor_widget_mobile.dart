@@ -350,10 +350,13 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                     });
 
                                     return Array.from(nodes)
-                                      .map((e) => e.outerHTML)
+                                      .map((e) => e.outerHTML ?? e.textContent)
                                       .join("");
                                   }
                                   const removeUnnecessaryDivRecursive = function(node) {
+                                    if (node.children === undefined) {
+                                      return;
+                                    }
                                     for (let index = 0; index < node.children.length; index++) {
                                       const childElement = node.children[index];
                                       removeUnnecessaryDivRecursive(childElement);
