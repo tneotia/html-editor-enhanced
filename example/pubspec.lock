@@ -96,7 +96,7 @@ packages:
       name: flutter_keyboard_visibility
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.2.0"
+    version: "5.3.0"
   flutter_keyboard_visibility_platform_interface:
     dependency: transitive
     description:
