@@ -1444,6 +1444,9 @@ a.note-dropdown-item, a.note-dropdown-item:hover {
     margin: 0;
     margin-left: 0.7rem;
 }
+.note-editor .note-editing-area .note-editable ul[data-type="taskList"] li {
+    margin: 4px 0;
+}
 
 .note-editor .note-editing-area .note-editable ul[data-type="taskList"] li[data-checked] {
     --checkbox-color: #047bf8;
@@ -1459,7 +1462,6 @@ ul[data-type="taskList"] li[data-checked] label {
 
 .note-editor .note-editing-area .note-editable
 ul[data-type="taskList"] li[data-checked] label span {
-    margin-top: 4.5px;
     width: 16px;
     height: 16px;
     border-radius: 4px;
@@ -1556,6 +1558,12 @@ ul[data-type="taskList"] li > div {
     flex: 1 1 auto;
 }
 
+
+.note-editor .note-editing-area .note-editable blockquote{
+    border-left: 3px solid #909090;
+    padding-left:15px;
+    margin: 1.5em 10px;
+}
 
 .note-editor .note-editing-area .note-editable .upbase-mention {
     color: #047bf8;
