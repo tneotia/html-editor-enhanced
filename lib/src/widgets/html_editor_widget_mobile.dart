@@ -5,7 +5,6 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:html_editor_enhanced/html_editor.dart'
@@ -24,6 +23,7 @@ class HtmlEditorWidget extends StatefulWidget {
     required this.htmlEditorOptions,
     required this.htmlToolbarOptions,
     required this.otherOptions,
+    this.focusScopeNode,
   }) : super(key: key);
 
   final HtmlEditorController controller;
@@ -33,7 +33,7 @@ class HtmlEditorWidget extends StatefulWidget {
   final HtmlEditorOptions htmlEditorOptions;
   final HtmlToolbarOptions htmlToolbarOptions;
   final OtherOptions otherOptions;
-
+  final FocusScopeNode? focusScopeNode;
   @override
   _HtmlEditorWidgetMobileState createState() => _HtmlEditorWidgetMobileState();
 }
@@ -69,6 +69,9 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
   /// the editor is focused much after its visibility changes
   double? cachedVisibleDecimal;
 
+  /// FocusScopeNode for the editor (focusNode of the editor should be focusScopeNode.next())
+  late FocusScopeNode focusScopeNode;
+
   @override
   void initState() {
     docHeight = widget.otherOptions.height;
@@ -83,6 +86,10 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
     } else {
       filePath = 'packages/html_editor_enhanced/assets/summernote.html';
     }
+
+    focusScopeNode = widget.focusScopeNode ??
+        FocusScopeNode(debugLabel: 'HtmlEditor Focus Scope');
+
     super.initState();
   }
 
@@ -107,10 +114,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        SystemChannels.textInput.invokeMethod('TextInput.hide');
-      },
+    return FocusScope.withExternalFocusNode(
+      focusScopeNode: focusScopeNode,
       child: VisibilityDetector(
         key: Key(key),
         onVisibilityChanged: (VisibilityInfo info) async {
@@ -188,6 +193,13 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                     print(message.message);
                   },
                   onWindowFocus: (controller) async {
+                    if (!focusScopeNode.hasFocus) {
+                      // get the scope focused
+                      focusScopeNode.requestFocus();
+                    }
+                    //the only children of the scope should be the editor
+                    focusScopeNode.nextFocus();
+
                     if (widget.htmlEditorOptions.shouldEnsureVisible &&
                         Scrollable.of(context) != null) {
                       await Scrollable.of(context)!.position.ensureVisible(

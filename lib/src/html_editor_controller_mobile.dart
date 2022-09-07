@@ -95,7 +95,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
   /// Sets the focus to the editor.
   @override
-  void setFocus() {
+  void setFocus() async {
     _evaluateJavascript(source: "\$('#summernote-2').summernote('focus');");
   }
 
