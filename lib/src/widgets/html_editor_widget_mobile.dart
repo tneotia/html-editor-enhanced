@@ -1,3 +1,5 @@
+// ignore_for_file: omit_local_variable_types
+
 import 'dart:async';
 import 'dart:collection';
 import 'dart:math';
@@ -112,6 +114,19 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
     }
   }
 
+  void focusEditor() {
+    double? pos = Scrollable.of(context)?.position.pixels;
+    if (!focusScopeNode.hasFocus) {
+      // get the scope focused
+      focusScopeNode.requestFocus();
+    }
+    //the only children of the scope should be the editor
+    focusScopeNode.nextFocus();
+
+    double? pos2 = Scrollable.of(context)?.position.pixels;
+    Scrollable.of(context)?.position.jumpTo(pos ?? 0);
+  }
+
   @override
   Widget build(BuildContext context) {
     return FocusScope.withExternalFocusNode(
@@ -193,60 +208,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                     print(message.message);
                   },
                   onWindowFocus: (controller) async {
-                    if (!focusScopeNode.hasFocus) {
-                      // get the scope focused
-                      focusScopeNode.requestFocus();
-                    }
-                    //the only children of the scope should be the editor
-                    focusScopeNode.nextFocus();
-
-                    if (widget.htmlEditorOptions.shouldEnsureVisible &&
-                        Scrollable.of(context) != null) {
-                      await Scrollable.of(context)!.position.ensureVisible(
-                            context.findRenderObject()!,
-                          );
-                    }
-                    if (widget.htmlEditorOptions.adjustHeightForKeyboard &&
-                        mounted &&
-                        !visibleStream.isClosed) {
-                      Future<void> setHeightJS() async {
-                        await controller.evaluateJavascript(source: """
-                                \$('div.note-editable').outerHeight(${max(docHeight - (toolbarKey.currentContext?.size?.height ?? 0), 30)});
-                                // from https://stackoverflow.com/a/67152280
-                                var selection = window.getSelection();
-                                if (selection.rangeCount) {
-                                  var firstRange = selection.getRangeAt(0);
-                                  if (firstRange.commonAncestorContainer !== document) {
-                                    var tempAnchorEl = document.createElement('br');
-                                    firstRange.insertNode(tempAnchorEl);
-                                    tempAnchorEl.scrollIntoView({
-                                      block: 'end',
-                                    });
-                                    tempAnchorEl.remove();
-                                  }
-                                }
-                              """);
-                      }
-
-                      /// this is a workaround so jumping between focus on different
-                      /// editable elements still resizes the editor
-                      if ((cachedVisibleDecimal ?? 0) > 0.1) {
-                        this.setState(() {
-                          docHeight = widget.otherOptions.height *
-                              cachedVisibleDecimal!;
-                        });
-                        await setHeightJS();
-                      }
-                      var visibleDecimal = await visibleStream.stream.first;
-                      var newHeight = widget.otherOptions.height;
-                      if (visibleDecimal > 0.1) {
-                        this.setState(() {
-                          docHeight = newHeight * visibleDecimal;
-                        });
-                        //todo add support for traditional summernote controls again?
-                        await setHeightJS();
-                      }
-                    }
+                    focusEditor();
                   },
                   onLoadStop:
                       (InAppWebViewController controller, Uri? uri) async {
@@ -504,49 +466,27 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                 });
                               }
                             });
-                        await controller.evaluateJavascript(
-                            source:
-                                "var height = document.body.scrollHeight; window.flutter_inappwebview.callHandler('setHeight', height);");
                       }
 
                       controller.addJavaScriptHandler(
                           handlerName: 'recalculateHeightWithNoScroll',
                           callback: (height) {
                             print("initialdocHeight ${initialdocHeight}");
+                            print("docheight ${docHeight}");
                             print("height ${height.first}");
                             if (height.first > initialdocHeight) {
                               int newHeight = height.first - 22;
-                              setState(mounted, this.setState, () {
-                                docHeight =
-                                    double.tryParse(newHeight.toString()) ?? 0;
-                              });
+                              if (newHeight > docHeight) {
+                                setState(mounted, this.setState, () {
+                                  docHeight = double.tryParse(
+                                          (newHeight + 500).toString()) ??
+                                      0;
+                                });
+                              }
                             } else {
                               docHeight = initialdocHeight;
                             }
                           });
-                      //reset the editor's height if the keyboard disappears at any point
-                      // if (widget.htmlEditorOptions.adjustHeightForKeyboard) {
-                      var keyboardVisibilityController =
-                          KeyboardVisibilityController();
-                      keyboardVisibilityController.onChange
-                          .listen((bool visible) async {
-                        if (!visible && mounted) {
-                          controller.clearFocus();
-                          await controller.evaluateJavascript(
-                              source:
-                                  "var height = document.querySelector('div.note-editable').scrollHeight; window.flutter_inappwebview.callHandler('recalculateHeightWithNoScroll', height);");
-                          // resetHeight();
-                        } else {
-                          if (mounted) {
-                            print("Keyboard opened");
-                            await controller.evaluateJavascript(
-                                source:
-                                    "var height = document.querySelector('div.note-editable').scrollHeight; window.flutter_inappwebview.callHandler('recalculateHeightWithNoScroll', height);");
-                            widget.onScrollToTop();
-                          }
-                        }
-                      });
-                      // }
                       widget.controller.editorController!.addJavaScriptHandler(
                           handlerName: 'totalChars',
                           callback: (keyCode) {
@@ -573,12 +513,6 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       controller.addJavaScriptHandler(
                           handlerName: 'onChangeContent',
                           callback: (contents) {
-                            if (widget.htmlEditorOptions.shouldEnsureVisible &&
-                                Scrollable.of(context) != null) {
-                              Scrollable.of(context)!.position.ensureVisible(
-                                    context.findRenderObject()!,
-                                  );
-                            }
                             if (widget.callbacks != null &&
                                 widget.callbacks!.onChangeContent != null) {
                               widget.callbacks!.onChangeContent!
