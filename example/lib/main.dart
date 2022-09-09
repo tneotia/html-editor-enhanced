@@ -180,7 +180,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                             .where((element) => element.contains(value))
                             .toList();
                       },
-                      variablesWeb: ['test1', 'test2', 'test3', 'toast1'],
+                      variablesWeb: [' test1 }}', ' test2 }}', ' test3 }}', ' toast1 }}'],
                       onSelect: (String value) {
                         print(value);
                       }),
