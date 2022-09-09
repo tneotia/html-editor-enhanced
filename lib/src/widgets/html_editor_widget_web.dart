@@ -98,7 +98,36 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     var maximumFileSize = 10485760;
     for (var p in widget.plugins) {
       headString = headString + p.getHeadString() + '\n';
+      if (p is SummernoteCurlyBraceInsertion) {
+        debugPrint("adding SummernoteCurlyBraceInsertion");
+        summernoteCallbacks = summernoteCallbacks +
+            '''
+            \nsummernoteCurlyBraceInsertion: {
+              getVariables: (value) => {
+                const variables = ${p.getVariablesWeb()};
+                return variables.filter((variable) => {
+                  return variable.includes(value);
+                });
+              },
+              onSelect: (value) => {
+                window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onSelectVariable", "value": value}), "*");
+              },
+            },
+          ''';
+        if (p.onSelect != null) {
+          html.window.onMessage.listen((event) {
+            var data = json.decode(event.data);
+            if (data['type'] != null &&
+                data['type'].contains('toDart:') &&
+                data['view'] == createdViewId &&
+                data['type'].contains('onSelectVariable')) {
+              p.onSelect!.call(data['value']);
+            }
+          });
+        }
+      }
       if (p is SummernoteAtMention) {
+        debugPrint("adding SummernoteAtMention");
         summernoteCallbacks = summernoteCallbacks +
             '''
             \nsummernoteAtMention: {
@@ -648,6 +677,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
       callbacks = callbacks +
           """
           \$('#summernote-2').on('summernote.keydown', function(_, e) {
+            console.error("summernote.keydown");
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onKeyDown", "keyCode": e.keyCode}), "*");
           });\n
         """;

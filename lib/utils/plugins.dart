@@ -51,3 +51,44 @@ class SummernoteAtMention extends Plugins {
     return mentionsString + ']';
   }
 }
+
+/// Summernote  Mention plugin - adds a dropdown to select the person to mention whenever
+/// the '@' character is typed into the editor. The list of people to mention is
+/// drawn from the [getSuggestionsMobile] (on mobile) or [mentionsWeb] (on Web)
+/// parameter. You can detect who was mentioned using the [onSelect] callback.
+///
+/// README available [here](https://github.com/team-loxo/summernote-at-mention)
+class SummernoteCurlyBraceInsertion extends Plugins {
+  /// Function used to get the displayed suggestions on mobile
+  final List<String> Function(String)? getVariablesMobile;
+
+  /// List of mentions to display on Web. The default behavior is to only return
+  /// the mentions containing the string entered by the user in the editor
+  final List<String>? variablesWeb;
+
+  /// Callback to run code when a mention is selected
+  final void Function(String)? onSelect;
+
+  const SummernoteCurlyBraceInsertion(
+      {this.getVariablesMobile, this.variablesWeb, this.onSelect})
+      : assert(kIsWeb ? variablesWeb != null : getVariablesMobile != null);
+
+  @override
+  String getHeadString() {
+    return '<script src=\"assets/packages/html_editor_enhanced/assets/plugins/summernote-curly-brace-insertion/summernote-curly-brace-insertion.js\"></script>';
+  }
+
+  @override
+  String getToolbarString() {
+    return '';
+  }
+
+  String getVariablesWeb() {
+    var variablesString = '[';
+    for (var e in variablesWeb!) {
+      variablesString =
+          variablesString + "'$e'" + (e != variablesWeb!.last ? ', ' : '');
+    }
+    return variablesString   + ']';
+  }
+}

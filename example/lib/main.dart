@@ -164,12 +164,23 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                 plugins: [
                   SummernoteAtMention(
                       getSuggestionsMobile: (String value) {
+                        var mentions = <String>['test1', 'test2', 'test3', 'taste1'];
+                        return mentions
+                            .where((element) => element.contains(value))
+                            .toList();
+                      },
+                      mentionsWeb: ['test1', 'test2', 'test3', 'taste1'],
+                      onSelect: (String value) {
+                        print(value);
+                      }),
+                  SummernoteCurlyBraceInsertion(
+                      getVariablesMobile: (String value) {
                         var mentions = <String>['test1', 'test2', 'test3'];
                         return mentions
                             .where((element) => element.contains(value))
                             .toList();
                       },
-                      mentionsWeb: ['test1', 'test2', 'test3'],
+                      variablesWeb: ['test1', 'test2', 'test3', 'toast1'],
                       onSelect: (String value) {
                         print(value);
                       }),

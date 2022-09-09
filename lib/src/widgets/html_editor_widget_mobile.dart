@@ -271,6 +271,37 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                   : p.getToolbarString().isNotEmpty
                                       ? ', '
                                       : '');
+                          if (p is SummernoteCurlyBraceInsertion) {
+                            summernoteCallbacks = summernoteCallbacks +
+                                """
+                              \nsummernoteCurlyBraceInsertion: {
+                                getVariables: async function(value) {
+                                  var result = await window.flutter_inappwebview.callHandler('getVariables', value);
+                                  var resultList = result.split(',');
+                                  return resultList;
+                                },
+                                onSelect: (value) => {
+                                  window.flutter_inappwebview.callHandler('onSelectVariable', value);
+                                },
+                              },
+                            """;
+                            controller.addJavaScriptHandler(
+                                handlerName: 'getVariables',
+                                callback: (value) {
+                                  return p.getVariablesMobile!
+                                      .call(value.first.toString())
+                                      .toString()
+                                      .replaceAll('[', '')
+                                      .replaceAll(']', '');
+                                });
+                            if (p.onSelect != null) {
+                              controller.addJavaScriptHandler(
+                                  handlerName: 'onSelectVariable',
+                                  callback: (value) {
+                                    p.onSelect!.call(value.first.toString());
+                                  });
+                            }
+                          }
                           if (p is SummernoteAtMention) {
                             summernoteCallbacks = summernoteCallbacks +
                                 """
