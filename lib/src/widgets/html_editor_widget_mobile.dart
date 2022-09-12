@@ -548,6 +548,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                               }
                             });
                       }
+                      await controller.injectCSSCode(
+                          source: 'blockquote { margin: 0 !important;}');
                     },
                   );
                 }),
