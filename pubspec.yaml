@@ -50,6 +50,7 @@ flutter:
     - packages/html_editor_enhanced/summernote-lite-dark.css
     - packages/html_editor_enhanced/summernote-lite.min.js
     - packages/html_editor_enhanced/jquery.min.js
+    - packages/html_editor_enhanced/common.js
     - packages/html_editor_enhanced/assets/font/summernote.eot
     - packages/html_editor_enhanced/assets/font/summernote.ttf
     - packages/html_editor_enhanced/assets/plugins/summernote-at-mention/summernote-at-mention.js
