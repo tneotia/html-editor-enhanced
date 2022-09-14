@@ -1,4 +1,9 @@
 # Flutter Html Editor - Enhanced
+
+# Objective of this Fork
+
+The main objective of this fork is to add plugins supporting Jinja2 syntax for autocompletion.  The only supported Jinja2 syntax thus far is for the **{{...}}** substitution.  It will also work with **Jinja2** macros.  The configuration of the plugin works exactly like the existing **SummernoteAtMention** plugin in that you specify a list of possible values.  The only advancement is to support a 2 character trigger of the selection/autocomplete list.
+
 [![pub package](https://img.shields.io/pub/v/html_editor_enhanced.svg)](https://pub.dev/packages/html_editor_enhanced)
 
 Flutter HTML Editor Enhanced is a text editor for Android, iOS, and Web to help write WYSIWYG HTML code with the Summernote JavaScript wrapper.
