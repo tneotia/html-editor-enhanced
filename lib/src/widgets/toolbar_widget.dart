@@ -77,7 +77,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   Color _foreColorSelected = Colors.black;
 
   /// Sets the selected item for the background color dialog
-  Color _backColorSelected = Colors.yellow;
+  Color _backColorSelected = Colors.transparent.withOpacity(0);
 
   /// Sets the selected item for the list style dropdown
   String? _listStyleSelectedItem;
@@ -190,11 +190,11 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
     if (colorList[1] != null && colorList[1]!.isNotEmpty) {
       setState(mounted, this.setState, () {
         _backColorSelected =
-            Color(int.parse(colorList[1]!, radix: 16) + 0xFF000000);
+            Color(int.parse(colorList[1]!, radix: 16) + 0x00000000);
       });
     } else {
       setState(mounted, this.setState, () {
-        _backColorSelected = Colors.yellow;
+        _backColorSelected = Colors.transparent.withOpacity(0);
       });
     }
     //check the list style if it matches one of the predetermined styles and update the toolbar
@@ -1079,7 +1079,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                     true;
                 if (proceed) {
                   widget.controller.execCommand('hiliteColor',
-                      argument: (Colors.yellow.value & 0xFFFFFF)
+                      argument: (Colors.transparent.withOpacity(0).value & Colors.transparent.withOpacity(0).value)
                           .toRadixString(16)
                           .padLeft(6, '0')
                           .toUpperCase());
@@ -1127,7 +1127,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                             runSpacing: 0,
                             borderRadius: 0,
                             wheelDiameter: 165,
-                            enableOpacity: false,
+                            enableOpacity: true,
                             showColorCode: true,
                             colorCodeHasColor: true,
                             pickersEnabled: <ColorPickerType, bool>{
@@ -1164,7 +1164,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                   if (t.getIcons()[index].icon ==
                                       Icons.format_color_fill) {
                                     setState(mounted, this.setState, () {
-                                      _backColorSelected = Colors.yellow;
+                                      _backColorSelected = Colors.transparent.withOpacity(0);
                                     });
                                     widget.controller.execCommand(
                                         'removeFormat',
