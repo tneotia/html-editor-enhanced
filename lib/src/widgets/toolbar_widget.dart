@@ -1079,7 +1079,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                     true;
                 if (proceed) {
                   widget.controller.execCommand('hiliteColor',
-                      argument: (Colors.transparent.value & 0xFFFFFF)
+                      argument: (Colors.transparent.value & Colors.transparent.value)
                           .toRadixString(16)
                           .padLeft(6, '0')
                           .toUpperCase());
