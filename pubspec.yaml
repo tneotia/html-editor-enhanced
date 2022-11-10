@@ -27,7 +27,7 @@ dependencies:
   # plugin to allow dropdowns and dialogs to be interactable when displaying over the editor
   # related to https://github.com/flutter/flutter/issues/54027
   # pinned to 0.9.1 because of issues with CanvasKit in the latest versions
-  pointer_interceptor: ^0.9.3+3
+  pointer_interceptor: 0.9.1
   # plugin to help maintain effective Dart standards
   pedantic: ^1.11.1
   # plugin for @internal annotation
