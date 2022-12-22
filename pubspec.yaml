@@ -44,12 +44,12 @@ dev_dependencies:
 flutter:
 
   assets:
-    - packages/html_editor_enhanced/summernote.html
-    - packages/html_editor_enhanced/summernote-no-plugins.html
-    - packages/html_editor_enhanced/summernote-lite.min.css
-    - packages/html_editor_enhanced/summernote-lite-dark.css
-    - packages/html_editor_enhanced/summernote-lite.min.js
-    - packages/html_editor_enhanced/jquery.min.js
+    - packages/html_editor_enhanced/assets/summernote.html
+    - packages/html_editor_enhanced/assets/summernote-no-plugins.html
+    - packages/html_editor_enhanced/assets/summernote-lite.min.css
+    - packages/html_editor_enhanced/assets/summernote-lite-dark.css
+    - packages/html_editor_enhanced/assets/summernote-lite.min.js
+    - packages/html_editor_enhanced/assets/jquery.min.js
     - packages/html_editor_enhanced/assets/font/summernote.eot
     - packages/html_editor_enhanced/assets/font/summernote.ttf
     - packages/html_editor_enhanced/assets/plugins/summernote-at-mention/summernote-at-mention.js
