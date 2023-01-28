@@ -189,6 +189,7 @@ class HtmlToolbarOptions {
     this.toolbarItemHeight = 36,
     this.gridViewHorizontalSpacing = 5,
     this.gridViewVerticalSpacing = 5,
+    this.allowImagePicking = true,
   });
 
   /// Allows you to set the allowed extensions when a user inserts an audio file
@@ -403,6 +404,10 @@ class HtmlToolbarOptions {
   final Color? buttonSelectedBorderColor;
   final BorderRadius? buttonBorderRadius;
   final double? buttonBorderWidth;
+
+  /// Allow the user to choose an image from their device when
+  /// image selection is enabled.
+  final bool allowImagePicking;
 }
 
 /// Other options such as the height of the widget and the decoration surrounding it
