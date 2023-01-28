@@ -2038,8 +2038,10 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                   if (filename.text.isEmpty &&
                                       url.text.isEmpty) {
                                     setState(() {
-                                      validateFailed =
-                                          'Please either choose an image or enter an image URL!';
+                                      validateFailed = widget.htmlToolbarOptions
+                                              .allowImagePicking
+                                          ? 'Please either choose an image or enter an image URL!'
+                                          : 'Please enter an image URL!';
                                     });
                                   } else if (filename.text.isNotEmpty &&
                                       url.text.isNotEmpty) {
