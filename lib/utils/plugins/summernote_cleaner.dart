@@ -96,7 +96,6 @@ class SummernoteCleaner extends Plugins {
         SummernoteCleanerBadTags.title.name,
       ],
       badAttributes: [
-        'background-color',
         SummernoteCleanerBadAttributes.bgcolor.name,
         SummernoteCleanerBadAttributes.border.name,
         SummernoteCleanerBadAttributes.height.name,
