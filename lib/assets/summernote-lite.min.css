@@ -8,7 +8,7 @@
   font-weight: 400;
   font-display: auto;
   src: url(font/summernote.eot);
-  src: url(font/summernote.eot?#iefix) format("embedded-opentype"),url(font/summernote.woff2) format("woff2"),url(font/summernote.woff) format("woff"),url(font/summernote.ttf) format("truetype");
+  src: url(font/summernote.eot?#iefix) format("embedded-opentype"),url(font/summernote.ttf) format("truetype");
 }
 
 [class*=" note-icon"]:before,[class^=note-icon]:before {
@@ -934,8 +934,6 @@ a.note-dropdown-item,a.note-dropdown-item:hover {
 }
 
 .note-editor.note-airframe .note-editing-area .note-editable,.note-editor.note-frame .note-editing-area .note-editable {
-  background-color: #fff;
-  color: #000;
   padding: 10px;
   overflow: auto;
   word-wrap: break-word;

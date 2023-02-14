@@ -6,14 +6,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:html_editor_enhanced/html_editor.dart'
-    hide NavigationActionPolicy, UserScript, ContextMenu;
+import 'package:visibility_detector/visibility_detector.dart';
 
 import 'package:html_editor_enhanced/utils/utils.dart';
-
-import 'package:visibility_detector/visibility_detector.dart';
 
 /// The HTML Editor widget itself, for mobile (uses InAppWebView)
 class HtmlEditorWidget extends StatefulWidget {
@@ -152,7 +150,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                         useShouldOverrideUrlLoading: true,
                       ),
                       android: AndroidInAppWebViewOptions(
-                        useHybridComposition: true,
+                        useHybridComposition: widget
+                            .htmlEditorOptions.androidUseHybridComposition,
                         loadWithOverviewMode: true,
                       )),
                   initialUserScripts:
@@ -424,11 +423,11 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                               ${widget.htmlEditorOptions.customOptions}
                               $summernoteCallbacks
                           });
-                          
+
                           \$('#summernote-2').on('summernote.change', function(_, contents, \$editable) {
                             window.flutter_inappwebview.callHandler('onChangeContent', contents);
                           });
-                      
+
                           function onSelectionChange() {
                             let {anchorNode, anchorOffset, focusNode, focusOffset} = document.getSelection();
                             var isBold = false;
@@ -550,6 +549,11 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                             widget.controller.characterCount =
                                 keyCode.first as int;
                           });
+                      //disable editor if necessary
+                      if (widget.htmlEditorOptions.disabled &&
+                          !callbacksInitialized) {
+                        widget.controller.disable();
+                      }
                       //initialize callbacks
                       if (widget.callbacks != null && !callbacksInitialized) {
                         addJSCallbacks(widget.callbacks!);
