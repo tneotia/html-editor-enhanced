@@ -181,7 +181,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                   },
                   onWindowFocus: (controller) async {
                     if (widget.htmlEditorOptions.shouldEnsureVisible) {
-                      await Scrollable.of(context).position.ensureVisible(
+                      await Scrollable.of(context)!.position.ensureVisible(
                             context.findRenderObject()!,
                           );
                     }
@@ -569,7 +569,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                           handlerName: 'onChangeContent',
                           callback: (contents) {
                             if (widget.htmlEditorOptions.shouldEnsureVisible) {
-                              Scrollable.of(context).position.ensureVisible(
+                              Scrollable.of(context)!.position.ensureVisible(
                                     context.findRenderObject()!,
                                   );
                             }
