@@ -6,12 +6,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:html_editor_enhanced/src/widgets/toolbar_widget.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:visibility_detector/visibility_detector.dart';
-import 'package:html_editor_enhanced/utils/plugins.dart';
+import 'package:html_editor_enhanced/html_editor.dart'
+    hide NavigationActionPolicy, UserScript, ContextMenu;
 import 'package:html_editor_enhanced/utils/utils.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 /// The HTML Editor widget itself, for mobile (uses InAppWebView)
 class HtmlEditorWidget extends StatefulWidget {
@@ -180,9 +180,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                     print(message.message);
                   },
                   onWindowFocus: (controller) async {
-                    if (widget.htmlEditorOptions.shouldEnsureVisible &&
-                        Scrollable.of(context) != null) {
-                      await Scrollable.of(context)!.position.ensureVisible(
+                    if (widget.htmlEditorOptions.shouldEnsureVisible) {
+                      await Scrollable.of(context).position.ensureVisible(
                             context.findRenderObject()!,
                           );
                     }
@@ -569,9 +568,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       controller.addJavaScriptHandler(
                           handlerName: 'onChangeContent',
                           callback: (contents) {
-                            if (widget.htmlEditorOptions.shouldEnsureVisible &&
-                                Scrollable.of(context) != null) {
-                              Scrollable.of(context)!.position.ensureVisible(
+                            if (widget.htmlEditorOptions.shouldEnsureVisible) {
+                              Scrollable.of(context).position.ensureVisible(
                                     context.findRenderObject()!,
                                   );
                             }
