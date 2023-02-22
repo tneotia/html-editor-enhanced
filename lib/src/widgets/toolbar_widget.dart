@@ -472,6 +472,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
 
   List<Widget> _buildChildren() {
     var toolbarChildren = <Widget>[];
+    final strings = widget.htmlToolbarOptions.htmlEditorStrings;
     for (var t in widget.htmlToolbarOptions.defaultToolbarButtons) {
       if (t is StyleButtons && t.style) {
         toolbarChildren.add(Container(
@@ -507,7 +508,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               items: [
                 CustomDropdownMenuItem(
                     value: 'p',
-                    child: PointerInterceptor(child: Text(widget.htmlToolbarOptions.htmlEditorStrings!.normal ?? 'Failed'))),
+                    child: PointerInterceptor(child: Text(strings!.normal))),
                 CustomDropdownMenuItem(
                     value: 'blockquote',
                     child: PointerInterceptor(
@@ -517,9 +518,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                   left: BorderSide(
                                       color: Colors.grey, width: 3.0))),
                           padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Text('Quote',
+                          child: Text(strings.quote,
                               style: TextStyle(
-                                  fontFamily: 'times', color: Colors.grey))),
+                                  fontFamily: strings.fontTimesNewRoman, color: Colors.grey))),
                     )),
                 CustomDropdownMenuItem(
                     value: 'pre',
@@ -529,49 +530,49 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                               borderRadius: BorderRadius.circular(5),
                               color: Colors.grey),
                           padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Text('Code',
+                          child: Text(strings.code,
                               style: TextStyle(
-                                  fontFamily: 'courier', color: Colors.white))),
+                                  fontFamily: strings.fontCourierNew, color: Colors.white))),
                     )),
                 CustomDropdownMenuItem(
                   value: 'h1',
                   child: PointerInterceptor(
-                      child: Text('Header 1',
+                      child: Text(strings.headerOne,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 32))),
                 ),
                 CustomDropdownMenuItem(
                   value: 'h2',
                   child: PointerInterceptor(
-                      child: Text('Header 2',
+                      child: Text(strings.headerTwo,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 24))),
                 ),
                 CustomDropdownMenuItem(
                   value: 'h3',
                   child: PointerInterceptor(
-                      child: Text('Header 3',
+                      child: Text(strings.headerThree,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18))),
                 ),
                 CustomDropdownMenuItem(
                   value: 'h4',
                   child: PointerInterceptor(
-                      child: Text('Header 4',
+                      child: Text(strings.headerFour,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16))),
                 ),
                 CustomDropdownMenuItem(
                   value: 'h5',
                   child: PointerInterceptor(
-                      child: Text('Header 5',
+                      child: Text(strings.headerFive,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 13))),
                 ),
                 CustomDropdownMenuItem(
                   value: 'h6',
                   child: PointerInterceptor(
-                      child: Text('Header 6',
+                      child: Text(strings.headerSix,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 11))),
                 ),
@@ -643,19 +644,19 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   CustomDropdownMenuItem(
                     value: 'Courier New',
                     child: PointerInterceptor(
-                        child: Text('Courier New',
+                        child: Text(strings?.fontCourierNew ??'Courier',
                             style: TextStyle(fontFamily: 'Courier'))),
                   ),
                   CustomDropdownMenuItem(
                     value: 'sans-serif',
                     child: PointerInterceptor(
-                        child: Text('Sans Serif',
+                        child: Text(strings?.fontSansSerif ??'Sans Serif',
                             style: TextStyle(fontFamily: 'sans-serif'))),
                   ),
                   CustomDropdownMenuItem(
                     value: 'Times New Roman',
                     child: PointerInterceptor(
-                        child: Text('Times New Roman',
+                        child: Text(strings?.fontTimesNewRoman ??'Times New Roman',
                             style: TextStyle(fontFamily: 'Times'))),
                   ),
                 ],
@@ -1120,7 +1121,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                               newColor = color;
                             },
                             title: Text('Choose a Color',
-                                style: Theme.of(context).textTheme.headline6),
+                                style: Theme.of(context).textTheme.titleLarge),
                             width: 40,
                             height: 40,
                             spacing: 0,
@@ -1872,7 +1873,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .textTheme
-                                                      .bodyText1
+                                                      .bodyLarge
                                                       ?.color)),
                                         ),
                                       ],
@@ -1943,6 +1944,64 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  Text('Select from files',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  SizedBox(height: 10),
+                                  TextFormField(
+                                      controller: filename,
+                                      readOnly: true,
+                                      decoration: InputDecoration(
+                                        prefixIcon: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                              backgroundColor: Theme.of(context)
+                                                  .dialogBackgroundColor,
+                                              padding: EdgeInsets.only(
+                                                  left: 5, right: 5),
+                                              elevation: 0.0),
+                                          onPressed: () async {
+                                            result = await FilePicker.platform
+                                                .pickFiles(
+                                              type: FileType.image,
+                                              withData: true,
+                                              allowedExtensions: widget
+                                                  .htmlToolbarOptions
+                                                  .imageExtensions,
+                                            );
+                                            if (result?.files.single.name !=
+                                                null) {
+                                              setState(() {
+                                                filename.text =
+                                                    result!.files.single.name;
+                                              });
+                                            }
+                                          },
+                                          child: Text('Choose image',
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge
+                                                      ?.color)),
+                                        ),
+                                        suffixIcon: result != null
+                                            ? IconButton(
+                                                icon: Icon(Icons.close),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    result = null;
+                                                    filename.text = '';
+                                                  });
+                                                })
+                                            : Container(height: 0, width: 0),
+                                        errorText: validateFailed,
+                                        errorMaxLines: 2,
+                                        border: InputBorder.none,
+                                      )),
+                                  SizedBox(height: 20),
+                                  Text('URL',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  SizedBox(height: 10),
                                   if (widget
                                       .htmlToolbarOptions.allowImagePicking)
                                     Text('Select from files',
@@ -2146,7 +2205,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .textTheme
-                                                      .bodyText1
+                                                      .bodyLarge
                                                       ?.color)),
                                         ),
                                         suffixIcon: result != null
@@ -2298,7 +2357,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .textTheme
-                                                      .bodyText1
+                                                      .bodyLarge
                                                       ?.color)),
                                         ),
                                         suffixIcon: result != null
@@ -2450,7 +2509,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .textTheme
-                                                      .bodyText1
+                                                      .bodyLarge
                                                       ?.color)),
                                         ),
                                         suffixIcon: result != null
