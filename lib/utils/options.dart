@@ -405,8 +405,8 @@ class HtmlToolbarOptions {
   final BorderRadius? buttonBorderRadius;
   final double? buttonBorderWidth;
 
-  /// Allow the user to choose an image from their device when
-  /// image selection is enabled.
+  /// Allow the user to choose an image from their device when image selection
+  /// is enabled. Inserting images via URL will still be possible if this is false.
   final bool allowImagePicking;
 }
 
