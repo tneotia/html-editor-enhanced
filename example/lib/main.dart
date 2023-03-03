@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:file_picker/file_picker.dart';
 
-void main() => runApp(HtmlEditorExampleApp());
+void main() => runApp(const HtmlEditorExampleApp());
 
 class HtmlEditorExampleApp extends StatelessWidget {
+  const HtmlEditorExampleApp({Key? key}) : super(key: key);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -13,18 +15,18 @@ class HtmlEditorExampleApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(),
       darkTheme: ThemeData.dark(),
-      home: HtmlEditorExample(title: 'Flutter HTML Editor Example'),
+      home: const HtmlEditorExample(title: 'Flutter HTML Editor Example'),
     );
   }
 }
 
 class HtmlEditorExample extends StatefulWidget {
-  HtmlEditorExample({Key? key, required this.title}) : super(key: key);
+  const HtmlEditorExample({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _HtmlEditorExampleState createState() => _HtmlEditorExampleState();
+  State<HtmlEditorExample> createState() => _HtmlEditorExampleState();
 }
 
 class _HtmlEditorExampleState extends State<HtmlEditorExample> {
@@ -45,7 +47,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
           elevation: 0,
           actions: [
             IconButton(
-                icon: Icon(Icons.refresh),
+                icon: const Icon(Icons.refresh),
                 onPressed: () {
                   if (kIsWeb) {
                     controller.reloadWeb();
@@ -59,7 +61,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
           onPressed: () {
             controller.toggleCodeView();
           },
-          child: Text(r'<\>',
+          child: const Text(r'<\>',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         ),
         body: SingleChildScrollView(
@@ -68,7 +70,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
             children: <Widget>[
               HtmlEditor(
                 controller: controller,
-                htmlEditorOptions: HtmlEditorOptions(
+                htmlEditorOptions: const HtmlEditorOptions(
                   hint: 'Your text here...',
                   shouldEnsureVisible: true,
                   //initialText: "<p>text content initial, if any</p>",
@@ -101,7 +103,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     return true;
                   },
                 ),
-                otherOptions: OtherOptions(height: 550),
+                otherOptions: const OtherOptions(height: 550),
                 callbacks: Callbacks(onBeforeCommand: (String? currentHtml) {
                   print('html before change is $currentHtml');
                 }, onChangeContent: (String? changed) {
@@ -187,9 +189,9 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                         controller.undo();
                       },
                       child:
-                          Text('Undo', style: TextStyle(color: Colors.white)),
+                          const Text('Undo', style: TextStyle(color: Colors.white)),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 16,
                     ),
                     TextButton(
@@ -199,9 +201,9 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                         controller.clear();
                       },
                       child:
-                          Text('Reset', style: TextStyle(color: Colors.white)),
+                          const Text('Reset', style: TextStyle(color: Colors.white)),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 16,
                     ),
                     TextButton(
@@ -218,12 +220,12 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                           result = txt;
                         });
                       },
-                      child: Text(
+                      child: const Text(
                         'Submit',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 16,
                     ),
                     TextButton(
@@ -233,7 +235,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                       onPressed: () {
                         controller.redo();
                       },
-                      child: Text(
+                      child: const Text(
                         'Redo',
                         style: TextStyle(color: Colors.white),
                       ),
@@ -256,10 +258,10 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                       onPressed: () {
                         controller.disable();
                       },
-                      child: Text('Disable',
+                      child: const Text('Disable',
                           style: TextStyle(color: Colors.white)),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 16,
                     ),
                     TextButton(
@@ -269,7 +271,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                       onPressed: () async {
                         controller.enable();
                       },
-                      child: Text(
+                      child: const Text(
                         'Enable',
                         style: TextStyle(color: Colors.white),
                       ),
@@ -277,7 +279,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                   ],
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -290,10 +292,10 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                       onPressed: () {
                         controller.insertText('Google');
                       },
-                      child: Text('Insert Text',
+                      child: const Text('Insert Text',
                           style: TextStyle(color: Colors.white)),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 16,
                     ),
                     TextButton(
@@ -304,7 +306,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                         controller.insertHtml(
                             '''<p style="color: blue">Google in blue</p>''');
                       },
-                      child: Text('Insert HTML',
+                      child: const Text('Insert HTML',
                           style: TextStyle(color: Colors.white)),
                     ),
                   ],
@@ -323,12 +325,12 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                         controller.insertLink(
                             'Google linked', 'https://google.com', true);
                       },
-                      child: Text(
+                      child: const Text(
                         'Insert Link',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 16,
                     ),
                     TextButton(
@@ -340,7 +342,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                             'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png',
                             filename: 'Google network image');
                       },
-                      child: Text(
+                      child: const Text(
                         'Insert network image',
                         style: TextStyle(color: Colors.white),
                       ),
@@ -348,7 +350,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                   ],
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -362,9 +364,9 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                             'Info notification', NotificationType.info);
                       },
                       child:
-                          Text('Info', style: TextStyle(color: Colors.white)),
+                          const Text('Info', style: TextStyle(color: Colors.white)),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 16,
                     ),
                     TextButton(
@@ -374,10 +376,10 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                         controller.addNotification(
                             'Warning notification', NotificationType.warning);
                       },
-                      child: Text('Warning',
+                      child: const Text('Warning',
                           style: TextStyle(color: Colors.white)),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 16,
                     ),
                     TextButton(
@@ -388,12 +390,12 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                         controller.addNotification(
                             'Success notification', NotificationType.success);
                       },
-                      child: Text(
+                      child: const Text(
                         'Success',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 16,
                     ),
                     TextButton(
@@ -404,7 +406,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                         controller.addNotification(
                             'Danger notification', NotificationType.danger);
                       },
-                      child: Text(
+                      child: const Text(
                         'Danger',
                         style: TextStyle(color: Colors.white),
                       ),
@@ -412,7 +414,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                   ],
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -425,10 +427,10 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                         controller.addNotification('Plaintext notification',
                             NotificationType.plaintext);
                       },
-                      child: Text('Plaintext',
+                      child: const Text('Plaintext',
                           style: TextStyle(color: Colors.white)),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 16,
                     ),
                     TextButton(
@@ -438,7 +440,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                       onPressed: () async {
                         controller.removeNotification();
                       },
-                      child: Text(
+                      child: const Text(
                         'Remove',
                         style: TextStyle(color: Colors.white),
                       ),
