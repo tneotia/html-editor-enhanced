@@ -9,3 +9,15 @@ build/
 .flutter-plugins-dependencies
 
 pubspec.lock
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Visual Studio Code related
+.classpath
+.project
+.settings/
+.vscode/
