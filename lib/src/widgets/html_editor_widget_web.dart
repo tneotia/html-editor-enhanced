@@ -549,13 +549,15 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
               widget.callbacks!.onChangeContent!.call(data['contents']);
             }
 
-            final scrollableState = Scrollable.maybeOf(context);
-            if (widget.htmlEditorOptions.shouldEnsureVisible &&
-                scrollableState != null) {
-              scrollableState.position.ensureVisible(
-                  context.findRenderObject()!,
-                  duration: const Duration(milliseconds: 100),
-                  curve: Curves.easeIn);
+            if (mounted) {
+              final scrollableState = Scrollable.maybeOf(context);
+              if (widget.htmlEditorOptions.shouldEnsureVisible &&
+                  scrollableState != null) {
+                scrollableState.position.ensureVisible(
+                    context.findRenderObject()!,
+                    duration: const Duration(milliseconds: 100),
+                    curve: Curves.easeIn);
+              }
             }
           }
           if (data['type'] != null &&

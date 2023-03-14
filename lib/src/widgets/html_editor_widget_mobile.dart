@@ -181,11 +181,13 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                     }
                   },
                   onWindowFocus: (controller) async {
-                    final scrollableState = Scrollable.maybeOf(context);
-                    if (widget.htmlEditorOptions.shouldEnsureVisible &&
-                        scrollableState != null) {
-                      await scrollableState.position
-                          .ensureVisible(context.findRenderObject()!);
+                    if (mounted) {
+                      final scrollableState = Scrollable.maybeOf(context);
+                      if (widget.htmlEditorOptions.shouldEnsureVisible &&
+                          scrollableState != null) {
+                        await scrollableState.position
+                            .ensureVisible(context.findRenderObject()!);
+                      }
                     }
 
                     if (widget.htmlEditorOptions.adjustHeightForKeyboard &&
@@ -525,12 +527,15 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       controller.addJavaScriptHandler(
                           handlerName: 'onChangeContent',
                           callback: (contents) {
-                            final scrollableState = Scrollable.maybeOf(context);
-                            if (widget.htmlEditorOptions.shouldEnsureVisible &&
-                                scrollableState != null) {
-                              scrollableState.position
-                                  .ensureVisible(context.findRenderObject()!);
+                            if (mounted) {
+                              final scrollableState = Scrollable.maybeOf(context);
+                              if (widget.htmlEditorOptions.shouldEnsureVisible &&
+                                  scrollableState != null) {
+                                scrollableState.position
+                                    .ensureVisible(context.findRenderObject()!);
+                              }
                             }
+
                             if (widget.callbacks != null &&
                                 widget.callbacks!.onChangeContent != null) {
                               widget.callbacks!.onChangeContent!
