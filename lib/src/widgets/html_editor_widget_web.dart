@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:html_editor_enhanced/utils/javascript_utils.dart';
 import 'package:html_editor_enhanced/utils/utils.dart';
 
 // ignore: avoid_web_libraries_in_flutter
@@ -383,43 +384,14 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
               }
               
               if (data["type"].includes("insertSignature")) {
-                const nodeSignature = document.getElementsByClassName('tmail-signature');
-                if (nodeSignature.length <= 0) {
-                  const nodeEditor = document.getElementsByClassName('note-editable')[0];
-                  
-                  const paraElement = document.createElement("p");
-                  paraElement.setAttribute('id', 'tmail-editor');
-                  const spaceElement = document.createElement("br");
-                  paraElement.appendChild(spaceElement);
-
-                  const divSignature = document.createElement('div');
-                  divSignature.setAttribute('class', 'tmail-signature');
-                  divSignature.innerHTML = data['signature'];
-                  
-                  if (nodeEditor.children.length > 0) {
-                    nodeEditor.insertBefore(divSignature, nodeEditor.firstChild);
-                    nodeEditor.insertBefore(paraElement, nodeEditor.firstChild);
-                  } else {
-                    nodeEditor.appendChild(paraElement);
-                    nodeEditor.appendChild(divSignature);
-                  }
-                } else {
-                  nodeSignature[0].innerHTML = data['signature'];
-                }
-                
+                ${JavascriptUtils.jsHandleInsertSignature}
+               
                 const contentsEditor = document.getElementsByClassName('note-editable')[0].innerHTML;
                 window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onChangeContent", "contents": contentsEditor}), "*");
               }
               
               if (data["type"].includes("removeSignature")) {
-                const nodeSignature = document.getElementsByClassName('tmail-signature');
-                if (nodeSignature.length > 0) {
-                  nodeSignature[0].remove();
-                }
-                const nodeEditor = document.getElementById('tmail-editor');
-                if (nodeEditor != null) {
-                  nodeEditor.remove();
-                }
+                ${JavascriptUtils.jsHandleRemoveSignature}
 
                 const contentsEditor = document.getElementsByClassName('note-editable')[0].innerHTML;
                 window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onChangeContent", "contents": contentsEditor}), "*");
