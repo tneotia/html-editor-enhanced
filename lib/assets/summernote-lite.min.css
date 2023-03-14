@@ -1059,6 +1059,7 @@ a.note-dropdown-item,a.note-dropdown-item:hover {
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
   border-top: 1px solid #ddd;
+  display: none;
 }
 
 .note-editor.note-airframe .note-statusbar .note-resizebar,.note-editor.note-frame .note-statusbar .note-resizebar {
@@ -1066,16 +1067,19 @@ a.note-dropdown-item,a.note-dropdown-item:hover {
   height: 9px;
   width: 100%;
   cursor: ns-resize;
+  display: none;
 }
 
 .note-editor.note-airframe .note-statusbar .note-resizebar .note-icon-bar,.note-editor.note-frame .note-statusbar .note-resizebar .note-icon-bar {
   width: 20px;
   margin: 1px auto;
   border-top: 1px solid #a9a9a9;
+  display: none;
 }
 
 .note-editor.note-airframe .note-statusbar.locked .note-resizebar,.note-editor.note-frame .note-statusbar.locked .note-resizebar {
   cursor: default;
+  display: none;
 }
 
 .note-editor.note-airframe .note-statusbar.locked .note-resizebar .note-icon-bar,.note-editor.note-frame .note-statusbar.locked .note-resizebar .note-icon-bar {
