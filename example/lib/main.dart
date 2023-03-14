@@ -188,8 +188,8 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                       onPressed: () {
                         controller.undo();
                       },
-                      child:
-                          const Text('Undo', style: TextStyle(color: Colors.white)),
+                      child: const Text('Undo',
+                          style: TextStyle(color: Colors.white)),
                     ),
                     const SizedBox(
                       width: 16,
@@ -200,8 +200,8 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                       onPressed: () {
                         controller.clear();
                       },
-                      child:
-                          const Text('Reset', style: TextStyle(color: Colors.white)),
+                      child: const Text('Reset',
+                          style: TextStyle(color: Colors.white)),
                     ),
                     const SizedBox(
                       width: 16,
@@ -363,8 +363,8 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                         controller.addNotification(
                             'Info notification', NotificationType.info);
                       },
-                      child:
-                          const Text('Info', style: TextStyle(color: Colors.white)),
+                      child: const Text('Info',
+                          style: TextStyle(color: Colors.white)),
                     ),
                     const SizedBox(
                       width: 16,

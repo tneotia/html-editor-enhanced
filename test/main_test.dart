@@ -1,7 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('test main', () {
-
-  });
+  test('test main', () {});
 }

@@ -7,13 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/utils/utils.dart';
+
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 import 'package:html_editor_enhanced/utils/shims/dart_ui.dart' as ui;
 
 /// The HTML Editor widget itself, for web (uses IFrameElement)
 class HtmlEditorWidget extends StatefulWidget {
-  HtmlEditorWidget({
+  const HtmlEditorWidget({
     Key? key,
     required this.controller,
     this.callbacks,
@@ -35,7 +36,7 @@ class HtmlEditorWidget extends StatefulWidget {
   final String? blockQuotedContent;
 
   @override
-  _HtmlEditorWidgetWebState createState() => _HtmlEditorWidgetWebState();
+  State<HtmlEditorWidget> createState() => _HtmlEditorWidgetWebState();
 }
 
 /// State for the web Html editor widget
@@ -99,11 +100,10 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     ''';
     var maximumFileSize = 10485760;
     for (var p in widget.plugins) {
-      headString = headString + p.getHeadString() + '\n';
+      headString = '$headString${p.getHeadString()}\n';
       if (p is SummernoteAtMention) {
-        summernoteCallbacks = summernoteCallbacks +
-            '''
-            \nsummernoteAtMention: {
+        summernoteCallbacks =
+            '''$summernoteCallbacks            \nsummernoteAtMention: {
               getSuggestions: (value) => {
                 const mentions = ${p.getMentionsWeb()};
                 return mentions.filter((mention) => {
@@ -130,17 +130,15 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     }
     if (widget.callbacks != null) {
       if (widget.callbacks!.onImageLinkInsert != null) {
-        summernoteCallbacks = summernoteCallbacks +
-            '''
-          onImageLinkInsert: function(url) {
+        summernoteCallbacks =
+            '''$summernoteCallbacks          onImageLinkInsert: function(url) {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onImageLinkInsert", "url": url}), "*");
           },
         ''';
       }
       if (widget.callbacks!.onImageUpload != null) {
-        summernoteCallbacks = summernoteCallbacks +
-            """
-          onImageUpload: function(files) {
+        summernoteCallbacks =
+            """$summernoteCallbacks          onImageUpload: function(files) {
             var reader = new FileReader();
             var base64 = "<an error occurred>";
             reader.onload = function (_) {
@@ -171,9 +169,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         """;
       }
       if (widget.callbacks!.onImageUploadError != null) {
-        summernoteCallbacks = summernoteCallbacks +
-            """
-              onImageUploadError: function(file, error) {
+        summernoteCallbacks =
+            """$summernoteCallbacks              onImageUploadError: function(file, error) {
                 if (typeof file === 'string') {
                   window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onImageUploadError", "base64": file, "error": error}), "*");
                 } else {
@@ -183,13 +180,13 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             """;
       }
     }
-    summernoteCallbacks = summernoteCallbacks + '}';
+    summernoteCallbacks = '$summernoteCallbacks}';
     var darkCSS = '';
     if ((Theme.of(widget.initBC).brightness == Brightness.dark ||
             widget.htmlEditorOptions.darkMode == true) &&
         widget.htmlEditorOptions.darkMode != false) {
       darkCSS =
-          '<link href=\"assets/packages/html_editor_enhanced/assets/summernote-lite-dark.css\" rel=\"stylesheet\">';
+          '<link href="assets/packages/html_editor_enhanced/assets/summernote-lite-dark.css" rel="stylesheet">';
     }
     var jsCallbacks = '';
     if (widget.callbacks != null) {
@@ -197,15 +194,14 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     }
     var userScripts = '';
     if (widget.htmlEditorOptions.webInitialScripts != null) {
-      widget.htmlEditorOptions.webInitialScripts!.forEach((element) {
-        userScripts = userScripts +
-            '''
+      for (var element in widget.htmlEditorOptions.webInitialScripts!) {
+        userScripts = '''$userScripts
           if (data["type"].includes("${element.name}")) {
             ${element.script}
           }
-        ''' +
-            '\n';
-      });
+          \n
+        ''';
+      }
     }
     var summernoteScripts = """
       <script type="text/javascript">
@@ -509,8 +505,10 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         .replaceFirst('<!--darkCSS-->', darkCSS)
         .replaceFirst('<!--headString-->', headString)
         .replaceFirst('<!--summernoteScripts-->', summernoteScripts)
-        .replaceFirst('<!--customBodyCssStyle-->', widget.htmlEditorOptions.customBodyCssStyle)
-        .replaceFirst('<!--blockQuotedContent-->', widget.blockQuotedContent ?? '')
+        .replaceFirst('<!--customBodyCssStyle-->',
+            widget.htmlEditorOptions.customBodyCssStyle)
+        .replaceFirst(
+            '<!--blockQuotedContent-->', widget.blockQuotedContent ?? '')
         .replaceFirst('"jquery.min.js"',
             '"assets/packages/html_editor_enhanced/assets/jquery.min.js"')
         .replaceFirst('"summernote-lite.min.css"',
@@ -518,8 +516,16 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         .replaceFirst('"summernote-lite.min.js"',
             '"assets/packages/html_editor_enhanced/assets/summernote-lite.min.js"');
     if (widget.callbacks != null) addJSListener(widget.callbacks!);
+
+    final currentContextBC = widget.initBC;
+    String maxWidth;
+    if (currentContextBC.mounted) {
+      maxWidth = MediaQuery.of(currentContextBC).size.width.toString();
+    } else {
+      maxWidth = '800';
+    }
     final iframe = html.IFrameElement()
-      ..width = MediaQuery.of(widget.initBC).size.width.toString() //'800'
+      ..width = maxWidth
       ..height = widget.htmlEditorOptions.autoAdjustHeight
           ? actualHeight.toString()
           : widget.otherOptions.height.toString()
@@ -527,6 +533,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
       ..srcdoc = htmlString
       ..style.border = 'none'
       ..style.overflow = 'hidden'
+      ..style.width = '100%'
+      ..style.height = '100%'
       ..onLoad.listen((event) async {
         if (widget.htmlEditorOptions.disabled && !alreadyDisabled) {
           widget.controller.disable();
@@ -542,7 +550,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         data['view'] = createdViewId;
         var data2 = <String, Object>{'type': 'toIframe: setInputType'};
         data2['view'] = createdViewId;
-        final jsonEncoder = JsonEncoder();
+        const jsonEncoder = JsonEncoder();
         var jsonStr = jsonEncoder.convert(data);
         var jsonStr2 = jsonEncoder.convert(data2);
         html.window.onMessage.listen((event) {
@@ -570,11 +578,12 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             }
 
             final scrollableState = Scrollable.maybeOf(context);
-            if (widget.htmlEditorOptions.shouldEnsureVisible && scrollableState != null) {
+            if (widget.htmlEditorOptions.shouldEnsureVisible &&
+                scrollableState != null) {
               scrollableState.position.ensureVisible(
-                context.findRenderObject()!,
-                duration: const Duration(milliseconds: 100),
-                curve: Curves.easeIn);
+                  context.findRenderObject()!,
+                  duration: const Duration(milliseconds: 100),
+                  curve: Curves.easeIn);
             }
           }
           if (data['type'] != null &&
@@ -597,7 +606,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: widget.htmlEditorOptions.autoAdjustHeight
           ? actualHeight
           : widget.otherOptions.height,
@@ -610,7 +619,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                   controller: widget.controller,
                   htmlToolbarOptions: widget.htmlToolbarOptions,
                   callbacks: widget.callbacks)
-              : Container(height: 0, width: 0),
+              : const SizedBox(height: 0, width: 0),
           Expanded(
               child: Directionality(
                   textDirection: TextDirection.ltr,
@@ -635,7 +644,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                   controller: widget.controller,
                   htmlToolbarOptions: widget.htmlToolbarOptions,
                   callbacks: widget.callbacks)
-              : Container(height: 0, width: 0),
+              : const SizedBox(height: 0, width: 0),
         ],
       ),
     );
@@ -645,105 +654,92 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   String getJsCallbacks(Callbacks c) {
     var callbacks = '';
     if (c.onBeforeCommand != null) {
-      callbacks = callbacks +
-          """
-          \$('#summernote-2').on('summernote.before.command', function(_, contents, \$editable) {
+      callbacks =
+          """$callbacks          \$('#summernote-2').on('summernote.before.command', function(_, contents, \$editable) {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onBeforeCommand", "contents": contents}), "*");
           });\n
         """;
     }
     if (c.onChangeCodeview != null) {
-      callbacks = callbacks +
-          """
-          \$('#summernote-2').on('summernote.change.codeview', function(_, contents, \$editable) {
+      callbacks =
+          """$callbacks          \$('#summernote-2').on('summernote.change.codeview', function(_, contents, \$editable) {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onChangeCodeview", "contents": contents}), "*");
           });\n
         """;
     }
     if (c.onDialogShown != null) {
-      callbacks = callbacks +
-          """
-          \$('#summernote-2').on('summernote.dialog.shown', function() {
+      callbacks =
+          """$callbacks          \$('#summernote-2').on('summernote.dialog.shown', function() {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onDialogShown"}), "*");
           });\n
         """;
     }
     if (c.onEnter != null) {
-      callbacks = callbacks +
-          """
-          \$('#summernote-2').on('summernote.enter', function() {
+      callbacks =
+          """$callbacks          \$('#summernote-2').on('summernote.enter', function() {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onEnter"}), "*");
           });\n
         """;
     }
     if (c.onFocus != null) {
-      callbacks = callbacks +
-          """
-          \$('#summernote-2').on('summernote.focus', function() {
+      callbacks =
+          """$callbacks          \$('#summernote-2').on('summernote.focus', function() {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onFocus"}), "*");
           });\n
         """;
     }
     if (c.onBlur != null) {
-      callbacks = callbacks +
-          """
-          \$('#summernote-2').on('summernote.blur', function() {
+      callbacks =
+          """$callbacks          \$('#summernote-2').on('summernote.blur', function() {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onBlur"}), "*");
           });\n
         """;
     }
     if (c.onBlurCodeview != null) {
-      callbacks = callbacks +
-          """
-          \$('#summernote-2').on('summernote.blur.codeview', function() {
+      callbacks =
+          """$callbacks          \$('#summernote-2').on('summernote.blur.codeview', function() {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onBlurCodeview"}), "*");
           });\n
         """;
     }
     if (c.onKeyDown != null) {
-      callbacks = callbacks +
-          """
-          \$('#summernote-2').on('summernote.keydown', function(_, e) {
+      callbacks =
+          """$callbacks          \$('#summernote-2').on('summernote.keydown', function(_, e) {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onKeyDown", "keyCode": e.keyCode}), "*");
           });\n
         """;
     }
     if (c.onKeyUp != null) {
-      callbacks = callbacks +
-          """
-          \$('#summernote-2').on('summernote.keyup', function(_, e) {
+      callbacks =
+          """$callbacks          \$('#summernote-2').on('summernote.keyup', function(_, e) {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onKeyUp", "keyCode": e.keyCode}), "*");
           });\n
         """;
     }
     if (c.onMouseDown != null) {
-      callbacks = callbacks +
-          """
-          \$('#summernote-2').on('summernote.mousedown', function(_) {
+      callbacks =
+          """$callbacks          \$('#summernote-2').on('summernote.mousedown', function(_) {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onMouseDown"}), "*");
           });\n
         """;
     }
     if (c.onMouseUp != null) {
-      callbacks = callbacks +
-          """
-          \$('#summernote-2').on('summernote.mouseup', function(_) {
+      callbacks =
+          """$callbacks          \$('#summernote-2').on('summernote.mouseup', function(_) {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onMouseUp"}), "*");
           });\n
         """;
     }
     if (c.onPaste != null) {
-      callbacks = callbacks +
-          """
-          \$('#summernote-2').on('summernote.paste', function(_) {
+      callbacks =
+          """$callbacks          \$('#summernote-2').on('summernote.paste', function(_) {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onPaste"}), "*");
           });\n
         """;
     }
     if (c.onScroll != null) {
-      callbacks = callbacks +
-          """
-          \$('#summernote-2').on('summernote.scroll', function(_) {
+      callbacks =
+          """$callbacks          \$('#summernote-2').on('summernote.scroll', function(_) {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onScroll"}), "*");
           });\n
         """;

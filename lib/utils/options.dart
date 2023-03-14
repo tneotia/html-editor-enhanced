@@ -408,6 +408,7 @@ class HtmlToolbarOptions {
   final Color? buttonSelectedBorderColor;
   final BorderRadius? buttonBorderRadius;
   final double? buttonBorderWidth;
+
   /// Align button toolbar
   /// Only use when ToolbarType == nativeGrid
   final Alignment? alignButton;

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 /// HtmlEditor class for web
 class HtmlEditor extends StatelessWidget {
-  HtmlEditor({
+  const HtmlEditor({
     Key? key,
     required this.controller,
     this.callbacks,
@@ -54,7 +54,7 @@ class HtmlEditor extends StatelessWidget {
         blockQuotedContent: blockQuotedContent,
       );
     } else {
-      return Text(
+      return const Text(
           'Non-Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart');
     }
   }

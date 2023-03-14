@@ -96,8 +96,8 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   @override
   Future<bool> isFullScreen() async {
     _evaluateJavascriptWeb(data: {'type': 'toIframe: isFullScreen'});
-    var e = await html.window.onMessage.firstWhere(
-        (element) => json.decode(element.data)['type'] == 'toDart: isFullScreen');
+    var e = await html.window.onMessage.firstWhere((element) =>
+        json.decode(element.data)['type'] == 'toDart: isFullScreen');
     bool value = json.decode(e.data)['value'];
     return value;
   }
@@ -131,8 +131,8 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   @override
   Future<bool> isActivatedCodeView() async {
     _evaluateJavascriptWeb(data: {'type': 'toIframe: isActivatedCodeView'});
-    var e = await html.window.onMessage.firstWhere(
-        (element) => json.decode(element.data)['type'] == 'toDart: isActivatedCodeView');
+    var e = await html.window.onMessage.firstWhere((element) =>
+        json.decode(element.data)['type'] == 'toDart: isActivatedCodeView');
     bool isActivated = json.decode(e.data)['value'];
     return isActivated;
   }
@@ -338,7 +338,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   void _evaluateJavascriptWeb({required Map<String, Object?> data}) async {
     if (kIsWeb) {
       data['view'] = _viewId;
-      final jsonEncoder = JsonEncoder();
+      const jsonEncoder = JsonEncoder();
       var json = jsonEncoder.convert(data);
       html.window.postMessage(json, '*');
     } else {
@@ -349,7 +349,8 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
   @override
   void insertSignature(String signature) {
-    _evaluateJavascriptWeb(data: {'type': 'toIframe: insertSignature', 'signature': signature});
+    _evaluateJavascriptWeb(
+        data: {'type': 'toIframe: insertSignature', 'signature': signature});
   }
 
   @override

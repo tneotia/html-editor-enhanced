@@ -3,7 +3,7 @@ import 'package:html_editor_enhanced/html_editor.dart';
 
 /// Fallback HtmlEditor class (should never be called)
 class HtmlEditor extends StatelessWidget {
-  HtmlEditor({
+  const HtmlEditor({
     Key? key,
     required this.controller,
     this.callbacks,
@@ -39,6 +39,6 @@ class HtmlEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text('Unsupported in this environment');
+    return const Text('Unsupported in this environment');
   }
 }
