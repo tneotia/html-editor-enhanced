@@ -1,7 +1,7 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:file_picker/file_picker.dart';
 
 void main() => runApp(HtmlEditorExampleApp());
 
@@ -163,16 +163,18 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                 }),
                 plugins: [
                   SummernoteAtMention(
-                      getSuggestionsMobile: (String value) {
-                        var mentions = <String>['test1', 'test2', 'test3'];
-                        return mentions
-                            .where((element) => element.contains(value))
-                            .toList();
-                      },
-                      mentionsWeb: ['test1', 'test2', 'test3'],
-                      onSelect: (String value) {
-                        print(value);
-                      }),
+                    getSuggestionsMobile: (String value) {
+                      var mentions = <String>['test1', 'test2', 'test3'];
+                      return mentions
+                          .where((element) => element.contains(value))
+                          .toList();
+                    },
+                    mentionsWeb: ['test1', 'test2', 'test3'],
+                    onSelect: (String value) {
+                      print(value);
+                    },
+                  ),
+                  SummernoteCleaner.byDefault(),
                 ],
               ),
               Padding(

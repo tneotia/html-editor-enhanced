@@ -1,6 +1,8 @@
 name: html_editor_enhanced_example
 description: Demonstrates how to use the html_editor_enhanced plugin.
 
+version: 2.5.1
+
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev

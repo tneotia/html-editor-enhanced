@@ -53,6 +53,7 @@ flutter:
     - packages/html_editor_enhanced/assets/font/summernote.eot
     - packages/html_editor_enhanced/assets/font/summernote.ttf
     - packages/html_editor_enhanced/assets/plugins/summernote-at-mention/summernote-at-mention.js
+    - packages/html_editor_enhanced/assets/plugins/summernote-cleaner/summernote-cleaner.js
   # This section identifies this Flutter project as a plugin project.
   # The 'pluginClass' and Android 'package' identifiers should not ordinarily
   # be modified. They are used by the tooling to maintain consistency when

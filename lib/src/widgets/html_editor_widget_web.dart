@@ -125,6 +125,33 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           });
         }
       }
+      if (p is SummernoteCleaner) {
+        summernoteCallbacks = summernoteCallbacks +
+            '''
+            \nsummernoteCleaner: {
+              getSuggestions: (value) => {
+                const mentions = ${p.getMentionsWeb()};
+                return mentions.filter((mention) => {
+                  return mention.includes(value);
+                });
+              },
+              onSelect: (value) => {
+                window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onSelectMention", "value": value}), "*");
+              },
+            },
+          ''';
+        // if (p.onSelect != null) {
+        //   html.window.onMessage.listen((event) {
+        //     var data = json.decode(event.data);
+        //     if (data['type'] != null &&
+        //         data['type'].contains('toDart:') &&
+        //         data['view'] == createdViewId &&
+        //         data['type'].contains('onSelectMention')) {
+        //       p.onSelect!.call(data['value']);
+        //     }
+        //   });
+        // }
+      }
     }
     if (widget.callbacks != null) {
       if (widget.callbacks!.onImageLinkInsert != null) {
@@ -218,16 +245,16 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             ${widget.htmlEditorOptions.customOptions}
             $summernoteCallbacks
           });
-          
+
           \$('#summernote-2').on('summernote.change', function(_, contents, \$editable) {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onChangeContent", "contents": contents}), "*");
           });
         });
-       
+
         window.parent.addEventListener('message', handleMessage, false);
         document.onselectionchange = onSelectionChange;
         console.log('done');
-      
+
         function handleMessage(e) {
           if (e && e.data && e.data.includes("toIframe:")) {
             var data = JSON.parse(e.data);
@@ -324,7 +351,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                 \$('#summernote-2').summernote('lineHeight', data["changed"]);
               }
               if (data["type"].includes("changeTextDirection")) {
-                var s=document.getSelection();			
+                var s=document.getSelection();
                 if(s==''){
                     document.execCommand("insertHTML", false, "<p dir='"+data['direction']+"'></p>");
                 }else{
@@ -367,10 +394,10 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                 var range = window.getSelection().getRangeAt(0);
                 var content = range.cloneContents();
                 var span = document.createElement('span');
-                  
+
                 span.appendChild(content);
                 var htmlContent = span.innerHTML;
-                
+
                 window.parent.postMessage(JSON.stringify({"type": "toDart: getSelectedText", "text": htmlContent}), "*");
               } else if (data["type"].includes("getSelectedText")) {
                 window.parent.postMessage(JSON.stringify({"type": "toDart: getSelectedText", "text": window.getSelection().toString()}), "*");
@@ -379,7 +406,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             }
           }
         }
-        
+
         function onSelectionChange() {
           let {anchorNode, anchorOffset, focusNode, focusOffset} = document.getSelection();
           var isBold = false;
@@ -426,7 +453,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             fontName = document.queryCommandValue('fontName');
           }
           var message = {
-            'view': "$createdViewId", 
+            'view': "$createdViewId",
             'type': "toDart: updateToolbar",
             'style': parent,
             'fontName': fontName,
@@ -442,7 +469,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           };
           window.parent.postMessage(JSON.stringify(message), "*");
         }
-        
+
         $jsCallbacks
       </script>
     """;
