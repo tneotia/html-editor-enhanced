@@ -409,10 +409,6 @@ class HtmlToolbarOptions {
   final Color? buttonSelectedBorderColor;
   final BorderRadius? buttonBorderRadius;
   final double? buttonBorderWidth;
-
-  /// Allow the user to choose an image from their device when image selection
-  /// is enabled. Inserting images via URL will still be possible if this is false.
-  final bool allowImagePicking;
 }
 
 /// Other options such as the height of the widget and the decoration surrounding it
