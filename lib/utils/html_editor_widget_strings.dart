@@ -67,9 +67,9 @@ abstract class HtmlEditorStrings {
 
   String get onePointSix;
 
-  String get ThreePointZero;
+  String get threePointZero;
 
-  String get TwoPointZero;
+  String get twoPointZero;
 
   String get onePointEight;
 
@@ -260,10 +260,10 @@ class DefaultHtmlEditorStrings extends HtmlEditorStrings {
   String get onePointFive => '1.5';
 
   @override
-  String get ThreePointZero => '3.0';
+  String get threePointZero => '3.0';
 
   @override
-  String get TwoPointZero => '2.0';
+  String get twoPointZero => '2.0';
 
   @override
   String get onePointEight => '1.8';
