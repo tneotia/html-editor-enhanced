@@ -1553,10 +1553,10 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   ),
                   CustomDropdownMenuItem(
                     value: 2,
-                    child: PointerInterceptor(child: Text(strings.TwoPointZero)),
+                    child: PointerInterceptor(child: Text(strings.twoPointZero)),
                   ),
                   CustomDropdownMenuItem(
-                      value: 3, child: PointerInterceptor(child: Text(strings.ThreePointZero))),
+                      value: 3, child: PointerInterceptor(child: Text(strings.threePointZero))),
                 ],
                 value: _lineHeightSelectedItem,
                 onChanged: (double? changed) async {
@@ -2045,7 +2045,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                                 style: TextStyle(
                                                     color: Theme.of(context)
                                                         .textTheme
-                                                        .bodyText1
+                                                        .bodyLarge
                                                         ?.color)),
                                           ),
                                           suffixIcon: result != null
