@@ -60,6 +60,104 @@ abstract class HtmlEditorStrings {
   String get onePointZero;
 
   String get onePointFour;
+
+  String get onePointTwo;
+
+  String get onePointFive;
+
+  String get onePointSix;
+
+  String get ThreePointZero;
+
+  String get TwoPointZero;
+
+  String get onePointEight;
+
+  String get changeCase;
+
+  String get upperCase;
+
+  String get lowerCase;
+
+  String get sentenceCase;
+
+  String get titleCase;
+
+  String get insertLink;
+
+  String get textToDisplay;
+
+  String get text;
+
+  String get url;
+
+  String get openInNewWindow;
+
+  String get pleaseEnterUrl;
+
+  String get insertImage;
+
+  String get selectFromFiles;
+
+  String get chooseImage;
+
+  String get insertAudio;
+
+  String get chooseFile;
+
+  String get insertFile;
+
+  String get chooseVideo;
+
+  String get insertVideo;
+
+  String get chooseAudio;
+
+  String get insertTable;
+
+  String get unTab;
+
+  String get shiftPlusTab;
+
+  String get tab;
+
+  String get upperTab;
+
+  String get redoTheLastComment;
+
+  String get ctrlPlusY;
+
+  String get ctrlPlusZ;
+
+  String get undoTheLastCommand;
+
+  String get insertParagraph;
+
+  String get enter;
+
+  String get escape;
+
+  String get esc;
+
+  String get action;
+
+  String get keyCombination;
+
+  String get help;
+
+  String get close;
+
+  String get x;
+
+  String get pleaseEitherChooseAFileOrEnterAFileURL;
+
+  String get pleaseInputEitherAFileOrAFileURLNotBoth;
+
+  String get pleaseInputEitherAnImageOrAnImageURLNotBoth;
+
+  String get pleaseEnterAnImageURL;
+
+  String get pleaseEitherChooseAnImageOrEnterAnImageURL;
 }
 
 class DefaultHtmlEditorStrings extends HtmlEditorStrings {
@@ -155,4 +253,152 @@ class DefaultHtmlEditorStrings extends HtmlEditorStrings {
   @override
   String get onePointZero => '1.0';
 
+  @override
+  String get onePointTwo => '1.2';
+
+  @override
+  String get onePointFive => '1.5';
+
+  @override
+  String get ThreePointZero => '3.0';
+
+  @override
+  String get TwoPointZero => '2.0';
+
+  @override
+  String get onePointEight => '1.8';
+
+  @override
+  String get onePointSix => '1.6';
+
+  @override
+  String get changeCase => 'Change case';
+
+  @override
+  String get lowerCase => 'lowercase';
+
+  @override
+  String get sentenceCase => 'Sentence case';
+
+  @override
+  String get titleCase => 'Title Case';
+
+  @override
+  String get upperCase => 'UPPERCASE';
+
+  @override
+  String get insertLink => 'Insert Link';
+
+  @override
+  String get openInNewWindow => 'Open in new window';
+
+  @override
+  String get text => 'Text';
+
+  @override
+  String get textToDisplay => 'Text to display';
+
+  @override
+  String get url => 'URL';
+
+  @override
+  String get pleaseEnterUrl => 'Please enter a URL!';
+
+  @override
+  String get chooseImage => 'Choose image';
+
+  @override
+  String get insertImage => 'Insert Image';
+
+  @override
+  String get selectFromFiles => 'Select from files';
+
+  @override
+  String get chooseAudio => 'Choose audio';
+
+  @override
+  String get chooseFile => 'Choose file';
+
+  @override
+  String get chooseVideo => 'Choose video';
+
+  @override
+  String get insertAudio => 'Insert Audio';
+
+  @override
+  String get insertFile => 'Insert File';
+
+  @override
+  String get insertVideo => 'Insert Video';
+
+  @override
+  String get insertTable => 'Insert Table';
+
+  @override
+  String get action => 'Action';
+
+  @override
+  String get ctrlPlusY => 'CTRL+Y';
+
+  @override
+  String get ctrlPlusZ => 'CTRL+Z';
+
+  @override
+  String get enter => 'ENTER';
+
+  @override
+  String get esc => 'ESC';
+
+  @override
+  String get escape => 'Escape';
+
+  @override
+  String get help => 'Help';
+
+  @override
+  String get insertParagraph => 'Insert Paragraph';
+
+  @override
+  String get keyCombination => 'Key Combination';
+
+  @override
+  String get redoTheLastComment => 'Redo the last command';
+
+  @override
+  String get shiftPlusTab => 'SHIFT+TAB';
+
+  @override
+  String get tab => 'Tab';
+
+  @override
+  String get undoTheLastCommand => 'Undo the last command';
+
+  @override
+  String get unTab => 'Untab';
+
+  @override
+  String get upperTab => 'TAB';
+
+  @override
+  String get close => 'Close';
+
+  @override
+  String get x => 'x';
+
+  @override
+  String get pleaseEitherChooseAFileOrEnterAFileURL =>
+      'Please either choose a file or enter a file URL!';
+
+  @override
+  String get pleaseInputEitherAFileOrAFileURLNotBoth =>
+      'Please input either a file or a file URL, not both!';
+
+  @override
+  String get pleaseEitherChooseAnImageOrEnterAnImageURL => 'Please either choose an image or enter an image URL!';
+
+  @override
+  String get pleaseEnterAnImageURL => 'Please enter an image URL!';
+
+  @override
+  String get pleaseInputEitherAnImageOrAnImageURLNotBoth =>'Please input either an image or an image URL, not both!';
 }

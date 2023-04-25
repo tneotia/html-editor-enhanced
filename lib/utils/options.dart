@@ -191,7 +191,7 @@ class HtmlToolbarOptions {
     this.toolbarItemHeight = 36,
     this.gridViewHorizontalSpacing = 5,
     this.gridViewVerticalSpacing = 5,
-    this.htmlEditorStrings,
+    this.htmlEditorStrings = const DefaultHtmlEditorStrings(),
     this.allowImagePicking = true,
   });
 
@@ -382,7 +382,7 @@ class HtmlToolbarOptions {
   /// Styling options that only apply to dropdowns:
   /// (See the [DropdownButton] class for more information)
 
-  final HtmlEditorStrings? htmlEditorStrings;
+  final HtmlEditorStrings htmlEditorStrings;
 
   final int dropdownElevation;
   final Widget? dropdownIcon;
