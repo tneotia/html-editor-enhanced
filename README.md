@@ -169,21 +169,21 @@ Below, you will find brief descriptions of the parameters the `HtmlEditor` widge
 
 ### Parameters - `HtmlEditor`
 
-Parameter | Type | Default | Description
------------- | ------------- | ------------- | -------------
-**controller** | `HtmlEditorController` | empty | Required param. Create a controller instance and pass it to the widget. This ensures that any methods called work only on their `HtmlEditor` instance, allowing you to use multiple HTML widgets on one page.
-**callbacks** | `Callbacks` | empty | Customize the callbacks for various events
-**options** | `HtmlEditorOptions` | `HtmlEditorOptions()` | Class to set various options. See [below](#parameters---htmleditoroptions) for more details.
-**plugins** | `List<Plugins>` | empty | Customize what plugins are activated. See [below](#plugins) for more details.
-**toolbar** | `List<Toolbar>` | See the widget's constructor | Customize what buttons are shown on the toolbar, and in which order. See [below](#toolbar) for more details.
+| Parameter      | Type                   | Default                      | Description                                                                                                                                                                                                   |
+|----------------|------------------------|------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **controller** | `HtmlEditorController` | empty                        | Required param. Create a controller instance and pass it to the widget. This ensures that any methods called work only on their `HtmlEditor` instance, allowing you to use multiple HTML widgets on one page. |
+| **callbacks**  | `Callbacks`            | empty                        | Customize the callbacks for various events                                                                                                                                                                    |
+| **options**    | `HtmlEditorOptions`    | `HtmlEditorOptions()`        | Class to set various options. See [below](#parameters---htmleditoroptions) for more details.                                                                                                                  |
+| **plugins**    | `List<Plugins>`        | empty                        | Customize what plugins are activated. See [below](#plugins) for more details.                                                                                                                                 |
+| **toolbar**    | `List<Toolbar>`        | See the widget's constructor | Customize what buttons are shown on the toolbar, and in which order. See [below](#toolbar) for more details.                                                                                                  |
 
 ### Parameters - `HtmlEditorController`
 
-Parameter | Type | Default | Description
------------- | ------------- | ------------- | -------------
-**processInputHtml** | `bool` | `true` | Determines whether processing occurs on any input HTML (e.g. escape quotes, apostrophes, and remove `/n`s)
-**processNewLineAsBr** | `bool` | `false` | Determines whether a new line (`\n`) becomes a `<br/>` in any *input* HTML
-**processOutputHtml** | `bool` | `true` | Determines whether processing occurs on any output HTML (e.g. `<p><br/><p>` becomes `""`)
+| Parameter              | Type   | Default | Description                                                                                                |
+|------------------------|--------|---------|------------------------------------------------------------------------------------------------------------|
+| **processInputHtml**   | `bool` | `true`  | Determines whether processing occurs on any input HTML (e.g. escape quotes, apostrophes, and remove `/n`s) |
+| **processNewLineAsBr** | `bool` | `false` | Determines whether a new line (`\n`) becomes a `<br/>` in any *input* HTML                                 |
+| **processOutputHtml**  | `bool` | `true`  | Determines whether processing occurs on any output HTML (e.g. `<p><br/><p>` becomes `""`)                  |
 
 ### Parameters - `HtmlEditorOptions`
 
