@@ -1,15 +1,15 @@
-export 'dart:html';
-
 import 'dart:convert';
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html' as html;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:html_editor_enhanced/utils/utils.dart';
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html;
 import 'package:html_editor_enhanced/utils/shims/dart_ui.dart' as ui;
+import 'package:html_editor_enhanced/utils/utils.dart';
+
+export 'dart:html';
 
 /// The HTML Editor widget itself, for web (uses IFrameElement)
 class HtmlEditorWidget extends StatefulWidget {
@@ -513,9 +513,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                 widget.callbacks!.onChangeContent != null) {
               widget.callbacks!.onChangeContent!.call(data['contents']);
             }
-            if (widget.htmlEditorOptions.shouldEnsureVisible &&
-                Scrollable.of(context) != null) {
-              Scrollable.of(context)!.position.ensureVisible(
+            if (widget.htmlEditorOptions.shouldEnsureVisible) {
+              Scrollable.of(context).position.ensureVisible(
                   context.findRenderObject()!,
                   duration: const Duration(milliseconds: 100),
                   curve: Curves.easeIn);
