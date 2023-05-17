@@ -23,7 +23,7 @@ dependencies:
   # plugin to get files from filesystem
   file_picker: ^5.2.0+1
   # plugin to show a scrollable number picker for inserting tables
-  numberpicker: ^2.1.1
+  numberpicker: ^2.1.2
   # plugin to allow dropdowns and dialogs to be interactable when displaying over the editor
   # related to https://github.com/flutter/flutter/issues/54027
   # pinned to 0.9.1 because of issues with CanvasKit in the latest versions
