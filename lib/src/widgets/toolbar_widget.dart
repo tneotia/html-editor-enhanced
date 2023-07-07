@@ -2252,13 +2252,13 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                       url.text.isEmpty) {
                                     setState(() {
                                       validateFailed =
-                                          strings.pleaseEitherChooseAudioOrEnterAudioURL;
+                                      'Please either choose an audio file or enter an audio file URL!';
                                     });
                                   } else if (filename.text.isNotEmpty &&
                                       url.text.isNotEmpty) {
                                     setState(() {
                                       validateFailed =
-                                          strings.pleaseInputEitherAudioOrAudioURLNotBoth;
+                                      'Please input either an audio file or an audio URL, not both!';
                                     });
                                   } else if (filename.text.isNotEmpty &&
                                       result?.files.single.bytes != null) {
