@@ -153,6 +153,10 @@ abstract class HtmlEditorStrings {
 
   String get pleaseInputEitherAFileOrAFileURLNotBoth;
 
+  String get pleaseEitherChooseAudioOrEnterAudioURL;
+
+  String get pleaseInputEitherAudioOrAudioURLNotBoth;
+
   String get pleaseInputEitherAnImageOrAnImageURLNotBoth;
 
   String get pleaseEnterAnImageURL;
@@ -401,4 +405,10 @@ class DefaultHtmlEditorStrings extends HtmlEditorStrings {
 
   @override
   String get pleaseInputEitherAnImageOrAnImageURLNotBoth =>'Please input either an image or an image URL, not both!';
+
+  @override
+  String get pleaseEitherChooseAudioOrEnterAudioURL => 'Please either choose an audio file or enter an audio file URL!';
+
+  @override
+  String get pleaseInputEitherAudioOrAudioURLNotBoth => 'Please input either an audio file or an audio URL, not both!';
 }
