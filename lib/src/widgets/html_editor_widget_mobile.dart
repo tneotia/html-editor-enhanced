@@ -650,6 +650,13 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
           });
         """);
     }
+    if (c.onScrollEvent != null) {
+      widget.controller.editorController!.evaluateJavascript(source: """
+          \$('.note-editable').scroll(function(_) {
+            window.flutter_inappwebview.callHandler('onScrollEvent', \$(this).scrollTop());
+          });
+        """);
+    }
   }
 
   /// creates flutter_inappwebview JavaScript Handlers to handle any callbacks the
@@ -785,6 +792,13 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
           handlerName: 'onScroll',
           callback: (_) {
             c.onScroll!.call();
+          });
+    }
+    if (c.onScrollEvent != null) {
+      widget.controller.editorController!.addJavaScriptHandler(
+          handlerName: 'onScrollEvent',
+          callback: (scrollTop) {
+            c.onScrollEvent!.call(scrollTop[0]);
           });
     }
   }

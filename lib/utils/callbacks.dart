@@ -25,6 +25,7 @@ class Callbacks {
     this.onNavigationRequestMobile,
     this.onPaste,
     this.onScroll,
+    this.onScrollEvent,
   });
 
   /// Called before certain commands are fired and the editor is in rich text view.
@@ -184,4 +185,17 @@ class Callbacks {
   /// Note: This function will be repeatedly called while the editor is scrolled.
   /// Make sure to factor that into your implementation.
   void Function()? onScroll;
+
+  /// Called whenever the editor is scrolled and it is in rich text view.
+  /// Editor scrolled is considered to be the editor box only, not the webview
+  /// container itself. Thus, this callback will only fire when the content in
+  /// the editor is longer than the editor height. This function can be called
+  /// with an explicit scrolling action via the mouse, or also via implied
+  /// scrolling, e.g. the enter key scrolling the editor to make new text visible.
+  /// This function will let you know the scrollTop() position from the scroll
+  /// container inside editor.
+  ///
+  /// Note: This function will be repeatedly called while the editor is scrolled.
+  /// Make sure to factor that into your implementation.
+  void Function(double)? onScrollEvent;
 }

@@ -692,6 +692,14 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           });\n
         """;
     }
+    if (c.onScrollEvent != null) {
+      callbacks = callbacks +
+          """
+          \$('.note-editable').scroll(function(e) {
+            window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onScrollEvent", "scrollTop" : \$(this).scrollTop()}), "*");
+          });\n
+        """;
+    }
     return callbacks;
   }
 
@@ -789,6 +797,9 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         }
         if (data['type'].contains('onScroll')) {
           c.onScroll!.call();
+        }
+        if (data['type'].contains('onScrollEvent')) {
+          c.onScrollEvent!.call(data['scrollTop']);
         }
         if (data['type'].contains('characterCount')) {
           widget.controller.characterCount = data['totalChars'];
