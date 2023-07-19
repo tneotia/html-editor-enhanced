@@ -63,6 +63,11 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
             "document.execCommand('$command', false${argument == null ? "" : ", '$argument'"});");
   }
 
+  @override
+  void evaluateJavascript(String js) {
+    _evaluateJavascript(source: '$js;');
+  }
+
   /// Gets the text from the editor and returns it as a [String].
   @override
   Future<String> getText() async {

@@ -81,6 +81,8 @@ class HtmlEditorController {
   /// A function to quickly call a document.execCommand function in a readable format
   void execCommand(String command, {String? argument}) {}
 
+  void evaluateJavascript(String js) {}
+
   /// A function to execute JS passed as a [WebScript] to the editor. This should
   /// only be used on Flutter Web.
   Future<dynamic> evaluateJavascriptWeb(String name,
