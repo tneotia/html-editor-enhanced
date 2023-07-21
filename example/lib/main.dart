@@ -68,6 +68,9 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
             children: <Widget>[
               HtmlEditor(
                 controller: controller,
+                onScrollToTop: () {
+                  print('scroll to top');
+                },
                 htmlEditorOptions: HtmlEditorOptions(
                   hint: 'Your text here...',
                   shouldEnsureVisible: true,

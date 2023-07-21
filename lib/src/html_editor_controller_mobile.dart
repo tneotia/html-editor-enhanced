@@ -63,6 +63,11 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
             "document.execCommand('$command', false${argument == null ? "" : ", '$argument'"});");
   }
 
+  @override
+  void evaluateJavascript(String js) {
+    _evaluateJavascript(source: '$js;');
+  }
+
   /// Gets the text from the editor and returns it as a [String].
   @override
   Future<String> getText() async {
@@ -95,7 +100,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
   /// Sets the focus to the editor.
   @override
-  void setFocus() {
+  void setFocus() async {
     _evaluateJavascript(source: "\$('#summernote-2').summernote('focus');");
   }
 
@@ -215,6 +220,15 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     _evaluateJavascript(
         source:
             "var height = document.body.scrollHeight; window.flutter_inappwebview.callHandler('setHeight', height);");
+  }
+
+  /// Set the height of the editor scale with the height of the html content
+  /// Adapt the webview height to the height of the html content
+  @override
+  void recalculateHeightWithNoScroll() {
+    _evaluateJavascript(
+        source:
+            "var lastRange = \$('.div.note-editable').summernote('editor.getLastRange');console.log('TZANOU', \$('div.note-editable').html(), lastRange);var height = document.querySelector('div.note-editable').scrollHeight; window.flutter_inappwebview.callHandler('recalculateHeightWithNoScroll', height);");
   }
 
   /// Add a notification to the bottom of the editor. This is styled similar to

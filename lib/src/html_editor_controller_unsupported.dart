@@ -81,6 +81,8 @@ class HtmlEditorController {
   /// A function to quickly call a document.execCommand function in a readable format
   void execCommand(String command, {String? argument}) {}
 
+  void evaluateJavascript(String js) {}
+
   /// A function to execute JS passed as a [WebScript] to the editor. This should
   /// only be used on Flutter Web.
   Future<dynamic> evaluateJavascriptWeb(String name,
@@ -116,6 +118,10 @@ class HtmlEditorController {
   /// Recalculates the height of the editor to remove any vertical scrolling.
   /// This method will not do anything if [autoAdjustHeight] is turned off.
   void recalculateHeight() {}
+
+  /// Set the height of the editor scale with the height of the html content
+  /// Adapt the webview height to the height of the html content
+  void recalculateHeightWithNoScroll() {}
 
   /// Redoes the last action
   void redo() {}
