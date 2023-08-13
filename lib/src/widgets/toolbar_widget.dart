@@ -1773,7 +1773,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     if (mimeType != null && mimeType.toLowerCase().contains('heic')) {
                                       base64Data = await convertHeicToBase64(File(compressFile.path));
                                     } else {
-                                      base64Data = base64.encode(result!.files.single.bytes!);
+                                      final byts = await compressFile.readAsBytes();
+                                      base64Data = base64.encode(byts);
                                     }
 
                                     var proceed = await widget.htmlToolbarOptions.mediaUploadInterceptor
