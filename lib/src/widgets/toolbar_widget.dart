@@ -1,14 +1,17 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/utils/utils.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
+import 'package:path/path.dart' as pth;
 
 /// Toolbar widget class
 class ToolbarWidget extends StatefulWidget {
@@ -1760,7 +1763,17 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                       validateFailed = 'Please input either an image or an image URL, not both!';
                                     });
                                   } else if (filename.text.isNotEmpty && result?.files.single.bytes != null) {
-                                    var base64Data = base64.encode(result!.files.single.bytes!);
+                                    final compressFile = await compressImage(File(result!.files.single.path!));
+                                    final mimeType = compressFile.mimeType;
+
+                                    showAboutDialog(context: context, applicationName: 'Mime Type => $mimeType');
+                                    var base64Data = '';
+                                    if (mimeType != null && mimeType.toLowerCase().contains('heic')) {
+                                      base64Data = await convertHeicToBase64(File(compressFile.path));
+                                    } else {
+                                      base64Data = base64.encode(result!.files.single.bytes!);
+                                    }
+
                                     var proceed = await widget.htmlToolbarOptions.mediaUploadInterceptor
                                             ?.call(result!.files.single, InsertFileType.image) ??
                                         true;
@@ -2548,5 +2561,28 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       toolbarChildren = intersperse(widget.htmlToolbarOptions.separatorWidget, toolbarChildren).toList();
     }
     return toolbarChildren;
+  }
+
+  Future<String> convertHeicToBase64(File heicFile) async {
+    try {
+      // var imageBytes = await compressImage(heicFile);
+      List<int> fileBytes = await heicFile.readAsBytes();
+      var base64Image = base64Encode(fileBytes);
+      return base64Image;
+    } catch (e) {
+      print('Error converting HEIC to base64: $e');
+      return '';
+    }
+  }
+
+  Future<XFile> compressImage(File file, {int? quality}) async {
+    var newPath = file.path.replaceAll(pth.basename(file.path), 'compress_${pth.basename(file.path)}');
+    var result = await FlutterImageCompress.compressAndGetFile(
+      file.absolute.path,
+      newPath,
+      quality: quality ?? 50,
+    );
+
+    return result!;
   }
 }
