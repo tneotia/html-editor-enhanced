@@ -1770,19 +1770,21 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
 
                                     log('HTML EDITOR WIDGET : image mimetype => $mimeType ${compressFile.mimeType}');
                                     var base64Data = '';
-                                    if (mimeType != null && mimeType.toLowerCase().contains('heic')) {
-                                      base64Data = await convertHeicToBase64(File(compressFile.path));
-                                    } else {
-                                      final byts = await compressFile.readAsBytes();
-                                      base64Data = base64.encode(byts);
-                                    }
+                                    log('HTML EDITOR WIDGET : ${compressFile.path}');
+                                    final byts = await compressFile.readAsBytes();
+                                    base64Data = base64.encode(byts);
 
-                                    var proceed = await widget.htmlToolbarOptions.mediaUploadInterceptor
-                                            ?.call(result!.files.single, InsertFileType.image) ??
+                                    final sizeImg = await compressFile.length();
+                                    var proceed = await widget.htmlToolbarOptions.mediaUploadInterceptor?.call(
+                                            PlatformFile(
+                                                name: pth.basenameWithoutExtension(compressFile.path),
+                                                size: sizeImg,
+                                                path: compressFile.path),
+                                            InsertFileType.image) ??
                                         true;
                                     if (proceed) {
                                       widget.controller.insertHtml(
-                                          "<img width='50%' src='data:image/${result!.files.single.extension};base64,$base64Data' data-filename='${result!.files.single.name}'/>");
+                                          "<img width='50%' src='data:image/${pth.extension(compressFile.path)};base64,$base64Data' data-filename='${compressFile.name}'/>");
                                     }
                                     Navigator.of(context).pop();
                                   } else {
