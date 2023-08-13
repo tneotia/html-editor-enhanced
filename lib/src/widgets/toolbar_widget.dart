@@ -7,7 +7,7 @@ import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart' as f_compress;
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/utils/utils.dart';
 import 'package:mime/mime.dart';
@@ -2577,11 +2577,11 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
     }
   }
 
-  Future<XFile?> compressImage(File file, {int? quality}) async {
+  Future<f_compress.XFile?> compressImage(File file, {int? quality}) async {
     try {
       var newPath = file.path.replaceAll(pth.basename(file.path), 'compress_${pth.basename(file.path)}');
-      var result = await FlutterImageCompress.compressAndGetFile(file.absolute.path, newPath,
-          quality: quality ?? 50, format: CompressFormat.png);
+      var result = await f_compress.FlutterImageCompress.compressAndGetFile(file.absolute.path, newPath,
+          quality: quality ?? 50, format: f_compress.CompressFormat.png);
 
       return result!;
     } catch (e) {
