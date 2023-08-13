@@ -2579,7 +2579,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
 
   Future<f_compress.XFile?> compressImage(File file, {int? quality}) async {
     try {
-      var newPath = file.path.replaceAll(pth.basename(file.path), 'compress_${pth.basename(file.path)}');
+      var newPath = file.path.replaceAll(pth.basename(file.path), 'compress_${pth.basenameWithoutExtension(file.path)}.png');
       var result = await f_compress.FlutterImageCompress.compressAndGetFile(file.absolute.path, newPath,
           quality: quality ?? 50, format: f_compress.CompressFormat.png);
 
