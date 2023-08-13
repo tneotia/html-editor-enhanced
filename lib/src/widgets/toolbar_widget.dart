@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/utils/utils.dart';
+import 'package:mime/mime.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:path/path.dart' as pth;
@@ -1765,12 +1766,12 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     });
                                   } else if (filename.text.isNotEmpty && result?.files.single.bytes != null) {
                                     final compressFile = await compressImage(File(result!.files.single.path!));
-                                    final mimeType = compressFile?.mimeType;
+                                    final mimeType = lookupMimeType(compressFile!.path);
 
                                     log('HTML EDITOR WIDGET : image mimetype => $mimeType');
                                     var base64Data = '';
                                     if (mimeType != null && mimeType.toLowerCase().contains('heic')) {
-                                      base64Data = await convertHeicToBase64(File(compressFile?.path ?? ''));
+                                      base64Data = await convertHeicToBase64(File(compressFile.path ?? ''));
                                     } else {
                                       base64Data = base64.encode(result!.files.single.bytes!);
                                     }
