@@ -1784,14 +1784,12 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
 
                                     // log('HTML EDITOR WIDGET : proceed ? $proceed ${compressFile.path} $base64Data');
                                     final html =
-                                        "<img src='data:image/${pth.extension(compressFile.path)};base64,$base64Data' data-filename='${pth.basenameWithoutExtension(compressFile.path)}'/>";
-                                    final html2 =
-                                        "<img src='data:image/${pth.extension(compressFile.path)};base64,$base64Data' data-filename='${pth.basenameWithoutExtension(compressFile.path)}'/>";
+                                        "<img width='50%' src='data:image/${(pth.extension(compressFile.path)).replaceAll('.', '').trim()};base64,$base64Data' data-filename='${pth.basenameWithoutExtension(compressFile.path)}'/>";
 
                                     log('HTML EDITOR WIDGET : proceed ? $proceed ${compressFile.path} $html');
-                                    log('HTML EDITOR WIDGET : proceed 2  $html2');
+                                    log('HTML EDITOR WIDGET : proceed 2  $html');
                                     if (proceed) {
-                                      widget.controller.insertHtml(html2);
+                                      widget.controller.insertHtml(html);
                                     }
                                     Navigator.of(context).pop();
                                   } else {
