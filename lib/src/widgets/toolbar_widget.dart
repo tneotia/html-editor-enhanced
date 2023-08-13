@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -1764,12 +1765,12 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     });
                                   } else if (filename.text.isNotEmpty && result?.files.single.bytes != null) {
                                     final compressFile = await compressImage(File(result!.files.single.path!));
-                                    final mimeType = compressFile.mimeType;
+                                    final mimeType = compressFile?.mimeType;
 
-                                    showAboutDialog(context: context, applicationName: 'Mime Type => $mimeType');
+                                    log('HTML EDITOR WIDGET : image mimetype => $mimeType');
                                     var base64Data = '';
                                     if (mimeType != null && mimeType.toLowerCase().contains('heic')) {
-                                      base64Data = await convertHeicToBase64(File(compressFile.path));
+                                      base64Data = await convertHeicToBase64(File(compressFile?.path ?? ''));
                                     } else {
                                       base64Data = base64.encode(result!.files.single.bytes!);
                                     }
@@ -2575,14 +2576,19 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
     }
   }
 
-  Future<XFile> compressImage(File file, {int? quality}) async {
-    var newPath = file.path.replaceAll(pth.basename(file.path), 'compress_${pth.basename(file.path)}');
-    var result = await FlutterImageCompress.compressAndGetFile(
-      file.absolute.path,
-      newPath,
-      quality: quality ?? 50,
-    );
+  Future<XFile?> compressImage(File file, {int? quality}) async {
+    try {
+      var newPath = file.path.replaceAll(pth.basename(file.path), 'compress_${pth.basename(file.path)}');
+      var result = await FlutterImageCompress.compressAndGetFile(
+        file.absolute.path,
+        newPath,
+        quality: quality ?? 50,
+      );
 
-    return result!;
+      return result!;
+    } catch (e) {
+      log('HTML EDITOR WIDGET : ERROR COMPRESS IMAGE $e');
+      return null;
+    }
   }
 }
