@@ -1768,10 +1768,10 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     final compressFile = await compressImage(File(result!.files.single.path!));
                                     final mimeType = lookupMimeType(compressFile!.path);
 
-                                    log('HTML EDITOR WIDGET : image mimetype => $mimeType');
+                                    log('HTML EDITOR WIDGET : image mimetype => $mimeType ${compressFile.mimeType}');
                                     var base64Data = '';
                                     if (mimeType != null && mimeType.toLowerCase().contains('heic')) {
-                                      base64Data = await convertHeicToBase64(File(compressFile.path ?? ''));
+                                      base64Data = await convertHeicToBase64(File(compressFile.path));
                                     } else {
                                       base64Data = base64.encode(result!.files.single.bytes!);
                                     }
@@ -1781,7 +1781,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                         true;
                                     if (proceed) {
                                       widget.controller.insertHtml(
-                                          "<img src='data:image/${result!.files.single.extension};base64,$base64Data' data-filename='${result!.files.single.name}'/>");
+                                          "<img width='50%' src='data:image/${result!.files.single.extension};base64,$base64Data' data-filename='${result!.files.single.name}'/>");
                                     }
                                     Navigator.of(context).pop();
                                   } else {
@@ -2580,11 +2580,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   Future<XFile?> compressImage(File file, {int? quality}) async {
     try {
       var newPath = file.path.replaceAll(pth.basename(file.path), 'compress_${pth.basename(file.path)}');
-      var result = await FlutterImageCompress.compressAndGetFile(
-        file.absolute.path,
-        newPath,
-        quality: quality ?? 50,
-      );
+      var result = await FlutterImageCompress.compressAndGetFile(file.absolute.path, newPath,
+          quality: quality ?? 50, format: CompressFormat.png);
 
       return result!;
     } catch (e) {
