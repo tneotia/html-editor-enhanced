@@ -1770,7 +1770,6 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
 
                                     log('HTML EDITOR WIDGET : image mimetype => $mimeType ${compressFile.mimeType}');
                                     var base64Data = '';
-                                    log('HTML EDITOR WIDGET : ${compressFile.path}');
                                     final byts = await compressFile.readAsBytes();
                                     base64Data = base64.encode(byts);
 
@@ -1782,9 +1781,11 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                                 path: compressFile.path),
                                             InsertFileType.image) ??
                                         true;
+
+                                    log('HTML EDITOR WIDGET : proceed ? $proceed ${compressFile.path} $base64Data');
                                     if (proceed) {
                                       widget.controller.insertHtml(
-                                          "<img width='50%' src='data:image/${pth.extension(compressFile.path)};base64,$base64Data' data-filename='${compressFile.name}'/>");
+                                          "<img src='data:image/${pth.extension(compressFile.path)};base64,$base64Data' data-filename='${compressFile.name}'/>");
                                     }
                                     Navigator.of(context).pop();
                                   } else {
