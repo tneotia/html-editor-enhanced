@@ -1782,10 +1782,16 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                             InsertFileType.image) ??
                                         true;
 
-                                    log('HTML EDITOR WIDGET : proceed ? $proceed ${compressFile.path} $base64Data');
+                                    // log('HTML EDITOR WIDGET : proceed ? $proceed ${compressFile.path} $base64Data');
+                                    final html =
+                                        "<img src='data:image/${pth.extension(compressFile.path)};base64,$base64Data' data-filename='${pth.basenameWithoutExtension(compressFile.path)}'/>";
+                                    final html2 =
+                                        "<img src='data:image/${pth.extension(compressFile.path)};base64,$base64Data' data-filename='${pth.basenameWithoutExtension(compressFile.path)}'/>";
+
+                                    log('HTML EDITOR WIDGET : proceed ? $proceed ${compressFile.path} $html');
+                                    log('HTML EDITOR WIDGET : proceed 2  $html2');
                                     if (proceed) {
-                                      widget.controller.insertHtml(
-                                          "<img src='data:image/${pth.extension(compressFile.path)};base64,$base64Data' data-filename='${pth.basenameWithoutExtension(compressFile.path)}'/>");
+                                      widget.controller.insertHtml(html2);
                                     }
                                     Navigator.of(context).pop();
                                   } else {
