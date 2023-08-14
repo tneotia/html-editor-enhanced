@@ -11,6 +11,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/utils/shims/dart_ui.dart';
 import 'package:path/path.dart' as pth;
+import 'package:flutter_image_compress/flutter_image_compress.dart' as f_compress;
 
 Future<XFile?> compressImage(File file, {int? quality}) async {
   try {
@@ -18,11 +19,11 @@ Future<XFile?> compressImage(File file, {int? quality}) async {
     if (extension != '.png' || extension != '.jpg' || extension != '.jpeg') {
       extension = '.png';
     }
-    final CompressFormat compressFormat;
+    final f_compress.CompressFormat compressFormat;
     if (extension == '.jpg' || extension == '.jpeg') {
-      compressFormat = CompressFormat.jpeg;
+      compressFormat = f_compress.CompressFormat.jpeg;
     } else {
-      compressFormat = CompressFormat.png;
+      compressFormat = f_compress.CompressFormat.png;
     }
 
     var newPath = file.path.replaceAll(pth.basename(file.path), 'compress_${pth.basenameWithoutExtension(file.path)}$extension');
