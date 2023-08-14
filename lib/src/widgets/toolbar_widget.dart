@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -7,10 +6,8 @@ import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart' as f_compress;
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/utils/utils.dart';
-import 'package:mime/mime.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:path/path.dart' as pth;
@@ -1766,12 +1763,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     });
                                   } else if (filename.text.isNotEmpty && result?.files.single.bytes != null) {
                                     final compressFile = await compressImage(File(result!.files.single.path!));
-                                    final mimeType = lookupMimeType(compressFile!.path);
 
-                                    log('HTML EDITOR WIDGET : image mimetype => $mimeType ${compressFile.mimeType}');
-                                    var base64Data = '';
-                                    final byts = await compressFile.readAsBytes();
-                                    base64Data = base64.encode(byts);
+                                    final byts = await compressFile!.readAsBytes();
+                                    final base64Data = base64.encode(byts);
 
                                     final sizeImg = await compressFile.length();
                                     var proceed = await widget.htmlToolbarOptions.mediaUploadInterceptor?.call(
@@ -1786,8 +1780,6 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     final html =
                                         "<img width='50%' src='data:image/${(pth.extension(compressFile.path)).replaceAll('.', '').trim()};base64,$base64Data' data-filename='${pth.basenameWithoutExtension(compressFile.path)}'/>";
 
-                                    log('HTML EDITOR WIDGET : proceed ? $proceed ${compressFile.path} $html');
-                                    log('HTML EDITOR WIDGET : proceed 2  $html');
                                     if (proceed) {
                                       widget.controller.insertHtml(html);
                                     }
@@ -2571,30 +2563,5 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       toolbarChildren = intersperse(widget.htmlToolbarOptions.separatorWidget, toolbarChildren).toList();
     }
     return toolbarChildren;
-  }
-
-  Future<String> convertHeicToBase64(File heicFile) async {
-    try {
-      // var imageBytes = await compressImage(heicFile);
-      List<int> fileBytes = await heicFile.readAsBytes();
-      var base64Image = base64Encode(fileBytes);
-      return base64Image;
-    } catch (e) {
-      print('Error converting HEIC to base64: $e');
-      return '';
-    }
-  }
-
-  Future<f_compress.XFile?> compressImage(File file, {int? quality}) async {
-    try {
-      var newPath = file.path.replaceAll(pth.basename(file.path), 'compress_${pth.basenameWithoutExtension(file.path)}.png');
-      var result = await f_compress.FlutterImageCompress.compressAndGetFile(file.absolute.path, newPath,
-          quality: quality ?? 50, format: f_compress.CompressFormat.png);
-
-      return result!;
-    } catch (e) {
-      log('HTML EDITOR WIDGET : ERROR COMPRESS IMAGE $e');
-      return null;
-    }
   }
 }

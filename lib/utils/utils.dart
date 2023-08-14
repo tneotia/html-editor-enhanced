@@ -1,12 +1,40 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
+import 'dart:developer' as dev;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/utils/shims/dart_ui.dart';
+import 'package:path/path.dart' as pth;
+
+Future<XFile?> compressImage(File file, {int? quality}) async {
+  try {
+    var extension = pth.extension(file.path);
+    if (extension != '.png' || extension != '.jpg' || extension != '.jpeg') {
+      extension = '.png';
+    }
+    final CompressFormat compressFormat;
+    if (extension == '.jpg' || extension == '.jpeg') {
+      compressFormat = CompressFormat.jpeg;
+    } else {
+      compressFormat = CompressFormat.png;
+    }
+
+    var newPath = file.path.replaceAll(pth.basename(file.path), 'compress_${pth.basenameWithoutExtension(file.path)}$extension');
+    var result = await FlutterImageCompress.compressAndGetFile(file.absolute.path, newPath,
+        quality: quality ?? 50, format: compressFormat);
+
+    return result!;
+  } catch (e) {
+    dev.log('HTML EDITOR WIDGET : ERROR COMPRESS IMAGE $e');
+    return null;
+  }
+}
 
 /// small function to always check if mounted before running setState()
 void setState(bool mounted, void Function(Function()) setState, void Function() fn) {
