@@ -1,7 +1,7 @@
 name: html_editor_enhanced
 description: HTML rich text editor for Android, iOS, and Web, using the Summernote library.
   Enhanced with highly customizable widget-based controls, bug fixes, callbacks, dark mode, and more.
-version: 2.5.1
+version: 2.5.2
 homepage: https://github.com/tneotia/html-editor-enhanced
 
 environment:
