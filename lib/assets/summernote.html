@@ -16,6 +16,15 @@
 <script src="plugins/summernote-at-mention/summernote-at-mention.js"></script>
 <!--minor styling to improve editor design-->
 <style>
+  body, html {
+    overflow: hidden !important;
+  }
+  .note-editor.note-frame .note-editing-area .note-editable > *:nth-last-child(1):after {
+      content: '';
+      display: block;
+      height: 30px;
+      width: 100%;
+  }
   body {
       display: block;
       margin: 0px;
