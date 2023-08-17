@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <meta name="description" content="Flutter Summernote HTML Editor">
     <meta name="author" content="tneotia">
     <title>Summernote Text Editor HTML</title>
@@ -20,11 +20,9 @@
   body, html {
     overflow: hidden !important;
   }
-  .note-editor.note-frame .note-editing-area .note-editable > *:nth-last-child(1):after {
-      content: '';
-      display: block;
-      height: 30px;
-      width: 100%;
+  .note-editor.note-frame .note-editing-area .note-editable {
+    height: 85% !important;
+    padding-bottom: 30px !important;
   }
   body {
       display: block;
@@ -36,6 +34,7 @@
   .note-frame {
       border-radius: 0px;
   }
+
 </style>
 </body>
 </html>
