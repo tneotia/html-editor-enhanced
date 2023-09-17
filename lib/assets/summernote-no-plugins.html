@@ -1,76 +1,209 @@
-<html lang="en">
+<html lang="en" ng-app="dhEditorApp">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <meta
             name="viewport"
             content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
-    <meta name="description" content="Flutter Summernote HTML Editor" />
-    <meta name="author" content="tneotia" />
+    <meta name="description" content="Flutter Summernote HTML Editor"/>
+    <meta name="author" content="tneotia"/>
     <title>Summernote Text Editor HTML</title>
     <script src="jquery.min.js"></script>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     <link
             href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap"
             rel="stylesheet"
     />
     <!--summernote js and css-->
-    <link href="summernote-lite.min.css" rel="stylesheet" />
+    <link href="summernote-lite.min.css" rel="stylesheet"/>
     <script src="summernote-lite.min.js"></script>
     <!--darkCSS-->
 </head>
-<body>
+<body ng-controller="dhEditorController">
 <div id="summernote-2"></div>
 <!--headString-->
 <!--summernoteScripts-->
 <!--minor styling to improve editor design-->
+<div id="dhEditorTextHighlights">
+    <!--{{ editorHighlights }}-->
+    <span ng-repeat="(index, highlight) in parsedEditorHighlights" ng-if="highlight.width" style="
+    position: absolute;
+    left:{{highlight.left}};
+    top:{{highlight.top}};
+    width:{{highlight.width}}; color: transparent; border-bottom: 1px solid green; background-color: yellow; opacity: .3; {{highlight.css}}" class="bg-primary absolute">{{highlight.text}}</span>
+</div>
 <style>
     * {
-      font-family: 'Poppins', sans-serif !important;
+        font-family: 'Poppins', sans-serif !important;
     }
+
     body,
     html {
-      overflow: hidden !important;
+        overflow: hidden !important;
     }
+
     .note-editor.note-frame .note-editing-area .note-editable {
-      height: 100% !important;
-      padding-bottom: 30px !important;
+        padding-bottom: 30px !important;
     }
+
     .note-editor.note-frame .note-statusbar {
-      display: none;
+        display: none;
     }
 
     p {
-      margin: 0;
+        margin: 0;
     }
+
     *:not(h1) {
-      font-size: 14px;
-      line-height: 22px;
+        font-size: 14px;
+        line-height: 22px;
     }
+
     body {
-      display: block;
-      margin: 0px;
+        display: block;
+        margin: 0px;
     }
+
     .note-editor.note-airframe,
     .note-editor.note-frame {
-      border: 0px solid #a9a9a9;
-      height: 100%;
+        border: 0px solid #a9a9a9;
+        height: 100%;
     }
+
     .note-frame {
-      border-radius: 0px;
+        border-radius: 0px;
     }
+
     h1,
     h1 * {
-      font-size: 16px !important;
-      line-height: 24px;
-      margin: 0;
+        font-size: 16px !important;
+        line-height: 24px;
+        margin: 0;
     }
+
     h1 {
-      font-weight: 500 !important;
-      font-weight: normal;
+        font-weight: 500 !important;
+        font-weight: normal;
     }
+
 </style>
+<!--angular js-->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+<!--angular js-->
+<script>
+    Array.prototype.max = function() {
+        return Math.max.apply(null, this);
+    };
+
+
+    angular.module('dhEditorApp', []).controller('dhEditorController', ($scope) => {
+        window.dhNgEditorScope = $scope;
+        $scope.editorHighlights = [];
+        $scope.highlightsFound = [];
+        $scope.parsedEditorHighlights = [];
+        $scope.$watch('editorHighlights', function() {
+            reloadParsed();
+        });
+        let  reloadParsed = () => {
+            $scope.parsedEditorHighlights = $scope.editorHighlights.map((line) => {
+                return {
+                    ...$scope.getTextPosition(line.text),
+                    ...line
+                }
+            });
+        }
+
+        window.jQuery("body").on('DOMSubtreeModified', '.note-editable', function(){
+            setTimeout(() => {
+                $scope.highlightsFound = [];
+                reloadParsed()
+                $scope.$apply()
+            },200);
+        });
+
+        $scope.createOverlay = (startNode, startIndex, endIndex, str) => {
+            const containerRef = document.querySelector(".note-editable")
+            if (!containerRef) return null;
+            const calcRange = (padding,start,end) => {
+                const range = document.createRange();
+                range.setStart(startNode, start+padding);
+                range.setEnd(startNode, end-padding);
+                return range;
+            }
+            const safeRect = calcRange(1,startIndex,endIndex+1).getBoundingClientRect();
+            const firstCharRect = calcRange(0,startIndex,startIndex+1).getBoundingClientRect()
+            const lastCharRect = calcRange(0,endIndex-1,endIndex).getBoundingClientRect()
+
+            let totalWidth = 0;
+            let charWidths = [0]
+            if(str.length > 2){
+                for (let i = startIndex+1; i<=startIndex+str.length-1;i++){
+                    const range = calcRange(0,i,i+1);
+                    const charWidth = range.getBoundingClientRect().width
+                    totalWidth += charWidth;
+                    charWidths.push(charWidth)
+                }
+            }else {
+                totalWidth = lastCharRect.width*str.length
+            }
+            let left = ((safeRect.left-firstCharRect.width) + 1);
+            if(left < 0){
+                left = 10;
+            }
+            return {
+                left: left + 'px',
+                top: (lastCharRect.top - 1) + 'px', // 2px border, adjust as needed
+                //width: ((safeRect.width+(firstCharRect.width+lastCharRect.width)) || 1) + 'px' // Ensure a minimum width
+                width: totalWidth+(str.length > 1 ? charWidths.max() : 0)
+            }
+        }
+
+        $scope.getTextPosition = (textToFind) => {
+            textToFind = `${textToFind}`
+
+            const elements = document.querySelectorAll('.note-editable > *');
+            let startIndex = -1;
+            let elIndex = 0;
+            for (let i = 0; i < elements.length; i++) {
+                const elementText = elements[i].textContent;
+
+                if (!elementText) continue;
+                let existingWordEndIndex = 0;
+                //const existingHighlights = $scope.highlightsFound.filter((e) => e.text === textToFind);
+                /*if(existingHighlights.length){
+                    existingWordEndIndex = existingHighlights[existingHighlights.length-1].endIndex;
+                }*/
+                const index = elementText.indexOf(textToFind);
+                if (index !== -1) {
+                    startIndex = index;
+                    elIndex = i;
+                    break;
+                }
+            }
+
+
+            if (startIndex !== -1) {
+                const endIndex = startIndex + textToFind.length;
+                const child = elements[elIndex].firstChild ? elements[elIndex].firstChild : elements[elIndex];
+                const dimens = $scope.createOverlay(child, startIndex, endIndex, textToFind);
+                $scope.highlightsFound.push({
+                    text:textToFind,
+                    endIndex
+                })
+                return dimens;
+            }
+
+            return {
+                top:"0px",
+                left:"0px",
+                width: "auto"
+            };
+        };
+
+    });
+
+</script>
 </body>
 </html>

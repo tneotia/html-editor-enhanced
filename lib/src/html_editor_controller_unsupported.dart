@@ -1,12 +1,16 @@
+import 'dart:convert';
+
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:meta/meta.dart';
+
+import 'models/text_highlight.dart';
 
 /// Fallback controller (should never be used)
 class HtmlEditorController {
   HtmlEditorController({
     this.processInputHtml = true,
     this.processNewLineAsBr = false,
-    this.processOutputHtml = true,
+    this.processOutputHtml = true
   });
 
   /// Toolbar widget state to call various methods. For internal use only.
@@ -34,6 +38,17 @@ class HtmlEditorController {
 
   /// Internally tracks the character count in the editor
   int _characterCount = 0;
+
+  /// Text Editor Highlights
+  void setHighlights(List<TextHighLight> highlights) {
+    if(editorController != null){
+      editorController?.evaluateJavascript(source: '''
+          window.dhNgEditorScope.\$apply(function(){
+               window.dhNgEditorScope.editorHighlights = ${jsonEncode(highlights)};
+          })   
+      ''');
+    }
+  }
 
   /// Gets the current character count
   // ignore: unnecessary_getters_setters

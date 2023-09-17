@@ -1,4 +1,4 @@
-<html lang="en">
+<html lang="en" ng-app="dhEditorApp">
 <head>
     <meta charset="UTF-8" />
     <meta
@@ -16,11 +16,17 @@
             href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap"
             rel="stylesheet"
     />
+    <!--angular js-->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <!--angular js-->
+
     <!--summernote js and css-->
     <link href="summernote-lite.min.css" rel="stylesheet" />
     <script src="summernote-lite.min.js"></script>
+    <!--darkCSS-->
 </head>
-<body>
+<body ng-controller="dhEditorController">
+<p ng-cloak>{{ test }}</p>
 <div id="summernote-2"></div>
 <!--summernote at mention plugin-->
 <script src="plugins/summernote-at-mention/summernote-at-mention.js"></script>
@@ -34,7 +40,6 @@
       overflow: hidden !important;
     }
     .note-editor.note-frame .note-editing-area .note-editable {
-      height: 100% !important;
       padding-bottom: 30px !important;
     }
     .note-editor.note-frame .note-statusbar {
