@@ -104,9 +104,9 @@
         $scope.highlightsFound = [];
         $scope.parsedEditorHighlights = [];
         $scope.$watch('editorHighlights', function() {
-            reloadParsed();
+            $scope.reloadParsed();
         });
-        let  reloadParsed = () => {
+        $scope.reloadParsed = () => {
             $scope.parsedEditorHighlights = $scope.editorHighlights.map((line) => {
                 return {
                     ...$scope.getTextPosition(line.text),
@@ -117,9 +117,11 @@
 
         window.jQuery("body").on('DOMSubtreeModified', '.note-editable', function(){
             setTimeout(() => {
+               // alert(window.jQuery('.note-editable').html());
                 $scope.highlightsFound = [];
-                reloadParsed()
-                $scope.$apply()
+                $scope.reloadParsed()
+                $scope.$apply();
+                //alert("a")
             },200);
         });
 
@@ -198,7 +200,7 @@
             return {
                 top:"0px",
                 left:"0px",
-                width: "auto"
+                width: undefined
             };
         };
 

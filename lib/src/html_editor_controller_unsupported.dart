@@ -44,8 +44,8 @@ class HtmlEditorController {
     if(editorController != null){
       editorController?.evaluateJavascript(source: '''
           window.dhNgEditorScope.\$apply(function(){
-               window.dhNgEditorScope.editorHighlights = ${jsonEncode(highlights)};
-          })   
+             window.dhNgEditorScope.editorHighlights = ${jsonEncode(highlights)};
+          })
       ''');
     }
   }
