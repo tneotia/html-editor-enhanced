@@ -631,6 +631,13 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
           });
         """);
     }
+    if (c.onWebViewReady != null) {
+      widget.controller.editorController!.evaluateJavascript(source: """
+          \$(window).load(function(_) {
+            window.flutter_inappwebview.callHandler('onWebViewReady', true);
+          });
+        """);
+    }
   }
 
   /// creates flutter_inappwebview JavaScript Handlers to handle any callbacks the
@@ -773,6 +780,13 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
           handlerName: 'onScrollEvent',
           callback: (scrollTop) {
             c.onScrollEvent!.call(scrollTop[0]);
+          });
+    }
+    if (c.onWebViewReady != null) {
+      widget.controller.editorController!.addJavaScriptHandler(
+          handlerName: 'onWebViewReady',
+          callback: (_) {
+            c.onWebViewReady!.call();
           });
     }
   }

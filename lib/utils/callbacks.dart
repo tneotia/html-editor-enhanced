@@ -26,6 +26,7 @@ class Callbacks {
     this.onPaste,
     this.onScroll,
     this.onScrollEvent,
+    this.onWebViewReady,
   });
 
   /// Called before certain commands are fired and the editor is in rich text view.
@@ -198,4 +199,5 @@ class Callbacks {
   /// Note: This function will be repeatedly called while the editor is scrolled.
   /// Make sure to factor that into your implementation.
   void Function(double)? onScrollEvent;
+  void Function()? onWebViewReady;
 }
