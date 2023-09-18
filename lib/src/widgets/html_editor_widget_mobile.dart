@@ -112,9 +112,9 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
         SystemChannels.textInput.invokeMethod('TextInput.hide');
       },
       onDoubleTap: () {
-        this.setState(() {
-          webviewKey = ValueKey(Random().nextInt(1000));
-        });
+        // this.setState(() {
+        //   webviewKey = ValueKey(Random().nextInt(1000));
+        // });
       },
       child: VisibilityDetector(
         key: Key(key),
