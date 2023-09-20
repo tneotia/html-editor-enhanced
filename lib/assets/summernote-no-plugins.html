@@ -28,11 +28,13 @@
 <!--minor styling to improve editor design-->
 <div id="dhEditorTextHighlights">
     <!--{{ editorHighlights }}-->
-    <span ng-repeat="(index, highlight) in parsedEditorHighlights" ng-if="highlight.width" style="
+
+
+    <span ng-repeat="(index, highlight) in parsedEditorHighlights" ng-if="highlight.width != '1px'" style="
     position: absolute;
     left:{{highlight.left}};
     top:{{highlight.top}};
-    width:{{highlight.width}}; color: transparent; border-bottom: 1px solid green; background-color: yellow; opacity: .3; {{highlight.css}}" class="bg-primary absolute">{{highlight.text}}</span>
+    width:{{highlight.width}}; color: transparent !important; border-bottom: 1px solid green; background-color: red; opacity: .3; {{highlight.css}}" data-idx="{{highlight.startIndex}} | {{highlight.endIndex}}" class="bg-primary absolute">{{highlight.text}}</span>
 </div>
 <style>
     * {
@@ -101,18 +103,34 @@
     angular.module('dhEditorApp', []).controller('dhEditorController', ($scope) => {
         window.dhNgEditorScope = $scope;
         $scope.editorHighlights = [];
-        $scope.highlightsFound = [];
         $scope.parsedEditorHighlights = [];
         $scope.$watch('editorHighlights', function() {
             $scope.reloadParsed();
         });
         $scope.reloadParsed = () => {
-            $scope.parsedEditorHighlights = $scope.editorHighlights.map((line) => {
-                return {
-                    ...$scope.getTextPosition(line.text),
-                    ...line
+            $scope.parsedEditorHighlights = [];
+            let numOfRetries = 0;
+            while (true) {
+                console.error(`=========================START ${++numOfRetries}=================================`)
+                let existingHighlights = $scope.parsedEditorHighlights;
+                let mewStartIndex = existingHighlights.length ? existingHighlights.map((h) => h.endIndex).max() : 0;
+                let newHighlights = $scope.editorHighlights.map((line) => {
+                    let pos = $scope.getTextPosition(line.text,mewStartIndex);
+                    if(pos){
+                        return pos.map((highlight) => ({...line, ...highlight}))
+                    }else {
+                        return []
+                    }
+                }).flat();
+                if(!newHighlights.length){
+                    break;
                 }
-            });
+                $scope.parsedEditorHighlights = [
+                    ...$scope.parsedEditorHighlights,
+                    ...newHighlights
+                ];
+                console.error(`=========================END ${numOfRetries}=================================`)
+            }
         }
 
         window.jQuery("body").on('DOMSubtreeModified', '.note-editable', function(){
@@ -126,58 +144,61 @@
         });
 
         $scope.createOverlay = (startNode, startIndex, endIndex, str) => {
-            const containerRef = document.querySelector(".note-editable")
-            if (!containerRef) return null;
-            const calcRange = (padding,start,end) => {
-                const range = document.createRange();
-                range.setStart(startNode, start+padding);
-                range.setEnd(startNode, end-padding);
-                return range;
-            }
-            const safeRect = calcRange(1,startIndex,endIndex+1).getBoundingClientRect();
-            const firstCharRect = calcRange(0,startIndex,startIndex+1).getBoundingClientRect()
-            const lastCharRect = calcRange(0,endIndex-1,endIndex).getBoundingClientRect()
+            const containerRef = document.getElementById("dhEditorTextHighlights");
 
-            let totalWidth = 0;
-            let charWidths = [0]
-            if(str.length > 2){
-                for (let i = startIndex+1; i<=startIndex+str.length-1;i++){
-                    const range = calcRange(0,i,i+1);
-                    const charWidth = range.getBoundingClientRect().width
-                    totalWidth += charWidth;
-                    charWidths.push(charWidth)
+            if (!containerRef) return null;
+
+            // Calculate the position and width of the overlay
+            const range = document.createRange();
+            range.setStart(startNode, startIndex);
+            range.setEnd(startNode, endIndex);
+            const rects = Array.from(range.getClientRects());
+            const containerRect = containerRef.getBoundingClientRect();
+
+            let wordMap = {}
+            let words = str.split(" ");
+            if(words.length > 1){
+                let nextIndex = startIndex;
+                words.forEach((word) => {
+                    const range = document.createRange();
+                    range.setStart(startNode, nextIndex+word.length-2);
+                    range.setEnd(startNode, nextIndex+word.length-1);
+                    let currentTop = range.getBoundingClientRect().top;
+                    if (!wordMap[currentTop]){
+                        wordMap[currentTop] = []
+                    }
+                    wordMap[currentTop].push(word);
+                    nextIndex += ++word.length;
+                });
+            }
+
+            return rects.map(rect => {
+                return {
+                    startIndex,
+                    endIndex,
+                    text: wordMap[rect.top] ?  wordMap[rect.top].join(" ") : str,
+                    left: (rect.left - containerRect.left) + 'px',
+                    top: (rect.top - containerRect.top) + 'px', // 2px border, adjust as needed
+                    width: (rect.width || 1) + 'px', // Ensure a minimum width
+                    height: (rect.height || 1) + 'px' // Ensure a minimum height
                 }
-            }else {
-                totalWidth = lastCharRect.width*str.length
-            }
-            let left = ((safeRect.left-firstCharRect.width) + 1);
-            if(left < 0){
-                left = 10;
-            }
-            return {
-                left: left + 'px',
-                top: (lastCharRect.top - 1) + 'px', // 2px border, adjust as needed
-                //width: ((safeRect.width+(firstCharRect.width+lastCharRect.width)) || 1) + 'px' // Ensure a minimum width
-                width: totalWidth+(str.length > 1 ? charWidths.max() : 0)
-            }
+            })
         }
 
-        $scope.getTextPosition = (textToFind) => {
+        $scope.getTextPosition = (textToFind,startFrom) => {
             textToFind = `${textToFind}`
+            console.error(textToFind,startFrom);
 
             const elements = document.querySelectorAll('.note-editable > *');
             let startIndex = -1;
             let elIndex = 0;
+
             for (let i = 0; i < elements.length; i++) {
                 const elementText = elements[i].textContent;
 
                 if (!elementText) continue;
-                let existingWordEndIndex = 0;
-                //const existingHighlights = $scope.highlightsFound.filter((e) => e.text === textToFind);
-                /*if(existingHighlights.length){
-                    existingWordEndIndex = existingHighlights[existingHighlights.length-1].endIndex;
-                }*/
-                const index = elementText.indexOf(textToFind);
+
+                const index = elementText.indexOf(textToFind,startFrom);
                 if (index !== -1) {
                     startIndex = index;
                     elIndex = i;
@@ -189,19 +210,11 @@
             if (startIndex !== -1) {
                 const endIndex = startIndex + textToFind.length;
                 const child = elements[elIndex].firstChild ? elements[elIndex].firstChild : elements[elIndex];
-                const dimens = $scope.createOverlay(child, startIndex, endIndex, textToFind);
-                $scope.highlightsFound.push({
-                    text:textToFind,
-                    endIndex
-                })
-                return dimens;
+
+                return $scope.createOverlay(child, startIndex, endIndex, textToFind);
             }
 
-            return {
-                top:"0px",
-                left:"0px",
-                width: undefined
-            };
+            return null;
         };
 
     });
