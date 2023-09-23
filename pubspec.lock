@@ -41,14 +41,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.17.2"
-  cupertino_icons:
-    dependency: "direct main"
-    description:
-      name: cupertino_icons
-      sha256: d57953e10f9f8327ce64a508a355f0b1ec902193f66288e8cb5070e7c47eeb2d
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.6"
   fake_async:
     dependency: transitive
     description:
@@ -66,7 +58,7 @@ packages:
     source: hosted
     version: "2.1.0"
   file_picker:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: file_picker
       sha256: be325344c1f3070354a1d84a231a1ba75ea85d413774ec4bdf444c023342e030
@@ -74,7 +66,7 @@ packages:
     source: hosted
     version: "5.5.0"
   flex_color_picker:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flex_color_picker
       sha256: f37476ab3e80dcaca94e428e159944d465dd16312fda9ff41e07e86f04bfa51c
@@ -95,7 +87,7 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_inappwebview:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_inappwebview
       sha256: fad1f2740ff4b5b7da378a639f54beeb9d787b6339c89a9de00494d92372c0bb
@@ -111,7 +103,7 @@ packages:
     source: hosted
     version: "1.1.0"
   flutter_keyboard_size:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_keyboard_size
       sha256: "90b6a45ca79a0c756ae38bc5ed90ccaeae4d917c6141a646208c5a98e4285453"
@@ -119,7 +111,7 @@ packages:
     source: hosted
     version: "1.0.1"
   flutter_keyboard_visibility:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_keyboard_visibility
       sha256: "4983655c26ab5b959252ee204c2fffa4afeb4413cd030455194ec0caa3b8e7cb"
@@ -184,13 +176,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  html_editor_enhanced:
-    dependency: "direct main"
-    description:
-      path: ".."
-      relative: true
-    source: path
-    version: "2.5.7"
   infinite_listview:
     dependency: transitive
     description:
@@ -224,7 +209,7 @@ packages:
     source: hosted
     version: "0.5.0"
   meta:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: meta
       sha256: "3c74dbf8763d36539f114c799d8a2d87343b5067e9d796ca22b5eb8437090ee3"
@@ -240,7 +225,7 @@ packages:
     source: hosted
     version: "1.0.0"
   numberpicker:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: numberpicker
       sha256: "4c129154944b0f6b133e693f8749c3f8bfb67c4d07ef9dcab48b595c22d1f156"
@@ -256,7 +241,7 @@ packages:
     source: hosted
     version: "1.8.3"
   pedantic:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: pedantic
       sha256: "67fc27ed9639506c856c840ccce7594d0bdcd91bc8d53d6e52359449a1d50602"
@@ -272,7 +257,7 @@ packages:
     source: hosted
     version: "2.1.6"
   pointer_interceptor:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: pointer_interceptor
       sha256: "7626e034489820fd599380d2bb4d3f4a0a5e3529370b62bfce53ab736b91adb2"
@@ -349,7 +334,7 @@ packages:
     source: hosted
     version: "2.1.4"
   visibility_detector:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: visibility_detector
       sha256: "15c54a459ec2c17b4705450483f3d5a2858e733aee893dcee9d75fd04814940d"

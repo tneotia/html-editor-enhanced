@@ -32,6 +32,24 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
   final HtmlEditorController controller = HtmlEditorController();
 
   @override
+  void initState() {
+    controller.setHighlights([
+      TextHighLight(text: 'Kotlin'),
+      TextHighLight(text: 'Actively'),
+      TextHighLight(text: 'Flutter'),
+      TextHighLight(text: 'Swift'),
+      TextHighLight(text: 'mobile'),
+      TextHighLight(text: 'Ionic'),
+      TextHighLight(text: 'in'),
+      TextHighLight(text: 'A'),
+      TextHighLight(text: 'technologies',css: {
+        "background-color":"green !important"
+      }),
+    ]);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -47,7 +65,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
             IconButton(
                 icon: Icon(Icons.refresh),
                 onPressed: () async {
-                  controller.clear();
+                  //controller.clear();
                   controller.insertText('A full-stack web & mobile developer with experience in web and mobile development technologies. Actively involved in tech communities as a speaker & mentor. Started with Web Progressing towards mobile development and has worked with iOS (using Swift), Android (Kotlin & Java), Ionic, React Native, Flutter, and many other platforms with various types of languages and frameworks.');
                   await Future.delayed(Duration(milliseconds: 1000));
                   /*if (kIsWeb) {
@@ -62,10 +80,14 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     TextHighLight(text: 'Swift'),
                     TextHighLight(text: 'mobile'),
                     TextHighLight(text: 'Ionic'),
-                    TextHighLight(text: 'in'),
+                    TextHighLight(text: 'in web and mobile',onTap: () {
+                      print('HOGYAA1====================================================');
+                    }),
                     TextHighLight(text: 'A'),
                     TextHighLight(text: 'technologies',css: {
                       "background-color":"green !important"
+                    },onTap: () {
+                      print('HOGYAA2====================================================');
                     }),
                   ]);
                 })

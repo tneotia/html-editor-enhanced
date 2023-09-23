@@ -10,7 +10,7 @@ class HtmlEditorController {
   HtmlEditorController({
     this.processInputHtml = true,
     this.processNewLineAsBr = false,
-    this.processOutputHtml = true
+    this.processOutputHtml = true,
   });
 
   /// Toolbar widget state to call various methods. For internal use only.
@@ -39,14 +39,35 @@ class HtmlEditorController {
   /// Internally tracks the character count in the editor
   int _characterCount = 0;
 
+  List<TextHighLight>? highLights;
+
   /// Text Editor Highlights
   void setHighlights(List<TextHighLight> highlights) {
     if(editorController != null){
+      var id = 0;
+      highLights = highlights.map((e) => TextHighLight(text: e.text,lineNo: e.lineNo,css: e.css,id: '${id++}',onTap: e.onTap)).toList();
+      print(jsonEncode(highLights));
       editorController?.evaluateJavascript(source: '''
           window.dhNgEditorScope.\$apply(function(){
-             window.dhNgEditorScope.editorHighlights = ${jsonEncode(highlights)};
+             window.dhNgEditorScope.editorHighlights = ${jsonEncode(highLights?.map((e) => TextHighLight(text: e.text,lineNo: e.lineNo,css: e.css,id: e.id)).toList())};
+             window.dhNgEditorScope.editorHighlights = window.dhNgEditorScope.editorHighlights.map((jsE) => {
+               return {
+                  ...jsE,
+                  onTap: () => {
+                    window.flutter_inappwebview.callHandler('onHighlightSelection', `\${jsE.id}`)
+                  }
+               }; 
+             });
           })
       ''');
+      editorController?.addJavaScriptHandler(
+          handlerName: 'onHighlightSelection',
+          callback: (id) {
+            var highlight = highLights?.where((element) => element.id == id[0]).toList();
+            if(highlight != null && highlight.isNotEmpty && highlight.first.onTap != null){
+              highlight.first.onTap!();
+            }
+          });
     }
   }
 

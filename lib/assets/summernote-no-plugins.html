@@ -29,7 +29,7 @@
 <div id="dhEditorTextHighlights">
     <!--{{ editorHighlights }}-->
 
-
+    <span id="counter"></span>
     <span ng-repeat="(index, highlight) in parsedEditorHighlights" ng-if="highlight.width != '1px'" style="
     position: absolute;
     left:{{highlight.left}};
@@ -131,6 +131,7 @@
                 ];
                 console.error(`=========================END ${numOfRetries}=================================`)
             }
+            console.error($scope.parsedEditorHighlights)
         }
 
         window.jQuery("body").on('DOMSubtreeModified', '.note-editable', function(){
@@ -142,6 +143,10 @@
                 //alert("a")
             },200);
         });
+
+        $scope.onPhraseTap = () => {
+            alert("Hello world")
+        }
 
         $scope.createOverlay = (startNode, startIndex, endIndex, str) => {
             const containerRef = document.getElementById("dhEditorTextHighlights");
@@ -219,6 +224,18 @@
 
     });
 
+
+    document.addEventListener("selectionchange", function () {
+        if(window.dhNgEditorScope){
+            let ngS = window.dhNgEditorScope;
+            let currentRangeOffset = document.getSelection().getRangeAt(0).startOffset;
+            let filtered = ngS.parsedEditorHighlights.filter((highlight) => highlight.startIndex <= currentRangeOffset && highlight.endIndex >= currentRangeOffset);
+            if(filtered.length && filtered[0].onTap != null){
+                filtered[0].onTap();
+            }
+            document.querySelector("#counter").textContent = `${currentRangeOffset}`;
+        }
+    })
 </script>
 </body>
 </html>
