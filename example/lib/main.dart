@@ -66,7 +66,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                 icon: Icon(Icons.refresh),
                 onPressed: () async {
                   //controller.clear();
-                  controller.insertText('A full-stack web & mobile developer with experience in web and mobile development technologies. Actively involved in tech communities as a speaker & mentor. Started with Web Progressing towards mobile development and has worked with iOS (using Swift), Android (Kotlin & Java), Ionic, React Native, Flutter, and many other platforms with various types of languages and frameworks.');
+                  controller.insertText('A full-stack web & mobile developer with experience in web and mobile development technologies. Actively involved in tech communities as a speaker & mentor. technologies  Started with Web Progressing towards mobile development and has worked technologies with iOS (using Swift), Android (Kotlin & Java), Ionic, React Native, Flutter, and many other platforms with various types of languages and frameworks.');
                   await Future.delayed(Duration(milliseconds: 1000));
                   /*if (kIsWeb) {
                     controller.reloadWeb();
@@ -80,13 +80,15 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     TextHighLight(text: 'Swift'),
                     TextHighLight(text: 'mobile'),
                     TextHighLight(text: 'Ionic'),
-                    TextHighLight(text: 'in web and mobile',onTap: () {
+                    TextHighLight(text: 'in web and mobile',onTap: (highlight, replacer) {
+                      replacer('SHIT HAPPENS');
                       print('HOGYAA1====================================================');
                     }),
                     TextHighLight(text: 'A'),
                     TextHighLight(text: 'technologies',css: {
                       "background-color":"green !important"
-                    },onTap: () {
+                    },onTap: (highlight, replacer) {
+                      replacer('WOW');
                       print('HOGYAA2====================================================');
                     }),
                   ]);

@@ -368,19 +368,22 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                         newElement.style.pointerEvents = "none";
                                       }
                                 
-                                      \$('#summernote-2').summernote({
-                                          placeholder: "${widget.htmlEditorOptions.hint ?? ""}",
-                                          tabsize: 2,
-                                          height: ${widget.otherOptions.height},
-                                          toolbar: $summernoteToolbar
-                                          disableGrammar: false,
-                                          spellCheck: ${widget.htmlEditorOptions.spellCheck},
-                                          maximumFileSize: $maximumFileSize,
-                                          ${widget.htmlEditorOptions.customOptions}
-                                          $summernoteCallbacks
-                                      });
+                                      window.initSummernote = () => {
+                                        \$('#summernote-2').summernote({
+                                            placeholder: "${widget.htmlEditorOptions.hint ?? ""}",
+                                            tabsize: 2,
+                                            height: ${widget.otherOptions.height},
+                                            toolbar: $summernoteToolbar
+                                            disableGrammar: false,
+                                            spellCheck: ${widget.htmlEditorOptions.spellCheck},
+                                            maximumFileSize: $maximumFileSize,
+                                            ${widget.htmlEditorOptions.customOptions}
+                                            $summernoteCallbacks
+                                          });
+                                      }
                                       
                                       \$(document).ready(() => {
+                                       window.initSummernote();
                                        setTimeout(window.loadOverlay,1000);
                                       });
                                       

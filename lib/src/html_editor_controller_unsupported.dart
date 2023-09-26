@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:html_editor_enhanced/src/models/parsed_highlight.dart';
 import 'package:meta/meta.dart';
 
 import 'models/text_highlight.dart';
@@ -48,24 +49,34 @@ class HtmlEditorController {
       highLights = highlights.map((e) => TextHighLight(text: e.text,lineNo: e.lineNo,css: e.css,id: '${id++}',onTap: e.onTap)).toList();
       print(jsonEncode(highLights));
       editorController?.evaluateJavascript(source: '''
-          window.dhNgEditorScope.\$apply(function(){
-             window.dhNgEditorScope.editorHighlights = ${jsonEncode(highLights?.map((e) => TextHighLight(text: e.text,lineNo: e.lineNo,css: e.css,id: e.id)).toList())};
+          window.setDHHighlights = () => {
+            window.dhNgEditorScope.editorHighlights = ${jsonEncode(highLights?.map((e) => TextHighLight(text: e.text,lineNo: e.lineNo,css: e.css,id: e.id)).toList())};
              window.dhNgEditorScope.editorHighlights = window.dhNgEditorScope.editorHighlights.map((jsE) => {
                return {
                   ...jsE,
-                  onTap: () => {
-                    window.flutter_inappwebview.callHandler('onHighlightSelection', `\${jsE.id}`)
+                  onTap: (highlight) => {
+                    window.flutter_inappwebview.callHandler('onHighlightSelection', JSON.stringify({
+                      ...highlight,
+                      onTap: null
+                    }))
                   }
                }; 
              });
-          })
+          }
+          window.dhNgEditorScope.\$apply(window.setDHHighlights)
       ''');
       editorController?.addJavaScriptHandler(
           handlerName: 'onHighlightSelection',
-          callback: (id) {
-            var highlight = highLights?.where((element) => element.id == id[0]).toList();
+          callback: (callbackData) {
+            var parsedData = jsonDecode(callbackData[0]);
+            var parsedHighlight = ParsedHighlight.fromJson(parsedData);
+            var highlight = highLights?.where((element) => element.id == parsedHighlight.highLight!.id).toList();
             if(highlight != null && highlight.isNotEmpty && highlight.first.onTap != null){
-              highlight.first.onTap!();
+              highlight.first.onTap!(parsedHighlight,(replacement) {
+                editorController?.evaluateJavascript(source: ''' 
+                  window.dhNgEditorScope.replaceHighlight(${jsonEncode(parsedHighlight.toJson())},'$replacement');
+                ''');
+              });
             }
           });
     }
