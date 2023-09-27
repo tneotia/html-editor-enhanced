@@ -66,7 +66,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                 icon: Icon(Icons.refresh),
                 onPressed: () async {
                   //controller.clear();
-                  controller.insertText('A full-stack web & mobile developer with experience in web and mobile development technologies. Actively involved in tech communities as a speaker & mentor. technologies  Started with Web Progressing towards mobile development and has worked technologies with iOS (using Swift), Android (Kotlin & Java), Ionic, React Native, Flutter, and many other platforms with various types of languages and frameworks.');
+                  controller.insertText('A full-stack web & mobile developer with experience in web and mobile development technologies. Actively involved in tech communities as a speaker & mentor. technologies  Started with Web Progressing towards mobile development and has worked technologies with iOS (using Swift), Android (Kotlin & Java), Ionic, React Native, Flutter, and many other platforms with various types of languages and frameworks. Ahsan is very good man');
                   await Future.delayed(Duration(milliseconds: 1000));
                   /*if (kIsWeb) {
                     controller.reloadWeb();
@@ -74,11 +74,13 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     controller.editorController!.reload();
                   }*/
                   controller.setHighlights([
-                    TextHighLight(text: 'Kotlin'),
+                    TextHighLight(text: 'Kotlin',onTap: (h,r) {
+                      r('');
+                    }),
                     TextHighLight(text: 'Actively'),
                     TextHighLight(text: 'Flutter'),
                     TextHighLight(text: 'Swift'),
-                    TextHighLight(text: 'mobile'),
+                    //TextHighLight(text: 'mobile'),
                     TextHighLight(text: 'Ionic'),
                     TextHighLight(text: 'in web and mobile',onTap: (highlight, replacer) {
                       replacer('SHIT HAPPENS');

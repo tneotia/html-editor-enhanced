@@ -47,7 +47,6 @@ class HtmlEditorController {
     if(editorController != null){
       var id = 0;
       highLights = highlights.map((e) => TextHighLight(text: e.text,lineNo: e.lineNo,css: e.css,id: '${id++}',onTap: e.onTap)).toList();
-      print(jsonEncode(highLights));
       editorController?.evaluateJavascript(source: '''
           window.setDHHighlights = () => {
             window.dhNgEditorScope.editorHighlights = ${jsonEncode(highLights?.map((e) => TextHighLight(text: e.text,lineNo: e.lineNo,css: e.css,id: e.id)).toList())};

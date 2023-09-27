@@ -132,7 +132,7 @@
                     }
                     return res;
                 }).flat();
-                if(!newHighlights.length){
+                if(!newHighlights.length || (newHighlights.filter((h) => $scope.parsedEditorHighlights.filter((p) => p.top === h.top && p.left === h.left && p.text === h.text).length).length)){
                     break;
                 }
                 $scope.parsedEditorHighlights = [
@@ -214,6 +214,8 @@
         $scope.getTextPosition = (line,startFrom) => {
             let textToFind = `${line.text}`
 
+            console.log("Getting Position", JSON.stringify(line), startFrom)
+
             const elements = document.querySelectorAll('.note-editable > *');
             let startIndex = -1;
             let elIndex = 0;
@@ -223,6 +225,7 @@
                 if (!elementText) continue;
 
                 const index = elementText.indexOf(textToFind,startFrom);
+                console.error(line.text)
                 if (index !== -1) {
                     startIndex = index;
                     elIndex = i;
