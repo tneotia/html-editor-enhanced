@@ -111,7 +111,9 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                 controller: controller,
                 htmlEditorOptions: const HtmlEditorOptions(hint: "Start writing your job description here or <strong>upload pdf</strong>", initialText: "", adjustHeightForKeyboard: true),
                 otherOptions: const OtherOptions(decoration: BoxDecoration(border: null)),
-                //callbacks: Callbacks(onChangeSelection: viewModel.onEditorSettingsChange,onPaste: viewModel.onPaste),
+                callbacks: Callbacks(onWebViewReady: () {
+                  print('Please');
+                }),
                 htmlToolbarOptions: const HtmlToolbarOptions(
                     renderSeparatorWidget: false,
                     toolbarType: ToolbarType.nativeGrid,

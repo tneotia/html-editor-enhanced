@@ -636,7 +636,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
     }
     if (c.onWebViewReady != null) {
       widget.controller.editorController!.evaluateJavascript(source: """
-          \$(window).load(function(_) {
+          \$(document).ready(function(_) {
             window.flutter_inappwebview.callHandler('onWebViewReady', true);
           });
         """);
