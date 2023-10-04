@@ -12,12 +12,12 @@ dependencies:
   flutter:
     sdk: flutter
   # webview plugin
-#  flutter_inappwebview: ^5.7.2+3
-  flutter_inappwebview:
-    git:
-      url: https://github.com/nesquikm/flutter_inappwebview
-      ref: heads/v5.7.2+3_fix_xcode_17
-  # plugin to get webview's visible fraction for keyboard height adjustment
+  flutter_inappwebview: ^5.8.0
+#  flutter_inappwebview:
+#    git:
+#      url: https://github.com/nesquikm/flutter_inappwebview
+#      ref: heads/v5.7.2+3_fix_xcode_17
+#  # plugin to get webview's visible fraction for keyboard height adjustment
   visibility_detector: ^0.3.3
   # plugin to get when the keyboard is hidden via back (Android)
   # or "done" (iOS) to reset the editor's height
