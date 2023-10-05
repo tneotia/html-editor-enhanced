@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/src/models/text_highlight.dart';
+import 'package:html_editor_enhanced/src/models/parsed_highlight.dart';
 
 void main() => runApp(HtmlEditorExampleApp());
 
@@ -29,10 +30,15 @@ class HtmlEditorExample extends StatefulWidget {
 
 class _HtmlEditorExampleState extends State<HtmlEditorExample> {
   String result = '';
+  List<ParsedHighlight> highlights = [];
   final HtmlEditorController controller = HtmlEditorController();
 
   @override
   void initState() {
+    controller.onTextHighlightsReplacersReady = (parsedData) {
+      highlights = parsedData;
+      setState(() {});
+    };
     controller.setHighlights([
       TextHighLight(text: 'Kotlin'),
       TextHighLight(text: 'Actively'),
@@ -83,7 +89,8 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     //TextHighLight(text: 'mobile'),
                     TextHighLight(text: 'Ionic'),
                     TextHighLight(text: 'in web and mobile',onTap: (highlight, replacer) {
-                      replacer('SHIT HAPPENS');
+                      //replacer('SHIT HAPPENS');
+                      highlights[highlights.indexOf(highlight)].replacer!('CHEETAH KAAM HGYA');
                       print('HOGYAA1====================================================');
                     }),
                     TextHighLight(text: 'A'),
@@ -112,7 +119,9 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                 htmlEditorOptions: const HtmlEditorOptions(hint: "Start writing your job description here or <strong>upload pdf</strong>", initialText: "", adjustHeightForKeyboard: true),
                 otherOptions: const OtherOptions(decoration: BoxDecoration(border: null)),
                 callbacks: Callbacks(onWebViewReady: () {
-                  print('Please');
+
+                },onFocus: () {
+                  print("Hello world");
                 }),
                 htmlToolbarOptions: const HtmlToolbarOptions(
                     renderSeparatorWidget: false,

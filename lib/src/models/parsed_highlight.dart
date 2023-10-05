@@ -8,6 +8,7 @@ class ParsedHighlight {
   String? top;
   String? width;
   String? height;
+  void Function(String)? replacer;
 
   ParsedHighlight(
       {this.highLight, this.startIndex, this.endIndex, this.left, this.top, this.width, this.height});
@@ -36,4 +37,25 @@ class ParsedHighlight {
     };
     return data;
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ParsedHighlight &&
+          runtimeType == other.runtimeType &&
+          startIndex == other.startIndex &&
+          endIndex == other.endIndex &&
+          left == other.left &&
+          top == other.top &&
+          width == other.width &&
+          height == other.height;
+
+  @override
+  int get hashCode =>
+      startIndex.hashCode ^
+      endIndex.hashCode ^
+      left.hashCode ^
+      top.hashCode ^
+      width.hashCode ^
+      height.hashCode;
 }

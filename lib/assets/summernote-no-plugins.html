@@ -98,11 +98,11 @@
         return Math.max.apply(null, this);
     };
 
-
     angular.module('dhEditorApp', []).controller('dhEditorController', ($scope) => {
         window.dhNgEditorScope = $scope;
         $scope.editorHighlights = [];
         $scope.ranges = {};
+        $scope.replacers = {};
         $scope.parsedEditorHighlights = [];
         $scope.$watch('editorHighlights', function() {
             $scope.reloadParsed();
@@ -110,6 +110,7 @@
         $scope.reloadParsed = () => {
             $scope.parsedEditorHighlights = [];
             $scope.ranges = {};
+            $scope.replacers = {};
             while (true) {
                 let existingHighlights = $scope.parsedEditorHighlights;
                 let newStartIndex = existingHighlights.length ? existingHighlights.map((h) => ({
@@ -126,7 +127,7 @@
                     })() : 0);
                     let res;
                     if(pos){
-                        res = pos.map((highlight) => ({...line, ...highlight,groupText: line.text}))
+                        res = pos.map((highlight) => ({...line, ...highlight,groupText: line.text, }))
                     }else {
                         res = []
                     }
@@ -140,6 +141,7 @@
                     ...newHighlights
                 ];
             }
+            window.flutter_inappwebview.callHandler('onReplacersReady',JSON.stringify($scope.parsedEditorHighlights));
         }
 
         let existingData =  '';
@@ -296,6 +298,9 @@
             }
         }
     })
+
+
+
 </script>
 </body>
 </html>

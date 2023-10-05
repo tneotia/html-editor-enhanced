@@ -12,6 +12,7 @@ class HtmlEditorController {
     this.processInputHtml = true,
     this.processNewLineAsBr = false,
     this.processOutputHtml = true,
+    this.onTextHighlightsReplacersReady
   });
 
   /// Toolbar widget state to call various methods. For internal use only.
@@ -78,8 +79,30 @@ class HtmlEditorController {
               });
             }
           });
+      editorController?.addJavaScriptHandler(
+          handlerName: 'onReplacersReady',
+          callback: (callbackData) {
+            var parsedData = jsonDecode(callbackData[0]);
+            var newHighlights = <ParsedHighlight>[];
+            for(var parsedItem in parsedData){
+              var parsedHighlight = ParsedHighlight.fromJson(parsedItem);
+              if(parsedHighlight.highLight != null){
+                parsedHighlight.replacer = (replacement) {
+                  editorController?.evaluateJavascript(source: ''' 
+                  window.dhNgEditorScope.replaceHighlight(${jsonEncode(parsedHighlight.toJson())},'$replacement');
+                ''');
+                };
+                newHighlights.add(parsedHighlight);
+              }
+            }
+            if(onTextHighlightsReplacersReady != null){
+              onTextHighlightsReplacersReady!(newHighlights);
+            }
+          });
     }
   }
+
+  Function(List<ParsedHighlight>)? onTextHighlightsReplacersReady;
 
   /// Gets the current character count
   // ignore: unnecessary_getters_setters

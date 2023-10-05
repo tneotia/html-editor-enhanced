@@ -1,17 +1,14 @@
-
-import 'dart:convert';
-
 import 'package:html_editor_enhanced/src/models/parsed_highlight.dart';
 
 class TextHighLight {
   final String text;
   final int? lineNo;
   final Map<String,String>? css;
-  final void Function(ParsedHighlight parsedHighlight,void Function(String) replacer)? onTap;
+  void Function(ParsedHighlight parsedHighlight,void Function(String) replacer)? onTap;
   final String? id;
 
   TextHighLight({required this.text, this.lineNo, this.css, this.onTap,this.id});
-  
+
   Map<String,dynamic> toJson() {
     var highlightJson = <String,dynamic>{};
     highlightJson['text'] = text;

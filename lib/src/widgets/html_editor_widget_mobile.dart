@@ -566,7 +566,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
     }
     if (c.onFocus != null) {
       widget.controller.editorController!.evaluateJavascript(source: """
-          \$('#summernote-2').on('summernote.focus', function() {
+          \$('#summernote-2').on('summernote.focus', function(e) {
+            e.preventDefault();
             window.flutter_inappwebview.callHandler('onFocus', 'fired');
           });
         """);
