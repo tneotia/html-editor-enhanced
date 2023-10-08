@@ -355,6 +355,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                           summernoteCallbacks = summernoteCallbacks + '}';
                           await controller.evaluateJavascript(source: """
                                       window.jQuery = \$;
+                                      
                                       function loadOverlay() {
                                         const element = document.querySelector(".note-editable");
                                         const newElement = document.getElementById("dhEditorTextHighlights");

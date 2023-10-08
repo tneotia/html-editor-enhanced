@@ -94,6 +94,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
 <!--angular js-->
 <script>
+
     Array.prototype.max = function() {
         return Math.max.apply(null, this);
     };
@@ -179,6 +180,12 @@
 
         window.jQuery(document).ready(function () {
             resetOverlayHeight();
+        });
+
+        window.jQuery("#summernote-2").on("summernote.paste",function(e,ne) {
+            let bufferText = ((ne.originalEvent || ne).clipboardData || window.clipboardData).getData('Text');
+            ne.preventDefault();
+            document.execCommand('insertText', false, bufferText);
         });
 
         $scope.onPhraseTap = () => {
