@@ -102,7 +102,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
     var bottomHeight = MediaQuery.of(context).padding.bottom;
     if (widget.controller.editorController is InAppWebViewController && Platform.isIOS) {
       (widget.controller.editorController as InAppWebViewController).evaluateJavascript(source: ''' 
-                               \$(".note-editable").css('cssText', "height:${bottomHeight <= 0 ? 87 : 100}% !important; overscroll-behavior: none !important;");   
+                               \$(".note-editable").css('cssText', "height:${bottomHeight <= 0 ? 95 : 100}% !important; overscroll-behavior: none !important;");   
                                \$("#dhEditorTextHighlights").css('height', "${bottomHeight <= 0 ? 87 : 100}% !important;");  
                               ''');
     }
