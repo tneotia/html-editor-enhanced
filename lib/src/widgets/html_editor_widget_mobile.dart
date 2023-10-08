@@ -102,7 +102,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
     var bottomHeight = MediaQuery.of(context).padding.bottom;
     if (widget.controller.editorController is InAppWebViewController && Platform.isIOS) {
       (widget.controller.editorController as InAppWebViewController).evaluateJavascript(source: ''' 
-                               \$(".note-editable").css('cssText', "height:${bottomHeight <= 0 ? 87 : 100}% !important;");   
+                               \$(".note-editable").css('cssText', "height:${bottomHeight <= 0 ? 87 : 100}% !important; overscroll-behavior: none !important;");   
+                               \$("#dhEditorTextHighlights").css('height', "${bottomHeight <= 0 ? 87 : 100}% !important;");  
                               ''');
     }
     return GestureDetector(
@@ -150,7 +151,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       },
                       initialOptions: InAppWebViewGroupOptions(
                           crossPlatform: InAppWebViewOptions(
-                            disableVerticalScroll: true,
+                            disableVerticalScroll: false,
                             javaScriptEnabled: true,
                             transparentBackground: true,
                             useShouldOverrideUrlLoading: true,
@@ -358,14 +359,15 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                         const element = document.querySelector(".note-editable");
                                         const newElement = document.getElementById("dhEditorTextHighlights");
                                         
-                                        newElement.style.height = element.scrollHeight + 'px';
-                                        newElement.style.width = element.scrollWidth + 'px';
+                                        newElement.style.height = 100 + '%';
+                                        newElement.style.width = 100 + '%';
                                         newElement.style.position = 'absolute';
                                         element.style.zIndex = 2;
                                         newElement.style.zIndex = 1;
                                         newElement.style.top = 0;
                                         newElement.style.left = 0;
                                         newElement.style.pointerEvents = "none";
+                                        newElement.style.overflowY = "scroll";
                                       }
                                 
                                       window.initSummernote = () => {

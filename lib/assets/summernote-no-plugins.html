@@ -46,7 +46,7 @@
     }
 
     .note-editor.note-frame .note-editing-area .note-editable {
-        padding-bottom: 30px !important;
+        padding-bottom: 10px !important;
     }
 
     .note-editor.note-frame .note-statusbar {
@@ -146,6 +146,22 @@
 
         let existingData =  '';
 
+        const resetOverlayHeight = () => {
+            (function() {
+                const element = document.querySelector(".note-editable");
+                const newElement = document.getElementById("dhEditorTextHighlights");
+
+                //newElement.style.height = element.scrollHeight + 'px';
+                //newElement.style.width = element.scrollWidth + 'px';
+
+                element.onscroll = function() {
+                    let maxScrollPosition = element.scrollHeight;
+                    newElement.style.height = `${maxScrollPosition}`;
+                    newElement.style.top = `-${this.scrollTop}px`;
+                };
+            })();
+        }
+
         window.jQuery("body").on('DOMSubtreeModified', '.note-editable', function(){
             setTimeout(() => {
                 let newData =  document.querySelector('.note-editable').innerHTML;
@@ -157,7 +173,12 @@
                 $scope.reloadParsed()
                 $scope.$apply();
                 //alert("a")
+                resetOverlayHeight();
             },200);
+        });
+
+        window.jQuery(document).ready(function () {
+            resetOverlayHeight();
         });
 
         $scope.onPhraseTap = () => {
