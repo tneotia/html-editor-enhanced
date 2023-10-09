@@ -81,19 +81,30 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                   }*/
                   controller.setHighlights([
                     TextHighLight(text: 'Kotlin',onTap: (h,r) {
-                      r('');
+                      print("as");
                     }),
-                    TextHighLight(text: 'Actively'),
-                    TextHighLight(text: 'Flutter'),
-                    TextHighLight(text: 'Swift'),
+                    TextHighLight(text: 'Actively',onTap: (h,r){
+                      print("as");
+                    }),
+                    TextHighLight(text: 'Flutter',onTap: (h,r){
+                      print("as");
+                    }),
+                    TextHighLight(text: 'Swift',onTap: (h,r){
+                      print("as");
+                    }),
                     //TextHighLight(text: 'mobile'),
-                    TextHighLight(text: 'Ionic'),
+                    TextHighLight(text: 'Ionic',onTap: (h,r){
+                      highlights[highlights.indexOf(h)].replacer!('CHEETAH KAAM HGYA');
+                      print("as");
+                    }),
                     TextHighLight(text: 'in web and mobile',onTap: (highlight, replacer) {
                       //replacer('SHIT HAPPENS');
-                      highlights[highlights.indexOf(highlight)].replacer!('CHEETAH KAAM HGYA');
+                      //highlights[highlights.indexOf(highlight)].replacer!('CHEETAH KAAM HGYA');
                       print('HOGYAA1====================================================');
                     }),
-                    TextHighLight(text: 'A'),
+                    TextHighLight(text: 'A',onTap: (h,r){
+                      print("as");
+                    }),
                     TextHighLight(text: 'technologies',css: {
                       "background-color":"green !important"
                     },onTap: (highlight, replacer) {

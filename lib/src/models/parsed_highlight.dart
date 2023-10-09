@@ -8,6 +8,7 @@ class ParsedHighlight {
   String? top;
   String? width;
   String? height;
+  String? groupText;
   void Function(String)? replacer;
 
   ParsedHighlight(
@@ -21,6 +22,7 @@ class ParsedHighlight {
     top = json['top'];
     width = json['width'];
     height = json['height'];
+    groupText = json['groupText'];
   }
 
   Map<String, dynamic> toJson() {
@@ -31,6 +33,7 @@ class ParsedHighlight {
     data['top'] = top;
     data['width'] = width;
     data['height'] = height;
+    data['groupText'] = groupText;
     data = {
       ...data,
       ...highLight?.toJson() ?? {}
@@ -48,7 +51,8 @@ class ParsedHighlight {
           left == other.left &&
           top == other.top &&
           width == other.width &&
-          height == other.height;
+          height == other.height &&
+          groupText == other.groupText;
 
   @override
   int get hashCode =>
@@ -57,5 +61,6 @@ class ParsedHighlight {
       left.hashCode ^
       top.hashCode ^
       width.hashCode ^
-      height.hashCode;
+      height.hashCode ^
+      groupText.hashCode;
 }
