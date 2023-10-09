@@ -6,7 +6,7 @@ class TextHighLight<T> {
   final Map<String,String>? css;
   void Function(ParsedHighlight parsedHighlight,void Function(String) replacer)? onTap;
   final String? id;
-  final T? data;
+  T? data;
 
   TextHighLight({required this.text, this.lineNo, this.css, this.onTap,this.id,this.data});
 
