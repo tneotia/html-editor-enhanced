@@ -33,7 +33,7 @@
     position: absolute;
     left:{{highlight.left}};
     top:{{highlight.top}};
-    width:{{highlight.width}}; transition: all 0.25s linear; color: transparent !important; border-bottom: 1px solid green; background-color: red; opacity: .3; {{highlight.css}}" data-idx="{{highlight.startIndex}} | {{highlight.endIndex}}" class="bg-primary absolute">{{highlight.text}}</span>
+    width:{{highlight.width}}; transition: all 0.25s linear; color: transparent !important; border-bottom: 2px solid red; background-color: transparent; opacity: .7; {{highlight.css}}" data-idx="{{highlight.startIndex}} | {{highlight.endIndex}}" class="bg-primary absolute">{{highlight.text}}</span>
 </div>
 <style>
     * {
@@ -230,7 +230,7 @@
                         endIndex,
                         text: wordMap[rect.top] ?  wordMap[rect.top].join(" ") : str,
                         left: (rect.left - containerRect.left) + 'px',
-                        top: (rect.top - containerRect.top) + 'px', // 2px border, adjust as needed
+                        top: ((rect.top - containerRect.top)-3) + 'px', // 2px border, adjust as needed
                         width: (rect.width || 1) + 'px', // Ensure a minimum width
                         height: (rect.height || 1) + 'px', // Ensure a minimum height,
                         elIndex
