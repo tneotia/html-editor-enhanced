@@ -9,7 +9,10 @@ import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/utils/utils.dart';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
-import 'package:html_editor_enhanced/utils/shims/dart_ui.dart' as ui;
+import 'dart:ui_web' as ui;
+
+import '../models/parsed_highlight.dart';
+import '../models/text_highlight.dart';
 
 /// The HTML Editor widget itself, for web (uses IFrameElement)
 class HtmlEditorWidget extends StatefulWidget {
@@ -207,17 +210,45 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     }
     var summernoteScripts = """
       <script type="text/javascript">
+                 window.jQuery = \$;
+                                      
+                  function loadOverlay() {
+                      const element = document.querySelector(".note-editable");
+                      const newElement = document.getElementById("dhEditorTextHighlights");
+                      
+                      newElement.style.height = 100 + '%';
+                      newElement.style.width = 100 + '%';
+                      newElement.style.position = 'absolute';
+                      element.style.zIndex = 2;
+                      newElement.style.zIndex = 1;
+                      newElement.style.top = 0;
+                      newElement.style.left = 0;
+                      newElement.style.pointerEvents = "none";
+                      newElement.style.overflowY = "scroll";
+                  }
+                  
+                  window.initSummernote = () => {
+                      \$('#summernote-2').summernote({
+                          placeholder: "${widget
+                          .htmlEditorOptions.hint}",
+                          tabsize: 2,
+                          height: ${widget.otherOptions
+                          .height},
+                          disableGrammar: false,
+                          spellCheck: ${widget
+                          .htmlEditorOptions.spellCheck},
+                          maximumFileSize: $maximumFileSize,
+                          ${widget.htmlEditorOptions.customOptions}
+                          $summernoteCallbacks
+                      });
+                  }
+         
+        window.createdViewId = '${createdViewId}';
+        window.isWeb = ${kIsWeb}; 
         \$(document).ready(function () {
-          \$('#summernote-2').summernote({
-            placeholder: "${widget.htmlEditorOptions.hint}",
-            tabsize: 2,
-            height: ${widget.otherOptions.height},
-            disableGrammar: false,
-            spellCheck: ${widget.htmlEditorOptions.spellCheck},
-            maximumFileSize: $maximumFileSize,
-            ${widget.htmlEditorOptions.customOptions}
-            $summernoteCallbacks
-          });
+           window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onWebViewReady", "contents": true}), "*");
+           window.initSummernote();
+           setTimeout(window.loadOverlay,1000);
           
           \$('#summernote-2').on('summernote.change', function(_, contents, \$editable) {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onChangeContent", "contents": contents}), "*");
@@ -241,7 +272,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                 window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: htmlHeight", "height": height}), "*");
               }
               if (data["type"].includes("setInputType")) {
-                document.getElementsByClassName('note-editable')[0].setAttribute('inputmode', '${describeEnum(widget.htmlEditorOptions.inputType)}');
+                document.getElementsByClassName('note-editable')[0].setAttribute('inputmode', '${describeEnum(
+        widget.htmlEditorOptions.inputType)}');
               }
               if (data["type"].includes("setText")) {
                 \$('#summernote-2').summernote('code', data["text"]);
@@ -377,6 +409,13 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
               }
               $userScripts
             }
+          }else {
+           let data = JSON.parse(e.data);
+           console.error(data);
+           if(data.name === "replaceHighlight"){
+              console.error(data.name,data.data);
+             window.dhNgEditorScope.replaceHighlight(data.data.data,data.data.replacement);
+           }
           }
         }
         
@@ -444,6 +483,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         }
         
         $jsCallbacks
+        ${getHighlightingScripts()}
       </script>
     """;
     var filePath =
@@ -532,11 +572,79 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         html.window.postMessage(jsonStr, '*');
         html.window.postMessage(jsonStr2, '*');
       });
+
     ui.platformViewRegistry
         .registerViewFactory(createdViewId, (int viewId) => iframe);
     setState(mounted, this.setState, () {
       summernoteInit = Future.value(true);
     });
+  }
+
+  String getHighlightingScripts() {
+      var scripts = '';
+      var id = 0;
+      widget.controller.highLights = widget.controller.highLights?.map((e) => TextHighLight(text: e.text,lineNo: e.lineNo,css: e.css,id: '${id++}',onTap: e.onTap, data: e.data)).toList();
+      scripts += '''
+       setTimeout(() => {
+       window.setDHHighlights = () => {
+            window.dhNgEditorScope.editorHighlights = ${jsonEncode( widget.controller.highLights?.map((e) => TextHighLight(text: e.text,lineNo: e.lineNo,css: e.css,id: e.id,data: e.data)).toList())};
+             window.dhNgEditorScope.editorHighlights = window.dhNgEditorScope.editorHighlights.map((jsE) => {
+               return {
+                  ...jsE,
+                  onTap: (highlight) => {
+                   window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onHighlightSelection", "contents": JSON.stringify({
+                      ...highlight,
+                      onTap: null
+                    })}), "*");
+                  }
+               }; 
+             });
+          }
+          
+          window.dhNgEditorScope.\$apply(window.setDHHighlights)
+       },2000)
+      ''';
+
+      return scripts;
+  }
+
+  void onHighlightSelection(data) {
+    var parsedData = jsonDecode(data);
+    var parsedHighlight = ParsedHighlight.fromJson(parsedData);
+    var highlight = widget.controller.highLights?.where((element) => element.id == parsedHighlight.highLight!.id).toList();
+    if(highlight != null && highlight.isNotEmpty && highlight.first.onTap != null){
+      highlight.first.onTap!(parsedHighlight,(replacement) {
+        //   window.parent.postMessage.replaceHighlight(${jsonEncode(parsedHighlight.toJson())},'$replacement');
+        widget.controller.sendJavascriptDataWeb('replaceHighlight', {
+          'data': parsedHighlight.toJson(),
+          'replacement': replacement
+        });
+      });
+    }
+  }
+
+  void onHighlightsReplacersReady(data) {
+    var parsedData = jsonDecode(data);
+    var newHighlights = <ParsedHighlight>[];
+    if(!(parsedData is Iterable)){
+      parsedData = [parsedData];
+    }
+    for(var parsedItem in parsedData){
+      var parsedHighlight = ParsedHighlight.fromJson(parsedItem);
+      if(parsedHighlight.highLight != null){
+        parsedHighlight.replacer = (replacement) {
+          //window.dhNgEditorScope.replaceHighlight(${jsonEncode(parsedHighlight.toJson())},'$replacement');
+          widget.controller.sendJavascriptDataWeb('replaceHighlight', {
+            'data': parsedHighlight.toJson(),
+            'replacement': replacement
+          });
+        };
+        newHighlights.add(parsedHighlight);
+      }
+    }
+    if(widget.controller.onTextHighlightsReplacersReady != null){
+      widget.controller.onTextHighlightsReplacersReady!(newHighlights);
+    }
   }
 
   @override
@@ -714,7 +822,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           c.onBeforeCommand!.call(data['contents']);
         }
         if (data['type'].contains('onChangeContent')) {
-          c.onChangeContent!.call(data['contents']);
+          c.onChangeContent?.call(data['contents']);
         }
         if (data['type'].contains('onChangeCodeview')) {
           c.onChangeCodeview!.call(data['contents']);
@@ -803,6 +911,19 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         }
         if (data['type'].contains('characterCount')) {
           widget.controller.characterCount = data['totalChars'];
+        }
+        if (data['type'].contains('onWebViewReady')) {
+          c.onWebViewReady!.call();
+        }
+        if (data['type'].contains('onWebViewReady')) {
+          c.onWebViewReady!.call();
+        }
+        if (data['type'].contains('onReplacersReady')) {
+          onHighlightsReplacersReady(data['contents']);
+        }
+        if (data['type'].contains('onHighlightSelection')) {
+          print(data);
+          onHighlightsReplacersReady(data['contents']);
         }
       }
     });

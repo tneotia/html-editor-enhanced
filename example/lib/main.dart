@@ -31,27 +31,30 @@ class HtmlEditorExample extends StatefulWidget {
 class _HtmlEditorExampleState extends State<HtmlEditorExample> {
   String result = '';
   List<ParsedHighlight> highlights = [];
-  final HtmlEditorController controller = HtmlEditorController();
+  final HtmlEditorController controller = HtmlEditorController(highLights: [
+    TextHighLight(text: 'Kotlin',css: {
+      "background-color":"red"
+    }),
+    TextHighLight(text: 'Actively'),
+    TextHighLight(text: 'Flutter'),
+    TextHighLight(text: 'Swift'),
+    TextHighLight(text: 'mobile'),
+    TextHighLight(text: 'Ionic'),
+    TextHighLight(text: 'in'),
+    TextHighLight(text: 'A'),
+    TextHighLight(text: 'technologies',css: {
+      "background-color":"green !important"
+    }),
+  ]);
 
   @override
   void initState() {
     controller.onTextHighlightsReplacersReady = (parsedData) {
       highlights = parsedData;
       setState(() {});
+      print("onTextHighlightsReplacersReady");
     };
-    controller.setHighlights([
-      TextHighLight(text: 'Kotlin'),
-      TextHighLight(text: 'Actively'),
-      TextHighLight(text: 'Flutter'),
-      TextHighLight(text: 'Swift'),
-      TextHighLight(text: 'mobile'),
-      TextHighLight(text: 'Ionic'),
-      TextHighLight(text: 'in'),
-      TextHighLight(text: 'A'),
-      TextHighLight(text: 'technologies',css: {
-        "background-color":"green !important"
-      }),
-    ]);
+    //controller.setHighlights
     super.initState();
   }
 
@@ -72,14 +75,18 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                 icon: Icon(Icons.refresh),
                 onPressed: () async {
                   //controller.clear();
+                  if(highlights.isEmpty){
                   controller.insertText('A full-stack web & mobile developer with experience in web and mobile development technologies. Actively involved in tech communities as a speaker & mentor. technologies  Started with Web Progressing towards mobile development and has worked technologies with iOS (using Swift), Android (Kotlin & Java), Ionic, React Native, Flutter, and many other platforms with various types of languages and frameworks. Ahsan is very good man');
                   await Future.delayed(Duration(milliseconds: 1000));
+                  }else{
+                    highlights.first.replacer!('TEST_REPLACED');
+                  }
                   /*if (kIsWeb) {
                     controller.reloadWeb();
                   } else {
                     controller.editorController!.reload();
                   }*/
-                  controller.setHighlights([
+                  /*controller.setHighlights([
                     TextHighLight(text: 'Kotlin',onTap: (h,r) {
                       print("as");
                     }),
@@ -111,15 +118,9 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                       replacer('WOW');
                       print('HOGYAA2====================================================');
                     }),
-                  ]);
+                  ]);*/
                 })
           ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            controller.toggleCodeView();
-          },
-          child: Text(r'<\>', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -128,11 +129,11 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
               child: HtmlEditor(
                 controller: controller,
                 htmlEditorOptions: const HtmlEditorOptions(hint: "Start writing your job description here or <strong>upload pdf</strong>", initialText: "", adjustHeightForKeyboard: true),
-                otherOptions: const OtherOptions(decoration: BoxDecoration(border: null)),
+                otherOptions: OtherOptions(decoration: BoxDecoration(border: null),height: MediaQuery.of(context).size.height),
                 callbacks: Callbacks(onWebViewReady: () {
 
                 },onFocus: () {
-                  print("Hello world");
+
                 }),
                 htmlToolbarOptions: const HtmlToolbarOptions(
                     renderSeparatorWidget: false,

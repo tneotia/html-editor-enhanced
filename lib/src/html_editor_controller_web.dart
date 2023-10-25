@@ -8,12 +8,17 @@ import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart
     as unsupported;
 import 'package:meta/meta.dart';
 
+import 'models/parsed_highlight.dart';
+import 'models/text_highlight.dart';
+
 /// Controller for web
 class HtmlEditorController extends unsupported.HtmlEditorController {
   HtmlEditorController({
     this.processInputHtml = true,
     this.processNewLineAsBr = false,
     this.processOutputHtml = true,
+    this.highLights,
+    this.onTextHighlightsReplacersReady
   });
 
   /// Toolbar widget state to call various methods. For internal use only.
@@ -44,6 +49,10 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
   /// Manages the view ID for the [HtmlEditorController] on web
   String? _viewId;
+
+  List<TextHighLight>? highLights;
+
+  Function(List<ParsedHighlight>)? onTextHighlightsReplacersReady;
 
   /// Internal method to set the view ID when iframe initialization
   /// is complete
@@ -235,6 +244,22 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     if (hasReturnValue) {
       var e = await html.window.onMessage.firstWhere(
           (element) => json.decode(element.data)['type'] == 'toDart: $name');
+      return json.decode(e.data);
+    }
+  }
+
+  /// A function to execute JS passed as a [WebScript] to the editor. This should
+  /// only be used on Flutter Web.
+  @override
+  Future<dynamic> sendJavascriptDataWeb(String name,Map<String,dynamic> data,
+      {bool hasReturnValue = false}) async {
+    _evaluateJavascriptWeb(data: {
+      'name':name,
+      'data':data
+    });
+    if (hasReturnValue) {
+      var e = await html.window.onMessage.firstWhere(
+          (element) => element.data['name'] == name);
       return json.decode(e.data);
     }
   }

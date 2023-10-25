@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/src/models/parsed_highlight.dart';
 import 'package:meta/meta.dart';
@@ -12,6 +10,7 @@ class HtmlEditorController {
     this.processInputHtml = true,
     this.processNewLineAsBr = false,
     this.processOutputHtml = true,
+    this.highLights,
     this.onTextHighlightsReplacersReady
   });
 
@@ -43,64 +42,10 @@ class HtmlEditorController {
 
   List<TextHighLight>? highLights;
 
-  /// Text Editor Highlights
-  void setHighlights(List<TextHighLight> highlights) {
-    if(editorController != null){
-      var id = 0;
-      highLights = highlights.map((e) => TextHighLight(text: e.text,lineNo: e.lineNo,css: e.css,id: '${id++}',onTap: e.onTap, data: e.data)).toList();
-      editorController?.evaluateJavascript(source: '''
-          window.setDHHighlights = () => {
-            window.dhNgEditorScope.editorHighlights = ${jsonEncode(highLights?.map((e) => TextHighLight(text: e.text,lineNo: e.lineNo,css: e.css,id: e.id,data: e.data)).toList())};
-             window.dhNgEditorScope.editorHighlights = window.dhNgEditorScope.editorHighlights.map((jsE) => {
-               return {
-                  ...jsE,
-                  onTap: (highlight) => {
-                    window.flutter_inappwebview.callHandler('onHighlightSelection', JSON.stringify({
-                      ...highlight,
-                      onTap: null
-                    }))
-                  }
-               }; 
-             });
-          }
-          window.dhNgEditorScope.\$apply(window.setDHHighlights)
-      ''');
-      editorController?.addJavaScriptHandler(
-          handlerName: 'onHighlightSelection',
-          callback: (callbackData) {
-            var parsedData = jsonDecode(callbackData[0]);
-            var parsedHighlight = ParsedHighlight.fromJson(parsedData);
-            var highlight = highLights?.where((element) => element.id == parsedHighlight.highLight!.id).toList();
-            if(highlight != null && highlight.isNotEmpty && highlight.first.onTap != null){
-              highlight.first.onTap!(parsedHighlight,(replacement) {
-                editorController?.evaluateJavascript(source: ''' 
-                  window.dhNgEditorScope.replaceHighlight(${jsonEncode(parsedHighlight.toJson())},'$replacement');
-                ''');
-              });
-            }
-          });
-      editorController?.addJavaScriptHandler(
-          handlerName: 'onReplacersReady',
-          callback: (callbackData) {
-            var parsedData = jsonDecode(callbackData[0]);
-            var newHighlights = <ParsedHighlight>[];
-            for(var parsedItem in parsedData){
-              var parsedHighlight = ParsedHighlight.fromJson(parsedItem);
-              if(parsedHighlight.highLight != null){
-                parsedHighlight.replacer = (replacement) {
-                  editorController?.evaluateJavascript(source: ''' 
-                  window.dhNgEditorScope.replaceHighlight(${jsonEncode(parsedHighlight.toJson())},'$replacement');
-                ''');
-                };
-                newHighlights.add(parsedHighlight);
-              }
-            }
-            if(onTextHighlightsReplacersReady != null){
-              onTextHighlightsReplacersReady!(newHighlights);
-            }
-          });
-    }
-  }
+  // /// Text Editor Highlights
+  // void setHighlights(List<TextHighLight> highlights) {
+  //   print("UNSUPPORTED");
+  // }
 
   Function(List<ParsedHighlight>)? onTextHighlightsReplacersReady;
 
@@ -155,6 +100,9 @@ class HtmlEditorController {
   Future<dynamic> evaluateJavascriptWeb(String name,
           {bool hasReturnValue = false}) =>
       Future.value();
+
+  Future<dynamic> sendJavascriptDataWeb(String name,Map<String,dynamic> data,
+      {bool hasReturnValue = false}) =>  Future.value();
 
   /// Gets the text from the editor and returns it as a [String].
   Future<String> getText() => Future.value('');

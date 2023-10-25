@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
@@ -11,6 +12,8 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_keyboard_size/flutter_keyboard_size.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:html_editor_enhanced/html_editor.dart' hide NavigationActionPolicy, UserScript, ContextMenu;
+import 'package:html_editor_enhanced/src/models/parsed_highlight.dart';
+import 'package:html_editor_enhanced/src/models/text_highlight.dart';
 import 'package:html_editor_enhanced/utils/utils.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -138,7 +141,6 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       initialFile: filePath,
                       onWebViewCreated: (InAppWebViewController controller) {
                         widget.controller.editorController = controller;
-
                         controller.addJavaScriptHandler(
                             handlerName: 'FormatSettings',
                             callback: (e) {
@@ -537,6 +539,64 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
     );
   }
 
+  void enableHighlightingFeatures() {
+    if(widget.controller.editorController != null){
+      var id = 0;
+      widget.controller.highLights = widget.controller.highLights?.map((e) => TextHighLight(text: e.text,lineNo: e.lineNo,css: e.css,id: '${id++}',onTap: e.onTap, data: e.data)).toList();
+      widget.controller.editorController.evaluateJavascript(source: '''
+          window.setDHHighlights = () => {
+            window.dhNgEditorScope.editorHighlights = ${jsonEncode( widget.controller.highLights?.map((e) => TextHighLight(text: e.text,lineNo: e.lineNo,css: e.css,id: e.id,data: e.data)).toList())};
+             window.dhNgEditorScope.editorHighlights = window.dhNgEditorScope.editorHighlights.map((jsE) => {
+               return {
+                  ...jsE,
+                  onTap: (highlight) => {
+                    window.flutter_inappwebview.callHandler('onHighlightSelection', JSON.stringify({
+                      ...highlight,
+                      onTap: null
+                    }))
+                  }
+               }; 
+             });
+          }
+          window.dhNgEditorScope.\$apply(window.setDHHighlights)
+      ''');
+      widget.controller.editorController.addJavaScriptHandler(
+          handlerName: 'onHighlightSelection',
+          callback: (callbackData) {
+            var parsedData = jsonDecode(callbackData[0]);
+            var parsedHighlight = ParsedHighlight.fromJson(parsedData);
+            var highlight = widget.controller.highLights?.where((element) => element.id == parsedHighlight.highLight!.id).toList();
+            if(highlight != null && highlight.isNotEmpty && highlight.first.onTap != null){
+              highlight.first.onTap!(parsedHighlight,(replacement) {
+                widget.controller.editorController?.evaluateJavascript(source: ''' 
+                  window.dhNgEditorScope.replaceHighlight(${jsonEncode(parsedHighlight.toJson())},'$replacement');
+                ''');
+              });
+            }
+          });
+      widget.controller.editorController?.addJavaScriptHandler(
+          handlerName: 'onReplacersReady',
+          callback: (callbackData) {
+            var parsedData = jsonDecode(callbackData[0]);
+            var newHighlights = <ParsedHighlight>[];
+            for(var parsedItem in parsedData){
+              var parsedHighlight = ParsedHighlight.fromJson(parsedItem);
+              if(parsedHighlight.highLight != null){
+                parsedHighlight.replacer = (replacement) {
+                  widget.controller.editorController?.evaluateJavascript(source: ''' 
+                  window.dhNgEditorScope.replaceHighlight(${jsonEncode(parsedHighlight.toJson())},'$replacement');
+                ''');
+                };
+                newHighlights.add(parsedHighlight);
+              }
+            }
+            if(widget.controller.onTextHighlightsReplacersReady != null){
+              widget.controller.onTextHighlightsReplacersReady!(newHighlights);
+            }
+          });
+    }
+  }
+
   /// adds the callbacks set by the user into the scripts
   void addJSCallbacks(Callbacks c) {
     if (c.onBeforeCommand != null) {
@@ -789,12 +849,11 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
             c.onScrollEvent!.call(scrollTop[0]);
           });
     }
-    if (c.onWebViewReady != null) {
-      widget.controller.editorController!.addJavaScriptHandler(
-          handlerName: 'onWebViewReady',
-          callback: (_) {
-            c.onWebViewReady!.call();
-          });
-    }
+    widget.controller.editorController!.addJavaScriptHandler(
+        handlerName: 'onWebViewReady',
+        callback: (_) {
+          enableHighlightingFeatures();
+          c.onWebViewReady?.call();
+        });
   }
 }

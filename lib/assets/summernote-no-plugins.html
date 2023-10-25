@@ -24,7 +24,6 @@
 <body ng-controller="dhEditorController">
 <div id="summernote-2"></div>
 <!--headString-->
-<!--summernoteScripts-->
 <!--minor styling to improve editor design-->
 <div id="dhEditorTextHighlights">
     <!--{{ editorHighlights }}-->
@@ -47,6 +46,10 @@
 
     .note-editor.note-frame .note-editing-area .note-editable {
         padding-bottom: 10px !important;
+    }
+
+    .note-editing-area {
+        height: 100vh;
     }
 
     .note-editor.note-frame .note-statusbar {
@@ -101,6 +104,7 @@
 
     angular.module('dhEditorApp', []).controller('dhEditorController', ($scope) => {
         window.dhNgEditorScope = $scope;
+
         $scope.editorHighlights = [];
         $scope.ranges = {};
         $scope.replacers = {};
@@ -142,7 +146,11 @@
                     ...newHighlights
                 ];
             }
-            window.flutter_inappwebview.callHandler('onReplacersReady',JSON.stringify($scope.parsedEditorHighlights));
+            if(window.isWeb) {
+                window.parent.postMessage(JSON.stringify({"view": window.createdViewId, "type": "toDart: onReplacersReady", "contents": JSON.stringify($scope.parsedEditorHighlights)}), "*");
+            }else{
+                window.flutter_inappwebview.callHandler('onReplacersReady',JSON.stringify($scope.parsedEditorHighlights));
+            }
         }
 
         let existingData =  '';
@@ -188,9 +196,6 @@
             document.execCommand('insertText', false, bufferText);
         });
 
-        $scope.onPhraseTap = () => {
-            alert("Hello world")
-        }
 
         $scope.createOverlay = (startNode, startIndex, endIndex, lineData, elIndex) => {
             let str = lineData.text;
@@ -244,8 +249,6 @@
         $scope.getTextPosition = (line,startFrom) => {
             let textToFind = `${line.text}`
 
-            console.log("Getting Position", JSON.stringify(line), startFrom)
-
             const elements = document.querySelectorAll('.note-editable > *');
             let startIndex = -1;
             let elIndex = 0;
@@ -255,7 +258,7 @@
                 if (!elementText) continue;
 
                 const index = elementText.indexOf(textToFind,startFrom);
-                console.error(line.text)
+
                 if (index !== -1) {
                     startIndex = index;
                     elIndex = i;
@@ -330,5 +333,6 @@
 
 
 </script>
+<!--summernoteScripts-->
 </body>
 </html>
