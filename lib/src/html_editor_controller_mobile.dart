@@ -43,12 +43,14 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   @override
   final bool processOutputHtml;
 
+  @override
   List<TextHighLight>? highLights;
 
-  // /// Text Editor Highlights
-  // void setHighlights(List<TextHighLight> highlights) {
-  //
-  // }
+  /// Text Editor Highlights
+  @override
+  void setHighlights(List<TextHighLight> highlights) {
+
+  }
 
   Function(List<ParsedHighlight>)? onTextHighlightsReplacersReady;
 

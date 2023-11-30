@@ -50,8 +50,10 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Manages the view ID for the [HtmlEditorController] on web
   String? _viewId;
 
+  @override
   List<TextHighLight>? highLights;
 
+  @override
   Function(List<ParsedHighlight>)? onTextHighlightsReplacersReady;
 
   /// Internal method to set the view ID when iframe initialization

@@ -230,13 +230,13 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                   window.initSummernote = () => {
                       \$('#summernote-2').summernote({
                           placeholder: "${widget
-                          .htmlEditorOptions.hint}",
+        .htmlEditorOptions.hint}",
                           tabsize: 2,
                           height: ${widget.otherOptions
-                          .height},
+        .height},
                           disableGrammar: false,
                           spellCheck: ${widget
-                          .htmlEditorOptions.spellCheck},
+        .htmlEditorOptions.spellCheck},
                           maximumFileSize: $maximumFileSize,
                           ${widget.htmlEditorOptions.customOptions}
                           $summernoteCallbacks
@@ -411,9 +411,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             }
           }else {
            let data = JSON.parse(e.data);
-           console.error(data);
            if(data.name === "replaceHighlight"){
-              console.error(data.name,data.data);
              window.dhNgEditorScope.replaceHighlight(data.data.data,data.data.replacement);
            }
           }
@@ -922,7 +920,6 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           onHighlightsReplacersReady(data['contents']);
         }
         if (data['type'].contains('onHighlightSelection')) {
-          print(data);
           onHighlightsReplacersReady(data['contents']);
         }
       }

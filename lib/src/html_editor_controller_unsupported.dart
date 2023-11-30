@@ -43,9 +43,9 @@ class HtmlEditorController {
   List<TextHighLight>? highLights;
 
   // /// Text Editor Highlights
-  // void setHighlights(List<TextHighLight> highlights) {
-  //   print("UNSUPPORTED");
-  // }
+  void setHighlights(List<TextHighLight> highlights) {
+    throw 'Unsupported';
+  }
 
   Function(List<ParsedHighlight>)? onTextHighlightsReplacersReady;
 
