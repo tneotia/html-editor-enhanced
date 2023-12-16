@@ -11,3 +11,5 @@ example/android/local.properties
 example/android/app/local.properties
 .fvm
 example/.fvm
+.idea
+example/.vscode
