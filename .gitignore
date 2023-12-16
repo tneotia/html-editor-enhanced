@@ -7,3 +7,7 @@
 build/
 .flutter-plugins
 .flutter-plugins-dependencies
+example/android/local.properties
+example/android/app/local.properties
+.fvm
+example/.fvm
