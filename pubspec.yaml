@@ -1,48 +1,45 @@
 name: html_editor_enhanced
-description: HTML rich text editor for Android, iOS, and Web, using the Summernote library.
-  Enhanced with highly customizable widget-based controls, bug fixes, callbacks, dark mode, and more.
+description: HTML rich text editor for Android, iOS, and Web, using the
+  Summernote library. Enhanced with highly customizable widget-based controls,
+  bug fixes, callbacks, dark mode, and more.
 version: 2.5.2
 homepage: https://github.com/tneotia/html-editor-enhanced
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: ">=2.19.0 <3.0.0"
   flutter: ">=3.0.0"
 
 dependencies:
+  # plugin to get files from filesystem
+  file_picker: ^6.1.1
+  # plugin to show a color picker for foreground/highlight color
+  flex_color_picker: ^3.3.0
   flutter:
     sdk: flutter
-  # webview plugin
-  flutter_inappwebview: ^5.7.2+3
-  # plugin to get webview's visible fraction for keyboard height adjustment
-  visibility_detector: ^0.4.0+2
+  flutter_inappwebview: ^5.8.0
   # plugin to get when the keyboard is hidden via back (Android)
   # or "done" (iOS) to reset the editor's height
-  flutter_keyboard_visibility: ^5.4.0
-  # plugin to show a color picker for foreground/highlight color
-  flex_color_picker: ^3.0.2
-  # plugin to get files from filesystem
-  file_picker: ^6.0.0
+  flutter_keyboard_visibility: ^5.4.1
+  # plugin for @internal annotation
+  meta: '>=1.0.0 <2.0.0'
   # plugin to show a scrollable number picker for inserting tables
-  numberpicker: ^2.1.1
+  numberpicker: ^2.1.2
   # plugin to allow dropdowns and dialogs to be interactable when displaying over the editor
   # related to https://github.com/flutter/flutter/issues/54027
   # pinned to 0.9.1 because of issues with CanvasKit in the latest versions
-  pointer_interceptor: ^0.9.3+3
-  # plugin to help maintain effective Dart standards
-  pedantic: ^1.11.1
-  # plugin for @internal annotation
-  meta: '>=1.0.0 <2.0.0'
+  pointer_interceptor: ^0.10.0
+  visibility_detector: ^0.4.0+2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  # plugin to help maintain effective Flutter standards
+  flutter_lints: ^2.0.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-
 # The following section is specific to Flutter.
 flutter:
-
   assets:
     - packages/html_editor_enhanced/assets/summernote.html
     - packages/html_editor_enhanced/assets/summernote-no-plugins.html
@@ -57,7 +54,6 @@ flutter:
   # The 'pluginClass' and Android 'package' identifiers should not ordinarily
   # be modified. They are used by the tooling to maintain consistency when
   # adding or updating assets for this project.
-
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
@@ -68,7 +64,6 @@ flutter:
   #
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
-
   # To add custom fonts to your plugin package, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
