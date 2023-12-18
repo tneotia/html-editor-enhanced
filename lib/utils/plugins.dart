@@ -28,13 +28,12 @@ class SummernoteAtMention extends Plugins {
   /// Callback to run code when a mention is selected
   final void Function(String)? onSelect;
 
-  const SummernoteAtMention(
-      {this.getSuggestionsMobile, this.mentionsWeb, this.onSelect})
+  const SummernoteAtMention({this.getSuggestionsMobile, this.mentionsWeb, this.onSelect})
       : assert(kIsWeb ? mentionsWeb != null : getSuggestionsMobile != null);
 
   @override
   String getHeadString() {
-    return '<script src=\"assets/packages/html_editor_enhanced/assets/plugins/summernote-at-mention/summernote-at-mention.js\"></script>';
+    return '<script src="assets/packages/html_editor_enhanced/assets/plugins/summernote-at-mention/summernote-at-mention.js"></script>';
   }
 
   @override
@@ -45,9 +44,8 @@ class SummernoteAtMention extends Plugins {
   String getMentionsWeb() {
     var mentionsString = '[';
     for (var e in mentionsWeb!) {
-      mentionsString =
-          mentionsString + "'$e'" + (e != mentionsWeb!.last ? ', ' : '');
+      mentionsString = "$mentionsString'$e'${e != mentionsWeb!.last ? ', ' : ''}";
     }
-    return mentionsString + ']';
+    return '$mentionsString]';
   }
 }

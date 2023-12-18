@@ -2,42 +2,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart'
-    as unsupported;
+import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart' as unsupported;
 
 /// Controller for mobile
 class HtmlEditorController extends unsupported.HtmlEditorController {
   HtmlEditorController({
-    this.processInputHtml = true,
-    this.processNewLineAsBr = false,
-    this.processOutputHtml = true,
+    super.processInputHtml = true,
+    super.processNewLineAsBr = false,
+    super.processOutputHtml = true,
   });
-
-  /// Toolbar widget state to call various methods. For internal use only.
-  @override
-  ToolbarWidgetState? toolbar;
-
-  /// Determines whether text processing should happen on input HTML, e.g.
-  /// whether a new line should be converted to a <br>.
-  ///
-  /// The default value is false.
-  @override
-  final bool processInputHtml;
-
-  /// Determines whether newlines (\n) should be written as <br>. This is not
-  /// recommended for HTML documents.
-  ///
-  /// The default value is false.
-  @override
-  final bool processNewLineAsBr;
-
-  /// Determines whether text processing should happen on output HTML, e.g.
-  /// whether <p><br></p> is returned as "". For reference, Summernote uses
-  /// that HTML as the default HTML (when no text is in the editor).
-  ///
-  /// The default value is true.
-  @override
-  final bool processOutputHtml;
 
   /// Manages the [InAppWebViewController] for the [HtmlEditorController]
   InAppWebViewController? _editorController;
@@ -66,8 +39,8 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Gets the text from the editor and returns it as a [String].
   @override
   Future<String> getText() async {
-    var text = await _evaluateJavascript(
-        source: "\$('#summernote-2').summernote('code');") as String?;
+    var text =
+        await _evaluateJavascript(source: "\$('#summernote-2').summernote('code');") as String?;
     if (processOutputHtml &&
         (text == null ||
             text.isEmpty ||
@@ -82,15 +55,13 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   @override
   void setText(String text) {
     text = _processHtml(html: text);
-    _evaluateJavascript(
-        source: "\$('#summernote-2').summernote('code', '$text');");
+    _evaluateJavascript(source: "\$('#summernote-2').summernote('code', '$text');");
   }
 
   /// Sets the editor to full-screen mode.
   @override
   void setFullScreen() {
-    _evaluateJavascript(
-        source: '\$("#summernote-2").summernote("fullscreen.toggle");');
+    _evaluateJavascript(source: '\$("#summernote-2").summernote("fullscreen.toggle");');
   }
 
   /// Sets the focus to the editor.
@@ -116,8 +87,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// toggles the codeview in the Html editor
   @override
   void toggleCodeView() {
-    _evaluateJavascript(
-        source: "\$('#summernote-2').summernote('codeview.toggle');");
+    _evaluateJavascript(source: "\$('#summernote-2').summernote('codeview.toggle');");
   }
 
   /// disables the Html editor
@@ -150,8 +120,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Note: This method should only be used for plaintext strings
   @override
   void insertText(String text) {
-    _evaluateJavascript(
-        source: "\$('#summernote-2').summernote('insertText', '$text');");
+    _evaluateJavascript(source: "\$('#summernote-2').summernote('insertText', '$text');");
   }
 
   /// Insert HTML at the position of the cursor in the editor
@@ -159,16 +128,14 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   @override
   void insertHtml(String html) {
     html = _processHtml(html: html);
-    _evaluateJavascript(
-        source: "\$('#summernote-2').summernote('pasteHTML', '$html');");
+    _evaluateJavascript(source: "\$('#summernote-2').summernote('pasteHTML', '$html');");
   }
 
   /// Insert a network image at the position of the cursor in the editor
   @override
   void insertNetworkImage(String url, {String filename = ''}) {
     _evaluateJavascript(
-        source:
-            "\$('#summernote-2').summernote('insertImage', '$url', '$filename');");
+        source: "\$('#summernote-2').summernote('insertImage', '$url', '$filename');");
   }
 
   /// Insert a link at the position of the cursor in the editor
@@ -203,9 +170,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// when [adjustHeightForKeyboard] is enabled.
   @override
   void resetHeight() {
-    _evaluateJavascript(
-        source:
-            "window.flutter_inappwebview.callHandler('setHeight', 'reset');");
+    _evaluateJavascript(source: "window.flutter_inappwebview.callHandler('setHeight', 'reset');");
   }
 
   /// Recalculates the height of the editor to remove any vertical scrolling.
