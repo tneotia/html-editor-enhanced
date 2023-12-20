@@ -1,23 +1,24 @@
 library html_editor;
 
-export 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart'
-    if (dart.library.html) 'package:html_editor_enhanced/src/html_editor_controller_web.dart'
-    if (dart.library.io) 'package:html_editor_enhanced/src/html_editor_controller_mobile.dart';
+export 'package:html_editor_enhanced/src/widgets/toolbar_widget.dart';
+export 'package:html_editor_enhanced/utils/callbacks.dart';
+export 'package:html_editor_enhanced/utils/toolbar.dart';
+export 'package:html_editor_enhanced/utils/plugins.dart';
+export 'package:html_editor_enhanced/utils/file_upload_model.dart';
+export 'package:html_editor_enhanced/utils/options.dart';
+export 'package:html_editor_enhanced/utils/utils.dart'
+    hide setState, intersperse, getRandString;
+
 export 'package:html_editor_enhanced/src/html_editor_unsupported.dart'
     if (dart.library.html) 'package:html_editor_enhanced/src/html_editor_web.dart'
     if (dart.library.io) 'package:html_editor_enhanced/src/html_editor_mobile.dart';
-export 'package:html_editor_enhanced/src/widgets/custom_html_editor.dart';
-export 'package:html_editor_enhanced/src/widgets/math_keyboard_dialog.dart';
-export 'package:html_editor_enhanced/src/widgets/toolbar_widget.dart';
-export 'package:html_editor_enhanced/utils/callbacks.dart';
-export 'package:html_editor_enhanced/utils/file_upload_model.dart';
-export 'package:html_editor_enhanced/utils/options.dart';
-export 'package:html_editor_enhanced/utils/plugins.dart';
+
+export 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart'
+    if (dart.library.html) 'package:html_editor_enhanced/src/html_editor_controller_web.dart'
+    if (dart.library.io) 'package:html_editor_enhanced/src/html_editor_controller_mobile.dart';
+
 export 'package:html_editor_enhanced/utils/shims/flutter_inappwebview_fake.dart'
     if (dart.library.io) 'package:flutter_inappwebview/flutter_inappwebview.dart';
-export 'package:html_editor_enhanced/utils/toolbar.dart';
-export 'package:html_editor_enhanced/utils/utils.dart'
-    hide setState, intersperse, getRandString;
 
 /// Defines the 3 different cases for file insertion failing
 enum UploadError { unsupportedFile, exceededMaxSize, jsException }
@@ -71,7 +72,6 @@ enum ButtonType {
   otherFile,
   table,
   hr,
-  fn,
   fullscreen,
   codeview,
   undo,
