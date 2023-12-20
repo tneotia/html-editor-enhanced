@@ -37,7 +37,7 @@ class HtmlEditorController {
         tags.add(element);
       }
     });
-    String tag = '';
+    var tag = '';
     tags.forEach((element) {
       tag = '$tag$element';
     });
