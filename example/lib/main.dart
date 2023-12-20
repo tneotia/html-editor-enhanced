@@ -1,7 +1,7 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:file_picker/file_picker.dart';
 
 void main() => runApp(HtmlEditorExampleApp());
 
@@ -79,13 +79,12 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                   onButtonPressed:
                       (ButtonType type, bool? status, Function? updateStatus) {
                     print(
-                        "button '${describeEnum(type)}' pressed, the current selected status is $status");
+                        "button '${(type.name)}' pressed, the current selected status is $status");
                     return true;
                   },
                   onDropdownChanged: (DropdownType type, dynamic changed,
                       Function(dynamic)? updateSelectedItem) {
-                    print(
-                        "dropdown '${describeEnum(type)}' changed to $changed");
+                    print("dropdown '${(type.name)}' changed to $changed");
                     return true;
                   },
                   mediaLinkInsertInterceptor:
@@ -136,7 +135,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                   },*/
                     onImageUploadError: (FileUpload? file, String? base64Str,
                         UploadError error) {
-                  print(describeEnum(error));
+                      print((error.name));
                   print(base64Str ?? '');
                   if (file != null) {
                     print(file.name);
@@ -144,23 +143,23 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     print(file.type);
                   }
                 }, onKeyDown: (int? keyCode) {
-                  print('$keyCode key downed');
-                  print(
-                      'current character count: ${controller.characterCount}');
-                }, onKeyUp: (int? keyCode) {
-                  print('$keyCode key released');
-                }, onMouseDown: () {
-                  print('mouse downed');
-                }, onMouseUp: () {
-                  print('mouse released');
-                }, onNavigationRequestMobile: (String url) {
-                  print(url);
-                  return NavigationActionPolicy.ALLOW;
-                }, onPaste: () {
-                  print('pasted into editor');
-                }, onScroll: () {
-                  print('editor scrolled');
-                }),
+                      print('$keyCode key downed');
+                      print(
+                          'current character count: ${controller.characterCount}');
+                    }, onKeyUp: (int? keyCode) {
+                      print('$keyCode key released');
+                    }, onMouseDown: () {
+                      print('mouse downed');
+                    }, onMouseUp: () {
+                      print('mouse released');
+                    }, onNavigationRequestMobile: (String url) {
+                      print(url);
+                      return NavigationActionPolicy.ALLOW;
+                    }, onPaste: () {
+                      print('pasted into editor');
+                    }, onScroll: () {
+                      print('editor scrolled');
+                    }),
                 plugins: [
                   SummernoteAtMention(
                       getSuggestionsMobile: (String value) {
@@ -187,7 +186,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                         controller.undo();
                       },
                       child:
-                          Text('Undo', style: TextStyle(color: Colors.white)),
+                      Text('Undo', style: TextStyle(color: Colors.white)),
                     ),
                     SizedBox(
                       width: 16,
@@ -199,7 +198,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                         controller.clear();
                       },
                       child:
-                          Text('Reset', style: TextStyle(color: Colors.white)),
+                      Text('Reset', style: TextStyle(color: Colors.white)),
                     ),
                     SizedBox(
                       width: 16,
@@ -207,12 +206,12 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     TextButton(
                       style: TextButton.styleFrom(
                           backgroundColor:
-                              Theme.of(context).colorScheme.secondary),
+                          Theme.of(context).colorScheme.secondary),
                       onPressed: () async {
                         var txt = await controller.getText();
                         if (txt.contains('src=\"data:')) {
                           txt =
-                              '<text removed due to base-64 data, displaying the text could cause the app to crash>';
+                          '<text removed due to base-64 data, displaying the text could cause the app to crash>';
                         }
                         setState(() {
                           result = txt;
@@ -229,7 +228,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     TextButton(
                       style: TextButton.styleFrom(
                           backgroundColor:
-                              Theme.of(context).colorScheme.secondary),
+                          Theme.of(context).colorScheme.secondary),
                       onPressed: () {
                         controller.redo();
                       },
@@ -265,7 +264,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     TextButton(
                       style: TextButton.styleFrom(
                           backgroundColor:
-                              Theme.of(context).colorScheme.secondary),
+                          Theme.of(context).colorScheme.secondary),
                       onPressed: () async {
                         controller.enable();
                       },
@@ -286,7 +285,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     TextButton(
                       style: TextButton.styleFrom(
                           backgroundColor:
-                              Theme.of(context).colorScheme.secondary),
+                          Theme.of(context).colorScheme.secondary),
                       onPressed: () {
                         controller.insertText('Google');
                       },
@@ -299,7 +298,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     TextButton(
                       style: TextButton.styleFrom(
                           backgroundColor:
-                              Theme.of(context).colorScheme.secondary),
+                          Theme.of(context).colorScheme.secondary),
                       onPressed: () {
                         controller.insertHtml(
                             '''<p style="color: blue">Google in blue</p>''');
@@ -318,7 +317,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     TextButton(
                       style: TextButton.styleFrom(
                           backgroundColor:
-                              Theme.of(context).colorScheme.secondary),
+                          Theme.of(context).colorScheme.secondary),
                       onPressed: () async {
                         controller.insertLink(
                             'Google linked', 'https://google.com', true);
@@ -334,7 +333,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     TextButton(
                       style: TextButton.styleFrom(
                           backgroundColor:
-                              Theme.of(context).colorScheme.secondary),
+                          Theme.of(context).colorScheme.secondary),
                       onPressed: () {
                         controller.insertNetworkImage(
                             'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png',
@@ -362,7 +361,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                             'Info notification', NotificationType.info);
                       },
                       child:
-                          Text('Info', style: TextStyle(color: Colors.white)),
+                      Text('Info', style: TextStyle(color: Colors.white)),
                     ),
                     SizedBox(
                       width: 16,
@@ -383,7 +382,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     TextButton(
                       style: TextButton.styleFrom(
                           backgroundColor:
-                              Theme.of(context).colorScheme.secondary),
+                          Theme.of(context).colorScheme.secondary),
                       onPressed: () async {
                         controller.addNotification(
                             'Success notification', NotificationType.success);
@@ -399,7 +398,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     TextButton(
                       style: TextButton.styleFrom(
                           backgroundColor:
-                              Theme.of(context).colorScheme.secondary),
+                          Theme.of(context).colorScheme.secondary),
                       onPressed: () {
                         controller.addNotification(
                             'Danger notification', NotificationType.danger);
@@ -434,7 +433,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     TextButton(
                       style: TextButton.styleFrom(
                           backgroundColor:
-                              Theme.of(context).colorScheme.secondary),
+                          Theme.of(context).colorScheme.secondary),
                       onPressed: () async {
                         controller.removeNotification();
                       },
