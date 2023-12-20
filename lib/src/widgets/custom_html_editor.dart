@@ -43,11 +43,6 @@ class CustomHtmlEditorWidget extends StatelessWidget {
         //by default
         onButtonPressed:
             (ButtonType type, bool? status, Function? updateStatus) {
-          if (type.name == ButtonType.picture.name) {
-            print('no image');
-            controller.insertHtml(tableTex);
-            return false;
-          }
           print(
               "button '${type.name}' pressed, the current selected status is $status");
           return true;

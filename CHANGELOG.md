@@ -1,3 +1,7 @@
+## [2.6.6] = 2023-12-20
+
+* Image Upload was turned off, now its on
+
 ## [2.6.5] = 2023-12-20
 
 * Version Name
