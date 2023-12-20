@@ -5,7 +5,7 @@ version: 2.5.1
 homepage: https://github.com/tneotia/html-editor-enhanced
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=2.15.0 <3.0.0'
   flutter: ">=3.0.0"
 
 dependencies:
@@ -32,6 +32,8 @@ dependencies:
   pedantic: ^1.11.1
   # plugin for @internal annotation
   meta: '>=1.0.0 <2.0.0'
+  math_keyboard: ^0.2.1
+  webview_flutter: ^4.4.2
 
 dev_dependencies:
   flutter_test:

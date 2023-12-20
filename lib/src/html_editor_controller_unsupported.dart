@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:meta/meta.dart';
 
@@ -8,6 +10,39 @@ class HtmlEditorController {
     this.processNewLineAsBr = false,
     this.processOutputHtml = true,
   });
+
+  final HashMap<String, String> _latexMap = HashMap();
+
+  void addToHashMap(String key, String value) {
+    _latexMap.addAll({
+      key: value,
+    });
+  }
+
+  Future<String> getHtmlStringWithLatex() async {
+    var txt = await getText();
+    final reg = RegExp('<math>', multiLine: true);
+    var tags = <String>[];
+    var res = txt.split(reg);
+    print('result = $res');
+
+    res.forEach((element) {
+      if (element.contains(r'</math>')) {
+        var split = element.split(r'</math>');
+        var after = split.last;
+        element = '<math>${split.first}</math>';
+        tags.add(_latexMap[element] ?? element);
+        tags.add(after);
+      } else {
+        tags.add(element);
+      }
+    });
+    String tag = '';
+    tags.forEach((element) {
+      tag = '$tag$element';
+    });
+    return tag;
+  }
 
   /// Toolbar widget state to call various methods. For internal use only.
   @internal
@@ -84,7 +119,7 @@ class HtmlEditorController {
   /// A function to execute JS passed as a [WebScript] to the editor. This should
   /// only be used on Flutter Web.
   Future<dynamic> evaluateJavascriptWeb(String name,
-          {bool hasReturnValue = false}) =>
+      {bool hasReturnValue = false}) =>
       Future.value();
 
   /// Gets the text from the editor and returns it as a [String].
