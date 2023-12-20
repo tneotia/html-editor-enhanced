@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:html_editor_enhanced_fork_latex/html_editor.dart';
 import 'package:meta/meta.dart';
 
 /// Fallback controller (should never be used)

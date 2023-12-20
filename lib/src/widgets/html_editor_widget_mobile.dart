@@ -8,9 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:html_editor_enhanced/html_editor.dart'
+import 'package:html_editor_enhanced_fork_latex/html_editor.dart'
     hide NavigationActionPolicy, UserScript, ContextMenu;
-import 'package:html_editor_enhanced/utils/utils.dart';
+import 'package:html_editor_enhanced_fork_latex/utils/utils.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 /// The HTML Editor widget itself, for mobile (uses InAppWebView)

@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'dart:html' as html;
 
 import 'package:flutter/foundation.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart'
+import 'package:html_editor_enhanced_fork_latex/html_editor.dart';
+import 'package:html_editor_enhanced_fork_latex/src/html_editor_controller_unsupported.dart'
     as unsupported;
 import 'package:meta/meta.dart';
 

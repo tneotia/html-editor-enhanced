@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:html_editor_enhanced_fork_latex/utils/custom_math_field_controller.dart';
 import 'package:math_keyboard/math_keyboard.dart';
 
 class MathKeyboardDialog extends StatelessWidget {
@@ -13,11 +14,12 @@ class MathKeyboardDialog extends StatelessWidget {
     }
   }
 
-  final MathFieldEditingController controller;
+  final CustomMathFieldEditingController controller;
   final MathField? mathField;
 
   @override
   Widget build(BuildContext context) {
+    var tex = '';
     return Dialog(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -25,20 +27,47 @@ class MathKeyboardDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            _mathField(context),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: MathField(
+                focusNode: mathField?.focusNode,
+                autofocus: mathField?.autofocus ?? true,
+                controller: controller,
+                variables:
+                    mathField?.variables ?? ['x', 'y', 'z', 'A', 'B', 'C'],
+                decoration: mathField?.decoration ??
+                    InputDecoration(
+                      suffix: MouseRegion(
+                        cursor: MaterialStateMouseCursor.clickable,
+                        child: GestureDetector(
+                          onTap: controller.clear,
+                          child: const Icon(
+                            Icons.highlight_remove_rounded,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                    ),
+                onChanged: mathField?.onChanged ??
+                    (str) {
+                      tex = str;
+                    },
+                onSubmitted: mathField?.onSubmitted,
+                opensKeyboard: mathField?.opensKeyboard ?? true,
+              ),
+            ),
             const SizedBox(height: 15),
             TextButton(
               onPressed: () {
-                controller.setTexString('');
                 Navigator.pop(context, '');
-                print(controller.texStringAsFun);
+                print(texStringAsFun(tex));
               },
               child: const Text('Close'),
             ),
             TextButton(
               onPressed: () {
                 Navigator.pop(context, controller.texStringAsFun);
-                print(controller.texStringAsFun);
+                print(texStringAsFun(tex));
               },
               child: const Text('save'),
             ),
@@ -48,34 +77,5 @@ class MathKeyboardDialog extends StatelessWidget {
     );
   }
 
-  Widget _mathField(context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: MathField(
-        focusNode: mathField?.focusNode,
-        autofocus: mathField?.autofocus ?? true,
-        controller: controller,
-        variables: mathField?.variables ?? ['x', 'y', 'z', 'A', 'B', 'C'],
-        decoration: mathField?.decoration ??
-            InputDecoration(
-              suffix: MouseRegion(
-                cursor: MaterialStateMouseCursor.clickable,
-                child: GestureDetector(
-                  onTap: controller.clear,
-                  child: const Icon(
-                    Icons.highlight_remove_rounded,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-            ),
-        onChanged: mathField?.onChanged ??
-            (str) {
-              controller.setTexString(str);
-            },
-        onSubmitted: mathField?.onSubmitted,
-        opensKeyboard: mathField?.opensKeyboard ?? true,
-      ),
-    );
-  }
+  String texStringAsFun(String str) => '\\($str\\)';
 }
