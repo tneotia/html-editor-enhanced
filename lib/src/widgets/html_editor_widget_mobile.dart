@@ -72,9 +72,10 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
       filePath = widget.htmlEditorOptions.filePath!;
     } else if (widget.plugins.isEmpty) {
       filePath =
-          'packages/html_editor_enhanced/assets/summernote-no-plugins.html';
+          'packages/html_editor_enhanced_fork_latex/assets/summernote-no-plugins.html';
     } else {
-      filePath = 'packages/html_editor_enhanced/assets/summernote.html';
+      filePath =
+          'packages/html_editor_enhanced_fork_latex/assets/summernote.html';
     }
     super.initState();
   }
@@ -456,7 +457,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                           widget.htmlEditorOptions.darkMode != false) {
                         //todo fix for iOS (https://github.com/pichillilorenzo/flutter_inappwebview/issues/695)
                         var darkCSS =
-                            '<link href=\"${(widget.htmlEditorOptions.filePath != null ? "file:///android_asset/flutter_assets/packages/html_editor_enhanced/assets/" : "") + "summernote-lite-dark.css"}\" rel=\"stylesheet\">';
+                            '<link href=\"${(widget.htmlEditorOptions.filePath != null ? "file:///android_asset/flutter_assets/packages/html_editor_enhanced_fork_latex/assets/" : "") + "summernote-lite-dark.css"}\" rel=\"stylesheet\">';
                         await controller.evaluateJavascript(
                             source: "\$('head').append('$darkCSS');");
                       }

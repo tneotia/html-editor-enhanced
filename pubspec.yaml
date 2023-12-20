@@ -1,12 +1,12 @@
 name: html_editor_enhanced_fork_latex
 description: HTML rich text editor for Android, iOS, and Web, using the Summernote library.
   Enhanced with highly customizable widget-based controls, bug fixes, callbacks, dark mode, and more.
-version: 2.6.1
+version: 2.6.3
 homepage: https://github.com/tneotia/html-editor-enhanced
 repository: https://github.com/AhmadKhateebq/html-editor-enhanced-with-latex.git
 
 environment:
-  sdk: '>=2.15.0 <3.0.0'
+  sdk: '>=2.15.0 <4.0.0'
   flutter: ">=3.0.0"
 
 dependencies:
@@ -47,15 +47,15 @@ dev_dependencies:
 flutter:
 
   assets:
-    - packages/html_editor_enhanced/assets/summernote.html
-    - packages/html_editor_enhanced/assets/summernote-no-plugins.html
-    - packages/html_editor_enhanced/assets/summernote-lite.min.css
-    - packages/html_editor_enhanced/assets/summernote-lite-dark.css
-    - packages/html_editor_enhanced/assets/summernote-lite.min.js
-    - packages/html_editor_enhanced/assets/jquery.min.js
-    - packages/html_editor_enhanced/assets/font/summernote.eot
-    - packages/html_editor_enhanced/assets/font/summernote.ttf
-    - packages/html_editor_enhanced/assets/plugins/summernote-at-mention/summernote-at-mention.js
+    - packages/html_editor_enhanced_fork_latex/assets/summernote.html
+    - packages/html_editor_enhanced_fork_latex/assets/summernote-no-plugins.html
+    - packages/html_editor_enhanced_fork_latex/assets/summernote-lite.min.css
+    - packages/html_editor_enhanced_fork_latex/assets/summernote-lite-dark.css
+    - packages/html_editor_enhanced_fork_latex/assets/summernote-lite.min.js
+    - packages/html_editor_enhanced_fork_latex/assets/jquery.min.js
+    - packages/html_editor_enhanced_fork_latex/assets/font/summernote.eot
+    - packages/html_editor_enhanced_fork_latex/assets/font/summernote.ttf
+    - packages/html_editor_enhanced_fork_latex/assets/plugins/summernote-at-mention/summernote-at-mention.js
   # This section identifies this Flutter project as a plugin project.
   # The 'pluginClass' and Android 'package' identifiers should not ordinarily
   # be modified. They are used by the tooling to maintain consistency when

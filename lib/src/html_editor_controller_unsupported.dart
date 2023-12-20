@@ -119,7 +119,7 @@ class HtmlEditorController {
   /// A function to execute JS passed as a [WebScript] to the editor. This should
   /// only be used on Flutter Web.
   Future<dynamic> evaluateJavascriptWeb(String name,
-      {bool hasReturnValue = false}) =>
+          {bool hasReturnValue = false}) =>
       Future.value();
 
   /// Gets the text from the editor and returns it as a [String].

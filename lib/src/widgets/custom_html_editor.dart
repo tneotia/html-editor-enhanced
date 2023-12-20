@@ -150,6 +150,7 @@ class CustomHtmlEditorWidget extends StatelessWidget {
     return _htmlWidget();
   }
 }
+
 const tableTex = r'''
   <tex>
   \begin{array} { | l | l | l | } 

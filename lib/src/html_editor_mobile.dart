@@ -51,7 +51,7 @@ class HtmlEditor extends StatelessWidget {
       );
     } else {
       return Text(
-          'Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart');
+          'Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced_fork_latex/html_editor.dart');
     }
   }
 }
