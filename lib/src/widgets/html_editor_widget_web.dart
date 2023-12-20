@@ -4,9 +4,9 @@ import 'dart:html' as html;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:html_editor_enhanced/utils/shims/dart_ui.dart' as ui;
-import 'package:html_editor_enhanced/utils/utils.dart';
+import 'package:html_editor_enhanced_fork_latex/html_editor.dart';
+import 'package:html_editor_enhanced_fork_latex/utils/shims/dart_ui.dart' as ui;
+import 'package:html_editor_enhanced_fork_latex/utils/utils.dart';
 
 export 'dart:html';
 

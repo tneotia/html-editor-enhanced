@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  html_editor_enhanced:
+  html_editor_enhanced_fork_latex:
     # When depending on this package from a real application you should use:
     #   html_editor_enhanced: ^x.y.z
     # See https://dart.dev/tools/pub/dependencies#version-constraints

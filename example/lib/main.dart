@@ -1,7 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:html_editor_enhanced_fork_latex/html_editor.dart';
 
 void main() => runApp(HtmlEditorExampleApp());
 
