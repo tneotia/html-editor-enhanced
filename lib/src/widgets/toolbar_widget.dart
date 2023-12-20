@@ -8,8 +8,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_editor_enhanced_fork_latex/html_editor.dart';
+import 'package:html_editor_enhanced_fork_latex/utils/custom_math_field_controller.dart';
 import 'package:html_editor_enhanced_fork_latex/utils/utils.dart';
-import 'package:math_keyboard/math_keyboard.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -2611,7 +2611,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                       ?.call(ButtonType.fn, null, null) ??
                   true;
               if (proceed) {
-                final c = MathFieldEditingController();
+                final c = CustomMathFieldEditingController();
                 await showDialog(
                     context: context,
                     builder: (context) => MathKeyboardDialog(controller: c));
