@@ -153,7 +153,6 @@ class InsertButtons extends Toolbar {
   final bool otherFile;
   final bool table;
   final bool hr;
-  final bool fn;
 
   const InsertButtons({
     this.link = true,
@@ -163,7 +162,6 @@ class InsertButtons extends Toolbar {
     this.otherFile = false,
     this.table = true,
     this.hr = true,
-    this.fn = true,
   });
 
   List<Icon> getIcons() {
