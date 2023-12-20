@@ -1139,7 +1139,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                               ColorPickerType.wheel: true,
                             },
                             copyPasteBehavior:
-                            const ColorPickerCopyPasteBehavior(
+                                const ColorPickerCopyPasteBehavior(
                               parseShortHexCode: true,
                             ),
                             actionButtons: const ColorPickerActionButtons(

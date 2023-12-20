@@ -72,5 +72,4 @@ class MathKeyboardDialog extends StatelessWidget {
       ),
     );
   }
-
 }
