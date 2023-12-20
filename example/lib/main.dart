@@ -208,10 +208,10 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                           backgroundColor:
                           Theme.of(context).colorScheme.secondary),
                       onPressed: () async {
-                        var txt = await controller.getText();
+                        var txt = await controller.getHtmlStringWithLatex();
                         if (txt.contains('src=\"data:')) {
                           txt =
-                          '<text removed due to base-64 data, displaying the text could cause the app to crash>';
+                              '<text removed due to base-64 data, displaying the text could cause the app to crash>';
                         }
                         setState(() {
                           result = txt;

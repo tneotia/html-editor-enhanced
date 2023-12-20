@@ -503,7 +503,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               dropdownColor: widget.htmlToolbarOptions.dropdownBackgroundColor,
               menuDirection: widget.htmlToolbarOptions.dropdownMenuDirection ??
                   (widget.htmlToolbarOptions.toolbarPosition ==
-                      ToolbarPosition.belowEditor
+                          ToolbarPosition.belowEditor
                       ? DropdownMenuDirection.up
                       : DropdownMenuDirection.down),
               menuMaxHeight: widget.htmlToolbarOptions.dropdownMenuMaxHeight ??

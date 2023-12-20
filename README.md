@@ -481,9 +481,11 @@ Notes:
 You can use these files from the package to avoid adding more asset files:
 
 ```html
-<script src="assets/packages/html_editor_enhanced/assets/jquery.min.js"></script>
-<link href="assets/packages/html_editor_enhanced/assets/summernote-lite.min.css" rel="stylesheet">
-<script src="assets/packages/html_editor_enhanced/assets/summernote-lite.min.js"></script>
+
+<script src="assets/packages/html_editor_enhanced_fork_latex/assets/jquery.min.js"></script>
+<link href="assets/packages/html_editor_enhanced_fork_latex/assets/summernote-lite.min.css"
+      rel="stylesheet">
+<script src="assets/packages/html_editor_enhanced_fork_latex/assets/summernote-lite.min.js"></script>
 ```
 
 See the example HTML file [below](#example-html-for-filepath) for an actual example.
@@ -848,7 +850,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:html_editor_enhanced_fork_latex/html_editor.dart';
 
 class _ExampleState extends State<Example> {
   final HtmlEditorController controller = HtmlEditorController();
@@ -950,9 +952,9 @@ class _ExampleState extends State<Example> {
     <meta name="description" content="Flutter Summernote HTML Editor">
     <meta name="author" content="tneotia">
     <title>Summernote Text Editor HTML</title>
-    <script src="assets/packages/html_editor_enhanced/assets/jquery.min.js"></script>
-    <link href="assets/packages/html_editor_enhanced/assets/summernote-lite.min.css" rel="stylesheet">
-    <script src="assets/packages/html_editor_enhanced/assets/summernote-lite.min.js"></script>
+    <script src="assets/packages/html_editor_enhanced_fork_latex/assets/jquery.min.js"></script>
+    <link href="assets/packages/html_editor_enhanced_fork_latex/assets/summernote-lite.min.css" rel="stylesheet">
+    <script src="assets/packages/html_editor_enhanced_fork_latex/assets/summernote-lite.min.js"></script>
     <!--darkCSS-->
 </head>
 <body>

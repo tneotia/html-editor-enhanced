@@ -19,7 +19,6 @@ class MathKeyboardDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var tex = '';
     return Dialog(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -48,10 +47,7 @@ class MathKeyboardDialog extends StatelessWidget {
                         ),
                       ),
                     ),
-                onChanged: mathField?.onChanged ??
-                    (str) {
-                      tex = str;
-                    },
+                onChanged: mathField?.onChanged ?? controller.setTexString,
                 onSubmitted: mathField?.onSubmitted,
                 opensKeyboard: mathField?.opensKeyboard ?? true,
               ),
@@ -60,14 +56,14 @@ class MathKeyboardDialog extends StatelessWidget {
             TextButton(
               onPressed: () {
                 Navigator.pop(context, '');
-                print(texStringAsFun(tex));
+                print(controller.texStringAsFun);
               },
               child: const Text('Close'),
             ),
             TextButton(
               onPressed: () {
                 Navigator.pop(context, controller.texStringAsFun);
-                print(texStringAsFun(tex));
+                print(controller.texStringAsFun);
               },
               child: const Text('save'),
             ),
@@ -77,5 +73,4 @@ class MathKeyboardDialog extends StatelessWidget {
     );
   }
 
-  String texStringAsFun(String str) => '\\($str\\)';
 }

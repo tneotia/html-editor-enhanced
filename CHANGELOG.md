@@ -1,14 +1,47 @@
-## [2.5.1] = 2023-01-25
+## [2.6.4] = 2023-12-20
+
+* Fixed Cursor bug in math keyboard
+
+## [2.6.3] = 2023-12-20
+
+* Fixed the assets for name change
+
+## [2.6.2] = 2023-12-20
+
+* Dart formatter
+*
+
+## [2.6.1] = 2023-12-20
+
+* Update pubspec
+* Added repo url
+
+## [2.6.0] = 2023-12-20
+
+* Bug fixes
+* Added a Custom Math Keyboard
+
+## [2.5.2] = 2023-12-20
+
+* Added latex
+* Added dependencies
+
+## [2.5.1] = 2023-12-20
+
 * Fix build issues on Flutter 3.4.0+ due to assets directory
 * Update dependencies
 
 ## [2.5.0] - 2022-06-04
+
 * Support Flutter 3.0 (remove warnings) (@Cteq3132)
-* [BREAKING] Support modifying `foreColorSelected` and `backColorSelected` when using a custom dialog for font coloring
-   * If you are using a custom `updateStatus` function for the font coloring, that function is now defined as `updateStatus(Color)`
+* [BREAKING] Support modifying `foreColorSelected` and `backColorSelected` when using a custom
+  dialog for font coloring
+  * If you are using a custom `updateStatus` function for the font coloring, that function is now
+    defined as `updateStatus(Color)`
 * Added `disabled` parameter to automatically disable editor on initial load
 * Fixed white background color appearing sometimes when pressing backspace on text
-* Added `useHybridComposition` parameter in case devs want to disable this behavior (improves animations of app)
+* Added `useHybridComposition` parameter in case devs want to disable this behavior (improves
+  animations of app)
 * [WEB] Fixed editor height being 0 when `initialText` is `null` (@dab246)
 * Migrated example to Android embedding V2
 * Removed woff fonts to allow iOS App Store submissions

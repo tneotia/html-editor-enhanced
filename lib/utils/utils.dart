@@ -491,6 +491,7 @@ class _DropdownRouteResult<T> {
 
 class _MenuLimits {
   const _MenuLimits(this.top, this.bottom, this.height, this.scrollOffset);
+
   final double top;
   final double bottom;
   final double height;
@@ -845,6 +846,7 @@ class _DropdownButtonState<T> extends State<CustomDropdownButton<T>>
   _DropdownRoute<T>? _dropdownRoute;
   Orientation? _lastOrientation;
   FocusNode? _internalNode;
+
   FocusNode? get focusNode => widget.focusNode ?? _internalNode;
   bool _hasPrimaryFocus = false;
   late Map<Type, Action<Intent>> _actionMap;
