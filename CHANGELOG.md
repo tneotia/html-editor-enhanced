@@ -1,3 +1,7 @@
+## [2.6.7] = 2023-12-20
+
+* improved performance
+
 ## [2.6.6] = 2023-12-20
 
 * Image Upload was turned off, now its on

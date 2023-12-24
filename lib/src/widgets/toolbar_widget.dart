@@ -95,6 +95,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   /// Tracks the expanded status of the toolbar
   bool _isExpanded = false;
   final HashMap<String, String> _latexMap = HashMap();
+  var _completer = Completer<String>();
+  var _webController = WebViewController();
 
   @override
   void initState() {
@@ -118,7 +120,19 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         _alignSelected = List<bool>.filled(t.getIcons1().length, false);
       }
     }
+    _initWebController();
     super.initState();
+  }
+
+  _initWebController() async {
+    await _webController.setJavaScriptMode(JavaScriptMode.unrestricted);
+    await _webController.addJavaScriptChannel('MathMLChannel',
+        onMessageReceived: (JavaScriptMessage message) {
+      print('Received message: ${message.message}');
+      _completer.complete(message.message);
+      _completer = Completer<String>();
+    });
+    WebViewWidget(controller: _webController);
   }
 
   void disable() {
@@ -2612,9 +2626,17 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   true;
               if (proceed) {
                 final c = CustomMathFieldEditingController();
+                if (!kIsWeb) {
+                  widget.controller.clearFocus();
+                }
+
                 await showDialog(
                     context: context,
                     builder: (context) => MathKeyboardDialog(controller: c));
+                if (!kIsWeb) {
+                  widget.controller.setFocus();
+                }
+
                 var math = c.texString;
                 if (math != '') {
                   var texAsFun = c.texStringAsFun;
@@ -2626,6 +2648,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   });
                   widget.controller.addToHashMap(result, texAsFun);
                   widget.controller.insertHtml(result);
+                  widget.controller.insertText(' ');
                 }
               }
             }
@@ -3029,16 +3052,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   }
 
   Future<String> _latexToHtml(String latex) async {
-    var completer = Completer<String>();
-    var controller = WebViewController();
-    await controller.setJavaScriptMode(JavaScriptMode.unrestricted);
-    await controller.addJavaScriptChannel('MathMLChannel',
-        onMessageReceived: (JavaScriptMessage message) {
-      print('Received message: ${message.message}');
-      completer.complete(message.message);
-    });
-    WebViewWidget(controller: controller);
-    await controller.runJavaScript('''
+    await _webController.runJavaScript('''
     (async () => {
       try {
         const mathlive = await import("https://unpkg.com/mathlive?module");
@@ -3049,6 +3063,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       }
     })();
   ''');
-    return completer.future;
+
+    return _completer.future;
   }
 }
