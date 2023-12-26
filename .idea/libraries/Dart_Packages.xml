@@ -325,7 +325,7 @@
         <entry key="web">
           <value>
             <list>
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/web-0.2.1-beta/lib" />
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/web-0.3.0/lib" />
               <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/web-0.1.4-beta/lib" />
             </list>
           </value>
@@ -387,7 +387,7 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/vector_math-2.1.4/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/visibility_detector-0.3.3/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/web-0.1.4-beta/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/web-0.2.1-beta/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/web-0.3.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/win32-5.0.8/lib" />
       <root url="file://$PROJECT_DIR$/../../Flutter/SDK/bin/cache/pkg/sky_engine/lib" />
       <root url="file://$PROJECT_DIR$/../../Flutter/SDK/packages/flutter/lib" />

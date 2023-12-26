@@ -49,7 +49,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Text Editor Highlights
   @override
   void setHighlights(List<TextHighLight> highlights) {
-
+    editorController?.evaluateJavascript(source: "window.flutter_inappwebview.callHandler('onWebViewReady', true);");
   }
 
   Function(List<ParsedHighlight>)? onTextHighlightsReplacersReady;

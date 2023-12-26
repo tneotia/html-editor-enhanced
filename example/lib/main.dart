@@ -54,7 +54,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
       setState(() {});
       print("onTextHighlightsReplacersReady");
     };
-    //controller.setHighlights
+    controller.setHighlights();
     super.initState();
   }
 

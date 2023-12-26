@@ -539,11 +539,12 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
     );
   }
 
-  void enableHighlightingFeatures() {
+  void enableHighlightingFeatures(List<TextHighLight>? passedHighLights) {
     if(widget.controller.editorController != null){
+      widget.controller.highLights = passedHighLights;
       var id = 0;
       widget.controller.highLights = widget.controller.highLights?.map((e) => TextHighLight(text: e.text,lineNo: e.lineNo,css: e.css,id: '${id++}',onTap: e.onTap, data: e.data)).toList();
-      widget.controller.editorController.evaluateJavascript(source: '''
+      widget.controller.editorController?.evaluateJavascript(source: '''
           window.setDHHighlights = () => {
             window.dhNgEditorScope.editorHighlights = ${jsonEncode( widget.controller.highLights?.map((e) => TextHighLight(text: e.text,lineNo: e.lineNo,css: e.css,id: e.id,data: e.data)).toList())};
              window.dhNgEditorScope.editorHighlights = window.dhNgEditorScope.editorHighlights.map((jsE) => {
@@ -560,7 +561,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
           }
           window.dhNgEditorScope.\$apply(window.setDHHighlights)
       ''');
-      widget.controller.editorController.addJavaScriptHandler(
+      widget.controller.editorController?.addJavaScriptHandler(
           handlerName: 'onHighlightSelection',
           callback: (callbackData) {
             var parsedData = jsonDecode(callbackData[0]);
@@ -851,8 +852,9 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
     }
     widget.controller.editorController!.addJavaScriptHandler(
         handlerName: 'onWebViewReady',
-        callback: (_) {
-          enableHighlightingFeatures();
+        callback: (e) {
+          print(e);
+          enableHighlightingFeatures(widget.controller.highLights);
           c.onWebViewReady?.call();
         });
   }
