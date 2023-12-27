@@ -219,7 +219,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "2.6.7"
+    version: "2.6.8"
   infinite_listview:
     dependency: transitive
     description:
@@ -269,7 +269,7 @@ packages:
     source: hosted
     version: "2.4.0"
   math_keyboard:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: math_keyboard
       sha256: "4f5d4eb4b7f003715e2ae7d1f58f5f1fddd9dd746d1f1bbc27f1c967e10124d4"

@@ -4,6 +4,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced_fork_latex/html_editor.dart';
 import 'package:html_editor_enhanced_fork_latex/src/html_editor_controller_unsupported.dart'
     as unsupported;
+import 'package:math_keyboard/math_keyboard.dart';
 
 /// Controller for mobile
 class HtmlEditorController extends unsupported.HtmlEditorController {
@@ -11,6 +12,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     this.processInputHtml = true,
     this.processNewLineAsBr = false,
     this.processOutputHtml = true,
+    this.mathField,
   });
 
   /// Toolbar widget state to call various methods. For internal use only.
@@ -38,6 +40,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// The default value is true.
   @override
   final bool processOutputHtml;
+  final MathField? mathField;
 
   /// Manages the [InAppWebViewController] for the [HtmlEditorController]
   InAppWebViewController? _editorController;

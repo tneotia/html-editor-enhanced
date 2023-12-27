@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:html_editor_enhanced_fork_latex/html_editor.dart';
+import 'package:math_keyboard/math_keyboard.dart';
 import 'package:meta/meta.dart';
 
 /// Fallback controller (should never be used)
@@ -9,6 +10,7 @@ class HtmlEditorController {
     this.processInputHtml = true,
     this.processNewLineAsBr = false,
     this.processOutputHtml = true,
+    this.mathField,
   });
 
   final HashMap<String, String> _latexMap = HashMap();
@@ -66,6 +68,7 @@ class HtmlEditorController {
   ///
   /// The default value is true.
   final bool processOutputHtml;
+  final MathField? mathField;
 
   /// Internally tracks the character count in the editor
   int _characterCount = 0;

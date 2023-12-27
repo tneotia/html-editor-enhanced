@@ -32,6 +32,8 @@ class MathKeyboardDialog extends StatelessWidget {
                 focusNode: mathField?.focusNode,
                 autofocus: mathField?.autofocus ?? true,
                 controller: controller,
+                keyboardType:
+                    mathField?.keyboardType ?? MathKeyboardType.expression,
                 variables:
                     mathField?.variables ?? ['x', 'y', 'z', 'A', 'B', 'C'],
                 decoration: mathField?.decoration ??

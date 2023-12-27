@@ -1,5 +1,9 @@
 ## [2.6.7] = 2023-12-20
 
+* customizable math keyboard
+
+## [2.6.7] = 2023-12-20
+
 * improved performance
 
 ## [2.6.6] = 2023-12-20

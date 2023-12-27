@@ -14,7 +14,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     this.processInputHtml = true,
     this.processNewLineAsBr = false,
     this.processOutputHtml = true,
-  });
+  }) : super(mathField: null);
 
   /// Toolbar widget state to call various methods. For internal use only.
   @override

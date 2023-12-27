@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:html_editor_enhanced_fork_latex/html_editor.dart';
+import 'package:math_keyboard/math_keyboard.dart';
 
 void main() => runApp(HtmlEditorExampleApp());
 
@@ -24,7 +25,14 @@ class MyApp2 extends StatelessWidget {
   final String title;
 
   MyApp2({Key? key, required this.title}) : super(key: key);
-  final HtmlEditorController controller = HtmlEditorController();
+  late final HtmlEditorController controller = HtmlEditorController(
+    mathField: MathField(
+      autofocus: true,
+      keyboardType: MathKeyboardType.numberOnly,
+      variables: ['x', 'y', 'z', 'A', 'B', 'C'],
+      opensKeyboard: true,
+    ),
+  );
   final HtmlEditorController controller2 = HtmlEditorController();
 
   @override

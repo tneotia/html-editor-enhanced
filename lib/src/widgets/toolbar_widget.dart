@@ -2632,11 +2632,13 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
 
                 await showDialog(
                     context: context,
-                    builder: (context) => MathKeyboardDialog(controller: c));
+                    builder: (context) => MathKeyboardDialog(
+                          controller: c,
+                          mathField: widget.controller.mathField,
+                        ));
                 if (!kIsWeb) {
                   widget.controller.setFocus();
                 }
-
                 var math = c.texString;
                 if (math != '') {
                   var texAsFun = c.texStringAsFun;
