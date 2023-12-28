@@ -2625,33 +2625,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                       ?.call(ButtonType.fn, null, null) ??
                   true;
               if (proceed) {
-                final c = CustomMathFieldEditingController();
-                if (!kIsWeb) {
-                  widget.controller.clearFocus();
-                }
-
-                await showDialog(
-                    context: context,
-                    builder: (context) => MathKeyboardDialog(
-                          controller: c,
-                          mathField: widget.controller.mathField,
-                        ));
-                if (!kIsWeb) {
-                  widget.controller.setFocus();
-                }
-                var math = c.texString;
-                if (math != '') {
-                  var texAsFun = c.texStringAsFun;
-                  var result =
-                      await _latexToHtml(math.replaceAll('\\', '\\\\'));
-                  result = '<math><semantics>$result</semantics></math>';
-                  _latexMap.addAll({
-                    result: texAsFun,
-                  });
-                  widget.controller.addToHashMap(result, texAsFun);
-                  widget.controller.insertHtml(result);
-                  widget.controller.insertText(' ');
-                }
+                await openMathDialog();
               }
             }
           },
@@ -3051,6 +3025,34 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           .toList();
     }
     return toolbarChildren;
+  }
+
+  openMathDialog() async {
+    final c = CustomMathFieldEditingController();
+    if (!kIsWeb) {
+      widget.controller.clearFocus();
+    }
+    await showDialog(
+        context: context,
+        builder: (context) => MathKeyboardDialog(
+              controller: c,
+              mathField: widget.controller.mathField,
+            ));
+    if (!kIsWeb) {
+      widget.controller.setFocus();
+    }
+    var math = c.texString;
+    if (math != '') {
+      var texAsFun = c.texStringAsFun;
+      var result = await _latexToHtml(math.replaceAll('\\', '\\\\'));
+      result = '<math><semantics>$result</semantics></math>';
+      _latexMap.addAll({
+        result: texAsFun,
+      });
+      widget.controller.addToHashMap(result, texAsFun);
+      widget.controller.insertHtml(result);
+      widget.controller.insertText(' ');
+    }
   }
 
   Future<String> _latexToHtml(String latex) async {
