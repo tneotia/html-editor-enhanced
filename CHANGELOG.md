@@ -1,3 +1,7 @@
+## [2.6.8] = 2023-12-31
+
+* moved the math keyboard to the controller
+
 ## [2.6.7] = 2023-12-20
 
 * customizable math keyboard

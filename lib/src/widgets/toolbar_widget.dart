@@ -8,7 +8,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_editor_enhanced_fork_latex/html_editor.dart';
-import 'package:html_editor_enhanced_fork_latex/utils/custom_math_field_controller.dart';
 import 'package:html_editor_enhanced_fork_latex/utils/utils.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
@@ -125,14 +124,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   }
 
   _initWebController() async {
-    await _webController.setJavaScriptMode(JavaScriptMode.unrestricted);
-    await _webController.addJavaScriptChannel('MathMLChannel',
-        onMessageReceived: (JavaScriptMessage message) {
-      print('Received message: ${message.message}');
-      _completer.complete(message.message);
-      _completer = Completer<String>();
-    });
-    WebViewWidget(controller: _webController);
+   await widget.controller.initWebController();
   }
 
   void disable() {
@@ -2625,7 +2617,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                       ?.call(ButtonType.fn, null, null) ??
                   true;
               if (proceed) {
-                await openMathDialog();
+                await widget.controller.openMathDialog(context);
               }
             }
           },
@@ -3026,48 +3018,48 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
     }
     return toolbarChildren;
   }
-
-  openMathDialog() async {
-    final c = CustomMathFieldEditingController();
-    if (!kIsWeb) {
-      widget.controller.clearFocus();
-    }
-    await showDialog(
-        context: context,
-        builder: (context) => MathKeyboardDialog(
-              controller: c,
-              mathField: widget.controller.mathField,
-            ));
-    if (!kIsWeb) {
-      widget.controller.setFocus();
-    }
-    var math = c.texString;
-    if (math != '') {
-      var texAsFun = c.texStringAsFun;
-      var result = await _latexToHtml(math.replaceAll('\\', '\\\\'));
-      result = '<math><semantics>$result</semantics></math>';
-      _latexMap.addAll({
-        result: texAsFun,
-      });
-      widget.controller.addToHashMap(result, texAsFun);
-      widget.controller.insertHtml(result);
-      widget.controller.insertText(' ');
-    }
-  }
-
-  Future<String> _latexToHtml(String latex) async {
-    await _webController.runJavaScript('''
-    (async () => {
-      try {
-        const mathlive = await import("https://unpkg.com/mathlive?module");
-        const mathML = mathlive.convertLatexToMathMl('\$\$$latex\$\$');
-        MathMLChannel.postMessage(mathML);
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    })();
-  ''');
-
-    return _completer.future;
-  }
+//
+// openMathDialog() async {
+//   final c = CustomMathFieldEditingController();
+//   if (!kIsWeb) {
+//     widget.controller.clearFocus();
+//   }
+//   await showDialog(
+//       context: context,
+//       builder: (context) => MathKeyboardDialog(
+//             controller: c,
+//             mathField: widget.controller.mathField,
+//           ));
+//   if (!kIsWeb) {
+//     widget.controller.setFocus();
+//   }
+//   var math = c.texString;
+//   if (math != '') {
+//     var texAsFun = c.texStringAsFun;
+//     var result = await _latexToHtml(math.replaceAll('\\', '\\\\'));
+//     result = '<math><semantics>$result</semantics></math>';
+//     _latexMap.addAll({
+//       result: texAsFun,
+//     });
+//     widget.controller.addToHashMap(result, texAsFun);
+//     widget.controller.insertHtml(result);
+//     widget.controller.insertText(' ');
+//   }
+// }
+//
+// Future<String> _latexToHtml(String latex) async {
+//   await _webController.runJavaScript('''
+//   (async () => {
+//     try {
+//       const mathlive = await import("https://unpkg.com/mathlive?module");
+//       const mathML = mathlive.convertLatexToMathMl('\$\$$latex\$\$');
+//       MathMLChannel.postMessage(mathML);
+//     } catch (error) {
+//       console.error('Error:', error);
+//     }
+//   })();
+// ''');
+//
+//   return _completer.future;
+// }
 }
