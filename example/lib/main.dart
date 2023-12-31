@@ -3,19 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:file_picker/file_picker.dart';
 
-void main() => runApp(HtmlEditorExampleApp());
+import 'plus/example_scaffold.dart';
+
+void main() => runApp(HtmlEditorExampleApp(showPlusExample: true));
 
 class HtmlEditorExampleApp extends StatelessWidget {
-  // This widget is the root of your application.
+  final bool showPlusExample;
+
+  const HtmlEditorExampleApp({this.showPlusExample = false});
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(),
-      darkTheme: ThemeData.dark(),
-      home: HtmlEditorExample(title: 'Flutter HTML Editor Example'),
-    );
-  }
+  Widget build(BuildContext context) => MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(),
+        darkTheme: ThemeData.dark(),
+        home: showPlusExample
+            ? const HtmlEditorPlusExample()
+            : HtmlEditorExample(title: 'Flutter HTML Editor Example'),
+      );
 }
 
 class HtmlEditorExample extends StatefulWidget {

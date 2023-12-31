@@ -34,3 +34,23 @@ class EditorReset extends EditorEvent {
 class EditorResizeToParent extends EditorEvent {
   const EditorResizeToParent() : super("resizeToParent");
 }
+
+class EditorReload extends EditorEvent {
+  const EditorReload() : super("reload");
+}
+
+class EditorUndo extends EditorEvent {
+  const EditorUndo() : super("undo");
+}
+
+class EditorRedo extends EditorEvent {
+  const EditorRedo() : super("redo");
+}
+
+class EditorEnable extends EditorEvent {
+  const EditorEnable() : super("enable");
+}
+
+class EditorDisable extends EditorEvent {
+  const EditorDisable() : super("disable");
+}

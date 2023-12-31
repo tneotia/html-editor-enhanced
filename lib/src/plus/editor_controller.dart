@@ -44,6 +44,12 @@ class HtmlEditorController extends ValueNotifier<HtmlEditorValue> {
   /// When the value is changed, listeners will be notified.
   String get html => value.html;
 
+  /// Get the processed html value of the editor.
+  String get processedHtml =>
+      (html.isEmpty || html == '<p></p>' || html == '<p><br></p>' || html == '<p><br/></p>')
+          ? ""
+          : html;
+
   /// Change the current html value of the editor.
   ///
   /// Listeners will be notified of the change.
@@ -70,6 +76,21 @@ class HtmlEditorController extends ValueNotifier<HtmlEditorValue> {
 
   /// Clears the editor of any text.
   void clear() => __eventsController?.add(const EditorReset());
+
+  /// Reloads the editor.
+  void reload() => __eventsController?.add(const EditorReload());
+
+  /// Undo the last action.
+  void undo() => __eventsController?.add(const EditorUndo());
+
+  /// Redo the last action.
+  void redo() => __eventsController?.add(const EditorRedo());
+
+  /// Enable the editor field.
+  void enable() => __eventsController?.add(const EditorEnable());
+
+  /// Disable the editor field.
+  void disable() => __eventsController?.add(const EditorDisable());
 
   /// Helper function to process input html
   String _processHtml({required html}) {

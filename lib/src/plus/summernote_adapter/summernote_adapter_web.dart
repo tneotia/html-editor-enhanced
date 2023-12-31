@@ -15,14 +15,10 @@ function handleMessage(e) {
       logDebug("Ignoring message for view: " + data["view"])
       return;
     }
-    if (data["method"] == "setHeight") {
-      logDebug("Setting height: " + data["payload"]);
-      ${editorHeight(height: 'data["payload"]')}
+    if (data["method"] == "reload") {
+      logDebug("Reloading editor....");
+      window.location.reload();
     }
-    else if (data["method"] == "setWidth") {
-      logDebug("Setting width: " + data["payload"]);
-      ${editorWidth(width: 'data["payload"]')}
-    } 
   }
   else if (e && e.data && e.data.includes("toSummernote")) {
     logDebug("Received toSummernote message from parent: " + e.data);

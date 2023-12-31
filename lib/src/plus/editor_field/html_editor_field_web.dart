@@ -156,9 +156,12 @@ ${_adapter.css(colorScheme: _themeData?.colorScheme)}
   void _parseEvents(EditorEvent event) async {
     const jsonEncoder = JsonEncoder();
     final message = EditorMessage.fromEvent(
-      key: _viewId,
-      event: event,
-    );
+        key: _viewId,
+        event: event,
+        type: switch (event) {
+          EditorReload() => "toIframe",
+          _ => "toSummernote",
+        });
     html.window.postMessage(jsonEncoder.convert(message.toJson()), '*');
   }
 

@@ -188,16 +188,20 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
 
   void _parseEvents(EditorEvent event) {
     debugPrint("Sending message to editor: $event");
-    _webviewController!.evaluateJavascript(
-      source: switch (event) {
-        EditorSetHtml(:final method, :final payload) => "$method(${jsonEncode(payload)})",
-        EditorResizeToParent(:final method) => "$method()",
-        _ => _adapter.callSummernoteMethod(
-            method: event.method,
-            payload: (event.payload != null) ? jsonEncode(event.payload) : null,
-          ),
-      },
-    );
+    (switch (event) {
+      EditorReload() => _webviewController!.reload(),
+      _ => _webviewController!.evaluateJavascript(
+          source: switch (event) {
+            EditorSetHtml(:final method, :final payload) => "$method(${jsonEncode(payload)})",
+            EditorResizeToParent(:final method) => "$method()",
+            _ => _adapter.callSummernoteMethod(
+                method: event.method,
+                payload: (event.payload != null) ? jsonEncode(event.payload) : null,
+              ),
+          },
+        ),
+    });
+
     if (event == const EditorToggleView()) {
       _parseEvents(const EditorResizeToParent());
     }
