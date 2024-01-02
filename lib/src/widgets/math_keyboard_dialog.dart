@@ -20,6 +20,7 @@ class MathKeyboardDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      insetPadding: EdgeInsets.all(10),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -28,6 +29,7 @@ class MathKeyboardDialog extends StatelessWidget {
           children: <Widget>[
             SizedBox(
               width: MediaQuery.of(context).size.width,
+              height: 100,
               child: MathField(
                 focusNode: mathField?.focusNode,
                 autofocus: mathField?.autofocus ?? true,

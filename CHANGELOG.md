@@ -1,3 +1,7 @@
+## [2.6.9+1] = 2023-1-2
+
+* improved the math keyboard dialog
+
 ## [2.6.9] = 2023-1-2
 
 * improved the math keyboard dialog
