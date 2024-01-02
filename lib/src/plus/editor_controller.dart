@@ -54,7 +54,13 @@ class HtmlEditorController extends ValueNotifier<HtmlEditorValue> {
   ///
   /// Listeners will be notified of the change.
   set html(String html) {
-    value = value.copyWith(html: _processHtml(html: html));
+    value = value.copyWith(
+      html: processHtml(
+        html: html,
+        processInputHtml: processInputHtml,
+        processNewLineAsBr: processNewLineAsBr,
+      ),
+    );
   }
 
   /// Stream used to send events to the editor.
@@ -105,18 +111,26 @@ class HtmlEditorController extends ValueNotifier<HtmlEditorValue> {
 
   /// Paste html code into the editor.
   void pasteHtml({required String html}) => __eventsController?.add(
-        EditorPasteHtml(payload: _processHtml(html: html)),
+        EditorPasteHtml(payload: processHtml(html: html)),
       );
-
-  /// Insert html code into the editor.
-  @Deprecated("This method was added as fallback use pasteHtml instead")
-  void insertHtml(String html) => pasteHtml(html: html);
 
   /// Move the cursor at the end of the current content.
   void setCursorToEnd() => __eventsController?.add(const EditorSetCursorToEnd());
 
+  /// Create/insert a link in the editor.
+  void createLink({
+    required String text,
+    required String url,
+    bool isNewWindow = true,
+  }) =>
+      __eventsController?.add(EditorCreateLink(text: text, url: url, isNewWindow: isNewWindow));
+
   /// Helper function to process input html
-  String _processHtml({required html}) {
+  static String processHtml({
+    required String html,
+    bool processInputHtml = true,
+    bool processNewLineAsBr = false,
+  }) {
     if (processInputHtml) {
       html = kIsWeb
           ? html.replaceAll('\r', '').replaceAll('\r\n', '')

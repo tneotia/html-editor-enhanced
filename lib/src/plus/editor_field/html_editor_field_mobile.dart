@@ -191,7 +191,9 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
 
   void _onChange(EditorMessage message) {
     if (message.payload != _currentValue.html) {
-      _currentValueNotifier.value = _currentValue.copyWith(html: message.payload);
+      _currentValueNotifier.value = _currentValue.copyWith(
+        html: HtmlEditorController.processHtml(html: message.payload!),
+      );
       _controller.html = message.payload!;
     }
   }
@@ -208,11 +210,19 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
     (switch (event) {
       EditorReload() => _webviewController!.reload(),
       EditorClearFocus() => SystemChannels.textInput.invokeMethod('TextInput.hide'),
+      EditorCallFunction(:final method, :final payload) => _adapter.javascriptFunction(
+          name: method,
+          arg: payload,
+        ),
       _ => _webviewController!.evaluateJavascript(
           source: switch (event) {
             EditorSetHtml(:final method, :final payload) => "$method(${jsonEncode(payload)});",
             EditorResizeToParent(:final method) => "$method();",
             EditorSetCursorToEnd(:final method) => "$method();",
+            EditorCreateLink(:final method, :final payload) => _adapter.callSummernoteMethod(
+                method: method,
+                payload: payload,
+              ),
             _ => _adapter.callSummernoteMethod(
                 method: event.method,
                 payload: (event.payload != null) ? jsonEncode(event.payload) : null,

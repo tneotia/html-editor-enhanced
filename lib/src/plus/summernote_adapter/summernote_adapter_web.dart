@@ -27,6 +27,9 @@ function handleMessage(e) {
     else if (method == "setCursorToEnd") {
       ${javascriptFunction(name: 'setCursorToEnd')}
     }
+    else if (method == "createLink") {
+      ${javascriptFunction(name: 'createLink', arg: "payload")}
+    }
   }
   else if (e && e.data && e.data.includes("toSummernote")) {
     logDebug("Received toSummernote message from parent: " + e.data);

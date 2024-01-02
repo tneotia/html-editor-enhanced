@@ -175,6 +175,17 @@ abstract class SummernoteAdapter {
     List<String> summernoteCallbacks = const [],
   }) =>
       '''
+function createLink(payload) {
+  const data = JSON.parse(payload);
+  const text = ${wrapInQuotes(value: 'data["text"]', wrap: false)}
+  const url = ${wrapInQuotes(value: 'data["url"]', wrap: false)}
+  ${callSummernoteMethod(
+        method: 'createLink',
+        payload: '{text: text, url: url, isNewWindow: data["isNewWindow"]}',
+      )}
+}
+
+
 function setCursorToEnd() {
     ${callSummernoteMethod(
         method: "setLastRange",
@@ -251,6 +262,11 @@ logDebug("Summernote initialised");
     final args = [effectiveMethod, if (payload != null) payload];
     return "$summernoteSelector.summernote(${args.join(",")});";
   }
+
+  /// Wrap a string in quotes.
+  ///
+  /// On mobile platform retrieving JSON values needs to be done with quotes.
+  String wrapInQuotes({required String value, bool wrap = true}) => wrap ? "'$value'" : value;
 
   List<String> summernoteCallbacks({
     int? characterLimit,

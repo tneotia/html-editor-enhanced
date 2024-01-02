@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 /// Events sent to the editor from the controller.
 sealed class EditorEvent {
   /// The summernote API method to call.
@@ -7,12 +9,14 @@ sealed class EditorEvent {
   /// https://summernote.org/deep-dive/#initialization-options
   final String method;
 
+  final String? _payload;
+
   /// The data which should be passed to the editor.
   ///
   /// Used it when you need to change a value of a specific property.
-  final String? payload;
+  String? get payload => _payload;
 
-  const EditorEvent(this.method, [this.payload]);
+  const EditorEvent(this.method, [String? payload]) : _payload = payload;
 
   @override
   bool operator ==(covariant EditorEvent other) {
@@ -87,9 +91,13 @@ class EditorClearFocus extends EditorEvent {
   const EditorClearFocus() : super("blur");
 }
 
-/// Custom event
-class EditorCustomEvent extends EditorEvent {
-  const EditorCustomEvent({required String method, String? payload}) : super(method, payload);
+/// This will call a JS custom function.
+///
+/// Make sure that the function is defined before calling it.
+///
+/// On the web this does nothing because you cannot call a JS function from inside iframe.
+class EditorCallFunction extends EditorEvent {
+  const EditorCallFunction({required String method, String? payload}) : super(method, payload);
 }
 
 /// Notify the editor to insert some text.
@@ -105,4 +113,34 @@ class EditorPasteHtml extends EditorEvent {
 /// Notify the editor to move the cursor at the end of the current content.
 class EditorSetCursorToEnd extends EditorEvent {
   const EditorSetCursorToEnd() : super("setCursorToEnd");
+}
+
+/// Notify the editor to create a link.
+class EditorCreateLink extends EditorEvent {
+  final bool isNewWindow;
+  final String text;
+  final String url;
+
+  @override
+  String get payload => jsonEncode({
+        "text": text,
+        "url": url,
+        "isNewWindow": isNewWindow,
+      });
+
+  const EditorCreateLink({
+    required this.text,
+    required this.url,
+    this.isNewWindow = true,
+  }) : super("createLink");
+
+  @override
+  bool operator ==(covariant EditorCreateLink other) {
+    if (identical(this, other)) return true;
+
+    return other.isNewWindow == isNewWindow && other.text == text && other.url == url;
+  }
+
+  @override
+  int get hashCode => isNewWindow.hashCode ^ text.hashCode ^ url.hashCode;
 }

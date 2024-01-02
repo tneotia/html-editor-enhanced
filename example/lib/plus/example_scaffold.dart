@@ -92,6 +92,14 @@ class _HtmlEditorPlusExampleState extends State<HtmlEditorPlusExample> {
                   icon: Icons.skip_next,
                   label: "Set cursor at end",
                 ),
+                ControlButton(
+                  onPressed: () => _controller.createLink(
+                    text: "Google linked",
+                    url: "https://google.com",
+                  ),
+                  icon: Icons.add_link,
+                  label: "Insert link",
+                ),
               ],
             ),
           ],

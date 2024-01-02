@@ -179,6 +179,7 @@ ${_adapter.css(colorScheme: _themeData?.colorScheme)}
         EditorReload() => "toIframe",
         EditorSetHtml() => "toIframe",
         EditorSetCursorToEnd() => "toIframe",
+        EditorCreateLink() => "toIframe",
         _ => "toSummernote",
       },
     );
