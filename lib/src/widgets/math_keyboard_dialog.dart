@@ -43,7 +43,7 @@ class MathKeyboardDialog extends StatelessWidget {
                         child: GestureDetector(
                           onTap: controller.clear,
                           child: const Icon(
-                            Icons.highlight_remove_rounded,
+                            Icons.cleaning_services_rounded,
                             color: Colors.grey,
                           ),
                         ),
@@ -55,19 +55,24 @@ class MathKeyboardDialog extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 15),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context, '');
-                print(controller.texStringAsFun);
-              },
-              child: const Text('Close'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context, controller.texStringAsFun);
-                print(controller.texStringAsFun);
-              },
-              child: const Text('save'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, '');
+                    print(controller.texStringAsFun);
+                  },
+                  child: const Text('Close'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, controller.texStringAsFun);
+                    print(controller.texStringAsFun);
+                  },
+                  child: const Text('Save'),
+                ),
+              ],
             ),
           ],
         ),
