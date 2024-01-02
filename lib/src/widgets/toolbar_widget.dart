@@ -1134,6 +1134,11 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                             pickersEnabled: <ColorPickerType, bool>{
                               ColorPickerType.wheel: true,
                             },
+                            pickerTypeLabels: {
+                              ColorPickerType.primary: strings.primary,
+                              ColorPickerType.accent: strings.accent,
+                              ColorPickerType.wheel: strings.wheel,
+                            },
                             copyPasteBehavior:
                                 const ColorPickerCopyPasteBehavior(
                               parseShortHexCode: true,

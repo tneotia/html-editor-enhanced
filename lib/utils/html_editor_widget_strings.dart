@@ -162,6 +162,12 @@ abstract class HtmlEditorStrings {
   String get pleaseEitherChooseAudioOrEnterAudioURL;
 
   String get pleaseInputEitherAudioOrAudioURLNotBoth;
+
+  String get primary;
+
+  String get accent;
+
+  String get wheel;
 }
 
 class DefaultHtmlEditorStrings extends HtmlEditorStrings {
@@ -411,4 +417,13 @@ class DefaultHtmlEditorStrings extends HtmlEditorStrings {
 
   @override
   String get pleaseInputEitherAudioOrAudioURLNotBoth => 'Please input either an audio file or an audio URL, not both!';
+
+  @override
+  String get accent => 'Accent';
+
+  @override
+  String get primary => 'Primary';
+
+  @override
+  String get wheel => 'Wheel';
 }
