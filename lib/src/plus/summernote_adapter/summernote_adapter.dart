@@ -175,13 +175,11 @@ abstract class SummernoteAdapter {
     List<String> summernoteCallbacks = const [],
   }) =>
       '''
-function setCursorToEnd(element) {
-    var range = document.createRange();
-    var selection = window.getSelection();
-    range.selectNodeContents(element);
-    range.collapse(false);
-    selection.removeAllRanges();
-    selection.addRange(range);
+function setCursorToEnd() {
+    ${callSummernoteMethod(
+        method: "setLastRange",
+        payload: '\$.summernote.range.createFromNodeAfter($editorSelector[0]).select()',
+      )}
 }
 
 function setHtml(value) {
@@ -192,7 +190,7 @@ function setHtml(value) {
   }
   logDebug("Setting value: " + value);
   ${callSummernoteMethod(method: "code", payload: 'value')}
-  setCursorToEnd(\$('div.note-editable')[0]);
+  setCursorToEnd();
 }
 
 function logDebug(message) {

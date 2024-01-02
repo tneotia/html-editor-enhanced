@@ -77,6 +77,21 @@ class _HtmlEditorPlusExampleState extends State<HtmlEditorPlusExample> {
                   icon: Icons.keyboard_hide,
                   label: "Clear focus",
                 ),
+                ControlButton(
+                  onPressed: () => _controller.insertText(text: "Inserted text"),
+                  icon: Icons.note_add,
+                  label: "Insert text",
+                ),
+                ControlButton(
+                  onPressed: () => _controller.pasteHtml(html: "<b><i>Pasted html</i></b>"),
+                  icon: Icons.paste,
+                  label: "Paste html",
+                ),
+                ControlButton(
+                  onPressed: _controller.setCursorToEnd,
+                  icon: Icons.skip_next,
+                  label: "Set cursor at end",
+                ),
               ],
             ),
           ],

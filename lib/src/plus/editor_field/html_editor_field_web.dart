@@ -178,6 +178,7 @@ ${_adapter.css(colorScheme: _themeData?.colorScheme)}
       type: switch (event) {
         EditorReload() => "toIframe",
         EditorSetHtml() => "toIframe",
+        EditorSetCursorToEnd() => "toIframe",
         _ => "toSummernote",
       },
     );

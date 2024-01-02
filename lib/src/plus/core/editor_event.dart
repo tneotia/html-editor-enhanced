@@ -79,7 +79,7 @@ class EditorDisable extends EditorEvent {
 ///
 /// Currently this event is pretty bugy, due to issues from the framework.
 class EditorRequestFocus extends EditorEvent {
-  const EditorRequestFocus() : super("tryFocus");
+  const EditorRequestFocus() : super("focus");
 }
 
 /// Notify the editor clear the focus from the field.
@@ -90,4 +90,19 @@ class EditorClearFocus extends EditorEvent {
 /// Custom event
 class EditorCustomEvent extends EditorEvent {
   const EditorCustomEvent({required String method, String? payload}) : super(method, payload);
+}
+
+/// Notify the editor to insert some text.
+class EditorInsertText extends EditorEvent {
+  const EditorInsertText({required String payload}) : super("insertText", payload);
+}
+
+/// Notify the editor to paste html code.
+class EditorPasteHtml extends EditorEvent {
+  const EditorPasteHtml({required String payload}) : super("pasteHTML", payload);
+}
+
+/// Notify the editor to move the cursor at the end of the current content.
+class EditorSetCursorToEnd extends EditorEvent {
+  const EditorSetCursorToEnd() : super("setCursorToEnd");
 }

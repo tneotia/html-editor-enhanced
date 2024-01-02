@@ -212,6 +212,7 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
           source: switch (event) {
             EditorSetHtml(:final method, :final payload) => "$method(${jsonEncode(payload)});",
             EditorResizeToParent(:final method) => "$method();",
+            EditorSetCursorToEnd(:final method) => "$method();",
             _ => _adapter.callSummernoteMethod(
                 method: event.method,
                 payload: (event.payload != null) ? jsonEncode(event.payload) : null,
@@ -219,11 +220,13 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
           },
         ),
     });
-
-    if (event == const EditorToggleView()) {
-      _parseEvents(const EditorResizeToParent());
-    }
+    _triggerExtraEvent(event);
   }
+
+  void _triggerExtraEvent(EditorEvent event) => switch (event) {
+        EditorToggleView() => _parseEvents(const EditorResizeToParent()),
+        _ => null,
+      };
 
   /// Function which clears the focus from the editor once the keyboard is hidden.
   ///

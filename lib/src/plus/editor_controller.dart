@@ -98,6 +98,23 @@ class HtmlEditorController extends ValueNotifier<HtmlEditorValue> {
   /// Clear the focus from the editor field.
   void clearFocus() => __eventsController?.add(const EditorClearFocus());
 
+  /// Insert text at the end of the current HTML content in the editor.
+  void insertText({required String text}) => __eventsController?.add(
+        EditorInsertText(payload: text),
+      );
+
+  /// Paste html code into the editor.
+  void pasteHtml({required String html}) => __eventsController?.add(
+        EditorPasteHtml(payload: _processHtml(html: html)),
+      );
+
+  /// Insert html code into the editor.
+  @Deprecated("This method was added as fallback use pasteHtml instead")
+  void insertHtml(String html) => pasteHtml(html: html);
+
+  /// Move the cursor at the end of the current content.
+  void setCursorToEnd() => __eventsController?.add(const EditorSetCursorToEnd());
+
   /// Helper function to process input html
   String _processHtml({required html}) {
     if (processInputHtml) {

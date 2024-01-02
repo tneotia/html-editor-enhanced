@@ -24,6 +24,9 @@ function handleMessage(e) {
     else if (method == "setHtml") {
       ${javascriptFunction(name: 'setHtml', arg: "payload")}
     }
+    else if (method == "setCursorToEnd") {
+      ${javascriptFunction(name: 'setCursorToEnd')}
+    }
   }
   else if (e && e.data && e.data.includes("toSummernote")) {
     logDebug("Received toSummernote message from parent: " + e.data);
