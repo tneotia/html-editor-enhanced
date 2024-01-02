@@ -4,17 +4,17 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:html_editor_enhanced/src/plus/core/editor_callbacks.dart';
-import 'package:html_editor_enhanced/src/plus/summernote_adapter/summernote_adapter_inappwebview.dart';
 
-import '../editor_controller.dart';
 import '../core/editor_event.dart';
+import '../core/editor_message.dart';
 import '../core/editor_value.dart';
 import '../core/enums.dart';
+import '../editor_controller.dart';
 import '../summernote_adapter/summernote_adapter.dart';
-import '../core/editor_message.dart';
 
 /// {@macro HtmlEditorField}
 ///
@@ -32,12 +32,24 @@ class HtmlEditorField extends StatefulWidget {
   /// {@macro HtmlEditorField.themeData}
   final ThemeData? themeData;
 
+  /// {@macro HtmlEditorField.onInit}
+  final VoidCallback? onInit;
+
+  /// {@macro HtmlEditorField.onFocus}
+  final VoidCallback? onFocus;
+
+  /// {@macro HtmlEditorField.onBlur}
+  final VoidCallback? onBlur;
+
   const HtmlEditorField({
     super.key,
     required this.controller,
     this.resizeMode = ResizeMode.resizeToParent,
     this.intialMobileOptions,
     this.themeData,
+    this.onInit,
+    this.onFocus,
+    this.onBlur,
   });
 
   @override
@@ -65,14 +77,18 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
   String get _jqueryPath => "$_assetsPath/jquery.min.js";
   String get _summernotePath => "$_assetsPath/summernote-lite.min.js";
 
+  Stream<bool> get _keyboardVisibilityStream => KeyboardVisibilityController().onChange;
+
   @override
   void initState() {
     super.initState();
     _themeData = widget.themeData;
     _viewId = DateTime.now().millisecondsSinceEpoch.toString();
-    _adapter = SummernoteAdapterInappWebView(
+    _adapter = SummernoteAdapter.inAppWebView(
       key: _viewId,
       resizeMode: widget.resizeMode,
+      enableOnBlur: widget.onBlur != null,
+      enableOnFocus: widget.onFocus != null,
     );
     _controller = widget.controller;
     _controller.addListener(_controllerListener);
@@ -90,9 +106,9 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
             loadWithOverviewMode: true,
           ),
         );
-    _keyboardVisibilitySubscription = KeyboardVisibilityController().onChange.listen(
-          _onKeyboardVisibilityChanged,
-        );
+    _keyboardVisibilitySubscription = _keyboardVisibilityStream.listen(
+      _onKeyboardVisibilityChanged,
+    );
   }
 
   @override
@@ -118,8 +134,6 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
           debugPrint("onLoadStop url: $url");
           _loadSummernote();
         },
-        onWindowFocus: (controller) => debugPrint("onWindowFocus"),
-        onWindowBlur: (controller) => debugPrint("onWindowBlur"),
         onLoadError: (controller, url, code, message) => debugPrint("message: $message"),
         initialOptions: _initialOptions,
         shouldOverrideUrlLoading: (controller, action) async {
@@ -164,12 +178,15 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
       EditorCallbacks.onInit => _onInit(),
       EditorCallbacks.onChange => _onChange(message),
       EditorCallbacks.onChangeCodeview => _onChange(message),
+      EditorCallbacks.onFocus => widget.onFocus?.call(),
+      EditorCallbacks.onBlur => widget.onBlur?.call(),
       _ => debugPrint("Uknown message received from editor: $message"),
     };
   }
 
   void _onInit() {
     if (_currentValue.hasValue) _parseEvents(EditorSetHtml(payload: _currentValue.html));
+    widget.onInit?.call();
   }
 
   void _onChange(EditorMessage message) {
@@ -190,10 +207,11 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
     debugPrint("Sending message to editor: $event");
     (switch (event) {
       EditorReload() => _webviewController!.reload(),
+      EditorClearFocus() => SystemChannels.textInput.invokeMethod('TextInput.hide'),
       _ => _webviewController!.evaluateJavascript(
           source: switch (event) {
-            EditorSetHtml(:final method, :final payload) => "$method(${jsonEncode(payload)})",
-            EditorResizeToParent(:final method) => "$method()",
+            EditorSetHtml(:final method, :final payload) => "$method(${jsonEncode(payload)});",
+            EditorResizeToParent(:final method) => "$method();",
             _ => _adapter.callSummernoteMethod(
                 method: event.method,
                 payload: (event.payload != null) ? jsonEncode(event.payload) : null,

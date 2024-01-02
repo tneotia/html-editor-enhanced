@@ -21,12 +21,24 @@ class HtmlEditor extends StatefulWidget {
   /// {@macro HtmlEditorField.themeData}
   final ThemeData? themeData;
 
+  /// {@macro HtmlEditorField.onInit}
+  final VoidCallback? onInit;
+
+  /// {@macro HtmlEditorField.onFocus}
+  final VoidCallback? onFocus;
+
+  /// {@macro HtmlEditorField.onBlur}
+  final VoidCallback? onBlur;
+
   const HtmlEditor({
     super.key,
     this.resizeMode = ResizeMode.resizeToParent,
     this.intialMobileOptions,
     this.controller,
     this.themeData,
+    this.onInit,
+    this.onFocus,
+    this.onBlur,
   });
 
   @override
@@ -63,5 +75,8 @@ class _HtmlEditorState extends State<HtmlEditor> {
         resizeMode: widget.resizeMode,
         themeData: _themeData,
         intialMobileOptions: widget.intialMobileOptions,
+        onInit: widget.onInit,
+        onFocus: widget.onFocus,
+        onBlur: widget.onBlur,
       );
 }

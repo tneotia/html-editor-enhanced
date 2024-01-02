@@ -6,21 +6,14 @@ import 'summernote_adapter.dart';
 class SummernoteAdapterInappWebView extends SummernoteAdapter {
   @override
   String get platformSpecificJavascript => """
-function setHtml(value) {
-  const currentValue = ${callSummernoteMethod(method: "code")}
-  console.log("Current value: " + currentValue);
-  if (value == currentValue) {
-    return;
-  }
-  console.log("Setting value: " + value);
-  ${callSummernoteMethod(method: "code", payload: 'value')}
-}
 """;
 
   SummernoteAdapterInappWebView({
     required super.key,
     super.summernoteSelector = "\$('#summernote-2')",
     super.resizeMode = ResizeMode.resizeToParent,
+    super.enableOnBlur = false,
+    super.enableOnFocus = false,
   });
 
   @override

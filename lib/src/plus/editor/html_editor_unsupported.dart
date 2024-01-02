@@ -26,12 +26,24 @@ class HtmlEditor extends StatelessWidget {
   /// {@macro HtmlEditorField.intialMobileOptions}
   final InAppWebViewGroupOptions? intialMobileOptions;
 
+  /// {@macro HtmlEditorField.onInit}
+  final VoidCallback? onInit;
+
+  /// {@macro HtmlEditorField.onFocus}
+  final VoidCallback? onFocus;
+
+  /// {@macro HtmlEditorField.onBlur}
+  final VoidCallback? onBlur;
+
   const HtmlEditor({
     super.key,
     this.resizeMode = ResizeMode.resizeToParent,
     this.intialMobileOptions,
     this.controller,
     this.themeData,
+    this.onInit,
+    this.onFocus,
+    this.onBlur,
   });
 
   @override

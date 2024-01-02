@@ -4,7 +4,9 @@ import 'editor_message.dart';
 enum EditorCallbacks implements Comparable<EditorCallbacks> {
   onInit(callback: "onInit"),
   onChange(callback: "onChange"),
-  onChangeCodeview(callback: "onChangeCodeview");
+  onChangeCodeview(callback: "onChangeCodeview"),
+  onFocus(callback: "onFocus"),
+  onBlur(callback: "onBlur");
 
   /// The name of the event.
   final String callback;

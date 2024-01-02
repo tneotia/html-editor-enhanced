@@ -35,6 +35,9 @@ class _HtmlEditorPlusExampleState extends State<HtmlEditorPlusExample> {
             Expanded(
               child: HtmlEditor(
                 controller: _controller,
+                onInit: () => print("Editor ready!"),
+                onFocus: () => print("Focus gained!"),
+                onBlur: () => print("Focus lost!"),
               ),
             ),
             EditorControls(
@@ -63,6 +66,16 @@ class _HtmlEditorPlusExampleState extends State<HtmlEditorPlusExample> {
                   onPressed: _controller.enable,
                   icon: Icons.edit,
                   label: "Enable",
+                ),
+                ControlButton(
+                  onPressed: _controller.requestFocus,
+                  icon: Icons.keyboard,
+                  label: "Request focus",
+                ),
+                ControlButton(
+                  onPressed: _controller.clearFocus,
+                  icon: Icons.keyboard_hide,
+                  label: "Clear focus",
                 ),
               ],
             ),

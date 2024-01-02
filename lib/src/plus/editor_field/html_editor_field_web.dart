@@ -28,11 +28,23 @@ class HtmlEditorField extends StatefulWidget {
   /// {@macro HtmlEditorField.themeData}
   final ThemeData? themeData;
 
+  /// {@macro HtmlEditorField.onInit}
+  final VoidCallback? onInit;
+
+  /// {@macro HtmlEditorField.onFocus}
+  final VoidCallback? onFocus;
+
+  /// {@macro HtmlEditorField.onBlur}
+  final VoidCallback? onBlur;
+
   const HtmlEditorField({
     super.key,
     required this.controller,
     this.resizeMode = ResizeMode.resizeToParent,
     this.themeData,
+    this.onInit,
+    this.onFocus,
+    this.onBlur,
   });
 
   @override
@@ -70,6 +82,8 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
     _adapter = SummernoteAdapter.web(
       key: _viewId,
       resizeMode: widget.resizeMode,
+      enableOnBlur: widget.onBlur != null,
+      enableOnFocus: widget.onFocus != null,
     );
     _controller = widget.controller;
     _controller.addListener(_controllerListener);
@@ -131,12 +145,15 @@ ${_adapter.css(colorScheme: _themeData?.colorScheme)}
       EditorCallbacks.onInit => _onInit(),
       EditorCallbacks.onChange => _onChange(message),
       EditorCallbacks.onChangeCodeview => _onChange(message),
+      EditorCallbacks.onFocus => widget.onFocus?.call(),
+      EditorCallbacks.onBlur => widget.onBlur?.call(),
       _ => debugPrint("Uknown message received from iframe: $message"),
     };
   }
 
   void _onInit() {
     if (_currentValue.hasValue) _parseEvents(EditorSetHtml(payload: _currentValue.html));
+    widget.onInit?.call();
   }
 
   void _onChange(EditorMessage message) {
@@ -156,12 +173,14 @@ ${_adapter.css(colorScheme: _themeData?.colorScheme)}
   void _parseEvents(EditorEvent event) async {
     const jsonEncoder = JsonEncoder();
     final message = EditorMessage.fromEvent(
-        key: _viewId,
-        event: event,
-        type: switch (event) {
-          EditorReload() => "toIframe",
-          _ => "toSummernote",
-        });
+      key: _viewId,
+      event: event,
+      type: switch (event) {
+        EditorReload() => "toIframe",
+        EditorSetHtml() => "toIframe",
+        _ => "toSummernote",
+      },
+    );
     html.window.postMessage(jsonEncoder.convert(message.toJson()), '*');
   }
 

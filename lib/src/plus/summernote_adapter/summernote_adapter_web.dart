@@ -9,15 +9,20 @@ class SummernoteAdapterWeb extends SummernoteAdapter {
   String get platformSpecificJavascript => '''
 function handleMessage(e) {
   if (e && e.data && e.data.includes("toIframe")) {
-  logDebug("Received toIframe message from parent: " + e.data);
+    logDebug("Received toIframe message from parent: " + e.data);
     const data = JSON.parse(e.data);
+    const method = data["method"];
+    const payload = data["payload"];
     if (data["key"] != $key) {
-      logDebug("Ignoring message for view: " + data["view"])
+      logDebug("Ignoring message for view: " + data["key"])
       return;
     }
-    if (data["method"] == "reload") {
+    if (method == "reload") {
       logDebug("Reloading editor....");
       window.location.reload();
+    }
+    else if (method == "setHtml") {
+      ${javascriptFunction(name: 'setHtml', arg: "payload")}
     }
   }
   else if (e && e.data && e.data.includes("toSummernote")) {
@@ -26,15 +31,7 @@ function handleMessage(e) {
     const method = data["method"];
     const payload = data["payload"];
     if (payload) {
-      if (method == "setHtml") {
-        const currentValue = ${callSummernoteMethod(method: 'code')}
-        logDebug("Current value: " + currentValue);
-        if (currentValue == payload) {
-          return;
-        }
-      }
-      logDebug("Setting value: " + payload);
-      ${callSummernoteMethod(method: 'code', payload: 'payload')}
+      ${callSummernoteMethod(method: 'method', wrapMethod: false, payload: 'payload')}
     } 
     else {
       logDebug("Calling method: " + method);
@@ -53,6 +50,8 @@ window.parent.addEventListener('message', handleMessage, false);
     required super.key,
     super.summernoteSelector = "\$('#summernote-2')",
     super.resizeMode = ResizeMode.resizeToParent,
+    super.enableOnBlur = false,
+    super.enableOnFocus = false,
   });
 
   @override

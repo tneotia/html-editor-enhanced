@@ -23,6 +23,12 @@ abstract class SummernoteAdapter {
   /// The resize mode of the editor.
   final ResizeMode resizeMode;
 
+  /// If the [EditorCallbacks.onFocus] should be enabled.
+  final bool enableOnFocus;
+
+  /// If the [EditorCallbacks.onBlur] should be enabled.
+  final bool enableOnBlur;
+
   /// Build string for [EditorCallbacks.onInit] callback.
   String get onInitCallback => summernoteCallback(
         event: EditorCallbacks.onInit,
@@ -43,6 +49,20 @@ abstract class SummernoteAdapter {
         event: EditorCallbacks.onChangeCodeview,
         args: const ["contents", "\$editable"],
         body: messageHandler(event: EditorCallbacks.onChangeCodeview, payload: "contents"),
+      );
+
+  /// Build string for [EditorCallbacks.onFocus] callback.
+  String get onFocusCallback => summernoteCallback(
+        event: EditorCallbacks.onFocus,
+        args: const [],
+        body: messageHandler(event: EditorCallbacks.onFocus),
+      );
+
+  /// Build string for [EditorCallbacks.onBlur] callback.
+  String get onBlurCallback => summernoteCallback(
+        event: EditorCallbacks.onBlur,
+        args: const [],
+        body: messageHandler(event: EditorCallbacks.onBlur),
       );
 
   /// Build a string which contains javascript specific to the current platform.
@@ -102,28 +122,38 @@ abstract class SummernoteAdapter {
     required this.key,
     this.summernoteSelector = "\$('#summernote-2')",
     this.resizeMode = ResizeMode.resizeToParent,
+    this.enableOnFocus = false,
+    this.enableOnBlur = false,
   });
 
   factory SummernoteAdapter.web({
     required String key,
     String summernoteSelector = "\$('#summernote-2')",
     ResizeMode resizeMode = ResizeMode.resizeToParent,
+    bool enableOnFocus = false,
+    bool enableOnBlur = false,
   }) =>
       SummernoteAdapterWeb(
         key: key,
         summernoteSelector: summernoteSelector,
         resizeMode: resizeMode,
+        enableOnFocus: enableOnFocus,
+        enableOnBlur: enableOnBlur,
       );
 
   factory SummernoteAdapter.inAppWebView({
     required String key,
     String summernoteSelector = "\$('#summernote-2')",
     ResizeMode resizeMode = ResizeMode.resizeToParent,
+    bool enableOnFocus = false,
+    bool enableOnBlur = false,
   }) =>
       SummernoteAdapterInappWebView(
         key: key,
         summernoteSelector: summernoteSelector,
         resizeMode: resizeMode,
+        enableOnFocus: enableOnFocus,
+        enableOnBlur: enableOnBlur,
       );
 
   /// Initialise the summernote editor.
@@ -145,18 +175,37 @@ abstract class SummernoteAdapter {
     List<String> summernoteCallbacks = const [],
   }) =>
       '''
-  function logDebug(message) {
-  if ($kDebugMode) console.log(message);
+function setCursorToEnd(element) {
+    var range = document.createRange();
+    var selection = window.getSelection();
+    range.selectNodeContents(element);
+    range.collapse(false);
+    selection.removeAllRanges();
+    selection.addRange(range);
+}
+
+function setHtml(value) {
+  const currentValue = ${callSummernoteMethod(method: "code")}
+  logDebug("Current value: " + currentValue);
+  if (value == currentValue) {
+    return;
   }
+  logDebug("Setting value: " + value);
+  ${callSummernoteMethod(method: "code", payload: 'value')}
+  setCursorToEnd(\$('div.note-editable')[0]);
+}
+
+function logDebug(message) {
+  if ($kDebugMode) console.log(message);
+}
   
-  
-  function resizeToParent() {
+function resizeToParent() {
   logDebug("Resizing to parent");
   ${editorHeight(height: "window.innerHeight")}
   ${editorWidth(width: "window.innerWidth")}
-  }
+}
   
-  $summernoteSelector.summernote({
+$summernoteSelector.summernote({
   ${hintText.trim().isNotEmpty ? "placeholder: '$hintText'," : ""}
   tabsize: 2,
   toolbar: $summernoteToolbar,
@@ -167,17 +216,17 @@ abstract class SummernoteAdapter {
   callbacks: {
     ${summernoteCallbacks.join(",\n")}
   }
-  });
+});
   
-  $platformSpecificJavascript
+$platformSpecificJavascript
   
-  if (${resizeMode == ResizeMode.resizeToParent}) {
+if (${resizeMode == ResizeMode.resizeToParent}) {
   resizeToParent();
   addEventListener("resize", (event) => resizeToParent());
-  }
+}
   
-  logDebug("Summernote initialised");
-  ''';
+logDebug("Summernote initialised");
+''';
 
   /// Builds a JavaScript code which will be used to send a message to the Dart side.
   ///
@@ -212,6 +261,8 @@ abstract class SummernoteAdapter {
         onInitCallback,
         onChangeCallback,
         onChangeCodeviewCallback,
+        if (enableOnFocus) onFocusCallback,
+        if (enableOnBlur) onBlurCallback,
       ];
 
   /// Build the function called for `onKeydown` event which emits `characterCount`.
@@ -322,6 +373,9 @@ abstract class SummernoteAdapter {
     String body = "",
   }) =>
       "${event.callback}: ${javaScriptCallbackFunction(args: args, body: body)}";
+
+  /// Build a callable javascript function.
+  String javascriptFunction({required String name, String? arg}) => "$name(${arg ?? ""});";
 
   /// Build a javascript function.
   ///

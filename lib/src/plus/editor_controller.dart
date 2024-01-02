@@ -92,6 +92,12 @@ class HtmlEditorController extends ValueNotifier<HtmlEditorValue> {
   /// Disable the editor field.
   void disable() => __eventsController?.add(const EditorDisable());
 
+  /// Request focus for the editor field.
+  void requestFocus() => __eventsController?.add(const EditorRequestFocus());
+
+  /// Clear the focus from the editor field.
+  void clearFocus() => __eventsController?.add(const EditorClearFocus());
+
   /// Helper function to process input html
   String _processHtml({required html}) {
     if (processInputHtml) {

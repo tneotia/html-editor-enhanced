@@ -55,12 +55,30 @@ class HtmlEditorField extends StatelessWidget {
   /// {@endtemplate}
   final InAppWebViewGroupOptions? intialMobileOptions;
 
+  /// {@template HtmlEditorField.onInit}
+  /// Callback to be called when the editor is initialized.
+  /// {@endtemplate}
+  final VoidCallback? onInit;
+
+  /// {@template HtmlEditorField.onFocus}
+  /// Callback to be called when the editor gains focus.
+  /// {@endtemplate}
+  final VoidCallback? onFocus;
+
+  /// {@template HtmlEditorField.onBlur}
+  /// Callback to be called when the editor loses focus.
+  /// {@endtemplate}
+  final VoidCallback? onBlur;
+
   const HtmlEditorField({
     super.key,
     required this.controller,
     this.resizeMode = ResizeMode.resizeToParent,
     this.themeData,
     this.intialMobileOptions,
+    this.onInit,
+    this.onFocus,
+    this.onBlur,
   });
 
   @override

@@ -11,6 +11,9 @@ class EditorControls extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Wrap(
+            alignment: WrapAlignment.center,
+            runAlignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
             spacing: 10,
             runSpacing: 10,
             children: controls,
