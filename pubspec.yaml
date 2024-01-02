@@ -1,7 +1,7 @@
 name: html_editor_enhanced_fork_latex
 description: HTML rich text editor for Android, iOS, and Web, using the Summernote library.
   Enhanced with highly customizable widget-based controls, bug fixes, callbacks, dark mode, and more.
-version: 2.6.8
+version: 2.6.9
 homepage: https://github.com/tneotia/html-editor-enhanced
 repository: https://github.com/AhmadKhateebq/html-editor-enhanced-with-latex.git
 
