@@ -41,6 +41,9 @@ class HtmlEditorField extends StatefulWidget {
   /// {@macro HtmlEditorField.onBlur}
   final VoidCallback? onBlur;
 
+  /// {@macro HtmlEditorField.onImageLinkInsert}
+  final ValueChanged<String>? onImageLinkInsert;
+
   const HtmlEditorField({
     super.key,
     required this.controller,
@@ -50,6 +53,7 @@ class HtmlEditorField extends StatefulWidget {
     this.onInit,
     this.onFocus,
     this.onBlur,
+    this.onImageLinkInsert,
   });
 
   @override
@@ -89,6 +93,7 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
       resizeMode: widget.resizeMode,
       enableOnBlur: widget.onBlur != null,
       enableOnFocus: widget.onFocus != null,
+      enableOnImageLinkInsert: widget.onImageLinkInsert != null,
     );
     _controller = widget.controller;
     _controller.addListener(_controllerListener);
@@ -180,6 +185,7 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
       EditorCallbacks.onChangeCodeview => _onChange(message),
       EditorCallbacks.onFocus => widget.onFocus?.call(),
       EditorCallbacks.onBlur => widget.onBlur?.call(),
+      EditorCallbacks.onImageLinkInsert => widget.onImageLinkInsert?.call(message.payload!),
       _ => debugPrint("Uknown message received from editor: $message"),
     };
   }
@@ -219,13 +225,14 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
             EditorSetHtml(:final method, :final payload) => "$method(${jsonEncode(payload)});",
             EditorResizeToParent(:final method) => "$method();",
             EditorSetCursorToEnd(:final method) => "$method();",
-            EditorCreateLink(:final method, :final payload) => _adapter.callSummernoteMethod(
-                method: method,
-                payload: payload,
-              ),
+            EditorInsertImageLink(:final method, :final payload) =>
+              "$method(${jsonEncode(payload)});",
             _ => _adapter.callSummernoteMethod(
                 method: event.method,
-                payload: (event.payload != null) ? jsonEncode(event.payload) : null,
+                payload: switch (event) {
+                  EditorCreateLink(:final payload) => payload,
+                  _ => (event.payload != null) ? jsonEncode(event.payload) : null,
+                },
               ),
           },
         ),

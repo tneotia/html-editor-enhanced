@@ -6,7 +6,8 @@ enum EditorCallbacks implements Comparable<EditorCallbacks> {
   onChange(callback: "onChange"),
   onChangeCodeview(callback: "onChangeCodeview"),
   onFocus(callback: "onFocus"),
-  onBlur(callback: "onBlur");
+  onBlur(callback: "onBlur"),
+  onImageLinkInsert(callback: "onImageLinkInsert");
 
   /// The name of the event.
   final String callback;

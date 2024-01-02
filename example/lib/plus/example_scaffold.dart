@@ -38,6 +38,7 @@ class _HtmlEditorPlusExampleState extends State<HtmlEditorPlusExample> {
                 onInit: () => print("Editor ready!"),
                 onFocus: () => print("Focus gained!"),
                 onBlur: () => print("Focus lost!"),
+                onImageLinkInsert: (String url) => print("Image link inserted: $url"),
               ),
             ),
             EditorControls(
@@ -99,6 +100,15 @@ class _HtmlEditorPlusExampleState extends State<HtmlEditorPlusExample> {
                   ),
                   icon: Icons.add_link,
                   label: "Insert link",
+                ),
+                ControlButton(
+                  onPressed: () => _controller.insertNetworkImage(
+                    url:
+                        "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png",
+                    filename: "Google network image",
+                  ),
+                  icon: Icons.add_a_photo,
+                  label: "Insert a network image",
                 ),
               ],
             ),

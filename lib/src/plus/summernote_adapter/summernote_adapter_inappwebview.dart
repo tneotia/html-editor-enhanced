@@ -14,6 +14,7 @@ class SummernoteAdapterInappWebView extends SummernoteAdapter {
     super.resizeMode = ResizeMode.resizeToParent,
     super.enableOnBlur = false,
     super.enableOnFocus = false,
+    super.enableOnImageLinkInsert = false,
   });
 
   @override

@@ -26,6 +26,9 @@ class HtmlEditor extends StatefulWidget {
   /// {@macro HtmlEditorField.onBlur}
   final VoidCallback? onBlur;
 
+  /// {@macro HtmlEditorField.onImageLinkInsert}
+  final ValueChanged<String>? onImageLinkInsert;
+
   const HtmlEditor({
     super.key,
     this.resizeMode = ResizeMode.resizeToParent,
@@ -34,6 +37,7 @@ class HtmlEditor extends StatefulWidget {
     this.onInit,
     this.onFocus,
     this.onBlur,
+    this.onImageLinkInsert,
   });
 
   @override
@@ -72,5 +76,6 @@ class _HtmlEditorState extends State<HtmlEditor> {
         onInit: widget.onInit,
         onFocus: widget.onFocus,
         onBlur: widget.onBlur,
+        onImageLinkInsert: widget.onImageLinkInsert,
       );
 }

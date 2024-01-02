@@ -29,6 +29,9 @@ abstract class SummernoteAdapter {
   /// If the [EditorCallbacks.onBlur] should be enabled.
   final bool enableOnBlur;
 
+  /// If the [EditorCallbacks.onImageLinkInsert] should be enabled.
+  final bool enableOnImageLinkInsert;
+
   /// Build string for [EditorCallbacks.onInit] callback.
   String get onInitCallback => summernoteCallback(
         event: EditorCallbacks.onInit,
@@ -63,6 +66,13 @@ abstract class SummernoteAdapter {
         event: EditorCallbacks.onBlur,
         args: const [],
         body: messageHandler(event: EditorCallbacks.onBlur),
+      );
+
+  /// Build string for [EditorCallbacks.onImageLinkInsert] callback.
+  String get onImageLinkInsertCallback => summernoteCallback(
+        event: EditorCallbacks.onImageLinkInsert,
+        args: const ["url"],
+        body: "console.log('Image link inserted: ' + url);",
       );
 
   /// Build a string which contains javascript specific to the current platform.
@@ -124,6 +134,7 @@ abstract class SummernoteAdapter {
     this.resizeMode = ResizeMode.resizeToParent,
     this.enableOnFocus = false,
     this.enableOnBlur = false,
+    this.enableOnImageLinkInsert = false,
   });
 
   factory SummernoteAdapter.web({
@@ -132,6 +143,7 @@ abstract class SummernoteAdapter {
     ResizeMode resizeMode = ResizeMode.resizeToParent,
     bool enableOnFocus = false,
     bool enableOnBlur = false,
+    bool enableOnImageLinkInsert = false,
   }) =>
       SummernoteAdapterWeb(
         key: key,
@@ -139,6 +151,7 @@ abstract class SummernoteAdapter {
         resizeMode: resizeMode,
         enableOnFocus: enableOnFocus,
         enableOnBlur: enableOnBlur,
+        enableOnImageLinkInsert: enableOnImageLinkInsert,
       );
 
   factory SummernoteAdapter.inAppWebView({
@@ -147,6 +160,7 @@ abstract class SummernoteAdapter {
     ResizeMode resizeMode = ResizeMode.resizeToParent,
     bool enableOnFocus = false,
     bool enableOnBlur = false,
+    bool enableOnImageLinkInsert = false,
   }) =>
       SummernoteAdapterInappWebView(
         key: key,
@@ -154,6 +168,7 @@ abstract class SummernoteAdapter {
         resizeMode: resizeMode,
         enableOnFocus: enableOnFocus,
         enableOnBlur: enableOnBlur,
+        enableOnImageLinkInsert: enableOnImageLinkInsert,
       );
 
   /// Initialise the summernote editor.
@@ -177,12 +192,20 @@ abstract class SummernoteAdapter {
       '''
 function createLink(payload) {
   const data = JSON.parse(payload);
-  const text = ${wrapInQuotes(value: 'data["text"]', wrap: false)}
-  const url = ${wrapInQuotes(value: 'data["url"]', wrap: false)}
+  const text = data["text"];
+  const url = data["url"];
   ${callSummernoteMethod(
         method: 'createLink',
         payload: '{text: text, url: url, isNewWindow: data["isNewWindow"]}',
       )}
+}
+
+function insertImage(payload) {
+  logDebug("Inserting image: " + payload);
+  const data = JSON.parse(payload);
+  const filename = data["filename"];
+  const url = data["url"];
+  ${callSummernoteMethod(method: 'insertImage', payload: 'url, filename')}
 }
 
 
@@ -233,6 +256,9 @@ if (${resizeMode == ResizeMode.resizeToParent}) {
   resizeToParent();
   addEventListener("resize", (event) => resizeToParent());
 }
+
+
+
   
 logDebug("Summernote initialised");
 ''';
@@ -277,6 +303,7 @@ logDebug("Summernote initialised");
         onChangeCodeviewCallback,
         if (enableOnFocus) onFocusCallback,
         if (enableOnBlur) onBlurCallback,
+        onImageLinkInsertCallback,
       ];
 
   /// Build the function called for `onKeydown` event which emits `characterCount`.

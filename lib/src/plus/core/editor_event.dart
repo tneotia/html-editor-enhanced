@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 /// Events sent to the editor from the controller.
@@ -138,9 +139,36 @@ class EditorCreateLink extends EditorEvent {
   bool operator ==(covariant EditorCreateLink other) {
     if (identical(this, other)) return true;
 
-    return other.isNewWindow == isNewWindow && other.text == text && other.url == url;
+    return other.method == method &&
+        other.isNewWindow == isNewWindow &&
+        other.text == text &&
+        other.url == url;
   }
 
   @override
-  int get hashCode => isNewWindow.hashCode ^ text.hashCode ^ url.hashCode;
+  int get hashCode => method.hashCode ^ isNewWindow.hashCode ^ text.hashCode ^ url.hashCode;
+}
+
+/// Notify the editor to insert a network image link.
+class EditorInsertImageLink extends EditorEvent {
+  final String filename;
+  final String url;
+
+  @override
+  String get payload => jsonEncode({"filename": filename, "url": url});
+
+  const EditorInsertImageLink({
+    required this.filename,
+    required this.url,
+  }) : super("insertImage");
+
+  @override
+  bool operator ==(covariant EditorInsertImageLink other) {
+    if (identical(this, other)) return true;
+
+    return other.method == method && other.filename == filename && other.url == url;
+  }
+
+  @override
+  int get hashCode => method.hashCode ^ filename.hashCode ^ url.hashCode;
 }

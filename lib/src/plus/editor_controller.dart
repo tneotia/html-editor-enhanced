@@ -123,12 +123,12 @@ class HtmlEditorController extends ValueNotifier<HtmlEditorValue> {
   void setCursorToEnd() => sendEvent(const EditorSetCursorToEnd());
 
   /// Create/insert a link in the editor.
-  void createLink({
-    required String text,
-    required String url,
-    bool isNewWindow = true,
-  }) =>
+  void createLink({required String text, required String url, bool isNewWindow = true}) =>
       sendEvent(EditorCreateLink(text: text, url: url, isNewWindow: isNewWindow));
+
+  /// Insert a network image at the position of the cursor in the editor.
+  void insertNetworkImage({required String url, String filename = ""}) =>
+      sendEvent(EditorInsertImageLink(url: url, filename: filename));
 
   /// Helper function to process input html
   static String processHtml({

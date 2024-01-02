@@ -37,6 +37,9 @@ class HtmlEditorField extends StatefulWidget {
   /// {@macro HtmlEditorField.onBlur}
   final VoidCallback? onBlur;
 
+  /// {@macro HtmlEditorField.onImageLinkInsert}
+  final ValueChanged<String>? onImageLinkInsert;
+
   const HtmlEditorField({
     super.key,
     required this.controller,
@@ -45,6 +48,7 @@ class HtmlEditorField extends StatefulWidget {
     this.onInit,
     this.onFocus,
     this.onBlur,
+    this.onImageLinkInsert,
   });
 
   @override
@@ -84,6 +88,7 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
       resizeMode: widget.resizeMode,
       enableOnBlur: widget.onBlur != null,
       enableOnFocus: widget.onFocus != null,
+      enableOnImageLinkInsert: widget.onImageLinkInsert != null,
     );
     _controller = widget.controller;
     _controller.addListener(_controllerListener);
@@ -147,6 +152,7 @@ ${_adapter.css(colorScheme: _themeData?.colorScheme)}
       EditorCallbacks.onChangeCodeview => _onChange(message),
       EditorCallbacks.onFocus => widget.onFocus?.call(),
       EditorCallbacks.onBlur => widget.onBlur?.call(),
+      EditorCallbacks.onImageLinkInsert => widget.onImageLinkInsert?.call(message.payload!),
       _ => debugPrint("Uknown message received from iframe: $message"),
     };
   }
@@ -180,6 +186,7 @@ ${_adapter.css(colorScheme: _themeData?.colorScheme)}
         EditorSetHtml() => "toIframe",
         EditorSetCursorToEnd() => "toIframe",
         EditorCreateLink() => "toIframe",
+        EditorInsertImageLink() => "toIframe",
         _ => "toSummernote",
       },
     );

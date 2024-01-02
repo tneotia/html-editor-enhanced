@@ -70,6 +70,11 @@ class HtmlEditorField extends StatelessWidget {
   /// {@endtemplate}
   final VoidCallback? onBlur;
 
+  /// {@template HtmlEditorField.onImageLinkInsert}
+  /// Callback to be called when the user inserts an image link.
+  /// {@endtemplate}
+  final ValueChanged<String>? onImageLinkInsert;
+
   const HtmlEditorField({
     super.key,
     required this.controller,
@@ -79,6 +84,7 @@ class HtmlEditorField extends StatelessWidget {
     this.onInit,
     this.onFocus,
     this.onBlur,
+    this.onImageLinkInsert,
   });
 
   @override
