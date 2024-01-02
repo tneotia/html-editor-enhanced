@@ -77,45 +77,50 @@ class HtmlEditorController extends ValueNotifier<HtmlEditorValue> {
     String? initialHtml,
   }) : super(HtmlEditorValue.initial(html: initialHtml));
 
+  /// Send an event to the editor.
+  ///
+  /// It's implemented to allow the developer to send custom events to the editor.
+  void sendEvent(EditorEvent event) => __eventsController?.add(event);
+
   /// Toggle between the code view and the rich text view.
-  void toggleCodeView() => __eventsController?.add(const EditorToggleView());
+  void toggleCodeView() => sendEvent(const EditorToggleView());
 
   /// Clears the editor of any text.
-  void clear() => __eventsController?.add(const EditorReset());
+  void clear() => sendEvent(const EditorReset());
 
   /// Reloads the editor.
-  void reload() => __eventsController?.add(const EditorReload());
+  void reload() => sendEvent(const EditorReload());
 
   /// Undo the last action.
-  void undo() => __eventsController?.add(const EditorUndo());
+  void undo() => sendEvent(const EditorUndo());
 
   /// Redo the last action.
-  void redo() => __eventsController?.add(const EditorRedo());
+  void redo() => sendEvent(const EditorRedo());
 
   /// Enable the editor field.
-  void enable() => __eventsController?.add(const EditorEnable());
+  void enable() => sendEvent(const EditorEnable());
 
   /// Disable the editor field.
-  void disable() => __eventsController?.add(const EditorDisable());
+  void disable() => sendEvent(const EditorDisable());
 
   /// Request focus for the editor field.
-  void requestFocus() => __eventsController?.add(const EditorRequestFocus());
+  void requestFocus() => sendEvent(const EditorRequestFocus());
 
   /// Clear the focus from the editor field.
-  void clearFocus() => __eventsController?.add(const EditorClearFocus());
+  void clearFocus() => sendEvent(const EditorClearFocus());
 
   /// Insert text at the end of the current HTML content in the editor.
-  void insertText({required String text}) => __eventsController?.add(
+  void insertText({required String text}) => sendEvent(
         EditorInsertText(payload: text),
       );
 
   /// Paste html code into the editor.
-  void pasteHtml({required String html}) => __eventsController?.add(
+  void pasteHtml({required String html}) => sendEvent(
         EditorPasteHtml(payload: processHtml(html: html)),
       );
 
   /// Move the cursor at the end of the current content.
-  void setCursorToEnd() => __eventsController?.add(const EditorSetCursorToEnd());
+  void setCursorToEnd() => sendEvent(const EditorSetCursorToEnd());
 
   /// Create/insert a link in the editor.
   void createLink({
@@ -123,7 +128,7 @@ class HtmlEditorController extends ValueNotifier<HtmlEditorValue> {
     required String url,
     bool isNewWindow = true,
   }) =>
-      __eventsController?.add(EditorCreateLink(text: text, url: url, isNewWindow: isNewWindow));
+      sendEvent(EditorCreateLink(text: text, url: url, isNewWindow: isNewWindow));
 
   /// Helper function to process input html
   static String processHtml({
