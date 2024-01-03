@@ -38,24 +38,20 @@ class HtmlEditorField extends StatelessWidget {
   final ThemeData? themeData;
 
   /// {@template HtmlEditorField.intialMobileOptions}
-  /// The initial options for the [InAppWebViewGroupOptions] used only on mobile platforms.
+  /// The initial options for the [InAppWebViewSettings] used only on mobile platforms.
   ///
   /// If not specified, these default options are used:
   /// ```dart
-  /// InAppWebViewGroupOptions(
-  ///   crossPlatform: InAppWebViewOptions(
-  ///     javaScriptEnabled: true,
-  ///     transparentBackground: true,
-  ///     useShouldOverrideUrlLoading: true,
-  ///   ),
-  ///   android: AndroidInAppWebViewOptions(
-  ///     useHybridComposition: true,
-  ///     loadWithOverviewMode: true,
-  ///   ),
+  /// InAppWebViewSettings(
+  ///   javaScriptEnabled: true,
+  ///   transparentBackground: true,
+  ///   useHybridComposition: true,
+  ///   useShouldOverrideUrlLoading: true,
+  ///   loadWithOverviewMode: true,
   /// );
   /// ```
   /// {@endtemplate}
-  final InAppWebViewGroupOptions? intialMobileOptions;
+  final InAppWebViewSettings? intialMobileOptions;
 
   /// {@template HtmlEditorField.onInit}
   /// Callback to be called when the editor is initialized.

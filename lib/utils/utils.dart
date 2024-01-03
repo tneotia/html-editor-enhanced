@@ -211,13 +211,13 @@ class _DropdownMenuPainter extends CustomPainter {
 
 class _DropdownMenuItemButton<T> extends StatefulWidget {
   const _DropdownMenuItemButton({
-    Key? key,
+    super.key,
     this.padding,
     required this.route,
     required this.buttonRect,
     required this.constraints,
     required this.itemIndex,
-  }) : super(key: key);
+  });
 
   final _DropdownRoute<T> route;
   final EdgeInsets? padding;
@@ -307,13 +307,13 @@ class _DropdownMenuItemButtonState<T> extends State<_DropdownMenuItemButton<T>> 
 
 class _DropdownMenu<T> extends StatefulWidget {
   const _DropdownMenu({
-    Key? key,
+    super.key,
     this.padding,
     required this.route,
     required this.buttonRect,
     required this.constraints,
     this.dropdownColor,
-  }) : super(key: key);
+  });
 
   final _DropdownRoute<T> route;
   final EdgeInsets? padding;
@@ -606,7 +606,7 @@ class _DropdownRoute<T> extends PopupRoute<_DropdownRouteResult<T>> {
 
 class _DropdownRoutePage<T> extends StatelessWidget {
   const _DropdownRoutePage({
-    Key? key,
+    super.key,
     required this.route,
     required this.constraints,
     this.items,
@@ -617,7 +617,7 @@ class _DropdownRoutePage<T> extends StatelessWidget {
     required this.capturedThemes,
     this.style,
     required this.dropdownColor,
-  }) : super(key: key);
+  });
 
   final _DropdownRoute<T> route;
   final BoxConstraints constraints;
@@ -671,10 +671,10 @@ class _DropdownRoutePage<T> extends StatelessWidget {
 
 class _MenuItem<T> extends SingleChildRenderObjectWidget {
   const _MenuItem({
-    Key? key,
+    super.key,
     required this.onLayout,
     required this.item,
-  }) : super(key: key, child: item);
+  }) : super(child: item);
 
   final ValueChanged<Size> onLayout;
   final CustomDropdownMenuItem<T>? item;
@@ -704,9 +704,9 @@ class _RenderMenuItem extends RenderProxyBox {
 
 class _DropdownMenuItemContainer extends StatelessWidget {
   const _DropdownMenuItemContainer({
-    Key? key,
+    super.key,
     required this.child,
-  }) : super(key: key);
+  });
 
   final Widget child;
 
@@ -722,11 +722,11 @@ class _DropdownMenuItemContainer extends StatelessWidget {
 
 class CustomDropdownMenuItem<T> extends _DropdownMenuItemContainer {
   const CustomDropdownMenuItem({
-    Key? key,
+    super.key,
     this.onTap,
     this.value,
-    required Widget child,
-  }) : super(key: key, child: child);
+    required super.child,
+  });
 
   final VoidCallback? onTap;
   final T? value;
@@ -734,9 +734,9 @@ class CustomDropdownMenuItem<T> extends _DropdownMenuItemContainer {
 
 class CustomDropdownButtonHideUnderline extends InheritedWidget {
   const CustomDropdownButtonHideUnderline({
-    Key? key,
-    required Widget child,
-  }) : super(key: key, child: child);
+    super.key,
+    required super.child,
+  });
 
   static bool at(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<CustomDropdownButtonHideUnderline>() != null;
@@ -748,7 +748,7 @@ class CustomDropdownButtonHideUnderline extends InheritedWidget {
 
 class CustomDropdownButton<T> extends StatefulWidget {
   CustomDropdownButton({
-    Key? key,
+    super.key,
     required this.items,
     this.selectedItemBuilder,
     this.value,
@@ -785,8 +785,7 @@ class CustomDropdownButton<T> extends StatefulWidget {
           'Either zero or 2 or more [DropdownMenuItem]s were detected '
           'with the same value',
         ),
-        assert(itemHeight == null || itemHeight >= kMinInteractiveDimension),
-        super(key: key);
+        assert(itemHeight == null || itemHeight >= kMinInteractiveDimension);
 
   final DropdownMenuDirection menuDirection;
   final List<CustomDropdownMenuItem<T>>? items;

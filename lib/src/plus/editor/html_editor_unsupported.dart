@@ -26,7 +26,7 @@ class HtmlEditor extends StatelessWidget {
   final ThemeData? themeData;
 
   /// {@macro HtmlEditorField.intialMobileOptions}
-  final InAppWebViewGroupOptions? intialMobileOptions;
+  final InAppWebViewSettings? intialMobileOptions;
 
   /// {@macro HtmlEditorField.onInit}
   final VoidCallback? onInit;

@@ -1,3 +1,5 @@
+library flutter_inappwebview_fake;
+
 ///Class that is used by [WebView.shouldOverrideUrlLoading] event.
 ///It represents the policy to pass back to the decision handler.
 // ignore_for_file: constant_identifier_names

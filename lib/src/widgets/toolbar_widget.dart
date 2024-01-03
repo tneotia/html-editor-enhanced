@@ -20,11 +20,11 @@ class ToolbarWidget extends StatefulWidget {
   final Callbacks? callbacks;
 
   const ToolbarWidget({
-    Key? key,
+    super.key,
     required this.controller,
     required this.htmlToolbarOptions,
     required this.callbacks,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() {

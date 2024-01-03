@@ -15,7 +15,7 @@ class HtmlEditor extends StatefulWidget {
   final ResizeMode resizeMode;
 
   /// {@macro HtmlEditorField.intialMobileOptions}
-  final InAppWebViewGroupOptions? intialMobileOptions;
+  final InAppWebViewSettings? intialMobileOptions;
 
   /// {@macro HtmlEditorField.controller}
   final HtmlEditorController? controller;

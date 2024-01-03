@@ -16,10 +16,10 @@ dependencies:
   flex_color_picker: ^3.3.0
   flutter:
     sdk: flutter
-  flutter_inappwebview: ^5.8.0
+  flutter_inappwebview: ^6.0.0
   # plugin to get when the keyboard is hidden via back (Android)
   # or "done" (iOS) to reset the editor's height
-  flutter_keyboard_visibility: ^5.4.1
+  flutter_keyboard_visibility: ^6.0.0
   # plugin for @internal annotation
   meta: '>=1.0.0 <2.0.0'
   # plugin to show a scrollable number picker for inserting tables
@@ -34,7 +34,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   # plugin to help maintain effective Flutter standards
-  flutter_lints: ^2.0.3
+  flutter_lints: ^3.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

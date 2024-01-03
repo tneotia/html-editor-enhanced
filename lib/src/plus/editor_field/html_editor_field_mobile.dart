@@ -26,7 +26,7 @@ class HtmlEditorField extends StatefulWidget {
   final ResizeMode resizeMode;
 
   /// {@macro HtmlEditorField.intialMobileOptions}
-  final InAppWebViewGroupOptions? intialMobileOptions;
+  final InAppWebViewSettings? intialMobileOptions;
 
   /// {@macro HtmlEditorField.controller}
   final HtmlEditorController controller;
@@ -74,7 +74,7 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
   late final StreamSubscription<EditorEvent> _eventsSubscription;
 
   late final StreamSubscription<bool> _keyboardVisibilitySubscription;
-  late final InAppWebViewGroupOptions _initialOptions;
+  late final InAppWebViewSettings _initialOptions;
 
   ThemeData? _themeData;
 
@@ -107,16 +107,12 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
     _currentValueNotifier = ValueNotifier(_controller.clonedValue);
     _eventsSubscription = _controller.events.listen(_parseEvents);
     _initialOptions = widget.intialMobileOptions ??
-        InAppWebViewGroupOptions(
-          crossPlatform: InAppWebViewOptions(
-            javaScriptEnabled: true,
-            transparentBackground: true,
-            useShouldOverrideUrlLoading: true,
-          ),
-          android: AndroidInAppWebViewOptions(
-            useHybridComposition: true,
-            loadWithOverviewMode: true,
-          ),
+        InAppWebViewSettings(
+          javaScriptEnabled: true,
+          transparentBackground: true,
+          useHybridComposition: true,
+          useShouldOverrideUrlLoading: true,
+          loadWithOverviewMode: true,
         );
     _keyboardVisibilitySubscription = _keyboardVisibilityStream.listen(
       _onKeyboardVisibilityChanged,
@@ -146,8 +142,10 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
           debugPrint("onLoadStop url: $url");
           _loadSummernote();
         },
-        onLoadError: (controller, url, code, message) => debugPrint("message: $message"),
-        initialOptions: _initialOptions,
+        onReceivedError: (controller, request, error) => debugPrint(
+          "message: ${error.description}",
+        ),
+        initialSettings: _initialOptions,
         shouldOverrideUrlLoading: (controller, action) async {
           /// TODO; implement
           /// if (!action.request.url.toString().contains(_filePath)) {
