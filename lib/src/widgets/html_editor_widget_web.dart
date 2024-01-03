@@ -61,6 +61,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   /// Tracks whether the editor was disabled onInit (to avoid re-disabling on reload)
   bool alreadyDisabled = false;
 
+  String get _assetsPath => "packages/html_editor_plus/assets";
+
   @override
   void initState() {
     actualHeight = widget.otherOptions.height;
@@ -442,7 +444,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         $jsCallbacks
       </script>
     """;
-    var filePath = 'packages/html_editor_plus/assets/summernote-no-plugins.html';
+    var filePath = '$_assetsPath/summernote-no-plugins.html';
     if (widget.htmlEditorOptions.filePath != null) {
       filePath = widget.htmlEditorOptions.filePath!;
     }
@@ -451,11 +453,9 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         .replaceFirst('<!--darkCSS-->', darkCSS)
         .replaceFirst('<!--headString-->', headString)
         .replaceFirst('<!--summernoteScripts-->', summernoteScripts)
-        .replaceFirst('"jquery.min.js"', '"assets/packages/html_editor_plus/assets/jquery.min.js"')
-        .replaceFirst('"summernote-lite.min.css"',
-            '"assets/packages/html_editor_plus/assets/summernote-lite.min.css"')
-        .replaceFirst('"summernote-lite.min.js"',
-            '"assets/packages/html_editor_plus/assets/summernote-lite.min.js"');
+        .replaceFirst('"jquery.min.js"', '"assets/$_assetsPath/jquery.min.js"')
+        .replaceFirst('"summernote-lite.min.css"', '"assets/$_assetsPath/summernote-lite.min.css"')
+        .replaceFirst('"summernote-lite.min.js"', '"assets/$_assetsPath/summernote-lite.min.js"');
     if (widget.callbacks != null) addJSListener(widget.callbacks!);
     final iframe = html.IFrameElement()
       ..width = MediaQuery.of(widget.initBC).size.width.toString() //'800'

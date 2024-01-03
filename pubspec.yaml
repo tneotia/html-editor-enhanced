@@ -40,15 +40,7 @@ dev_dependencies:
 # The following section is specific to Flutter.
 flutter:
   assets:
-    - packages/html_editor_plus/assets/summernote.html
-    - packages/html_editor_plus/assets/summernote-no-plugins.html
-    - packages/html_editor_plus/assets/summernote-lite.min.css
-    - packages/html_editor_plus/assets/summernote-lite-dark.css
-    - packages/html_editor_plus/assets/summernote-lite.min.js
-    - packages/html_editor_plus/assets/jquery.min.js
-    - packages/html_editor_plus/assets/font/summernote.eot
-    - packages/html_editor_plus/assets/font/summernote.ttf
-    - packages/html_editor_plus/assets/plugins/summernote-at-mention/summernote-at-mention.js
+    - assets/
   # This section identifies this Flutter project as a plugin project.
   # The 'pluginClass' and Android 'package' identifiers should not ordinarily
   # be modified. They are used by the tooling to maintain consistency when

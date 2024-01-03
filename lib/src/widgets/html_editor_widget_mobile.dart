@@ -67,6 +67,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
   /// the editor is focused much after its visibility changes
   double? cachedVisibleDecimal;
 
+  String get _assetsPath => "packages/html_editor_plus/assets";
+
   @override
   void initState() {
     docHeight = widget.otherOptions.height;
@@ -74,9 +76,9 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
     if (widget.htmlEditorOptions.filePath != null) {
       filePath = widget.htmlEditorOptions.filePath!;
     } else if (widget.plugins.isEmpty) {
-      filePath = 'packages/html_editor_plus/assets/summernote-no-plugins.html';
+      filePath = '$_assetsPath/summernote-no-plugins.html';
     } else {
-      filePath = 'packages/html_editor_plus/assets/summernote.html';
+      filePath = '$_assetsPath/summernote.html';
     }
     super.initState();
   }
