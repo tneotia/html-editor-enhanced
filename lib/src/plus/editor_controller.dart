@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:html_editor_enhanced/src/plus/core/editor_event.dart';
+import 'package:html_editor_plus/src/plus/core/editor_event.dart';
 import 'package:meta/meta.dart';
 
 import 'core/editor_value.dart';

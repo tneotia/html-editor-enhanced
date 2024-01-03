@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:html_editor_plus/html_editor.dart';
 
 /// Fallback HtmlEditor class (should never be called)
 class HtmlEditor extends StatelessWidget {

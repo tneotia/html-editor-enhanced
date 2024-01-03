@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_string_escapes
+
 import 'package:flutter/foundation.dart';
 
 /// Abstract class that all the plguin classes extend
@@ -33,7 +35,7 @@ class SummernoteAtMention extends Plugins {
 
   @override
   String getHeadString() {
-    return '<script src="assets/packages/html_editor_enhanced/assets/plugins/summernote-at-mention/summernote-at-mention.js"></script>';
+    return '<script src=\"assets/packages/html_editor_plus/assets/plugins/summernote-at-mention/summernote-at-mention.js\"></script>';
   }
 
   @override

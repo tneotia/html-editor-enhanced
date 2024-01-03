@@ -1,7 +1,7 @@
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:html_editor_enhanced/src/plus/core/editor_callbacks.dart';
+import 'package:html_editor_plus/src/plus/core/editor_callbacks.dart';
 
 import 'summernote_adapter_inappwebview.dart';
 import 'summernote_adapter_web.dart';

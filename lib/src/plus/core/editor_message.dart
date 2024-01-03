@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:html_editor_enhanced/src/plus/core/editor_event.dart';
+import 'package:html_editor_plus/src/plus/core/editor_event.dart';
 
 /// A DTO representing a message transferred between dart and javascript.
 class EditorMessage {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:html_editor_enhanced/core.dart';
-import 'package:html_editor_enhanced/editor_field.dart';
+import 'package:html_editor_plus/core.dart';
+import 'package:html_editor_plus/editor_field.dart';
 
 import '../core/editor_file.dart';
 import '../core/editor_upload_error.dart';

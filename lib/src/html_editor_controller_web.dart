@@ -1,10 +1,12 @@
+// ignore_for_file: curly_braces_in_flow_control_structures, deprecated_member_use
+
 import 'dart:convert';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 
 import 'package:flutter/foundation.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart' as unsupported;
+import 'package:html_editor_plus/html_editor.dart';
+import 'package:html_editor_plus/src/html_editor_controller_unsupported.dart' as unsupported;
 import 'package:meta/meta.dart';
 
 /// Controller for web
@@ -32,9 +34,8 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
         .firstWhere((element) => json.decode(element.data)['type'] == 'toDart: getText');
     String text = json.decode(e.data)['text'];
     if (processOutputHtml &&
-        (text.isEmpty || text == '<p></p>' || text == '<p><br></p>' || text == '<p><br/></p>')) {
+        (text.isEmpty || text == '<p></p>' || text == '<p><br></p>' || text == '<p><br/></p>'))
       text = '';
-    }
     return text;
   }
 
@@ -154,7 +155,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   @override
   void clearFocus() {
     throw Exception(
-        'Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart and check kIsWeb before calling this method.');
+        'Flutter Web environment detected, please make sure you are importing package:html_editor_plus/html_editor.dart and check kIsWeb before calling this method.');
   }
 
   /// Resets the height of the editor back to the original if it was changed to
@@ -163,7 +164,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   @override
   void resetHeight() {
     throw Exception(
-        'Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart and check kIsWeb before calling this method.');
+        'Flutter Web environment detected, please make sure you are importing package:html_editor_plus/html_editor.dart and check kIsWeb before calling this method.');
   }
 
   /// Refresh the page
@@ -278,7 +279,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
       html.window.postMessage(json, '*');
     } else {
       throw Exception(
-          'Non-Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart');
+          'Non-Flutter Web environment detected, please make sure you are importing package:html_editor_plus/html_editor.dart');
     }
   }
 }

@@ -1,8 +1,10 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart' as unsupported;
+import 'package:html_editor_plus/html_editor.dart';
+import 'package:html_editor_plus/src/html_editor_controller_unsupported.dart' as unsupported;
 
 /// Controller for mobile
 class HtmlEditorController extends unsupported.HtmlEditorController {
@@ -162,7 +164,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   @override
   void reloadWeb() {
     throw Exception(
-        'Non-Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart and check kIsWeb before calling this function');
+        'Non-Flutter Web environment detected, please make sure you are importing package:html_editor_plus/html_editor.dart and check kIsWeb before calling this function');
   }
 
   /// Resets the height of the editor back to the original if it was changed to
@@ -230,7 +232,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
       return result;
     } else {
       throw Exception(
-          'Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart');
+          'Flutter Web environment detected, please make sure you are importing package:html_editor_plus/html_editor.dart');
     }
   }
 

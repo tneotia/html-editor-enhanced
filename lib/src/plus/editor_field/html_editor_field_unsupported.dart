@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:html_editor_enhanced/src/plus/core/editor_upload_error.dart';
+import 'package:html_editor_plus/src/plus/core/editor_upload_error.dart';
 
 import '../core/editor_file.dart';
 import '../core/enums.dart';

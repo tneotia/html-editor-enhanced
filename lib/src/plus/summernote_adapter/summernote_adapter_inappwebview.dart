@@ -1,4 +1,4 @@
-import 'package:html_editor_enhanced/src/plus/core/editor_callbacks.dart';
+import 'package:html_editor_plus/src/plus/core/editor_callbacks.dart';
 
 import '../core/enums.dart';
 import 'summernote_adapter.dart';

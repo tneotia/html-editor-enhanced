@@ -6,11 +6,11 @@ import 'dart:ui_web' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:html_editor_enhanced/src/plus/core/editor_callbacks.dart';
-import 'package:html_editor_enhanced/src/plus/core/editor_event.dart';
-import 'package:html_editor_enhanced/src/plus/core/editor_message.dart';
-import 'package:html_editor_enhanced/src/plus/core/editor_upload_error.dart';
-import 'package:html_editor_enhanced/src/plus/core/editor_value.dart';
+import 'package:html_editor_plus/src/plus/core/editor_callbacks.dart';
+import 'package:html_editor_plus/src/plus/core/editor_event.dart';
+import 'package:html_editor_plus/src/plus/core/editor_message.dart';
+import 'package:html_editor_plus/src/plus/core/editor_upload_error.dart';
+import 'package:html_editor_plus/src/plus/core/editor_value.dart';
 
 import '../core/editor_file.dart';
 import '../core/enums.dart';
@@ -75,7 +75,7 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
   ThemeData? _themeData;
 
   HtmlEditorValue get _currentValue => _currentValueNotifier.value;
-  String get _assetsPath => "packages/html_editor_enhanced/assets";
+  String get _assetsPath => "packages/html_editor_plus/assets";
   String get _filePath => "$_assetsPath/summernote-no-plugins.html";
   String get _jqueryPath => "assets/$_assetsPath/jquery.min.js";
   String get _cssPath => "assets/$_assetsPath/summernote-lite.min.css";

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:html_editor_enhanced/src/plus/core/editor_callbacks.dart';
+import 'package:html_editor_plus/src/plus/core/editor_callbacks.dart';
 
 import '../core/editor_event.dart';
 import '../core/editor_file.dart';
@@ -81,7 +81,7 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
   InAppWebViewController? _webviewController;
 
   HtmlEditorValue get _currentValue => _currentValueNotifier.value;
-  String get _assetsPath => "packages/html_editor_enhanced/assets";
+  String get _assetsPath => "packages/html_editor_plus/assets";
   String get _filePath => "$_assetsPath/summernote-no-plugins.html";
   String get _cssPath => "$_assetsPath/summernote-lite.min.css";
   String get _jqueryPath => "$_assetsPath/jquery.min.js";

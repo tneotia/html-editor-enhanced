@@ -1,5 +1,5 @@
-import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:html_editor_enhanced/src/widgets/html_editor_widget_web.dart';
+import 'package:html_editor_plus/html_editor.dart';
+import 'package:html_editor_plus/src/widgets/html_editor_widget_web.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -50,7 +50,7 @@ class HtmlEditor extends StatelessWidget {
       );
     } else {
       return const Text(
-          'Non-Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart');
+          'Non-Flutter Web environment detected, please make sure you are importing package:html_editor_plus/html_editor.dart');
     }
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:html_editor_enhanced/html_editor_plus.dart';
-import 'package:html_editor_enhanced_example/plus/core/control_button.dart';
-import 'package:html_editor_enhanced_example/plus/core/controls.dart';
+import 'package:html_editor_plus/html_editor_plus.dart';
+import 'package:html_editor_plus_example/plus/core/control_button.dart';
+import 'package:html_editor_plus_example/plus/core/controls.dart';
 
 import 'core/app_bar_icon_button.dart';
 

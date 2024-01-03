@@ -1,6 +1,6 @@
-import 'package:html_editor_enhanced/src/plus/core/editor_callbacks.dart';
-import 'package:html_editor_enhanced/src/plus/core/editor_event.dart';
-import 'package:html_editor_enhanced/src/plus/core/enums.dart';
+import 'package:html_editor_plus/src/plus/core/editor_callbacks.dart';
+import 'package:html_editor_plus/src/plus/core/editor_event.dart';
+import 'package:html_editor_plus/src/plus/core/enums.dart';
 
 import 'summernote_adapter.dart';
 

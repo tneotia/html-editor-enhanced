@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use, use_build_context_synchronously
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously, sized_box_for_whitespace
 
 import 'dart:convert';
 
@@ -7,8 +7,8 @@ import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:html_editor_enhanced/utils/utils.dart';
+import 'package:html_editor_plus/html_editor.dart';
+import 'package:html_editor_plus/utils/utils.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 
@@ -390,7 +390,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                         children: _buildChildren()
                           ..insert(
                               0,
-                              SizedBox(
+                              Container(
                                 height: widget.htmlToolbarOptions.toolbarItemHeight,
                                 child: IconButton(
                                   icon: Icon(
