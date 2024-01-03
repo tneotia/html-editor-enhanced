@@ -5,7 +5,7 @@ import 'package:file_picker/file_picker.dart';
 
 import 'plus/example_scaffold.dart';
 
-void main() => runApp(HtmlEditorExampleApp(showPlusExample: true));
+void main() => runApp(HtmlEditorExampleApp());
 
 class HtmlEditorExampleApp extends StatelessWidget {
   final bool showPlusExample;
