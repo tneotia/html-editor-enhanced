@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:file_picker/file_picker.dart';
