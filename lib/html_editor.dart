@@ -6,8 +6,7 @@ export 'package:html_editor_enhanced/utils/toolbar.dart';
 export 'package:html_editor_enhanced/utils/plugins.dart';
 export 'package:html_editor_enhanced/utils/file_upload_model.dart';
 export 'package:html_editor_enhanced/utils/options.dart';
-export 'package:html_editor_enhanced/utils/utils.dart'
-    hide setState, intersperse, getRandString;
+export 'package:html_editor_enhanced/utils/utils.dart' hide setState, intersperse, getRandString;
 
 export 'package:html_editor_enhanced/src/html_editor_unsupported.dart'
     if (dart.library.html) 'package:html_editor_enhanced/src/html_editor_web.dart'
@@ -20,8 +19,7 @@ export 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart
 export 'package:html_editor_enhanced/utils/shims/flutter_inappwebview_fake.dart'
     if (dart.library.io) 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
-/// Defines the 3 different cases for file insertion failing
-enum UploadError { unsupportedFile, exceededMaxSize, jsException }
+export 'src/plus/core/enums.dart' show UploadError;
 
 /// Manages the notification type for a notification displayed at the bottom of
 /// the editor
@@ -82,15 +80,7 @@ enum ButtonType {
 }
 
 /// Returns the type of dropdown changed in the `onDropdownChanged` function
-enum DropdownType {
-  style,
-  fontName,
-  fontSize,
-  fontSizeUnit,
-  listStyles,
-  lineHeight,
-  caseConverter
-}
+enum DropdownType { style, fontName, fontSize, fontSizeUnit, listStyles, lineHeight, caseConverter }
 
 /// Sets the direction the dropdown menu opens
 enum DropdownMenuDirection { down, up }

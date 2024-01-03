@@ -9,8 +9,10 @@ import 'package:flutter/services.dart';
 import 'package:html_editor_enhanced/src/plus/core/editor_callbacks.dart';
 import 'package:html_editor_enhanced/src/plus/core/editor_event.dart';
 import 'package:html_editor_enhanced/src/plus/core/editor_message.dart';
+import 'package:html_editor_enhanced/src/plus/core/editor_upload_error.dart';
 import 'package:html_editor_enhanced/src/plus/core/editor_value.dart';
 
+import '../core/editor_file.dart';
 import '../core/enums.dart';
 import '../editor_controller.dart';
 import '../summernote_adapter/summernote_adapter.dart';
@@ -37,8 +39,11 @@ class HtmlEditorField extends StatefulWidget {
   /// {@macro HtmlEditorField.onBlur}
   final VoidCallback? onBlur;
 
-  /// {@macro HtmlEditorField.onImageLinkInsert}
-  final ValueChanged<String>? onImageLinkInsert;
+  /// {@macro HtmlEditorField.onImageUpload}
+  final ValueChanged<HtmlEditorFile>? onImageUpload;
+
+  /// {@macro HtmlEditorField.onImageUploadError}
+  final ValueChanged<HtmlEditorUploadError>? onImageUploadError;
 
   const HtmlEditorField({
     super.key,
@@ -48,7 +53,8 @@ class HtmlEditorField extends StatefulWidget {
     this.onInit,
     this.onFocus,
     this.onBlur,
-    this.onImageLinkInsert,
+    this.onImageUpload,
+    this.onImageUploadError,
   });
 
   @override
@@ -88,7 +94,8 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
       resizeMode: widget.resizeMode,
       enableOnBlur: widget.onBlur != null,
       enableOnFocus: widget.onFocus != null,
-      enableOnImageLinkInsert: widget.onImageLinkInsert != null,
+      enableOnImageUpload: widget.onImageUpload != null,
+      enableOnImageUploadError: widget.onImageUploadError != null,
     );
     _controller = widget.controller;
     _controller.addListener(_controllerListener);
@@ -152,7 +159,12 @@ ${_adapter.css(colorScheme: _themeData?.colorScheme)}
       EditorCallbacks.onChangeCodeview => _onChange(message),
       EditorCallbacks.onFocus => widget.onFocus?.call(),
       EditorCallbacks.onBlur => widget.onBlur?.call(),
-      EditorCallbacks.onImageLinkInsert => widget.onImageLinkInsert?.call(message.payload!),
+      EditorCallbacks.onImageUpload => widget.onImageUpload?.call(
+          HtmlEditorFile.fromJson(message.payload!),
+        ),
+      EditorCallbacks.onImageUploadError => widget.onImageUploadError?.call(
+          HtmlEditorUploadError.fromJson(message.payload!),
+        ),
       _ => debugPrint("Uknown message received from iframe: $message"),
     };
   }

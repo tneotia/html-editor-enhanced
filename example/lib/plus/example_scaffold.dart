@@ -38,7 +38,8 @@ class _HtmlEditorPlusExampleState extends State<HtmlEditorPlusExample> {
                 onInit: () => print("Editor ready!"),
                 onFocus: () => print("Focus gained!"),
                 onBlur: () => print("Focus lost!"),
-                onImageLinkInsert: (String url) => print("Image link inserted: $url"),
+                onImageUpload: (value) => print("Image uploaded: $value"),
+                onImageUploadError: (value) => print("Image upload failed with error: $value"),
               ),
             ),
             EditorControls(

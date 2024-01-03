@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
-import '../editor_controller.dart';
+import '../core/editor_file.dart';
+import '../core/editor_upload_error.dart';
 import '../core/enums.dart';
+import '../editor_controller.dart';
 
 /// {@template HtmlEditor}
 /// The full HTML editor widget.
@@ -35,8 +37,11 @@ class HtmlEditor extends StatelessWidget {
   /// {@macro HtmlEditorField.onBlur}
   final VoidCallback? onBlur;
 
-  /// {@macro HtmlEditorField.onImageLinkInsert}
-  final ValueChanged<String>? onImageLinkInsert;
+  /// {@macro HtmlEditorField.onImageUpload}
+  final ValueChanged<HtmlEditorFile>? onImageUpload;
+
+  /// {@macro HtmlEditorField.onImageUploadError}
+  final ValueChanged<HtmlEditorUploadError>? onImageUploadError;
 
   const HtmlEditor({
     super.key,
@@ -47,7 +52,8 @@ class HtmlEditor extends StatelessWidget {
     this.onInit,
     this.onFocus,
     this.onBlur,
-    this.onImageLinkInsert,
+    this.onImageUpload,
+    this.onImageUploadError,
   });
 
   @override

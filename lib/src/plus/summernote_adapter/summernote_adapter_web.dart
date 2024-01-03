@@ -61,7 +61,8 @@ window.parent.addEventListener('message', handleMessage, false);
     super.resizeMode = ResizeMode.resizeToParent,
     super.enableOnBlur = false,
     super.enableOnFocus = false,
-    super.enableOnImageLinkInsert = false,
+    super.enableOnImageUpload = false,
+    super.enableOnImageUploadError = false,
   });
 
   @override

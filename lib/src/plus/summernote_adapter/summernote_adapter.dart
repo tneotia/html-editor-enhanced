@@ -29,8 +29,11 @@ abstract class SummernoteAdapter {
   /// If the [EditorCallbacks.onBlur] should be enabled.
   final bool enableOnBlur;
 
-  /// If the [EditorCallbacks.onImageLinkInsert] should be enabled.
-  final bool enableOnImageLinkInsert;
+  /// If the [EditorCallbacks.onImageUpload] should be enabled.
+  final bool enableOnImageUpload;
+
+  /// If the [EditorCallbacks.onImageUploadError] should be enabled.
+  final bool enableOnImageUploadError;
 
   /// Build string for [EditorCallbacks.onInit] callback.
   String get onInitCallback => summernoteCallback(
@@ -68,11 +71,18 @@ abstract class SummernoteAdapter {
         body: messageHandler(event: EditorCallbacks.onBlur),
       );
 
-  /// Build string for [EditorCallbacks.onImageLinkInsert] callback.
-  String get onImageLinkInsertCallback => summernoteCallback(
-        event: EditorCallbacks.onImageLinkInsert,
-        args: const ["url"],
-        body: "console.log('Image link inserted: ' + url);",
+  /// Build string for [EditorCallbacks.onImageUpload] callback.
+  String get onImageUploadCallback => summernoteCallback(
+        event: EditorCallbacks.onImageUpload,
+        args: const ["files"],
+        body: "uploadFile(files[0])",
+      );
+
+  /// Build string for [EditorCallbacks.onImageUploadError] callback.
+  String get onImageUploadErrorCallback => summernoteCallback(
+        event: EditorCallbacks.onImageUploadError,
+        args: const ["file", "error"],
+        body: "uploadError(file, error)",
       );
 
   /// Build a string which contains javascript specific to the current platform.
@@ -134,7 +144,8 @@ abstract class SummernoteAdapter {
     this.resizeMode = ResizeMode.resizeToParent,
     this.enableOnFocus = false,
     this.enableOnBlur = false,
-    this.enableOnImageLinkInsert = false,
+    this.enableOnImageUpload = false,
+    this.enableOnImageUploadError = false,
   });
 
   factory SummernoteAdapter.web({
@@ -143,7 +154,8 @@ abstract class SummernoteAdapter {
     ResizeMode resizeMode = ResizeMode.resizeToParent,
     bool enableOnFocus = false,
     bool enableOnBlur = false,
-    bool enableOnImageLinkInsert = false,
+    bool enableOnImageUpload = false,
+    bool enableOnImageUploadError = false,
   }) =>
       SummernoteAdapterWeb(
         key: key,
@@ -151,7 +163,8 @@ abstract class SummernoteAdapter {
         resizeMode: resizeMode,
         enableOnFocus: enableOnFocus,
         enableOnBlur: enableOnBlur,
-        enableOnImageLinkInsert: enableOnImageLinkInsert,
+        enableOnImageUpload: enableOnImageUpload,
+        enableOnImageUploadError: enableOnImageUploadError,
       );
 
   factory SummernoteAdapter.inAppWebView({
@@ -160,7 +173,8 @@ abstract class SummernoteAdapter {
     ResizeMode resizeMode = ResizeMode.resizeToParent,
     bool enableOnFocus = false,
     bool enableOnBlur = false,
-    bool enableOnImageLinkInsert = false,
+    bool enableOnImageUpload = false,
+    bool enableOnImageUploadError = false,
   }) =>
       SummernoteAdapterInappWebView(
         key: key,
@@ -168,7 +182,8 @@ abstract class SummernoteAdapter {
         resizeMode: resizeMode,
         enableOnFocus: enableOnFocus,
         enableOnBlur: enableOnBlur,
-        enableOnImageLinkInsert: enableOnImageLinkInsert,
+        enableOnImageUpload: enableOnImageUpload,
+        enableOnImageUploadError: enableOnImageUploadError,
       );
 
   /// Initialise the summernote editor.
@@ -190,6 +205,45 @@ abstract class SummernoteAdapter {
     List<String> summernoteCallbacks = const [],
   }) =>
       '''
+
+function uploadFile(file) {
+  const reader = new FileReader();
+  let base64 = "";
+  reader.onload = function(_) {
+    base64 = reader.result;
+    const fileObject = ${objectFromFile(fileNode: "file")};
+    ${messageHandler(
+        event: EditorCallbacks.onImageUpload,
+        payload: "JSON.stringify(fileObject)",
+      )}
+  };
+  reader.onerror = function (_) {
+    const fileObject = ${objectFromFile(fileNode: "file")};
+    const fileObjectAsString = JSON.stringify(fileObject);
+    ${messageHandler(
+        event: EditorCallbacks.onImageUploadError,
+        payload: "JSON.stringify({'file': fileObjectAsString, 'error': 'An error occurred!'})",
+      )}
+  };
+  reader.readAsDataURL(file);
+}
+
+function uploadError(file, error) {
+  if (typeof file === 'string') {
+    ${messageHandler(
+        event: EditorCallbacks.onImageUploadError,
+        payload: "JSON.stringify({'file': file, 'error': error})",
+      )}
+  } else {
+    const fileObject = ${objectFromFile(fileNode: "file", hasBase64: false)};
+    const fileObjectAsString = JSON.stringify(fileObject);
+    ${messageHandler(
+        event: EditorCallbacks.onImageUploadError,
+        payload: "JSON.stringify({'file': fileObjectAsString, 'error': error})",
+      )}
+  }
+}
+
 function createLink(payload) {
   const data = JSON.parse(payload);
   const text = data["text"];
@@ -303,7 +357,8 @@ logDebug("Summernote initialised");
         onChangeCodeviewCallback,
         if (enableOnFocus) onFocusCallback,
         if (enableOnBlur) onBlurCallback,
-        onImageLinkInsertCallback,
+        if (enableOnImageUpload) onImageUploadCallback,
+        if (enableOnImageUploadError) onImageUploadErrorCallback,
       ];
 
   /// Build the function called for `onKeydown` event which emits `characterCount`.
@@ -426,5 +481,17 @@ logDebug("Summernote initialised");
     function(${args.join(', ')}) {
       $body
     }
+  ''';
+
+  /// Build a JS object for file upload.
+  String objectFromFile({required String fileNode, bool hasBase64 = true}) => '''
+    {
+      'lastModified': $fileNode.lastModified,
+      'lastModifiedDate': $fileNode.lastModifiedDate,
+      'name': $fileNode.name,
+      'size': $fileNode.size,
+      'mimeType': $fileNode.type,
+      ${hasBase64 ? "'base64': base64," : ""}
+    };
   ''';
 }

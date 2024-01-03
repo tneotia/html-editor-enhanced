@@ -3,6 +3,8 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/core.dart';
 import 'package:html_editor_enhanced/editor_field.dart';
 
+import '../core/editor_file.dart';
+import '../core/editor_upload_error.dart';
 import '../editor_controller.dart';
 
 /// {@macro HtmlEditorField}
@@ -30,8 +32,11 @@ class HtmlEditor extends StatefulWidget {
   /// {@macro HtmlEditorField.onBlur}
   final VoidCallback? onBlur;
 
-  /// {@macro HtmlEditorField.onImageLinkInsert}
-  final ValueChanged<String>? onImageLinkInsert;
+  /// {@macro HtmlEditorField.onImageUpload}
+  final ValueChanged<HtmlEditorFile>? onImageUpload;
+
+  /// {@macro HtmlEditorField.onImageUploadError}
+  final ValueChanged<HtmlEditorUploadError>? onImageUploadError;
 
   const HtmlEditor({
     super.key,
@@ -42,7 +47,8 @@ class HtmlEditor extends StatefulWidget {
     this.onInit,
     this.onFocus,
     this.onBlur,
-    this.onImageLinkInsert,
+    this.onImageUpload,
+    this.onImageUploadError,
   });
 
   @override
@@ -82,6 +88,7 @@ class _HtmlEditorState extends State<HtmlEditor> {
         onInit: widget.onInit,
         onFocus: widget.onFocus,
         onBlur: widget.onBlur,
-        onImageLinkInsert: widget.onImageLinkInsert,
+        onImageUpload: widget.onImageUpload,
+        onImageUploadError: widget.onImageUploadError,
       );
 }

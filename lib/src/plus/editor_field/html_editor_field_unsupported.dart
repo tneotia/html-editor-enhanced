@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:html_editor_enhanced/src/plus/core/editor_upload_error.dart';
 
-import '../editor_controller.dart';
+import '../core/editor_file.dart';
 import '../core/enums.dart';
+import '../editor_controller.dart';
 
 /// {@template HtmlEditorField}
 /// The widget representing the editor's text field where the user can insert the text.
@@ -70,10 +72,15 @@ class HtmlEditorField extends StatelessWidget {
   /// {@endtemplate}
   final VoidCallback? onBlur;
 
-  /// {@template HtmlEditorField.onImageLinkInsert}
-  /// Callback to be called when the user inserts an image link.
+  /// {@template HtmlEditorField.onImageUpload}
+  /// Callback to be called when the user inserts an image.
   /// {@endtemplate}
-  final ValueChanged<String>? onImageLinkInsert;
+  final ValueChanged<HtmlEditorFile>? onImageUpload;
+
+  /// {@template HtmlEditorField.onImageUploadError}
+  /// Callback to be called when an error occurs while uploading an image.
+  /// {@endtemplate}
+  final ValueChanged<HtmlEditorUploadError>? onImageUploadError;
 
   const HtmlEditorField({
     super.key,
@@ -84,7 +91,8 @@ class HtmlEditorField extends StatelessWidget {
     this.onInit,
     this.onFocus,
     this.onBlur,
-    this.onImageLinkInsert,
+    this.onImageUpload,
+    this.onImageUploadError,
   });
 
   @override

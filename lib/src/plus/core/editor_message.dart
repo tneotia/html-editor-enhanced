@@ -82,7 +82,7 @@ class EditorMessage {
       };
 
   @override
-  String toString() => "WebMessageDto(key: $key, type: $type, event: $method, payload: $payload)";
+  String toString() => "EditorMessage(key: $key, type: $type, event: $method, payload: $payload)";
 
   @override
   bool operator ==(covariant EditorMessage other) {
