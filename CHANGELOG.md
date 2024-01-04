@@ -1,3 +1,7 @@
+## [3.0.0] = 2023-1-4
+
+* compatibility
+
 ## [2.6.9+1] = 2023-1-2
 
 * improved the math keyboard dialog

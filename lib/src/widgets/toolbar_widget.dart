@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:collection';
 import 'dart:convert';
 
 import 'package:file_picker/file_picker.dart';
@@ -11,7 +10,6 @@ import 'package:html_editor_enhanced_fork_latex/html_editor.dart';
 import 'package:html_editor_enhanced_fork_latex/utils/utils.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 /// Toolbar widget class
 class ToolbarWidget extends StatefulWidget {
@@ -93,9 +91,6 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
 
   /// Tracks the expanded status of the toolbar
   bool _isExpanded = false;
-  final HashMap<String, String> _latexMap = HashMap();
-  var _completer = Completer<String>();
-  var _webController = WebViewController();
 
   @override
   void initState() {
@@ -2708,7 +2703,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 child: SingleChildScrollView(
                                   child: DataTable(
                                     columnSpacing: 5,
-                                    dataRowMinHeight: 75,
+                                    dataRowHeight: 75,
                                     columns: const <DataColumn>[
                                       DataColumn(
                                         label: Text(

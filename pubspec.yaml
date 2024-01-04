@@ -1,7 +1,7 @@
 name: html_editor_enhanced_fork_latex
 description: HTML rich text editor for Android, iOS, and Web, using the Summernote library.
   Enhanced with highly customizable widget-based controls, bug fixes, callbacks, dark mode, and more.
-version: 2.6.9+1
+version: 3.0.0
 homepage: https://github.com/tneotia/html-editor-enhanced
 repository: https://github.com/AhmadKhateebq/html-editor-enhanced-with-latex.git
 
@@ -22,18 +22,18 @@ dependencies:
   # plugin to show a color picker for foreground/highlight color
   flex_color_picker: ^3.3.0
   # plugin to get files from filesystem
-  file_picker: ^6.1.1
+  file_picker: ^5.2.0+1
   # plugin to show a scrollable number picker for inserting tables
   numberpicker: ^2.1.2
   # plugin to allow dropdowns and dialogs to be interactable when displaying over the editor
   # related to https://github.com/flutter/flutter/issues/54027
   # pinned to 0.9.1 because of issues with CanvasKit in the latest versions
-  pointer_interceptor: ^0.10.0
+  pointer_interceptor: ^0.9.3+3
   # plugin to help maintain effective Dart standards
-  lints: ^3.0.0
+
   # plugin for @internal annotation
-  meta: ^1.10.0
-  math_keyboard: ^0.2.1
+  meta: ^1.0.0
+  math_keyboard: ^0.1.1
   webview_flutter: ^4.4.2
 
 dev_dependencies:
