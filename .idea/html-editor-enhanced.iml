@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/build" />
+      <excludeFolder url="file://$MODULE_DIR$/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/file_picker/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/file_picker/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/file_picker/build" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/file_picker/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/file_picker/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/file_picker/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/flutter_inappwebview/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/flutter_inappwebview/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/flutter_inappwebview/build" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/flutter_inappwebview/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/flutter_inappwebview/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/flutter_inappwebview/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/flutter_keyboard_visibility/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/flutter_keyboard_visibility/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/flutter_keyboard_visibility/build" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/flutter_keyboard_visibility/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/flutter_keyboard_visibility/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/flutter_keyboard_visibility/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/rive_common/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/rive_common/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/rive_common/build" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/rive_common/ios/rive-cpp/dev/core_generator/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/rive_common/ios/rive-cpp/dev/core_generator/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/rive_common/ios/rive-cpp/dev/core_generator/build" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/rive_common/macos/rive-cpp/dev/core_generator/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/rive_common/macos/rive-cpp/dev/core_generator/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/rive_common/macos/rive-cpp/dev/core_generator/build" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/flutter_inappwebview/dev_packages/flutter_inappwebview_internal_annotations/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/flutter_inappwebview/dev_packages/flutter_inappwebview_internal_annotations/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/flutter_inappwebview/dev_packages/flutter_inappwebview_internal_annotations/build" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/flutter_inappwebview/dev_packages/generators/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/flutter_inappwebview/dev_packages/generators/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/flutter_inappwebview/dev_packages/generators/build" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Dart SDK" level="project" />
+    <orderEntry type="library" name="Flutter Plugins" level="project" />
+    <orderEntry type="library" name="Dart Packages" level="project" />
+  </component>
+</module>

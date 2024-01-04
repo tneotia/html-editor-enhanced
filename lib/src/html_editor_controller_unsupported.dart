@@ -1,5 +1,8 @@
 import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:html_editor_enhanced/src/models/parsed_highlight.dart';
 import 'package:meta/meta.dart';
+
+import 'models/text_highlight.dart';
 
 /// Fallback controller (should never be used)
 class HtmlEditorController {
@@ -7,6 +10,8 @@ class HtmlEditorController {
     this.processInputHtml = true,
     this.processNewLineAsBr = false,
     this.processOutputHtml = true,
+    this.highLights,
+    this.onTextHighlightsReplacersReady
   });
 
   /// Toolbar widget state to call various methods. For internal use only.
@@ -34,6 +39,15 @@ class HtmlEditorController {
 
   /// Internally tracks the character count in the editor
   int _characterCount = 0;
+
+  List<TextHighLight>? highLights;
+
+  // /// Text Editor Highlights
+  void setHighlights(List<TextHighLight> highlights) {
+    throw 'Unsupported';
+  }
+
+  Function(List<ParsedHighlight>)? onTextHighlightsReplacersReady;
 
   /// Gets the current character count
   // ignore: unnecessary_getters_setters
@@ -86,6 +100,9 @@ class HtmlEditorController {
   Future<dynamic> evaluateJavascriptWeb(String name,
           {bool hasReturnValue = false}) =>
       Future.value();
+
+  Future<dynamic> sendJavascriptDataWeb(String name,Map<String,dynamic> data,
+      {bool hasReturnValue = false}) =>  Future.value();
 
   /// Gets the text from the editor and returns it as a [String].
   Future<String> getText() => Future.value('');
