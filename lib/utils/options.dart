@@ -5,6 +5,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 
+import 'html_editor_widget_strings.dart';
+
 /// Options that modify the editor and its behavior
 class HtmlEditorOptions {
   const HtmlEditorOptions({
@@ -189,8 +191,13 @@ class HtmlToolbarOptions {
     this.toolbarItemHeight = 36,
     this.gridViewHorizontalSpacing = 5,
     this.gridViewVerticalSpacing = 5,
+    this.htmlEditorStrings = const DefaultHtmlEditorStrings(),
     this.allowImagePicking = true,
   });
+
+  /// Allow the user to choose an image from their device when image selection
+  /// is enabled. Inserting images via URL will still be possible if this is false.
+  final bool allowImagePicking;
 
   /// Allows you to set the allowed extensions when a user inserts an audio file
   ///
@@ -375,6 +382,8 @@ class HtmlToolbarOptions {
   /// Styling options that only apply to dropdowns:
   /// (See the [DropdownButton] class for more information)
 
+  final HtmlEditorStrings htmlEditorStrings;
+
   final int dropdownElevation;
   final Widget? dropdownIcon;
   final Color? dropdownIconColor;
@@ -404,10 +413,6 @@ class HtmlToolbarOptions {
   final Color? buttonSelectedBorderColor;
   final BorderRadius? buttonBorderRadius;
   final double? buttonBorderWidth;
-
-  /// Allow the user to choose an image from their device when image selection
-  /// is enabled. Inserting images via URL will still be possible if this is false.
-  final bool allowImagePicking;
 }
 
 /// Other options such as the height of the widget and the decoration surrounding it

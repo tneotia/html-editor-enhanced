@@ -472,6 +472,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
 
   List<Widget> _buildChildren() {
     var toolbarChildren = <Widget>[];
+    final strings = widget.htmlToolbarOptions.htmlEditorStrings;
     for (var t in widget.htmlToolbarOptions.defaultToolbarButtons) {
       if (t is StyleButtons && t.style) {
         toolbarChildren.add(Container(
@@ -507,7 +508,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               items: [
                 CustomDropdownMenuItem(
                     value: 'p',
-                    child: PointerInterceptor(child: Text('Normal'))),
+                    child: PointerInterceptor(child: Text(strings.normal))),
                 CustomDropdownMenuItem(
                     value: 'blockquote',
                     child: PointerInterceptor(
@@ -517,9 +518,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                   left: BorderSide(
                                       color: Colors.grey, width: 3.0))),
                           padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Text('Quote',
+                          child: Text(strings.quote,
                               style: TextStyle(
-                                  fontFamily: 'times', color: Colors.grey))),
+                                  fontFamily: strings.fontTimesNewRoman, color: Colors.grey))),
                     )),
                 CustomDropdownMenuItem(
                     value: 'pre',
@@ -529,49 +530,49 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                               borderRadius: BorderRadius.circular(5),
                               color: Colors.grey),
                           padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Text('Code',
+                          child: Text(strings.code,
                               style: TextStyle(
-                                  fontFamily: 'courier', color: Colors.white))),
+                                  fontFamily: strings.fontCourierNew, color: Colors.white))),
                     )),
                 CustomDropdownMenuItem(
                   value: 'h1',
                   child: PointerInterceptor(
-                      child: Text('Header 1',
+                      child: Text(strings.headerOne,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 32))),
                 ),
                 CustomDropdownMenuItem(
                   value: 'h2',
                   child: PointerInterceptor(
-                      child: Text('Header 2',
+                      child: Text(strings.headerTwo,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 24))),
                 ),
                 CustomDropdownMenuItem(
                   value: 'h3',
                   child: PointerInterceptor(
-                      child: Text('Header 3',
+                      child: Text(strings.headerThree,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18))),
                 ),
                 CustomDropdownMenuItem(
                   value: 'h4',
                   child: PointerInterceptor(
-                      child: Text('Header 4',
+                      child: Text(strings.headerFour,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16))),
                 ),
                 CustomDropdownMenuItem(
                   value: 'h5',
                   child: PointerInterceptor(
-                      child: Text('Header 5',
+                      child: Text(strings.headerFive,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 13))),
                 ),
                 CustomDropdownMenuItem(
                   value: 'h6',
                   child: PointerInterceptor(
-                      child: Text('Header 6',
+                      child: Text(strings.headerSix,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 11))),
                 ),
@@ -643,19 +644,19 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   CustomDropdownMenuItem(
                     value: 'Courier New',
                     child: PointerInterceptor(
-                        child: Text('Courier New',
+                        child: Text(strings.fontCourierNew,
                             style: TextStyle(fontFamily: 'Courier'))),
                   ),
                   CustomDropdownMenuItem(
                     value: 'sans-serif',
                     child: PointerInterceptor(
-                        child: Text('Sans Serif',
+                        child: Text(strings.fontSansSerif,
                             style: TextStyle(fontFamily: 'sans-serif'))),
                   ),
                   CustomDropdownMenuItem(
                     value: 'Times New Roman',
                     child: PointerInterceptor(
-                        child: Text('Times New Roman',
+                        child: Text(strings.fontTimesNewRoman,
                             style: TextStyle(fontFamily: 'Times'))),
                   ),
                 ],
@@ -854,11 +855,11 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 items: [
                   CustomDropdownMenuItem(
                     value: 'pt',
-                    child: PointerInterceptor(child: Text('pt')),
+                    child: PointerInterceptor(child: Text(strings.pt)),
                   ),
                   CustomDropdownMenuItem(
                     value: 'px',
-                    child: PointerInterceptor(child: Text('px')),
+                    child: PointerInterceptor(child: Text(strings.px)),
                   ),
                 ],
                 value: _fontSizeUnitSelectedItem,
@@ -1119,8 +1120,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                             onColorChanged: (color) {
                               newColor = color;
                             },
-                            title: Text('Choose a Color',
-                                style: Theme.of(context).textTheme.headline6),
+                            title: Text(strings.chooseAColor,
+                                style: Theme.of(context).textTheme.titleLarge),
                             width: 40,
                             height: 40,
                             spacing: 0,
@@ -1132,6 +1133,11 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                             colorCodeHasColor: true,
                             pickersEnabled: <ColorPickerType, bool>{
                               ColorPickerType.wheel: true,
+                            },
+                            pickerTypeLabels: {
+                              ColorPickerType.primary: strings.primary,
+                              ColorPickerType.accent: strings.accent,
+                              ColorPickerType.wheel: strings.wheel,
                             },
                             copyPasteBehavior:
                                 const ColorPickerCopyPasteBehavior(
@@ -1146,7 +1152,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
-                              child: Text('Cancel'),
+                              child: Text(strings.cancel),
                             ),
                             TextButton(
                                 onPressed: () {
@@ -1174,7 +1180,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                   }
                                   Navigator.of(context).pop();
                                 },
-                                child: Text('Reset to default color')),
+                                child: Text(strings.resetToDefaultColor)),
                             TextButton(
                               onPressed: () {
                                 if (t.getIcons()[index].icon ==
@@ -1205,7 +1211,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 });
                                 Navigator.of(context).pop();
                               },
-                              child: Text('Set color'),
+                              child: Text(strings.setColor),
                             )
                           ],
                         ),
@@ -1308,38 +1314,38 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 items: [
                   CustomDropdownMenuItem(
                     value: 'decimal',
-                    child: PointerInterceptor(child: Text('1. Numbered')),
+                    child: PointerInterceptor(child: Text(strings.numbered)),
                   ),
                   CustomDropdownMenuItem(
                     value: 'lower-alpha',
-                    child: PointerInterceptor(child: Text('a. Lower Alpha')),
+                    child: PointerInterceptor(child: Text(strings.lowerAlpha)),
                   ),
                   CustomDropdownMenuItem(
                     value: 'upper-alpha',
-                    child: PointerInterceptor(child: Text('A. Upper Alpha')),
+                    child: PointerInterceptor(child: Text(strings.upperAlpha)),
                   ),
                   CustomDropdownMenuItem(
                     value: 'lower-roman',
-                    child: PointerInterceptor(child: Text('i. Lower Roman')),
+                    child: PointerInterceptor(child: Text(strings.lowerRoman)),
                   ),
                   CustomDropdownMenuItem(
                     value: 'upper-roman',
-                    child: PointerInterceptor(child: Text('I. Upper Roman')),
+                    child: PointerInterceptor(child: Text(strings.upperRoman)),
                   ),
                   CustomDropdownMenuItem(
                     value: 'disc',
-                    child: PointerInterceptor(child: Text('• Disc')),
+                    child: PointerInterceptor(child: Text(strings.disc)),
                   ),
                   CustomDropdownMenuItem(
                     value: 'circle',
-                    child: PointerInterceptor(child: Text('○ Circle')),
+                    child: PointerInterceptor(child: Text(strings.circle)),
                   ),
                   CustomDropdownMenuItem(
                     value: 'square',
-                    child: PointerInterceptor(child: Text('■ Square')),
+                    child: PointerInterceptor(child: Text(strings.square)),
                   ),
                 ],
-                hint: Text('Select list style'),
+                hint: Text(strings.selectListStyle),
                 value: _listStyleSelectedItem,
                 onChanged: (String? changed) async {
                   void updateSelectedItem(dynamic changed) {
@@ -1529,33 +1535,33 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 style: widget.htmlToolbarOptions.textStyle,
                 items: [
                   CustomDropdownMenuItem(
-                      value: 1, child: PointerInterceptor(child: Text('1.0'))),
+                      value: 1, child: PointerInterceptor(child: Text(strings.onePointZero))),
                   CustomDropdownMenuItem(
                     value: 1.2,
-                    child: PointerInterceptor(child: Text('1.2')),
+                    child: PointerInterceptor(child: Text(strings.onePointTwo)),
                   ),
                   CustomDropdownMenuItem(
                     value: 1.4,
-                    child: PointerInterceptor(child: Text('1.4')),
+                    child: PointerInterceptor(child: Text(strings.onePointFour)),
                   ),
                   CustomDropdownMenuItem(
                     value: 1.5,
-                    child: PointerInterceptor(child: Text('1.5')),
+                    child: PointerInterceptor(child: Text(strings.onePointFive)),
                   ),
                   CustomDropdownMenuItem(
                     value: 1.6,
-                    child: PointerInterceptor(child: Text('1.6')),
+                    child: PointerInterceptor(child: Text(strings.onePointSix)),
                   ),
                   CustomDropdownMenuItem(
                     value: 1.8,
-                    child: PointerInterceptor(child: Text('1.8')),
+                    child: PointerInterceptor(child: Text(strings.onePointEight)),
                   ),
                   CustomDropdownMenuItem(
                     value: 2,
-                    child: PointerInterceptor(child: Text('2.0')),
+                    child: PointerInterceptor(child: Text(strings.twoPointZero)),
                   ),
                   CustomDropdownMenuItem(
-                      value: 3, child: PointerInterceptor(child: Text('3.0'))),
+                      value: 3, child: PointerInterceptor(child: Text(strings.threePointZero))),
                 ],
                 value: _lineHeightSelectedItem,
                 onChanged: (double? changed) async {
@@ -1686,22 +1692,22 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 items: [
                   CustomDropdownMenuItem(
                     value: 'lower',
-                    child: PointerInterceptor(child: Text('lowercase')),
+                    child: PointerInterceptor(child: Text(strings.lowerCase)),
                   ),
                   CustomDropdownMenuItem(
                     value: 'sentence',
-                    child: PointerInterceptor(child: Text('Sentence case')),
+                    child: PointerInterceptor(child: Text(strings.sentenceCase)),
                   ),
                   CustomDropdownMenuItem(
                     value: 'title',
-                    child: PointerInterceptor(child: Text('Title Case')),
+                    child: PointerInterceptor(child: Text(strings.titleCase)),
                   ),
                   CustomDropdownMenuItem(
                     value: 'upper',
-                    child: PointerInterceptor(child: Text('UPPERCASE')),
+                    child: PointerInterceptor(child: Text(strings.upperCase)),
                   ),
                 ],
-                hint: Text('Change case'),
+                hint: Text(strings.changeCase),
                 value: null,
                 onChanged: (String? changed) async {
                   if (changed != null) {
@@ -1797,7 +1803,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                         child: StatefulBuilder(builder:
                             (BuildContext context, StateSetter setState) {
                           return AlertDialog(
-                            title: Text('Insert Link'),
+                            title: Text(strings.insertLink),
                             scrollable: true,
                             content: Form(
                               key: formKey,
@@ -1805,7 +1811,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('Text to display',
+                                    Text(strings.textToDisplay,
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold)),
                                     SizedBox(height: 10),
@@ -1815,14 +1821,14 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                       textInputAction: TextInputAction.next,
                                       decoration: InputDecoration(
                                         border: OutlineInputBorder(),
-                                        hintText: 'Text',
+                                        hintText: strings.text,
                                       ),
                                       onSubmitted: (_) {
                                         urlFocus.requestFocus();
                                       },
                                     ),
                                     SizedBox(height: 20),
-                                    Text('URL',
+                                    Text(strings.url,
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold)),
                                     SizedBox(height: 10),
@@ -1832,11 +1838,11 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                       textInputAction: TextInputAction.done,
                                       decoration: InputDecoration(
                                         border: OutlineInputBorder(),
-                                        hintText: 'URL',
+                                        hintText: strings.url,
                                       ),
                                       validator: (String? value) {
                                         if (value == null || value.isEmpty) {
-                                          return 'Please enter a URL!';
+                                          return strings.pleaseEnterUrl;
                                         }
                                         return null;
                                       },
@@ -1868,11 +1874,11 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               openNewTab = !openNewTab;
                                             });
                                           },
-                                          child: Text('Open in new window',
+                                          child: Text(strings.openInNewWindow,
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .textTheme
-                                                      .bodyText1
+                                                      .bodyLarge
                                                       ?.color)),
                                         ),
                                       ],
@@ -1884,7 +1890,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: Text('Cancel'),
+                                child: Text(strings.cancel),
                               ),
                               TextButton(
                                 onPressed: () async {
@@ -1911,7 +1917,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     Navigator.of(context).pop();
                                   }
                                 },
-                                child: Text('OK'),
+                                child: Text(strings.ok),
                               )
                             ],
                           );
@@ -1937,15 +1943,73 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                         child: StatefulBuilder(builder:
                             (BuildContext context, StateSetter setState) {
                           return AlertDialog(
-                            title: Text('Insert Image'),
+                            title: Text(strings.insertLink),
                             scrollable: true,
                             content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  Text(strings.selectFromFiles,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  SizedBox(height: 10),
+                                  TextFormField(
+                                      controller: filename,
+                                      readOnly: true,
+                                      decoration: InputDecoration(
+                                        prefixIcon: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                              backgroundColor: Theme.of(context)
+                                                  .dialogBackgroundColor,
+                                              padding: EdgeInsets.only(
+                                                  left: 5, right: 5),
+                                              elevation: 0.0),
+                                          onPressed: () async {
+                                            result = await FilePicker.platform
+                                                .pickFiles(
+                                              type: FileType.image,
+                                              withData: true,
+                                              allowedExtensions: widget
+                                                  .htmlToolbarOptions
+                                                  .imageExtensions,
+                                            );
+                                            if (result?.files.single.name !=
+                                                null) {
+                                              setState(() {
+                                                filename.text =
+                                                    result!.files.single.name;
+                                              });
+                                            }
+                                          },
+                                          child: Text(strings.chooseImage,
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge
+                                                      ?.color)),
+                                        ),
+                                        suffixIcon: result != null
+                                            ? IconButton(
+                                                icon: Icon(Icons.close),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    result = null;
+                                                    filename.text = '';
+                                                  });
+                                                })
+                                            : Container(height: 0, width: 0),
+                                        errorText: validateFailed,
+                                        errorMaxLines: 2,
+                                        border: InputBorder.none,
+                                      )),
+                                  SizedBox(height: 20),
+                                  Text(strings.url,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  SizedBox(height: 10),
                                   if (widget
                                       .htmlToolbarOptions.allowImagePicking)
-                                    Text('Select from files',
+                                    Text(strings.selectFromFiles,
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold)),
                                   if (widget
@@ -1982,11 +2046,11 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                                 });
                                               }
                                             },
-                                            child: Text('Choose image',
+                                            child: Text(strings.chooseImage,
                                                 style: TextStyle(
                                                     color: Theme.of(context)
                                                         .textTheme
-                                                        .bodyText1
+                                                        .bodyLarge
                                                         ?.color)),
                                           ),
                                           suffixIcon: result != null
@@ -2008,7 +2072,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     SizedBox(height: 20),
                                   if (widget
                                       .htmlToolbarOptions.allowImagePicking)
-                                    Text('URL',
+                                    Text(strings.url,
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold)),
                                   if (widget
@@ -2020,7 +2084,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     textInputAction: TextInputAction.done,
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(),
-                                      hintText: 'URL',
+                                      hintText: strings.url,
                                       errorText: validateFailed,
                                       errorMaxLines: 2,
                                     ),
@@ -2031,7 +2095,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: Text('Cancel'),
+                                child: Text(strings.cancel),
                               ),
                               TextButton(
                                 onPressed: () async {
@@ -2040,14 +2104,14 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     setState(() {
                                       validateFailed = widget.htmlToolbarOptions
                                               .allowImagePicking
-                                          ? 'Please either choose an image or enter an image URL!'
-                                          : 'Please enter an image URL!';
+                                          ? strings.pleaseEitherChooseAnImageOrEnterAnImageURL
+                                          : strings.pleaseEnterAnImageURL;
                                     });
                                   } else if (filename.text.isNotEmpty &&
                                       url.text.isNotEmpty) {
                                     setState(() {
                                       validateFailed =
-                                          'Please input either an image or an image URL, not both!';
+                                          strings.pleaseInputEitherAnImageOrAnImageURLNotBoth;
                                     });
                                   } else if (filename.text.isNotEmpty &&
                                       result?.files.single.bytes != null) {
@@ -2078,7 +2142,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     Navigator.of(context).pop();
                                   }
                                 },
-                                child: Text('OK'),
+                                child: Text(strings.ok),
                               )
                             ],
                           );
@@ -2104,13 +2168,13 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                         child: StatefulBuilder(builder:
                             (BuildContext context, StateSetter setState) {
                           return AlertDialog(
-                            title: Text('Insert Audio'),
+                            title: Text(strings.insertAudio),
                             scrollable: true,
                             content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Select from files',
+                                  Text(strings.selectFromFiles,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold)),
                                   SizedBox(height: 10),
@@ -2142,11 +2206,11 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               });
                                             }
                                           },
-                                          child: Text('Choose audio',
+                                          child: Text(strings.chooseAudio,
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .textTheme
-                                                      .bodyText1
+                                                      .bodyLarge
                                                       ?.color)),
                                         ),
                                         suffixIcon: result != null
@@ -2164,7 +2228,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                         border: InputBorder.none,
                                       )),
                                   SizedBox(height: 20),
-                                  Text('URL',
+                                  Text(strings.url,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold)),
                                   SizedBox(height: 10),
@@ -2174,7 +2238,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     textInputAction: TextInputAction.done,
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(),
-                                      hintText: 'URL',
+                                      hintText: strings.url,
                                       errorText: validateFailed,
                                       errorMaxLines: 2,
                                     ),
@@ -2185,7 +2249,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: Text('Cancel'),
+                                child: Text(strings.cancel),
                               ),
                               TextButton(
                                 onPressed: () async {
@@ -2193,13 +2257,13 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                       url.text.isEmpty) {
                                     setState(() {
                                       validateFailed =
-                                          'Please either choose an audio file or enter an audio file URL!';
+                                      strings.pleaseEitherChooseAudioOrEnterAudioURL;
                                     });
                                   } else if (filename.text.isNotEmpty &&
                                       url.text.isNotEmpty) {
                                     setState(() {
                                       validateFailed =
-                                          'Please input either an audio file or an audio URL, not both!';
+                                      strings.pleaseInputEitherAudioOrAudioURLNotBoth;
                                     });
                                   } else if (filename.text.isNotEmpty &&
                                       result?.files.single.bytes != null) {
@@ -2230,7 +2294,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     Navigator.of(context).pop();
                                   }
                                 },
-                                child: Text('OK'),
+                                child: Text(strings.ok),
                               )
                             ],
                           );
@@ -2256,13 +2320,13 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                         child: StatefulBuilder(builder:
                             (BuildContext context, StateSetter setState) {
                           return AlertDialog(
-                            title: Text('Insert Video'),
+                            title: Text(strings.insertVideo),
                             scrollable: true,
                             content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Select from files',
+                                  Text(strings.selectFromFiles,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold)),
                                   SizedBox(height: 10),
@@ -2294,11 +2358,11 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               });
                                             }
                                           },
-                                          child: Text('Choose video',
+                                          child: Text(strings.chooseVideo,
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .textTheme
-                                                      .bodyText1
+                                                      .bodyLarge
                                                       ?.color)),
                                         ),
                                         suffixIcon: result != null
@@ -2316,7 +2380,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                         border: InputBorder.none,
                                       )),
                                   SizedBox(height: 20),
-                                  Text('URL',
+                                  Text(strings.url,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold)),
                                   SizedBox(height: 10),
@@ -2326,7 +2390,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     textInputAction: TextInputAction.done,
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(),
-                                      hintText: 'URL',
+                                      hintText: strings.url,
                                       errorText: validateFailed,
                                       errorMaxLines: 2,
                                     ),
@@ -2337,7 +2401,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: Text('Cancel'),
+                                child: Text(strings.cancel),
                               ),
                               TextButton(
                                 onPressed: () async {
@@ -2382,7 +2446,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     Navigator.of(context).pop();
                                   }
                                 },
-                                child: Text('OK'),
+                                child: Text(strings.ok),
                               )
                             ],
                           );
@@ -2408,13 +2472,13 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                         child: StatefulBuilder(builder:
                             (BuildContext context, StateSetter setState) {
                           return AlertDialog(
-                            title: Text('Insert File'),
+                            title: Text(strings.insertFile),
                             scrollable: true,
                             content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Select from files',
+                                  Text(strings.selectFromFiles,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold)),
                                   SizedBox(height: 10),
@@ -2446,11 +2510,11 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               });
                                             }
                                           },
-                                          child: Text('Choose file',
+                                          child: Text(strings.chooseFile,
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .textTheme
-                                                      .bodyText1
+                                                      .bodyLarge
                                                       ?.color)),
                                         ),
                                         suffixIcon: result != null
@@ -2468,7 +2532,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                         border: InputBorder.none,
                                       )),
                                   SizedBox(height: 20),
-                                  Text('URL',
+                                  Text(strings.url,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold)),
                                   SizedBox(height: 10),
@@ -2478,7 +2542,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     textInputAction: TextInputAction.done,
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(),
-                                      hintText: 'URL',
+                                      hintText: strings.url,
                                       errorText: validateFailed,
                                       errorMaxLines: 2,
                                     ),
@@ -2489,7 +2553,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: Text('Cancel'),
+                                child: Text(strings.cancel),
                               ),
                               TextButton(
                                 onPressed: () {
@@ -2497,13 +2561,13 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                       url.text.isEmpty) {
                                     setState(() {
                                       validateFailed =
-                                          'Please either choose a file or enter a file URL!';
+                                          strings.pleaseEitherChooseAFileOrEnterAFileURL;
                                     });
                                   } else if (filename.text.isNotEmpty &&
                                       url.text.isNotEmpty) {
                                     setState(() {
                                       validateFailed =
-                                          'Please input either a file or a file URL, not both!';
+                                          strings.pleaseInputEitherAFileOrAFileURLNotBoth;
                                     });
                                   } else if (filename.text.isNotEmpty &&
                                       result?.files.single.bytes != null) {
@@ -2517,7 +2581,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     Navigator.of(context).pop();
                                   }
                                 },
-                                child: Text('OK'),
+                                child: Text(strings.ok),
                               )
                             ],
                           );
@@ -2540,7 +2604,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                         child: StatefulBuilder(builder:
                             (BuildContext context, StateSetter setState) {
                           return AlertDialog(
-                            title: Text('Insert Table'),
+                            title: Text(strings.insertTable),
                             scrollable: true,
                             content: Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -2554,7 +2618,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     onChanged: (value) =>
                                         setState(() => currentRows = value),
                                   ),
-                                  Text('x'),
+                                  Text(strings.x),
                                   NumberPicker(
                                     value: currentCols,
                                     minValue: 1,
@@ -2568,7 +2632,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: Text('Cancel'),
+                                child: Text(strings.cancel),
                               ),
                               TextButton(
                                 onPressed: () async {
@@ -2583,7 +2647,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                   }
                                   Navigator.of(context).pop();
                                 },
-                                child: Text('OK'),
+                                child: Text(strings.ok),
                               )
                             ],
                           );
@@ -2681,7 +2745,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                           child: StatefulBuilder(builder:
                               (BuildContext context, StateSetter setState) {
                             return AlertDialog(
-                              title: Text('Help'),
+                              title: Text(strings.help),
                               scrollable: true,
                               content: Container(
                                 height: MediaQuery.of(context).size.height / 2,
@@ -2905,7 +2969,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                   onPressed: () async {
                                     Navigator.of(context).pop();
                                   },
-                                  child: Text('Close'),
+                                  child: Text(strings.close),
                                 )
                               ],
                             );
