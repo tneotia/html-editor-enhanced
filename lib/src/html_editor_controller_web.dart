@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:html' as html;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced_fork_latex/html_editor.dart';
 import 'package:html_editor_enhanced_fork_latex/src/html_editor_controller_unsupported.dart'
     as unsupported;
@@ -325,5 +327,17 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
       throw Exception(
           'Non-Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced_fork_latex/html_editor.dart');
     }
+  }
+
+  @override
+  openMathDialog(BuildContext context) async {
+    throw Exception(
+        'Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced_fork_latex/html_editor.dart and check kIsWeb before calling this method.');
+  }
+
+  @override
+  Future<String> latexToHtml(String latex) async {
+    throw Exception(
+        'Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced_fork_latex/html_editor.dart and check kIsWeb before calling this method.');
   }
 }

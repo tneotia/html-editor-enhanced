@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// Abstract class that all the toolbar classes extend
@@ -175,7 +176,7 @@ class InsertButtons extends Toolbar {
     if (otherFile) icons.add(Icon(Icons.attach_file));
     if (table) icons.add(Icon(Icons.table_chart_outlined));
     if (hr) icons.add(Icon(Icons.horizontal_rule));
-    if (fn) icons.add(Icon(Icons.functions));
+    if (fn && !kIsWeb) icons.add(Icon(Icons.functions));
     return icons;
   }
 }

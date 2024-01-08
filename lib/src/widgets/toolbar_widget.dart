@@ -114,12 +114,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         _alignSelected = List<bool>.filled(t.getIcons1().length, false);
       }
     }
-    _initWebController();
     super.initState();
-  }
-
-  _initWebController() async {
-   await widget.controller.initWebController();
   }
 
   void disable() {

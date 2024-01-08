@@ -1,14 +1,10 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced_fork_latex/html_editor.dart';
 import 'package:math_keyboard/math_keyboard.dart';
 import 'package:meta/meta.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-
-import '../utils/custom_math_field_controller.dart';
 
 /// Fallback controller (should never be used)
 class HtmlEditorController {
@@ -19,68 +15,14 @@ class HtmlEditorController {
     this.mathField,
   });
 
-  var _completer = Completer<String>();
-  var _webController = WebViewController();
+  final HashMap<String, String> latexMap = HashMap();
 
-  final HashMap<String, String> _latexMap = HashMap();
+  openMathDialog(BuildContext context) async {}
 
-  initWebController() async {
-    await _webController.setJavaScriptMode(JavaScriptMode.unrestricted);
-    await _webController.addJavaScriptChannel('MathMLChannel',
-        onMessageReceived: (JavaScriptMessage message) {
-      print('Received message: ${message.message}');
-      _completer.complete(message.message);
-      _completer = Completer<String>();
-    });
-    WebViewWidget(controller: _webController);
-  }
-
-  openMathDialog(BuildContext context) async {
-    final c = CustomMathFieldEditingController();
-    if (!kIsWeb) {
-      this.clearFocus();
-    }
-    await showDialog(
-        context: context,
-        builder: (context) => MathKeyboardDialog(
-              controller: c,
-              mathField: this.mathField,
-            ));
-    if (!kIsWeb) {
-      this.setFocus();
-    }
-    var math = c.texString;
-    if (math != '') {
-      var texAsFun = c.texStringAsFun;
-      var result = await _latexToHtml(math.replaceAll('\\', '\\\\'));
-      result = '<math><semantics>$result</semantics></math>';
-      _latexMap.addAll({
-        result: texAsFun,
-      });
-      this.addToHashMap(result, texAsFun);
-      this.insertHtml(result);
-      this.insertText(' ');
-    }
-  }
-
-  Future<String> _latexToHtml(String latex) async {
-    await _webController.runJavaScript('''
-    (async () => {
-      try {
-        const mathlive = await import("https://unpkg.com/mathlive?module");
-        const mathML = mathlive.convertLatexToMathMl('\$\$$latex\$\$');
-        MathMLChannel.postMessage(mathML);
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    })();
-  ''');
-
-    return _completer.future;
-  }
+  latexToHtml(String latex) {}
 
   void addToHashMap(String key, String value) {
-    _latexMap.addAll({
+    latexMap.addAll({
       key: value,
     });
   }
@@ -97,7 +39,7 @@ class HtmlEditorController {
         var split = element.split(r'</math>');
         var after = split.last;
         element = '<math>${split.first}</math>';
-        tags.add(_latexMap[element] ?? element);
+        tags.add(latexMap[element] ?? element);
         tags.add(after);
       } else {
         tags.add(element);

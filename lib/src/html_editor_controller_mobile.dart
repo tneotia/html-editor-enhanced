@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced_fork_latex/html_editor.dart';
 import 'package:html_editor_enhanced_fork_latex/src/html_editor_controller_unsupported.dart'
     as unsupported;
+import 'package:html_editor_enhanced_fork_latex/utils/custom_math_field_controller.dart';
 import 'package:math_keyboard/math_keyboard.dart';
 
 /// Controller for mobile
@@ -63,7 +67,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   void execCommand(String command, {String? argument}) {
     _evaluateJavascript(
         source:
-            "document.execCommand('$command', false${argument == null ? "" : ", '$argument'"});");
+        "document.execCommand('$command', false${argument == null ? "" : ", '$argument'"});");
   }
 
   /// Gets the text from the editor and returns it as a [String].
@@ -171,7 +175,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   void insertNetworkImage(String url, {String filename = ''}) {
     _evaluateJavascript(
         source:
-            "\$('#summernote-2').summernote('insertImage', '$url', '$filename');");
+        "\$('#summernote-2').summernote('insertImage', '$url', '$filename');");
   }
 
   /// Insert a link at the position of the cursor in the editor
@@ -208,7 +212,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   void resetHeight() {
     _evaluateJavascript(
         source:
-            "window.flutter_inappwebview.callHandler('setHeight', 'reset');");
+        "window.flutter_inappwebview.callHandler('setHeight', 'reset');");
   }
 
   /// Recalculates the height of the editor to remove any vertical scrolling.
@@ -217,7 +221,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   void recalculateHeight() {
     _evaluateJavascript(
         source:
-            "var height = document.body.scrollHeight; window.flutter_inappwebview.callHandler('setHeight', height);");
+        "var height = document.body.scrollHeight; window.flutter_inappwebview.callHandler('setHeight', height);");
   }
 
   /// Add a notification to the bottom of the editor. This is styled similar to
@@ -291,4 +295,53 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Internal function to insert table on Web
   @override
   void insertTable(String dimensions) {}
+
+  @override
+  openMathDialog(BuildContext context) async {
+    final c = CustomMathFieldEditingController();
+    if (!kIsWeb) {
+      this.clearFocus();
+    }
+    await showDialog(
+        context: context,
+        builder: (context) => MathKeyboardDialog(
+              controller: c,
+              mathField: this.mathField,
+            ));
+    if (!kIsWeb) {
+      this.setFocus();
+    }
+    var math = c.texString;
+    if (math != '') {
+      var texAsFun = c.texStringAsFun;
+      var result = await latexToHtml(math.replaceAll('\\', '\\\\'));
+      result = '<math><semantics>$result</semantics></math>';
+      latexMap.addAll({
+        result: texAsFun,
+      });
+      this.addToHashMap(result, texAsFun);
+      this.insertHtml(result);
+      this.insertText(' ');
+    }
+  }
+
+  @override
+  Future<String> latexToHtml(String latex) async {
+    var res = await editorController!.callAsyncJavaScript(
+        functionBody: r'''
+    async function func(){
+        const mathlive = await import("https://unpkg.com/mathlive?module");
+        const mathML = mathlive.convertLatexToMathMl('\$\$'''
+            '$latex'
+            r'''\$\$');
+        return(mathML);
+    };
+    var p = await func();
+    return p;
+    ''',
+        arguments: {'latex': latex});
+    log(res.toString());
+    log(res?.toMap().toString() ?? '');
+    return res!.value.toString();
+  }
 }

@@ -1,9 +1,10 @@
-import 'package:file_picker/file_picker.dart';
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart' as inApp;
 import 'package:get/get.dart';
 import 'package:html_editor_enhanced_fork_latex/html_editor.dart';
-import 'package:math_keyboard/math_keyboard.dart';
 
 void main() => runApp(HtmlEditorExampleApp());
 
@@ -15,39 +16,67 @@ class HtmlEditorExampleApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(),
       darkTheme: ThemeData.dark(),
-      home: HtmlEditorExample(title: 'Flutter HTML Editor Example'),
+      home: MyApp2(title: 'Flutter HTML Editor Example'),
       // home: MyApp2(title: 'Flutter HTML Editor Example'),
     );
   }
 }
 
-class MyApp2 extends StatelessWidget {
+class MyApp2 extends StatefulWidget {
   final String title;
 
   MyApp2({Key? key, required this.title}) : super(key: key);
-  late final HtmlEditorController controller = HtmlEditorController(
-    mathField: MathField(
-      autofocus: true,
-      keyboardType: MathKeyboardType.numberOnly,
-      variables: ['x', 'y', 'z', 'A', 'B', 'C'],
-      opensKeyboard: true,
-    ),
-  );
-  final HtmlEditorController controller2 = HtmlEditorController();
+
+  @override
+  State<MyApp2> createState() => _MyApp2State();
+}
+
+class _MyApp2State extends State<MyApp2> {
+  final HtmlEditorController controller1 = HtmlEditorController();
+  inApp.InAppWebViewController controller =
+      inApp.InAppWebViewController(0123, inApp.InAppWebView());
+
+  final controller2 = HtmlEditorController();
+
+  @override
+  void initState() {
+    (_latexToHtml('{x}', controller));
+    super.initState();
+  }
+
+  Future<String> _latexToHtml(String latex, editorController) async {
+    var res = await editorController!.callAsyncJavaScript(functionBody: r'''
+    func(string latex)async{
+        const mathlive = await import("https://unpkg.com/mathlive?module");
+        const mathML = mathlive.convertLatexToMathMl('\$\$latex\$\$');
+        MathMLChannel.postMessage(mathML);
+        return(mathML);
+    });
+    var p = await func();
+    return p;
+    ''', arguments: {'latex': latex});
+    log(res.toString());
+    log(res?.toMap().toString() ?? '');
+    return res!.value.toString();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            tb(controller),
-            tb(controller2),
-          ],
-        ),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                tb(controller1),
+                tb(controller2),
+              ],
+            ),
+          ),
+        ],
       ),
       appBar: AppBar(
-        title: Text(this.title),
+        title: Text(this.widget.title),
       ),
     );
   }
@@ -74,6 +103,7 @@ class MyApp2 extends StatelessWidget {
                     onPressed: () {
                       controller.insertHtml(
                           r'<math><semantics><mrow><mi>y</mi><mi>y</mi></mrow></semantics></>');
+                      isVisible.value = true;
                     },
                     icon: Icon(Icons.functions_outlined)),
           ),
@@ -172,29 +202,6 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                   //by default
                   toolbarType: ToolbarType.nativeScrollable,
                   //by default
-                  onButtonPressed:
-                      (ButtonType type, bool? status, Function? updateStatus) {
-                    print(
-                        "button '${(type.name)}' pressed, the current selected status is $status");
-                    return true;
-                  },
-                  onDropdownChanged: (DropdownType type, dynamic changed,
-                      Function(dynamic)? updateSelectedItem) {
-                    print("dropdown '${(type.name)}' changed to $changed");
-                    return true;
-                  },
-                  mediaLinkInsertInterceptor:
-                      (String url, InsertFileType type) {
-                    print(url);
-                    return true;
-                  },
-                  mediaUploadInterceptor:
-                      (PlatformFile file, InsertFileType type) async {
-                    print(file.name); //filename
-                    print(file.size); //size in bytes
-                    print(file.extension); //file extension (eg jpeg or mp4)
-                    return true;
-                  },
                 ),
                 otherOptions: OtherOptions(height: 550),
                 callbacks: Callbacks(onBeforeCommand: (String? currentHtml) {
