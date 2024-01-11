@@ -1,4 +1,4 @@
-## [3.1.0] = 2023-1-11
+## [3.2.0] = 2023-1-11
 
 * changed how the mathMl to Latex works, now faster
 
