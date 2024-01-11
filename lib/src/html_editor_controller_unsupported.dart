@@ -21,13 +21,21 @@ class HtmlEditorController {
 
   latexToHtml(String latex) {}
 
+  Future<String> mathMlToLatex(String mathMl, BuildContext context) {
+    throw Exception('UnImplemented');
+  }
+
   void addToHashMap(String key, String value) {
     latexMap.addAll({
-      key: value,
+      key
+          .replaceAll('&#x03c0;', 'pi')
+          .replaceAll('π', 'pi')
+          .replaceAll('&nbsp;', '')
+          .trim(): value,
     });
   }
 
-  Future<String> getHtmlStringWithLatex() async {
+  Future<String> getHtmlStringWithLatex(context) async {
     var txt = await getText();
     final reg = RegExp('<math>', multiLine: true);
     var tags = <String>[];
@@ -39,18 +47,24 @@ class HtmlEditorController {
         var split = element.split(r'</math>');
         var after = split.last;
         element = '<math>${split.first}</math>';
-        tags.add(latexMap[element] ?? element);
-        tags.add(after);
+        tags.add(latexMap[element
+                .replaceAll('&#x03c0;', 'pi')
+                .replaceAll('π', 'pi')
+                .trim()] ??
+            '');
+        if (after.isNotEmpty) tags.add(after);
       } else {
         tags.add(element);
       }
     });
     var tag = '';
     tags.forEach((element) {
-      tag = '$tag$element';
+      if (element.isNotEmpty) tag = '$tag$element';
     });
     return tag;
   }
+
+  insertLatex(String latex) {}
 
   /// Toolbar widget state to call various methods. For internal use only.
   @internal
@@ -128,7 +142,7 @@ class HtmlEditorController {
   /// A function to execute JS passed as a [WebScript] to the editor. This should
   /// only be used on Flutter Web.
   Future<dynamic> evaluateJavascriptWeb(String name,
-      {bool hasReturnValue = false}) =>
+          {bool hasReturnValue = false}) =>
       Future.value();
 
   /// Gets the text from the editor and returns it as a [String].
@@ -215,4 +229,6 @@ class HtmlEditorController {
   /// Internal function to insert table on Web
   @internal
   void insertTable(String dimensions) {}
+
+  insertHtmlStringWithLatex(String latex) {}
 }

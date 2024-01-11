@@ -16,7 +16,7 @@ class HtmlEditorExampleApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(),
       darkTheme: ThemeData.dark(),
-      home: MyApp2(title: 'Flutter HTML Editor Example'),
+      home: HtmlEditorExample(title: 'Flutter HTML Editor Example'),
       // home: MyApp2(title: 'Flutter HTML Editor Example'),
     );
   }
@@ -40,36 +40,35 @@ class _MyApp2State extends State<MyApp2> {
 
   @override
   void initState() {
-    (_latexToHtml('{x}', controller));
     super.initState();
   }
 
   Future<String> _latexToHtml(String latex, editorController) async {
-    var res = await editorController!.callAsyncJavaScript(functionBody: r'''
-    func(string latex)async{
-        const mathlive = await import("https://unpkg.com/mathlive?module");
-        const mathML = mathlive.convertLatexToMathMl('\$\$latex\$\$');
-        MathMLChannel.postMessage(mathML);
-        return(mathML);
-    });
-    var p = await func();
-    return p;
-    ''', arguments: {'latex': latex});
-    log(res.toString());
-    log(res?.toMap().toString() ?? '');
-    return res!.value.toString();
+    const breakPoint = '<mrow><mi>break</mi></mrow>';
+    var mathMl =
+        '<math><mrow><mi>x</mi><msqrt><mi>x</mi></msqrt></mrow></math><math><mrow><mi>x</mi><msqrt><mi>x</mi></msqrt></mrow></math><math><mrow><mi>x</mi><msqrt><mi>x</mi></msqrt></mrow></math>';
+
+    var a = await controller2.mathMlToLatex(
+        mathMl.replaceAll('</math><math>', breakPoint), context);
+    for (var value in a.split('break')) {
+      log(value.trim(), name: 'latex');
+    }
+    log(a, name: 'MathMl');
+    return a;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        (_latexToHtml('{x}', controller));
+      }),
       body: Stack(
         children: [
           SingleChildScrollView(
             child: Column(
               children: [
                 tb(controller1),
-                tb(controller2),
               ],
             ),
           ),
@@ -154,6 +153,17 @@ class HtmlEditorExample extends StatefulWidget {
 class _HtmlEditorExampleState extends State<HtmlEditorExample> {
   String result = '';
   final HtmlEditorController controller = HtmlEditorController();
+
+  Future<String> _latexToHtml(String latex) async {
+    const breakPoint = '<mrow><mi>break</mi></mrow>';
+    var a = await controller.mathMlToLatex(
+        latex.replaceAll('</math><math>', breakPoint), context);
+    for (var value in a.split('break')) {
+      log(value.trim(), name: 'latex');
+    }
+    log(a, name: 'MathMl');
+    return a;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -286,10 +296,11 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                       style: TextButton.styleFrom(
                           backgroundColor: Colors.blueGrey),
                       onPressed: () {
-                        controller.undo();
+                        controller.insertHtmlStringWithLatex(
+                            r'<p><h1>Hello</h1></p><p>\(\sqrt{x} e \pi \) <br></p>');
                       },
-                      child:
-                          Text('Undo', style: TextStyle(color: Colors.white)),
+                      child: Text('insert mathMl',
+                          style: TextStyle(color: Colors.white)),
                     ),
                     SizedBox(
                       width: 16,
@@ -297,11 +308,13 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     TextButton(
                       style: TextButton.styleFrom(
                           backgroundColor: Colors.blueGrey),
-                      onPressed: () {
-                        controller.clear();
+                      onPressed: () async {
+                        var text = await controller.getText();
+                        var res = await _latexToHtml(text);
+                        log(res, name: 'result');
                       },
-                      child:
-                          Text('Reset', style: TextStyle(color: Colors.white)),
+                      child: Text('Get Latex',
+                          style: TextStyle(color: Colors.white)),
                     ),
                     SizedBox(
                       width: 16,
@@ -311,7 +324,11 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                           backgroundColor:
                               Theme.of(context).colorScheme.secondary),
                       onPressed: () async {
-                        var txt = await controller.getHtmlStringWithLatex();
+                        // var txt = await controller.getHtmlStringWithLatex(context);
+                        var txt =
+                            await controller.getHtmlStringWithLatex(context);
+                        print(txt);
+                        // print(res);
                         if (txt.contains('src=\"data:')) {
                           txt =
                               '<text removed due to base-64 data, displaying the text could cause the app to crash>';
@@ -333,10 +350,10 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                           backgroundColor:
                               Theme.of(context).colorScheme.secondary),
                       onPressed: () {
-                        controller.redo();
+                        controller.insertLatex(r'\(\sqrt{x}\)');
                       },
                       child: Text(
-                        'Redo',
+                        'insert latex',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
