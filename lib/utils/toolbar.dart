@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// Abstract class that all the toolbar classes extend
@@ -153,6 +154,7 @@ class InsertButtons extends Toolbar {
   final bool otherFile;
   final bool table;
   final bool hr;
+  final bool fn;
 
   const InsertButtons({
     this.link = true,
@@ -162,6 +164,7 @@ class InsertButtons extends Toolbar {
     this.otherFile = false,
     this.table = true,
     this.hr = true,
+    this.fn = true,
   });
 
   List<Icon> getIcons() {
@@ -173,6 +176,7 @@ class InsertButtons extends Toolbar {
     if (otherFile) icons.add(Icon(Icons.attach_file));
     if (table) icons.add(Icon(Icons.table_chart_outlined));
     if (hr) icons.add(Icon(Icons.horizontal_rule));
+    if (fn && !kIsWeb) icons.add(Icon(Icons.functions));
     return icons;
   }
 }

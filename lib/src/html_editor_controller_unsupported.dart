@@ -1,4 +1,9 @@
-import 'package:html_editor_enhanced/html_editor.dart';
+import 'dart:async';
+import 'dart:collection';
+
+import 'package:flutter/material.dart';
+import 'package:html_editor_enhanced_fork_latex/html_editor.dart';
+import 'package:math_keyboard/math_keyboard.dart';
 import 'package:meta/meta.dart';
 
 /// Fallback controller (should never be used)
@@ -7,7 +12,59 @@ class HtmlEditorController {
     this.processInputHtml = true,
     this.processNewLineAsBr = false,
     this.processOutputHtml = true,
+    this.mathField,
   });
+
+  final HashMap<String, String> latexMap = HashMap();
+
+  openMathDialog(BuildContext context) async {}
+
+  latexToHtml(String latex) {}
+
+  Future<String> mathMlToLatex(String mathMl, BuildContext context) {
+    throw Exception('UnImplemented');
+  }
+
+  void addToHashMap(String key, String value) {
+    latexMap.addAll({
+      key
+          .replaceAll('&#x03c0;', 'pi')
+          .replaceAll('π', 'pi')
+          .replaceAll('&nbsp;', '')
+          .trim(): value,
+    });
+  }
+
+  Future<String> getHtmlStringWithLatex(context) async {
+    var txt = await getText();
+    final reg = RegExp('<math>', multiLine: true);
+    var tags = <String>[];
+    var res = txt.split(reg);
+    print('result = $res');
+
+    res.forEach((element) {
+      if (element.contains(r'</math>')) {
+        var split = element.split(r'</math>');
+        var after = split.last;
+        element = '<math>${split.first}</math>';
+        tags.add(latexMap[element
+                .replaceAll('&#x03c0;', 'pi')
+                .replaceAll('π', 'pi')
+                .trim()] ??
+            '');
+        if (after.isNotEmpty) tags.add(after);
+      } else {
+        tags.add(element);
+      }
+    });
+    var tag = '';
+    tags.forEach((element) {
+      if (element.isNotEmpty) tag = '$tag$element';
+    });
+    return tag;
+  }
+
+  insertLatex(String latex) {}
 
   /// Toolbar widget state to call various methods. For internal use only.
   @internal
@@ -31,6 +88,7 @@ class HtmlEditorController {
   ///
   /// The default value is true.
   final bool processOutputHtml;
+  final MathField? mathField;
 
   /// Internally tracks the character count in the editor
   int _characterCount = 0;
@@ -171,4 +229,6 @@ class HtmlEditorController {
   /// Internal function to insert table on Web
   @internal
   void insertTable(String dimensions) {}
+
+  insertHtmlStringWithLatex(String latex) {}
 }

@@ -1,9 +1,16 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart'
-    as unsupported;
+import 'package:html_editor_enhanced_fork_latex/html_editor.dart';
+import 'package:html_editor_enhanced_fork_latex/src/html_editor_controller_unsupported.dart'
+as unsupported;
+import 'package:html_editor_enhanced_fork_latex/utils/custom_math_field_controller.dart';
+import 'package:math_keyboard/math_keyboard.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 /// Controller for mobile
 class HtmlEditorController extends unsupported.HtmlEditorController {
@@ -11,6 +18,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     this.processInputHtml = true,
     this.processNewLineAsBr = false,
     this.processOutputHtml = true,
+    this.mathField,
   });
 
   /// Toolbar widget state to call various methods. For internal use only.
@@ -38,6 +46,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// The default value is true.
   @override
   final bool processOutputHtml;
+  final MathField? mathField;
 
   /// Manages the [InAppWebViewController] for the [HtmlEditorController]
   InAppWebViewController? _editorController;
@@ -195,7 +204,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   @override
   void reloadWeb() {
     throw Exception(
-        'Non-Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart and check kIsWeb before calling this function');
+        'Non-Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced_fork_latex/html_editor.dart and check kIsWeb before calling this function');
   }
 
   /// Resets the height of the editor back to the original if it was changed to
@@ -224,7 +233,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   void addNotification(String html, NotificationType notificationType) async {
     await _evaluateJavascript(source: """
         \$('.note-status-output').html(
-          '<div class="alert alert-${describeEnum(notificationType)}">$html</div>'
+          '<div class="alert alert-${(notificationType.name)}">$html</div>'
         );
         """);
     recalculateHeight();
@@ -265,7 +274,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
       return result;
     } else {
       throw Exception(
-          'Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced/html_editor.dart');
+          'Flutter Web environment detected, please make sure you are importing package:html_editor_enhanced_fork_latex/html_editor.dart');
     }
   }
 
@@ -288,4 +297,199 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Internal function to insert table on Web
   @override
   void insertTable(String dimensions) {}
+
+  @override
+  openMathDialog(BuildContext context) async {
+    final c = CustomMathFieldEditingController();
+    if (!kIsWeb) {
+      this.clearFocus();
+    }
+    await showDialog(
+        context: context,
+        builder: (context) => MathKeyboardDialog(
+          controller: c,
+          mathField: this.mathField,
+        ));
+    if (!kIsWeb) {
+      this.setFocus();
+    }
+    var math = c.texString;
+    if (math != '') {
+      var texAsFun = c.texStringAsFun;
+      var result = await latexToHtml(math);
+      result = '<math><semantics>$result</semantics></math>';
+      latexMap.addAll({
+        result: texAsFun,
+      });
+      this.addToHashMap(result, texAsFun);
+      this.insertHtml(result);
+      this.insertText(' ');
+    }
+  }
+
+  @override
+  Future<String> latexToHtml(String latex) async {
+    latex = latex.replaceAll('\\', '\\\\');
+    var res = await editorController!.callAsyncJavaScript(
+        functionBody: r'''
+    async function func(){
+        const mathlive = await import("https://unpkg.com/mathlive?module");
+        const mathML = mathlive.convertLatexToMathMl('\$\$'''
+            '$latex'
+            r'''\$\$');
+        return(mathML);
+    };
+    var p = await func();
+    return p;
+    ''',
+        arguments: {'latex': latex});
+    log(res.toString());
+    log(res?.toMap().toString() ?? '');
+    return res!.value.toString();
+  }
+
+  @override
+  Future<String> mathMlToLatex(String mathMl, BuildContext context) async {
+    String result = '';
+    late BuildContext dialogContext;
+    Completer<String> completer = Completer();
+    final webViewController = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setOnConsoleMessage((message) async {
+        log(
+          message.message,
+          name: 'ON_CONSOLE_MESSAGE',
+        );
+        result = message.message;
+        completer.complete(result);
+        await Future.delayed(Duration(milliseconds: 150));
+        Navigator.pop(dialogContext);
+      })
+      ..loadHtmlString(_getHtmlMathMlToLatex(mathMl));
+    showDialog(
+        context: context,
+        builder: (context) {
+          dialogContext = context;
+          return Stack(
+            children: [
+              Center(child: CircularProgressIndicator()),
+              Visibility(
+                  visible: false,
+                  child: WebViewWidget(
+                    controller: webViewController,
+                  )),
+            ],
+          );
+        });
+    return completer.future;
+  }
+
+  insertLatex(String latex) async {
+    var html = await latexToHtml(latex);
+    this.insertHtml('<math><semantics>$html</semantics></math>');
+  }
+
+  Future<String> getHtmlStringWithLatex(context) async {
+    var txt = await getText();
+    final reg = RegExp('<math>', multiLine: true);
+    var tags = <String>[];
+    var res = txt.split(reg);
+    print('result = $res');
+    String latexString = '';
+    const bp = '<mrow><mi>break</mi></mrow>';
+    int index = 0;
+    res.forEach((element) {
+      if (element.contains(r'</math>')) {
+        var split = element.split(r'</math>');
+        var after = split.last;
+        element = '<math>${split.first}</math>';
+        latexString = '$latexString$element';
+        // tags.add(latexMap[element
+        //         .replaceAll('&#x03c0;', 'pi')
+        //         .replaceAll('π', 'pi')
+        //         .replaceAll('&nbsp;', '')
+        //         .trim()] ??
+        //     '');
+        tags.add('LATEX#');
+        if (after.isNotEmpty) tags.add(after);
+      } else {
+        tags.add(element);
+      }
+    });
+    latexString = latexString.replaceAll('</math><math>', bp);
+    log(latexString, name: 'latex string');
+    var latexRes = await mathMlToLatex(latexString, context);
+    log(latexRes, name: 'mathMlToLatex');
+    var latexList = latexRes.split('break');
+    bool isTrue = true;
+
+    var tag = '';
+    tags.forEach((element) {
+      if (element.isNotEmpty) tag = '$tag$element';
+    });
+    while (isTrue) {
+      if (tag.contains('LATEX#')) {
+        tag = tag.replaceFirst('LATEX#', '\\(${latexList[index++]}\\)');
+      } else {
+        isTrue = false;
+      }
+    }
+    return tag.replaceAll('</p><p>', '');
+  }
+
+  Future<String> insertHtmlStringWithLatex(String latex) async {
+    var txt = latex;
+    final reg = RegExp(r'\(', multiLine: true);
+    var tags = <String>[];
+    var res = txt.split(reg);
+    print('result = $res');
+    String latexString = '';
+    const bp = '<mrow><mi>break</mi></mrow>';
+    int index = 0;
+    res.forEach((element) {
+      if (element.contains(r'\)')) {
+        var split = element.split(r'\)');
+        var after = split.last;
+        element = '\\(${split.first}\\)';
+        latexString = '$latexString$element';
+        tags.add('LATEX#');
+        if (after.isNotEmpty) tags.add(after);
+      } else {
+        tags.add(element);
+      }
+    });
+    latexString = latexString.replaceAll('\\)\\(', bp);
+    log(latexString, name: 'latex string');
+    var latexRes = await latexToHtml(
+      latexString,
+    );
+    log(latexRes, name: 'LatexToMathMl');
+    var latexList = latexRes.split('break');
+    bool isTrue = true;
+    var tag = '';
+    tags.forEach((element) {
+      if (element.isNotEmpty) tag = '$tag$element';
+    });
+    while (isTrue) {
+      if (tag.contains('LATEX#')) {
+        tag = tag.replaceFirst('LATEX#',
+            '<math><semantics>${latexList[index++]}</semantics></math>');
+      } else {
+        isTrue = false;
+      }
+    }
+    this.insertHtml(tag.replaceAll('</p><p>', ''));
+    return tag.replaceAll('</p><p>', '');
+  }
+
+  String _getHtmlMathMlToLatex(String mathMl) => '''
+  <script>
+            const result = "${mathMl.trim().replaceAll(' ', '').replaceAll('\n', '').toString()}";
+          </script>
+          '<script src="https://unpkg.com/mathml-to-latex@1.3.0/dist/bundle.min.js"></script>
+          <script>
+            const latexResult = MathMLToLaTeX.MathMLToLaTeX.convert(result.toString());
+            console.log(latexResult);
+          </script>'
+  ''';
 }

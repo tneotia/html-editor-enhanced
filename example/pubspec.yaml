@@ -6,13 +6,14 @@ description: Demonstrates how to use the html_editor_enhanced plugin.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=2.15.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-
-  html_editor_enhanced:
+  get: ^4.0.0
+  math_keyboard: ^0.1.1
+  html_editor_enhanced_fork_latex:
     # When depending on this package from a real application you should use:
     #   html_editor_enhanced: ^x.y.z
     # See https://dart.dev/tools/pub/dependencies#version-constraints

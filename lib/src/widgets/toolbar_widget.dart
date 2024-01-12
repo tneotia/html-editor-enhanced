@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:file_picker/file_picker.dart';
@@ -5,8 +6,8 @@ import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:html_editor_enhanced/utils/utils.dart';
+import 'package:html_editor_enhanced_fork_latex/html_editor.dart';
+import 'package:html_editor_enhanced_fork_latex/utils/utils.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 
@@ -1120,7 +1121,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                               newColor = color;
                             },
                             title: Text('Choose a Color',
-                                style: Theme.of(context).textTheme.headline6),
+                                style: Theme.of(context).textTheme.titleLarge),
                             width: 40,
                             height: 40,
                             spacing: 0,
@@ -1758,6 +1759,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               t.picture ||
               t.link ||
               t.hr ||
+              t.fn ||
               t.table)) {
         toolbarChildren.add(ToggleButtons(
           constraints: BoxConstraints.tightFor(
@@ -1872,7 +1874,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .textTheme
-                                                      .bodyText1
+                                                      .bodyLarge
                                                       ?.color)),
                                         ),
                                       ],
@@ -1986,7 +1988,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                                 style: TextStyle(
                                                     color: Theme.of(context)
                                                         .textTheme
-                                                        .bodyText1
+                                                        .bodyLarge
                                                         ?.color)),
                                           ),
                                           suffixIcon: result != null
@@ -2146,7 +2148,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .textTheme
-                                                      .bodyText1
+                                                      .bodyLarge
                                                       ?.color)),
                                         ),
                                         suffixIcon: result != null
@@ -2298,7 +2300,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .textTheme
-                                                      .bodyText1
+                                                      .bodyLarge
                                                       ?.color)),
                                         ),
                                         suffixIcon: result != null
@@ -2450,7 +2452,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .textTheme
-                                                      .bodyText1
+                                                      .bodyLarge
                                                       ?.color)),
                                         ),
                                         suffixIcon: result != null
@@ -2598,6 +2600,14 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   true;
               if (proceed) {
                 widget.controller.insertHtml('<hr/>');
+              }
+            }
+            if (t.getIcons()[index].icon == Icons.functions) {
+              var proceed = await widget.htmlToolbarOptions.onButtonPressed
+                      ?.call(ButtonType.fn, null, null) ??
+                  true;
+              if (proceed) {
+                await widget.controller.openMathDialog(context);
               }
             }
           },
@@ -2998,4 +3008,48 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
     }
     return toolbarChildren;
   }
+//
+// openMathDialog() async {
+//   final c = CustomMathFieldEditingController();
+//   if (!kIsWeb) {
+//     widget.controller.clearFocus();
+//   }
+//   await showDialog(
+//       context: context,
+//       builder: (context) => MathKeyboardDialog(
+//             controller: c,
+//             mathField: widget.controller.mathField,
+//           ));
+//   if (!kIsWeb) {
+//     widget.controller.setFocus();
+//   }
+//   var math = c.texString;
+//   if (math != '') {
+//     var texAsFun = c.texStringAsFun;
+//     var result = await _latexToHtml(math.replaceAll('\\', '\\\\'));
+//     result = '<math><semantics>$result</semantics></math>';
+//     _latexMap.addAll({
+//       result: texAsFun,
+//     });
+//     widget.controller.addToHashMap(result, texAsFun);
+//     widget.controller.insertHtml(result);
+//     widget.controller.insertText(' ');
+//   }
+// }
+//
+// Future<String> _latexToHtml(String latex) async {
+//   await _webController.runJavaScript('''
+//   (async () => {
+//     try {
+//       const mathlive = await import("https://unpkg.com/mathlive?module");
+//       const mathML = mathlive.convertLatexToMathMl('\$\$$latex\$\$');
+//       MathMLChannel.postMessage(mathML);
+//     } catch (error) {
+//       console.error('Error:', error);
+//     }
+//   })();
+// ''');
+//
+//   return _completer.future;
+// }
 }

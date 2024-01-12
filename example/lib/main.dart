@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart' as inApp;
+import 'package:get/get.dart';
+import 'package:html_editor_enhanced_fork_latex/html_editor.dart';
 
 void main() => runApp(HtmlEditorExampleApp());
 
@@ -14,7 +17,127 @@ class HtmlEditorExampleApp extends StatelessWidget {
       theme: ThemeData(),
       darkTheme: ThemeData.dark(),
       home: HtmlEditorExample(title: 'Flutter HTML Editor Example'),
+      // home: MyApp2(title: 'Flutter HTML Editor Example'),
     );
+  }
+}
+
+class MyApp2 extends StatefulWidget {
+  final String title;
+
+  MyApp2({Key? key, required this.title}) : super(key: key);
+
+  @override
+  State<MyApp2> createState() => _MyApp2State();
+}
+
+class _MyApp2State extends State<MyApp2> {
+  final HtmlEditorController controller1 = HtmlEditorController();
+  inApp.InAppWebViewController controller =
+      inApp.InAppWebViewController(0123, inApp.InAppWebView());
+
+  final controller2 = HtmlEditorController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<String> _latexToHtml(String latex, editorController) async {
+    const breakPoint = '<mrow><mi>break</mi></mrow>';
+    var mathMl =
+        '<math><mrow><mi>x</mi><msqrt><mi>x</mi></msqrt></mrow></math><math><mrow><mi>x</mi><msqrt><mi>x</mi></msqrt></mrow></math><math><mrow><mi>x</mi><msqrt><mi>x</mi></msqrt></mrow></math>';
+
+    var a = await controller2.mathMlToLatex(
+        mathMl.replaceAll('</math><math>', breakPoint), context);
+    for (var value in a.split('break')) {
+      log(value.trim(), name: 'latex');
+    }
+    log(a, name: 'MathMl');
+    return a;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        (_latexToHtml('{x}', controller));
+      }),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                tb(controller1),
+              ],
+            ),
+          ),
+        ],
+      ),
+      appBar: AppBar(
+        title: Text(this.widget.title),
+      ),
+    );
+  }
+
+  Widget tb(HtmlEditorController controller) {
+    var isVisible = false.obs;
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Obx(
+            () => isVisible.value
+                ? ToolbarWidget(
+                    controller: controller,
+                    htmlToolbarOptions: HtmlToolbarOptions(
+                      toolbarType: kIsWeb
+                          ? ToolbarType.nativeGrid
+                          : ToolbarType.nativeScrollable,
+                      toolbarPosition: ToolbarPosition
+                          .custom, //required to place toolbar anywhere!
+                      //other options
+                    ),
+                    callbacks: null)
+                : IconButton(
+                    onPressed: () {
+                      controller.insertHtml(
+                          r'<math><semantics><mrow><mi>y</mi><mi>y</mi></mrow></semantics></>');
+                      isVisible.value = true;
+                    },
+                    icon: Icon(Icons.functions_outlined)),
+          ),
+          //other widgets here
+          HtmlEditor(
+            controller: controller,
+            callbacks: Callbacks(
+              onBlur: () {
+                print('onBlur');
+                isVisible.value = false;
+              },
+              onNavigationRequestMobile: (s) async {
+                print('on NavReq to $s');
+                return NavigationActionPolicy.ALLOW;
+              },
+              onDialogShown: () => print('onDialogOpen'),
+              onFocus: () {
+                print('onFocus');
+                isVisible.value = true;
+              },
+            ),
+            htmlEditorOptions: HtmlEditorOptions(
+              hint: 'Your text here...',
+              shouldEnsureVisible: true,
+              //initialText: "<p>text content initial, if any</p>",
+            ),
+            htmlToolbarOptions: HtmlToolbarOptions(
+              toolbarPosition:
+                  ToolbarPosition.custom, // required to place toolbar anywhere!
+
+              //other options
+            ),
+            otherOptions: OtherOptions(height: 550),
+          ),
+        ]);
   }
 }
 
@@ -30,6 +153,17 @@ class HtmlEditorExample extends StatefulWidget {
 class _HtmlEditorExampleState extends State<HtmlEditorExample> {
   String result = '';
   final HtmlEditorController controller = HtmlEditorController();
+
+  Future<String> _latexToHtml(String latex) async {
+    const breakPoint = '<mrow><mi>break</mi></mrow>';
+    var a = await controller.mathMlToLatex(
+        latex.replaceAll('</math><math>', breakPoint), context);
+    for (var value in a.split('break')) {
+      log(value.trim(), name: 'latex');
+    }
+    log(a, name: 'MathMl');
+    return a;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,32 +208,10 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                   //initialText: "<p>text content initial, if any</p>",
                 ),
                 htmlToolbarOptions: HtmlToolbarOptions(
-                  toolbarPosition: ToolbarPosition.aboveEditor, //by default
-                  toolbarType: ToolbarType.nativeScrollable, //by default
-                  onButtonPressed:
-                      (ButtonType type, bool? status, Function? updateStatus) {
-                    print(
-                        "button '${describeEnum(type)}' pressed, the current selected status is $status");
-                    return true;
-                  },
-                  onDropdownChanged: (DropdownType type, dynamic changed,
-                      Function(dynamic)? updateSelectedItem) {
-                    print(
-                        "dropdown '${describeEnum(type)}' changed to $changed");
-                    return true;
-                  },
-                  mediaLinkInsertInterceptor:
-                      (String url, InsertFileType type) {
-                    print(url);
-                    return true;
-                  },
-                  mediaUploadInterceptor:
-                      (PlatformFile file, InsertFileType type) async {
-                    print(file.name); //filename
-                    print(file.size); //size in bytes
-                    print(file.extension); //file extension (eg jpeg or mp4)
-                    return true;
-                  },
+                  toolbarPosition: ToolbarPosition.aboveEditor,
+                  //by default
+                  toolbarType: ToolbarType.nativeScrollable,
+                  //by default
                 ),
                 otherOptions: OtherOptions(height: 550),
                 callbacks: Callbacks(onBeforeCommand: (String? currentHtml) {
@@ -136,7 +248,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                   },*/
                     onImageUploadError: (FileUpload? file, String? base64Str,
                         UploadError error) {
-                  print(describeEnum(error));
+                  print((error.name));
                   print(base64Str ?? '');
                   if (file != null) {
                     print(file.name);
@@ -184,10 +296,11 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                       style: TextButton.styleFrom(
                           backgroundColor: Colors.blueGrey),
                       onPressed: () {
-                        controller.undo();
+                        controller.insertHtmlStringWithLatex(
+                            r'<p><h1>Hello</h1></p><p>\(\sqrt{x} e \pi \) <br></p>');
                       },
-                      child:
-                          Text('Undo', style: TextStyle(color: Colors.white)),
+                      child: Text('insert mathMl',
+                          style: TextStyle(color: Colors.white)),
                     ),
                     SizedBox(
                       width: 16,
@@ -195,11 +308,13 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     TextButton(
                       style: TextButton.styleFrom(
                           backgroundColor: Colors.blueGrey),
-                      onPressed: () {
-                        controller.clear();
+                      onPressed: () async {
+                        var text = await controller.getText();
+                        var res = await _latexToHtml(text);
+                        log(res, name: 'result');
                       },
-                      child:
-                          Text('Reset', style: TextStyle(color: Colors.white)),
+                      child: Text('Get Latex',
+                          style: TextStyle(color: Colors.white)),
                     ),
                     SizedBox(
                       width: 16,
@@ -209,7 +324,11 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                           backgroundColor:
                               Theme.of(context).colorScheme.secondary),
                       onPressed: () async {
-                        var txt = await controller.getText();
+                        // var txt = await controller.getHtmlStringWithLatex(context);
+                        var txt =
+                            await controller.getHtmlStringWithLatex(context);
+                        print(txt);
+                        // print(res);
                         if (txt.contains('src=\"data:')) {
                           txt =
                               '<text removed due to base-64 data, displaying the text could cause the app to crash>';
@@ -231,10 +350,10 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                           backgroundColor:
                               Theme.of(context).colorScheme.secondary),
                       onPressed: () {
-                        controller.redo();
+                        controller.insertLatex(r'\(\sqrt{x}\)');
                       },
                       child: Text(
-                        'Redo',
+                        'insert latex',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
