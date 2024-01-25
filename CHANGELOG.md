@@ -1,3 +1,6 @@
+## [3.0.0] = 2024-01-25
+* Update dependencies
+
 ## [2.5.1] = 2023-01-25
 * Fix build issues on Flutter 3.4.0+ due to assets directory
 * Update dependencies
