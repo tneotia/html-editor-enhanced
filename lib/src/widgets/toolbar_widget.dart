@@ -189,8 +189,17 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
     }
     if (colorList[1] != null && colorList[1]!.isNotEmpty) {
       setState(mounted, this.setState, () {
-        _backColorSelected =
-            Color(int.parse(colorList[1]!, radix: 16) + 0xFF000000);
+        if (colorList[1]! == 'transparent') {
+          _backColorSelected = Colors.transparent;
+        }
+        else {
+          try {
+            _backColorSelected =
+                Color(int.parse(colorList[1]!, radix: 16) + 0xFF000000);
+          }
+          catch (_) {
+          }
+        }
       });
     } else {
       setState(mounted, this.setState, () {
