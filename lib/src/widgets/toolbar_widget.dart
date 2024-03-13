@@ -641,6 +641,12 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 style: widget.htmlToolbarOptions.textStyle,
                 items: [
                   CustomDropdownMenuItem(
+                    value: 'Calibri',
+                    child: PointerInterceptor(
+                        child: Text('Calibri',
+                            style: TextStyle(fontFamily: 'Calibri'))),
+                  ),
+                  CustomDropdownMenuItem(
                     value: 'Courier New',
                     child: PointerInterceptor(
                         child: Text('Courier New',
