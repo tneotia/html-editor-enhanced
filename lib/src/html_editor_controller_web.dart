@@ -1,6 +1,8 @@
 import 'dart:convert';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
+import 'dart:js' as js;
+import 'dart:js_interop';
 
 import 'package:flutter/foundation.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
@@ -52,6 +54,17 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
   @override
   List<TextHighLight>? highLights;
+
+  @override
+  void setHighlights(List<TextHighLight> highlights) {
+    var id = 0;
+    highLights = highlights.map((e) => TextHighLight(text: e.text,lineNo: e.lineNo,css: e.css,id: '${id++}',data: e.data,onTap: e.onTap)).toList();
+    final context = js.JsObject.fromBrowserObject(html.window);
+    final dhNgEditorScope = context['dhNgEditorScope'] as js.JsObject?;
+    if (dhNgEditorScope != null) {
+      context.callMethod('setDHHighlights',[jsonEncode(highLights)]);
+    }
+  }
 
   @override
   Function(List<ParsedHighlight>)? onTextHighlightsReplacersReady;

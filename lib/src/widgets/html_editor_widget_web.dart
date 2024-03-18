@@ -502,6 +502,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             '"assets/packages/html_editor_enhanced/assets/summernote-lite.min.js"');
     if (widget.callbacks != null) addJSListener(widget.callbacks!);
     final iframe = html.IFrameElement()
+      ..id = createdViewId
       ..width = MediaQuery.of(widget.initBC).size.width.toString() //'800'
       ..height = widget.htmlEditorOptions.autoAdjustHeight
           ? actualHeight.toString()
@@ -583,10 +584,11 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
       var id = 0;
       widget.controller.highLights = widget.controller.highLights?.map((e) => TextHighLight(text: e.text,lineNo: e.lineNo,css: e.css,id: '${id++}',onTap: e.onTap, data: e.data)).toList();
       scripts += '''
-       setTimeout(() => {
-       window.setDHHighlights = () => {
-            window.dhNgEditorScope.editorHighlights = ${jsonEncode( widget.controller.highLights?.map((e) => TextHighLight(text: e.text,lineNo: e.lineNo,css: e.css,id: e.id,data: e.data)).toList())};
-             window.dhNgEditorScope.editorHighlights = window.dhNgEditorScope.editorHighlights.map((jsE) => {
+       window.setDHHighlights = parent.setDHHighlights = (data) => {
+              if(!data){
+                return;  
+              }
+             parent.dhNgEditorScope.editorHighlights = (Array.isArray(data) ? data : JSON.parse(data)).map((jsE) => {
                return {
                   ...jsE,
                   onTap: (highlight) => {
@@ -597,9 +599,9 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                   }
                }; 
              });
-          }
-          
-          window.dhNgEditorScope.\$apply(window.setDHHighlights)
+      }
+     setTimeout(() => { 
+        window.dhNgEditorScope.\$apply(()=>window.setDHHighlights(${jsonEncode( widget.controller.highLights?.map((e) => TextHighLight(text: e.text,lineNo: e.lineNo,css: e.css,id: e.id,data: e.data)).toList())}))
        },2000)
       ''';
 
@@ -609,8 +611,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   void onHighlightSelection(data) {
     var parsedData = jsonDecode(data);
     var parsedHighlight = ParsedHighlight.fromJson(parsedData);
-    var highlight = widget.controller.highLights?.where((element) => element.id == parsedHighlight.highLight!.id).toList();
-    if(highlight != null && highlight.isNotEmpty && highlight.first.onTap != null){
+    var highlight = (widget.controller.highLights?.where((element) => element.id == parsedHighlight.highLight!.id).toList()) ?? [];
+    if(highlight.isNotEmpty && highlight.first.onTap != null){
       highlight.first.onTap!(parsedHighlight,(replacement) {
         //   window.parent.postMessage.replaceHighlight(${jsonEncode(parsedHighlight.toJson())},'$replacement');
         widget.controller.sendJavascriptDataWeb('replaceHighlight', {
@@ -920,7 +922,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           onHighlightsReplacersReady(data['contents']);
         }
         if (data['type'].contains('onHighlightSelection')) {
-          onHighlightsReplacersReady(data['contents']);
+          onHighlightSelection(data['contents']);
         }
       }
     });

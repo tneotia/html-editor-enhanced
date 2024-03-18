@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
@@ -31,7 +33,7 @@ class HtmlEditorExample extends StatefulWidget {
 class _HtmlEditorExampleState extends State<HtmlEditorExample> {
   String result = '';
   List<ParsedHighlight> highlights = [];
-  final HtmlEditorController controller = HtmlEditorController(highLights: [
+  List<TextHighLight> h = [
     TextHighLight(text: 'Kotlin',css: {
       "background-color":"red"
     }),
@@ -45,16 +47,17 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
     TextHighLight(text: 'technologies',css: {
       "background-color":"green !important"
     }),
-  ]);
+  ];
+  late HtmlEditorController controller;
 
   @override
   void initState() {
+    controller = HtmlEditorController();
     controller.onTextHighlightsReplacersReady = (parsedData) {
       highlights = parsedData;
       setState(() {});
       print("onTextHighlightsReplacersReady");
     };
-    controller.setHighlights();
     super.initState();
   }
 
@@ -74,6 +77,8 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
             IconButton(
                 icon: Icon(Icons.refresh),
                 onPressed: () async {
+
+                  controller.setHighlights(h);
                   //controller.clear();
                   if(highlights.isEmpty){
                   controller.insertText('A full-stack web & mobile developer with experience in web and mobile development technologies. Actively involved in tech communities as a speaker & mentor. technologies  Started with Web Progressing towards mobile development and has worked technologies with iOS (using Swift), Android (Kotlin & Java), Ionic, React Native, Flutter, and many other platforms with various types of languages and frameworks. Ahsan is very good man');

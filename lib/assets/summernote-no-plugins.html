@@ -104,6 +104,7 @@
 
     angular.module('dhEditorApp', []).controller('dhEditorController', ($scope) => {
         window.dhNgEditorScope = $scope;
+        parent.dhNgEditorScope = $scope;
 
         $scope.editorHighlights = [];
         $scope.ranges = {};
@@ -188,6 +189,10 @@
 
         window.jQuery(document).ready(function () {
             resetOverlayHeight();
+        });
+
+        window.addEventListener("resize",function () {
+            $scope.reloadParsed();
         });
 
         window.jQuery("#summernote-2").on("summernote.paste",function(e,ne) {
