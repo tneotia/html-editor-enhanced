@@ -165,7 +165,17 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       });
     }
     //check the font name if it matches one of the predetermined fonts and update the toolbar
-    if (['Courier New', 'sans-serif', 'Times New Roman'].contains(fontName)) {
+    if ([
+      'Arial',
+      'Bodoni',
+      'Calibri',
+      'Courier New',
+      'Georgia',
+      'Helvetica',
+      'Roboto',
+      'sans-serif',
+      'Times New Roman',
+    ].contains(fontName)) {
       setState(mounted, this.setState, () {
         _fontNameSelectedItem = fontName;
       });
@@ -641,6 +651,18 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 style: widget.htmlToolbarOptions.textStyle,
                 items: [
                   CustomDropdownMenuItem(
+                    value: 'Arial',
+                    child: PointerInterceptor(
+                        child: Text('Arial',
+                            style: TextStyle(fontFamily: 'Arial'))),
+                  ),
+                  CustomDropdownMenuItem(
+                    value: 'Bodoni',
+                    child: PointerInterceptor(
+                        child: Text('Bodoni',
+                            style: TextStyle(fontFamily: 'Bodoni'))),
+                  ),
+                  CustomDropdownMenuItem(
                     value: 'Calibri',
                     child: PointerInterceptor(
                         child: Text('Calibri',
@@ -651,6 +673,24 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                     child: PointerInterceptor(
                         child: Text('Courier New',
                             style: TextStyle(fontFamily: 'Courier'))),
+                  ),
+                  CustomDropdownMenuItem(
+                    value: 'Georgia',
+                    child: PointerInterceptor(
+                        child: Text('Georgia',
+                            style: TextStyle(fontFamily: 'Georgia'))),
+                  ),
+                  CustomDropdownMenuItem(
+                    value: 'Helvetica',
+                    child: PointerInterceptor(
+                        child: Text('Helvetica',
+                            style: TextStyle(fontFamily: 'Helvetica'))),
+                  ),
+                  CustomDropdownMenuItem(
+                    value: 'Roboto',
+                    child: PointerInterceptor(
+                        child: Text('Roboto',
+                            style: TextStyle(fontFamily: 'Roboto'))),
                   ),
                   CustomDropdownMenuItem(
                     value: 'sans-serif',
@@ -670,6 +710,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   void updateSelectedItem(dynamic changed) async {
                     if (changed is String) {
                       setState(mounted, this.setState, () {
+                        print("setting _fontNameSelectedItem to $changed");
                         _fontNameSelectedItem = changed;
                       });
                     }
@@ -738,34 +779,52 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                     value: 2,
                     child: PointerInterceptor(
                         child: Text(
-                            "${_fontSizeUnitSelectedItem == "px" ? "13" : "10"} $_fontSizeUnitSelectedItem")),
+                            "${_fontSizeUnitSelectedItem == "px" ? "12" : "9"} $_fontSizeUnitSelectedItem")),
                   ),
                   CustomDropdownMenuItem(
                     value: 3,
                     child: PointerInterceptor(
                         child: Text(
-                            "${_fontSizeUnitSelectedItem == "px" ? "16" : "12"} $_fontSizeUnitSelectedItem")),
+                            "${_fontSizeUnitSelectedItem == "px" ? "13" : "10"} $_fontSizeUnitSelectedItem")),
                   ),
                   CustomDropdownMenuItem(
                     value: 4,
                     child: PointerInterceptor(
                         child: Text(
-                            "${_fontSizeUnitSelectedItem == "px" ? "19" : "14"} $_fontSizeUnitSelectedItem")),
+                            "${_fontSizeUnitSelectedItem == "px" ? "15" : "11"} $_fontSizeUnitSelectedItem")),
                   ),
                   CustomDropdownMenuItem(
                     value: 5,
                     child: PointerInterceptor(
                         child: Text(
-                            "${_fontSizeUnitSelectedItem == "px" ? "24" : "18"} $_fontSizeUnitSelectedItem")),
+                            "${_fontSizeUnitSelectedItem == "px" ? "16" : "12"} $_fontSizeUnitSelectedItem")),
                   ),
                   CustomDropdownMenuItem(
                     value: 6,
                     child: PointerInterceptor(
                         child: Text(
-                            "${_fontSizeUnitSelectedItem == "px" ? "32" : "24"} $_fontSizeUnitSelectedItem")),
+                            "${_fontSizeUnitSelectedItem == "px" ? "19" : "14"} $_fontSizeUnitSelectedItem")),
                   ),
                   CustomDropdownMenuItem(
                     value: 7,
+                    child: PointerInterceptor(
+                        child: Text(
+                            "${_fontSizeUnitSelectedItem == "px" ? "21" : "16"} $_fontSizeUnitSelectedItem")),
+                  ),
+                  CustomDropdownMenuItem(
+                    value: 8,
+                    child: PointerInterceptor(
+                        child: Text(
+                            "${_fontSizeUnitSelectedItem == "px" ? "24" : "18"} $_fontSizeUnitSelectedItem")),
+                  ),
+                  CustomDropdownMenuItem(
+                    value: 9,
+                    child: PointerInterceptor(
+                        child: Text(
+                            "${_fontSizeUnitSelectedItem == "px" ? "32" : "24"} $_fontSizeUnitSelectedItem")),
+                  ),
+                  CustomDropdownMenuItem(
+                    value: 10,
                     child: PointerInterceptor(
                         child: Text(
                             "${_fontSizeUnitSelectedItem == "px" ? "48" : "36"} $_fontSizeUnitSelectedItem")),
@@ -2679,7 +2738,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 child: SingleChildScrollView(
                                   child: DataTable(
                                     columnSpacing: 5,
-                                    dataRowHeight: 75,
+                                    dataRowMinHeight: 75,
                                     columns: const <DataColumn>[
                                       DataColumn(
                                         label: Text(
