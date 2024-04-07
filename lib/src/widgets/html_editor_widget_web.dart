@@ -471,6 +471,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
       // ignore: unsafe_html, necessary to load HTML string
       ..srcdoc = htmlString
       ..style.border = 'none'
+      ..style.overflow = 'hidden'
       ..onLoad.listen((event) async {
         if (widget.htmlEditorOptions.disabled && !alreadyDisabled) {
           widget.controller.disable();
@@ -496,7 +497,9 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
               data['view'] == createdViewId &&
               widget.htmlEditorOptions.autoAdjustHeight) {
             final docHeight = data['height'] ?? actualHeight;
-            if ((docHeight != null && docHeight != actualHeight) && mounted) {
+            if ((docHeight != null && docHeight != actualHeight) &&
+                mounted &&
+                docHeight > 0) {
               setState(mounted, this.setState, () {
                 actualHeight =
                     docHeight + (toolbarKey.currentContext?.size?.height ?? 0);

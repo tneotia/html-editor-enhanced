@@ -9,6 +9,7 @@ import 'package:html_editor_enhanced/html_editor.dart';
 class HtmlEditorOptions {
   const HtmlEditorOptions({
     this.autoAdjustHeight = true,
+    this.androidUseHybridComposition = true,
     this.adjustHeightForKeyboard = true,
     this.characterLimit,
     this.customOptions = '',
@@ -33,6 +34,12 @@ class HtmlEditorOptions {
   /// it significantly improves the UX.
   final bool adjustHeightForKeyboard;
 
+  /// ALlows devs to set hybrid composition off in case they would like to
+  /// prioritize animation smoothness over text input experience.
+  ///
+  /// The recommended value is `true`.
+  final bool androidUseHybridComposition;
+
   /// The editor will automatically adjust its height once the page is loaded to
   /// ensure there is no vertical scrolling or empty space. It will only perform
   /// the adjustment when the summernote editor is the loaded page.
@@ -45,6 +52,9 @@ class HtmlEditorOptions {
   /// it significantly improves the UX.
   final bool autoAdjustHeight;
 
+  /// Adds a character limit to the editor.
+  ///
+  /// NOTE: ONLY WORKS ON iOS AND WEB PLATFORMS!!
   final int? characterLimit;
 
   /// Set custom options for the summernote editor by using their syntax.
@@ -179,6 +189,7 @@ class HtmlToolbarOptions {
     this.toolbarItemHeight = 36,
     this.gridViewHorizontalSpacing = 5,
     this.gridViewVerticalSpacing = 5,
+    this.allowImagePicking = true,
   });
 
   /// Allows you to set the allowed extensions when a user inserts an audio file
@@ -267,8 +278,7 @@ class HtmlToolbarOptions {
   /// (true = continue with internal handler, false = do not use internal handler)
   ///
   /// If no interceptor is set, the plugin uses the internal handler.
-  final FutureOr<bool> Function(ButtonType, bool?, Function?)?
-      onButtonPressed;
+  final FutureOr<bool> Function(ButtonType, bool?, Function?)? onButtonPressed;
 
   /// Allows you to intercept any dropdown changes. The function passes the
   /// DropdownType enum, which tells you which dropdown was changed,
@@ -394,6 +404,10 @@ class HtmlToolbarOptions {
   final Color? buttonSelectedBorderColor;
   final BorderRadius? buttonBorderRadius;
   final double? buttonBorderWidth;
+
+  /// Allow the user to choose an image from their device when image selection
+  /// is enabled. Inserting images via URL will still be possible if this is false.
+  final bool allowImagePicking;
 }
 
 /// Other options such as the height of the widget and the decoration surrounding it

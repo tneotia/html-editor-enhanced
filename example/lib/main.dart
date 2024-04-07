@@ -1,7 +1,7 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:file_picker/file_picker.dart';
 
 void main() => runApp(HtmlEditorExampleApp());
 
@@ -71,14 +71,14 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                 htmlEditorOptions: HtmlEditorOptions(
                   hint: 'Your text here...',
                   shouldEnsureVisible: true,
-                  initialText: '''<span class="upbase-mention" data-id=\"DCgLhLJ637ZVtua\" data-label=\"Barry Allen\">@Barry Allen</span>'''
+                  initialText: '''\u003cp\u003eGuests sẽ bị chặn quyền truy cập vào một số tính năng.\u003c/p\u003e\u003cp\u003e\u003ca target=\"_blank\" rel=\"noopener noreferrer nofollow\" href=\"https://help.upbase.io/article/22-working-with-guests-in-a-list\"\u003ehttps://help.upbase.io/article/22-working-with-guests-in-a-list\u003c/a\u003e\u003c/p\u003e\u003cp\u003eCụ thể:\u003c/p\u003e\u003cul data-type=\"taskList\"\u003e\u003cli data-checked=\"false\" data-type=\"taskItem\"\u003e\u003clabel\u003e\u003cinput type=\"checkbox\"\u003e\u003cspan\u003e\u003c/span\u003e\u003c/label\u003e\u003cdiv\u003e\u003cp\u003eẨn menu My tasks, Schedule.\u003c/p\u003e\u003c/div\u003e\u003c/li\u003e\u003cli data-checked=\"false\" data-type=\"taskItem\"\u003e\u003clabel\u003e\u003cinput type=\"checkbox\"\u003e\u003cspan\u003e\u003c/span\u003e\u003c/label\u003e\u003cdiv\u003e\u003cp\u003eẨn nút màu xanh Add Folder và List.\u003c/p\u003e\u003c/div\u003e\u003c/li\u003e\u003cli data-checked=\"false\" data-type=\"taskItem\"\u003e\u003clabel\u003e\u003cinput type=\"checkbox\"\u003e\u003cspan\u003e\u003c/span\u003e\u003c/label\u003e\u003cdiv\u003e\u003cp\u003eẨn nút \"+\" bên phải tên Folder.\u003c/p\u003e\u003c/div\u003e\u003c/li\u003e\u003cli data-checked=\"false\" data-type=\"taskItem\"\u003e\u003clabel\u003e\u003cinput type=\"checkbox\"\u003e\u003cspan\u003e\u003c/span\u003e\u003c/label\u003e\u003cdiv\u003e\u003cp\u003eẨn menu khi long-press vào tên list.\u003c/p\u003e\u003c/div\u003e\u003c/li\u003e\u003c/ul\u003e\u003cp\u003e\u003c/p\u003e\u003cimg src=\"https://d36vdic3y07eu2.cloudfront.net/file/1676882544818774258/image.png\"\u003e\u003cp\u003e\u003c/p\u003e\u003cp\u003e\u003c/p\u003e\u003cp\u003e\u003c/p\u003e\u003ch3\u003eTrang Chat\u003c/h3\u003e\u003cul data-type=\"taskList\"\u003e\u003cli data-checked=\"false\" data-type=\"taskItem\"\u003e\u003clabel\u003e\u003cinput type=\"checkbox\"\u003e\u003cspan\u003e\u003c/span\u003e\u003c/label\u003e\u003cdiv\u003e\u003cp\u003eẨn section \"Direct messages\"\u003c/p\u003e\u003c/div\u003e\u003c/li\u003e\u003cli data-checked=\"false\" data-type=\"taskItem\"\u003e\u003clabel\u003e\u003cinput type=\"checkbox\"\u003e\u003cspan\u003e\u003c/span\u003e\u003c/label\u003e\u003cdiv\u003e\u003cp\u003eẨn nút màu xanh để browser channels.\u003c/p\u003e\u003c/div\u003e\u003c/li\u003e\u003c/ul\u003e\u003cp\u003e\u003c/p\u003e\u003cimg src=\"https://d36vdic3y07eu2.cloudfront.net/file/1676882813642608199/image.png\"\u003e\u003cp\u003e\u003c/p\u003e\u003cp\u003e\u003c/p\u003e\u003cp\u003e\u003c/p\u003e\u003ch3\u003eTrang tasks trong list\u003c/h3\u003e\u003cul data-type=\"taskList\"\u003e\u003cli data-checked=\"false\" data-type=\"taskItem\"\u003e\u003clabel\u003e\u003cinput type=\"checkbox\"\u003e\u003cspan\u003e\u003c/span\u003e\u003c/label\u003e\u003cdiv\u003e\u003cp\u003eẨn 2 menu ba chấm\u003c/p\u003e\u003c/div\u003e\u003c/li\u003e\u003c/ul\u003e\u003cp\u003e\u003c/p\u003e\u003cimg src=\"https://d36vdic3y07eu2.cloudfront.net/file/1676882900941886413/image.png\"\u003e\u003cp\u003e\u003c/p\u003e\u003cul data-type=\"taskList\"\u003e\u003cli data-checked=\"false\" data-type=\"taskItem\"\u003e\u003clabel\u003e\u003cinput type=\"checkbox\"\u003e\u003cspan\u003e\u003c/span\u003e\u003c/label\u003e\u003cdiv\u003e\u003cp\u003eẨn menu Delete đối với những item task, doc, file, message không phải do chính guest đó tạo. Guest không có quyền xóa item được tạo bởi người khác.\u003c/p\u003e\u003c/div\u003e\u003c/li\u003e\u003c/ul\u003e\u003cp\u003e\u003c/p\u003e'''
                   //initialText: "<p>text content initial, if any</p>",
                 ),
                 htmlToolbarOptions: HtmlToolbarOptions(
                   toolbarPosition: ToolbarPosition.aboveEditor, //by default
                   toolbarType: ToolbarType.nativeScrollable, //by default
-                  onButtonPressed: (ButtonType type, bool? status,
-                      Function? updateStatus) {
+                  onButtonPressed:
+                      (ButtonType type, bool? status, Function? updateStatus) {
                     print(
                         "button '${describeEnum(type)}' pressed, the current selected status is $status");
                     return true;
@@ -207,7 +207,8 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
-                          backgroundColor: Theme.of(context).colorScheme.secondary),
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary),
                       onPressed: () async {
                         var txt = await controller.getText();
                         if (txt.contains('src=\"data:')) {
@@ -228,7 +229,8 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
-                          backgroundColor: Theme.of(context).colorScheme.secondary),
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary),
                       onPressed: () {
                         controller.redo();
                       },
@@ -263,7 +265,8 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
-                          backgroundColor: Theme.of(context).colorScheme.secondary),
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary),
                       onPressed: () async {
                         controller.enable();
                       },
@@ -283,7 +286,8 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                   children: <Widget>[
                     TextButton(
                       style: TextButton.styleFrom(
-                          backgroundColor: Theme.of(context).colorScheme.secondary),
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary),
                       onPressed: () {
                         controller.insertText('Google');
                       },
@@ -295,7 +299,8 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
-                          backgroundColor: Theme.of(context).colorScheme.secondary),
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary),
                       onPressed: () {
                         controller.insertHtml(
                             '''<p style="color: blue">Google in blue</p>''');
@@ -313,7 +318,8 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                   children: <Widget>[
                     TextButton(
                       style: TextButton.styleFrom(
-                          backgroundColor: Theme.of(context).colorScheme.secondary),
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary),
                       onPressed: () async {
                         controller.insertLink(
                             'Google linked', 'https://google.com', true);
@@ -328,7 +334,8 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
-                          backgroundColor: Theme.of(context).colorScheme.secondary),
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary),
                       onPressed: () {
                         controller.insertNetworkImage(
                             'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png',
@@ -376,7 +383,8 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
-                          backgroundColor: Theme.of(context).colorScheme.secondary),
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary),
                       onPressed: () async {
                         controller.addNotification(
                             'Success notification', NotificationType.success);
@@ -391,7 +399,8 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
-                          backgroundColor: Theme.of(context).colorScheme.secondary),
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary),
                       onPressed: () {
                         controller.addNotification(
                             'Danger notification', NotificationType.danger);
@@ -425,7 +434,8 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
-                          backgroundColor: Theme.of(context).colorScheme.secondary),
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary),
                       onPressed: () async {
                         controller.removeNotification();
                       },
