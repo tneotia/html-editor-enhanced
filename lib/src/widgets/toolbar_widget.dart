@@ -167,12 +167,10 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
     //check the font name if it matches one of the predetermined fonts and update the toolbar
     if ([
       'Arial',
-      'Bodoni',
       'Calibri',
       'Courier New',
       'Georgia',
       'Helvetica',
-      'Roboto',
       'sans-serif',
       'Times New Roman',
     ].contains(fontName)) {
