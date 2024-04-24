@@ -45,10 +45,10 @@ packages:
     dependency: "direct main"
     description:
       name: cupertino_icons
-      sha256: "1989d917fbe8e6b39806207df5a3fdd3d816cbd090fac2ce26fb45e9a71476e5"
+      sha256: e35129dc44c9118cee2a5603506d823bab99c68393879edb440e0090d07586be
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.4"
+    version: "1.0.5"
   fake_async:
     dependency: transitive
     description:
@@ -77,10 +77,10 @@ packages:
     dependency: transitive
     description:
       name: flex_color_picker
-      sha256: b5c6a51554e8adef6fb4239786b42af30202941d50625649afa75fc98b26bb70
+      sha256: "40c1cbf8426a05c2b418ecf6c0fce386429fd7f9d238abbb2182985e8e6c5596"
       url: "https://pub.dev"
     source: hosted
-    version: "2.6.1"
+    version: "3.0.2"
   flex_seed_scheme:
     dependency: transitive
     description:
@@ -98,18 +98,34 @@ packages:
     dependency: transitive
     description:
       name: flutter_inappwebview
-      sha256: dcbaeeac2e47d5c4649a456b009a2fe230f9c35e33c3124ca16f868b4c789a2e
+      sha256: f73505c792cf083d5566e1a94002311be497d984b5607f25be36d685cf6361cf
       url: "https://pub.dev"
     source: hosted
-    version: "5.4.3+7"
+    version: "5.7.2+3"
   flutter_keyboard_visibility:
     dependency: transitive
     description:
       name: flutter_keyboard_visibility
-      sha256: "5c5c2bf049e0f8b61c6bb6c317e3bf6142d238ab6711841f829e7432c568cc00"
+      sha256: "86b71bbaffa38e885f5c21b1182408b9be6951fd125432cf6652c636254cef2d"
       url: "https://pub.dev"
     source: hosted
-    version: "5.2.0"
+    version: "5.4.0"
+  flutter_keyboard_visibility_linux:
+    dependency: transitive
+    description:
+      name: flutter_keyboard_visibility_linux
+      sha256: "6fba7cd9bb033b6ddd8c2beb4c99ad02d728f1e6e6d9b9446667398b2ac39f08"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
+  flutter_keyboard_visibility_macos:
+    dependency: transitive
+    description:
+      name: flutter_keyboard_visibility_macos
+      sha256: c5c49b16fff453dfdafdc16f26bdd8fb8d55812a1d50b0ce25fc8d9f2e53d086
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   flutter_keyboard_visibility_platform_interface:
     dependency: transitive
     description:
@@ -126,6 +142,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
+  flutter_keyboard_visibility_windows:
+    dependency: transitive
+    description:
+      name: flutter_keyboard_visibility_windows
+      sha256: fc4b0f0b6be9b93ae527f3d527fb56ee2d918cd88bbca438c478af7bcfd0ef73
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -150,7 +174,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "2.5.0"
+    version: "2.5.1"
   infinite_listview:
     dependency: transitive
     description:
@@ -243,10 +267,10 @@ packages:
     dependency: transitive
     description:
       name: pointer_interceptor
-      sha256: eb58f5b0ed416067735c49b3187f9c5efe96ae85f628f3f77e7fb02db92a1805
+      sha256: fee6ba42b910637465bc0d367ba27066c6eccfbc3bc0ceb14831915acc600db0
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.3+2"
+    version: "0.9.3+3"
   sky_engine:
     dependency: transitive
     description: flutter
