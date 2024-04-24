@@ -657,12 +657,6 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                             style: TextStyle(fontFamily: 'Arial'))),
                   ),
                   CustomDropdownMenuItem(
-                    value: 'Bodoni',
-                    child: PointerInterceptor(
-                        child: Text('Bodoni',
-                            style: TextStyle(fontFamily: 'Bodoni'))),
-                  ),
-                  CustomDropdownMenuItem(
                     value: 'Calibri',
                     child: PointerInterceptor(
                         child: Text('Calibri',
@@ -685,12 +679,6 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                     child: PointerInterceptor(
                         child: Text('Helvetica',
                             style: TextStyle(fontFamily: 'Helvetica'))),
-                  ),
-                  CustomDropdownMenuItem(
-                    value: 'Roboto',
-                    child: PointerInterceptor(
-                        child: Text('Roboto',
-                            style: TextStyle(fontFamily: 'Roboto'))),
                   ),
                   CustomDropdownMenuItem(
                     value: 'sans-serif',
