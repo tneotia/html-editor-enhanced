@@ -25,7 +25,7 @@
 <div id="summernote-2"></div>
 <!--headString-->
 <!--minor styling to improve editor design-->
-<div id="dhEditorTextHighlights" style="display: none;">
+<div id="dhEditorTextHighlights">
     <!--{{ editorHighlights }}-->
 
     <span ng-repeat="(index, highlight) in parsedEditorHighlights" ng-if="highlight.width != '1px'" style="
@@ -94,9 +94,9 @@
 
 </style>
 <!--angular js-->
-<!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>-->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
 <!--angular js-->
-<!--<script>
+<script>
 
     Array.prototype.max = function() {
         return Math.max.apply(null, this);
@@ -337,7 +337,7 @@
 
 
 
-</script>-->
+</script>
 <!--summernoteScripts-->
 </body>
 </html>
