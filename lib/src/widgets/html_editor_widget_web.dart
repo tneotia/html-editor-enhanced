@@ -582,6 +582,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   String getHighlightingScripts() {
       var scripts = '';
       var id = 0;
+      return "";
       widget.controller.highLights = widget.controller.highLights?.map((e) => TextHighLight(text: e.text,lineNo: e.lineNo,css: e.css,id: '${id++}',onTap: e.onTap, data: e.data)).toList();
       scripts += '''
        window.setDHHighlights = parent.setDHHighlights = (data) => {
