@@ -5,7 +5,7 @@ version: 2.6.0
 homepage: https://github.com/tneotia/html-editor-enhanced
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=3.0.0 <4.0.0'
   flutter: ">=3.0.0"
 
 dependencies:
@@ -29,7 +29,7 @@ dependencies:
   # pinned to 0.9.1 because of issues with CanvasKit in the latest versions
   pointer_interceptor: ^0.10.1+1
   # plugin to help maintain effective Dart standards
-  pedantic: ^1.11.1
+  lints: ^4.0.0
   # plugin for @internal annotation
   meta: '>=1.0.0 <2.0.0'
 
