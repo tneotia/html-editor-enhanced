@@ -6,6 +6,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:html_editor_enhanced/utils/flat_icon1.dart';
+import 'package:html_editor_enhanced/utils/flat_icon_new_icons.dart';
+import 'package:html_editor_enhanced/utils/flutter_icon.dart';
 import 'package:html_editor_enhanced/utils/utils.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
@@ -252,18 +255,18 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       for (var t in widget.htmlToolbarOptions.defaultToolbarButtons) {
         if (t is FontButtons) {
           for (var i = 0; i < _fontSelected.length; i++) {
-            if (t.getIcons1()[i].icon == Icons.format_bold) {
+            if (t.getIcons1()[i].icon == FlatIcon1.bold) {
               _fontSelected[i] = fontList[0] ?? false;
             }
-            if (t.getIcons1()[i].icon == Icons.format_italic) {
+            if (t.getIcons1()[i].icon == FlatIcon1.italic) {
               _fontSelected[i] = fontList[1] ?? false;
             }
-            if (t.getIcons1()[i].icon == Icons.format_underline) {
+            if (t.getIcons1()[i].icon == FlutterIcon.underline) {
               _fontSelected[i] = fontList[2] ?? false;
             }
           }
           for (var i = 0; i < _miscFontSelected.length; i++) {
-            if (t.getIcons2()[i].icon == Icons.format_strikethrough) {
+            if (t.getIcons2()[i].icon == FlatIcon1.strikethrough) {
               _miscFontSelected[i] = miscFontList[0] ?? false;
             }
             if (t.getIcons2()[i].icon == Icons.superscript) {
@@ -276,26 +279,26 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         }
         if (t is ListButtons) {
           for (var i = 0; i < _listSelected.length; i++) {
-            if (t.getIcons()[i].icon == Icons.format_list_bulleted) {
+            if (t.getIcons()[i].icon == FlatIcon1.bullet_list) {
               _listSelected[i] = paragraphList[0] ?? false;
             }
-            if (t.getIcons()[i].icon == Icons.format_list_numbered) {
+            if (t.getIcons()[i].icon == FlatIcon1.number) {
               _listSelected[i] = paragraphList[1] ?? false;
             }
           }
         }
         if (t is ParagraphButtons) {
           for (var i = 0; i < _alignSelected.length; i++) {
-            if (t.getIcons1()[i].icon == Icons.format_align_left) {
+            if (t.getIcons1()[i].icon == FlatIcon1.align_left) {
               _alignSelected[i] = alignList[0] ?? false;
             }
-            if (t.getIcons1()[i].icon == Icons.format_align_center) {
+            if (t.getIcons1()[i].icon == FlatIcon1.align_center) {
               _alignSelected[i] = alignList[1] ?? false;
             }
-            if (t.getIcons1()[i].icon == Icons.format_align_right) {
+            if (t.getIcons1()[i].icon == FlatIcon1.align_right) {
               _alignSelected[i] = alignList[2] ?? false;
             }
-            if (t.getIcons1()[i].icon == Icons.format_align_justify) {
+            if (t.getIcons1()[i].icon == FlatIcon1.justification) {
               _alignSelected[i] = alignList[3] ?? false;
             }
           }
@@ -508,73 +511,73 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 CustomDropdownMenuItem(
                     value: 'p',
                     child: PointerInterceptor(child: Text('Normal'))),
-                CustomDropdownMenuItem(
-                    value: 'blockquote',
-                    child: PointerInterceptor(
-                      child: Container(
-                          decoration: BoxDecoration(
-                              border: Border(
-                                  left: BorderSide(
-                                      color: Colors.grey, width: 3.0))),
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Text('Quote',
-                              style: TextStyle(
-                                  fontFamily: 'times', color: Colors.grey))),
-                    )),
-                CustomDropdownMenuItem(
-                    value: 'pre',
-                    child: PointerInterceptor(
-                      child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Colors.grey),
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Text('Code',
-                              style: TextStyle(
-                                  fontFamily: 'courier', color: Colors.white))),
-                    )),
+                // CustomDropdownMenuItem(
+                //     value: 'blockquote',
+                //     child: PointerInterceptor(
+                //       child: Container(
+                //           decoration: BoxDecoration(
+                //               border: Border(
+                //                   left: BorderSide(
+                //                       color: Colors.grey, width: 3.0))),
+                //           padding: EdgeInsets.symmetric(horizontal: 10.0),
+                //           child: Text('Quote',
+                //               style: TextStyle(
+                //                   fontFamily: 'times', color: Colors.grey))),
+                //     )),
+                // CustomDropdownMenuItem(
+                //     value: 'pre',
+                //     child: PointerInterceptor(
+                //       child: Container(
+                //           decoration: BoxDecoration(
+                //               borderRadius: BorderRadius.circular(5),
+                //               color: Colors.grey),
+                //           padding: EdgeInsets.symmetric(horizontal: 10.0),
+                //           child: Text('Code',
+                //               style: TextStyle(
+                //                   fontFamily: 'courier', color: Colors.white))),
+                //     )),
                 CustomDropdownMenuItem(
                   value: 'h1',
                   child: PointerInterceptor(
-                      child: Text('Header 1',
+                      child: Text('H1',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 32))),
+                              fontWeight: FontWeight.bold, fontSize: 28,color: Color(0xff6A6A6A),))),
                 ),
                 CustomDropdownMenuItem(
                   value: 'h2',
                   child: PointerInterceptor(
-                      child: Text('Header 2',
+                      child: Text('H2',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 24))),
+                              fontWeight: FontWeight.bold, fontSize: 24,color: Color(0xff6A6A6A),))),
                 ),
                 CustomDropdownMenuItem(
                   value: 'h3',
                   child: PointerInterceptor(
-                      child: Text('Header 3',
+                      child: Text('H3',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18))),
+                              fontWeight: FontWeight.bold, fontSize: 18,color: Color(0xff6A6A6A),))),
                 ),
-                CustomDropdownMenuItem(
-                  value: 'h4',
-                  child: PointerInterceptor(
-                      child: Text('Header 4',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16))),
-                ),
-                CustomDropdownMenuItem(
-                  value: 'h5',
-                  child: PointerInterceptor(
-                      child: Text('Header 5',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 13))),
-                ),
-                CustomDropdownMenuItem(
-                  value: 'h6',
-                  child: PointerInterceptor(
-                      child: Text('Header 6',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 11))),
-                ),
+                // CustomDropdownMenuItem(
+                //   value: 'h4',
+                //   child: PointerInterceptor(
+                //       child: Text('Header 4',
+                //           style: TextStyle(
+                //               fontWeight: FontWeight.bold, fontSize: 16))),
+                // ),
+                // CustomDropdownMenuItem(
+                //   value: 'h5',
+                //   child: PointerInterceptor(
+                //       child: Text('Header 5',
+                //           style: TextStyle(
+                //               fontWeight: FontWeight.bold, fontSize: 13))),
+                // ),
+                // CustomDropdownMenuItem(
+                //   value: 'h6',
+                //   child: PointerInterceptor(
+                //       child: Text('Header 6',
+                //           style: TextStyle(
+                //               fontWeight: FontWeight.bold, fontSize: 11))),
+                // ),
               ],
               value: _fontSelectedItem,
               onChanged: (String? changed) async {
@@ -916,7 +919,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 });
               }
 
-              if (t.getIcons1()[index].icon == Icons.format_bold) {
+              if (t.getIcons1()[index].icon == FlatIcon1.bold) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.bold, _fontSelected[index],
                             updateStatus) ??
@@ -926,7 +929,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   updateStatus();
                 }
               }
-              if (t.getIcons1()[index].icon == Icons.format_italic) {
+              if (t.getIcons1()[index].icon == FlatIcon1.italic) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.italic, _fontSelected[index],
                             updateStatus) ??
@@ -936,7 +939,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   updateStatus();
                 }
               }
-              if (t.getIcons1()[index].icon == Icons.format_underline) {
+              if (t.getIcons1()[index].icon == FlutterIcon.underline) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.underline, _fontSelected[index],
                             updateStatus) ??
@@ -986,7 +989,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 });
               }
 
-              if (t.getIcons2()[index].icon == Icons.format_strikethrough) {
+              if (t.getIcons2()[index].icon == FlatIcon1.strikethrough) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.strikethrough,
                             _miscFontSelected[index], updateStatus) ??
@@ -1120,7 +1123,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                               newColor = color;
                             },
                             title: Text('Choose a Color',
-                                style: Theme.of(context).textTheme.headline6),
+                                style: Theme.of(context).textTheme.headlineSmall),
                             width: 40,
                             height: 40,
                             spacing: 0,
@@ -1246,7 +1249,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 });
               }
 
-              if (t.getIcons()[index].icon == Icons.format_list_bulleted) {
+              if (t.getIcons()[index].icon == FlatIcon1.bullet_list) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.ul, _listSelected[index],
                             updateStatus) ??
@@ -1256,7 +1259,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   updateStatus();
                 }
               }
-              if (t.getIcons()[index].icon == Icons.format_list_numbered) {
+              if (t.getIcons()[index].icon == FlatIcon1.number) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.ol, _listSelected[index],
                             updateStatus) ??
@@ -1406,7 +1409,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 });
               }
 
-              if (t.getIcons1()[index].icon == Icons.format_align_left) {
+              if (t.getIcons1()[index].icon == FlatIcon1.align_left) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.alignLeft, _alignSelected[index],
                             updateStatus) ??
@@ -1416,7 +1419,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   updateStatus();
                 }
               }
-              if (t.getIcons1()[index].icon == Icons.format_align_center) {
+              if (t.getIcons1()[index].icon == FlatIcon1.align_center) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.alignCenter, _alignSelected[index],
                             updateStatus) ??
@@ -1426,7 +1429,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   updateStatus();
                 }
               }
-              if (t.getIcons1()[index].icon == Icons.format_align_right) {
+              if (t.getIcons1()[index].icon == FlatIcon1.align_right) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.alignRight, _alignSelected[index],
                             updateStatus) ??
@@ -1436,7 +1439,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   updateStatus();
                 }
               }
-              if (t.getIcons1()[index].icon == Icons.format_align_justify) {
+              if (t.getIcons1()[index].icon == FlatIcon1.justification) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.alignJustify, _alignSelected[index],
                             updateStatus) ??
@@ -1779,7 +1782,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           renderBorder: widget.htmlToolbarOptions.renderBorder,
           textStyle: widget.htmlToolbarOptions.textStyle,
           onPressed: (int index) async {
-            if (t.getIcons()[index].icon == Icons.link) {
+            if (t.getIcons()[index].icon == FlatIcon.link) {
               var proceed = await widget.htmlToolbarOptions.onButtonPressed
                       ?.call(ButtonType.link, null, null) ??
                   true;
@@ -1872,7 +1875,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .textTheme
-                                                      .bodyText1
+                                                      .bodyMedium
                                                       ?.color)),
                                         ),
                                       ],
@@ -1986,7 +1989,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                                 style: TextStyle(
                                                     color: Theme.of(context)
                                                         .textTheme
-                                                        .bodyText1
+                                                        .bodyMedium
                                                         ?.color)),
                                           ),
                                           suffixIcon: result != null
@@ -2146,7 +2149,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .textTheme
-                                                      .bodyText1
+                                                      .bodyMedium
                                                       ?.color)),
                                         ),
                                         suffixIcon: result != null
@@ -2298,7 +2301,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .textTheme
-                                                      .bodyText1
+                                                      .bodyMedium
                                                       ?.color)),
                                         ),
                                         suffixIcon: result != null
@@ -2450,7 +2453,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .textTheme
-                                                      .bodyText1
+                                                      .bodyMedium
                                                       ?.color)),
                                         ),
                                         suffixIcon: result != null
@@ -2653,7 +2656,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   updateStatus();
                 }
               }
-              if (t.getIcons1()[index].icon == Icons.undo) {
+              if (t.getIcons1()[index].icon == FlatIcon1.undo) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.undo, null, null) ??
                     true;
@@ -2661,7 +2664,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   widget.controller.undo();
                 }
               }
-              if (t.getIcons1()[index].icon == Icons.redo) {
+              if (t.getIcons1()[index].icon == FlatIcon1.redo) {
                 var proceed = await widget.htmlToolbarOptions.onButtonPressed
                         ?.call(ButtonType.redo, null, null) ??
                     true;

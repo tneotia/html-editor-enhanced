@@ -1,23 +1,23 @@
 name: html_editor_enhanced
 description: HTML rich text editor for Android, iOS, and Web, using the Summernote library.
   Enhanced with highly customizable widget-based controls, bug fixes, callbacks, dark mode, and more.
-version: 2.5.1
+version: 2.5.3
 homepage: https://github.com/tneotia/html-editor-enhanced
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
-  flutter: ">=3.0.0"
+  sdk: ">=3.0.6 <4.0.0"
+  flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
   # webview plugin
-  flutter_inappwebview: ^5.7.2+3
+  flutter_inappwebview: ^6.0.0
   # plugin to get webview's visible fraction for keyboard height adjustment
   visibility_detector: ^0.3.3
   # plugin to get when the keyboard is hidden via back (Android)
   # or "done" (iOS) to reset the editor's height
-  flutter_keyboard_visibility: ^5.4.0
+  flutter_keyboard_visibility: ^6.0.0
   # plugin to show a color picker for foreground/highlight color
   flex_color_picker: ^3.0.2
   # plugin to get files from filesystem
@@ -59,8 +59,7 @@ flutter:
   # adding or updating assets for this project.
 
   # To add assets to your plugin package, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+#    assets:
   #   - images/a_dot_ham.jpeg
   #
   # For details regarding assets in packages, see
@@ -74,12 +73,16 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
+  fonts:
+    - family: FlatIconNew
+      fonts:
+        - asset: packages/html_editor_enhanced/assets/font/FlatIconNew.ttf
+    - family: FlatIconNew1
+      fonts:
+        - asset: packages/html_editor_enhanced/assets/font/FlatIcon1.ttf
+    - family: FlutterIcon1
+      fonts:
+        - asset: packages/html_editor_enhanced/assets/font/FlutterIcon.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

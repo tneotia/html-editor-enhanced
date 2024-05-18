@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:html_editor_enhanced/utils/flat_icon1.dart';
+import 'package:html_editor_enhanced/utils/flat_icon_new_icons.dart';
+import 'package:html_editor_enhanced/utils/flutter_icon.dart';
 
 /// Abstract class that all the toolbar classes extend
 abstract class Toolbar {
   const Toolbar();
 }
+
+const sizeIcon = 24.0;
+const colorIcon = Color(0xff6A6A6A);
 
 /// Style group
 class StyleButtons extends Toolbar {
@@ -49,16 +55,16 @@ class FontButtons extends Toolbar {
 
   List<Icon> getIcons1() {
     var icons = <Icon>[];
-    if (bold) icons.add(Icon(Icons.format_bold));
-    if (italic) icons.add(Icon(Icons.format_italic));
-    if (underline) icons.add(Icon(Icons.format_underline));
+    if (bold) icons.add(Icon(FlatIcon1.bold,color: colorIcon,size: sizeIcon,));
+    if (italic) icons.add(Icon(FlatIcon1.italic,color: colorIcon,size: sizeIcon,));
+    if (underline) icons.add(Icon(FlutterIcon.underline,color: colorIcon,size: sizeIcon,));
     if (clearAll) icons.add(Icon(Icons.format_clear));
     return icons;
   }
 
   List<Icon> getIcons2() {
     var icons = <Icon>[];
-    if (strikethrough) icons.add(Icon(Icons.format_strikethrough));
+    if (strikethrough) icons.add(Icon(FlatIcon1.strikethrough,color: colorIcon,size: sizeIcon,));
     if (superscript) icons.add(Icon(Icons.superscript));
     if (subscript) icons.add(Icon(Icons.subscript));
     return icons;
@@ -97,8 +103,8 @@ class ListButtons extends Toolbar {
 
   List<Icon> getIcons() {
     var icons = <Icon>[];
-    if (ul) icons.add(Icon(Icons.format_list_bulleted));
-    if (ol) icons.add(Icon(Icons.format_list_numbered));
+    if (ul) icons.add(Icon(FlatIcon1.bullet_list,color: colorIcon,size: sizeIcon,));
+    if (ol) icons.add(Icon(FlatIcon1.number,color: colorIcon,size: sizeIcon,));
     return icons;
   }
 }
@@ -129,10 +135,10 @@ class ParagraphButtons extends Toolbar {
 
   List<Icon> getIcons1() {
     var icons = <Icon>[];
-    if (alignLeft) icons.add(Icon(Icons.format_align_left));
-    if (alignCenter) icons.add(Icon(Icons.format_align_center));
-    if (alignRight) icons.add(Icon(Icons.format_align_right));
-    if (alignJustify) icons.add(Icon(Icons.format_align_justify));
+    if (alignLeft) icons.add(Icon(FlatIcon1.align_left,color: colorIcon,size: sizeIcon,));
+    if (alignCenter) icons.add(Icon(FlatIcon1.align_center,color: colorIcon,size: sizeIcon,));
+    if (alignRight) icons.add(Icon(FlatIcon1.align_right,color: colorIcon,size: sizeIcon,));
+    if (alignJustify) icons.add(Icon(FlatIcon1.justification,color: colorIcon,size: 18,));
     return icons;
   }
 
@@ -166,7 +172,7 @@ class InsertButtons extends Toolbar {
 
   List<Icon> getIcons() {
     var icons = <Icon>[];
-    if (link) icons.add(Icon(Icons.link));
+    if (link) icons.add(Icon(FlatIcon.link,color: colorIcon,size: 18,));
     if (picture) icons.add(Icon(Icons.image_outlined));
     if (audio) icons.add(Icon(Icons.audiotrack_outlined));
     if (video) icons.add(Icon(Icons.videocam_outlined));
@@ -201,8 +207,8 @@ class OtherButtons extends Toolbar {
     var icons = <Icon>[];
     if (fullscreen) icons.add(Icon(Icons.fullscreen));
     if (codeview) icons.add(Icon(Icons.code));
-    if (undo) icons.add(Icon(Icons.undo));
-    if (redo) icons.add(Icon(Icons.redo));
+    if (undo) icons.add(Icon(FlatIcon1.undo,color: colorIcon,size: sizeIcon,));
+    if (redo) icons.add(Icon(FlatIcon1.redo,color: colorIcon,size: sizeIcon,));
     if (help) icons.add(Icon(Icons.help_outline));
     return icons;
   }
