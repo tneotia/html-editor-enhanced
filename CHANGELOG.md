@@ -1,3 +1,8 @@
+## [2.5.1] = 2024-05-18
+* Fix build issues on Flutter 3.22.0+ due to deprecations
+* Update dependencies
+* Fix bad state error when checking height of editor
+
 ## [2.5.1] = 2023-01-25
 * Fix build issues on Flutter 3.4.0+ due to assets directory
 * Update dependencies
