@@ -180,8 +180,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                     print(message.message);
                   },
                   onWindowFocus: (controller) async {
-                    if (widget.htmlEditorOptions.shouldEnsureVisible &&
-                        Scrollable.of(context) != null) {
+                    if (widget.htmlEditorOptions.shouldEnsureVisible) {
                       await Scrollable.of(context)!.position.ensureVisible(
                             context.findRenderObject()!,
                           );
@@ -259,19 +258,20 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                               window.flutter_inappwebview.callHandler('totalChars', totalChars);
                           },
                       ''';
+                      var summernoteCleanerOptions = '';
                       if (widget.plugins.isNotEmpty) {
                         summernoteToolbar = summernoteToolbar + "['plugins', [";
-                        for (var p in widget.plugins) {
+                        for (var plugin in widget.plugins) {
                           summernoteToolbar = summernoteToolbar +
-                              (p.getToolbarString().isNotEmpty
-                                  ? "'${p.getToolbarString()}'"
+                              (plugin.getToolbarString().isNotEmpty
+                                  ? "'${plugin.getToolbarString()}'"
                                   : '') +
-                              (p == widget.plugins.last
+                              (plugin == widget.plugins.last
                                   ? ']]\n'
-                                  : p.getToolbarString().isNotEmpty
+                                  : plugin.getToolbarString().isNotEmpty
                                       ? ', '
                                       : '');
-                          if (p is SummernoteAtMention) {
+                          if (plugin is SummernoteAtMention) {
                             summernoteCallbacks = summernoteCallbacks +
                                 """
                               \nsummernoteAtMention: {
@@ -288,19 +288,60 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                             controller.addJavaScriptHandler(
                                 handlerName: 'getSuggestions',
                                 callback: (value) {
-                                  return p.getSuggestionsMobile!
+                                  return plugin.getSuggestionsMobile!
                                       .call(value.first.toString())
                                       .toString()
                                       .replaceAll('[', '')
                                       .replaceAll(']', '');
                                 });
-                            if (p.onSelect != null) {
+                            if (plugin.onSelect != null) {
                               controller.addJavaScriptHandler(
                                   handlerName: 'onSelectMention',
                                   callback: (value) {
-                                    p.onSelect!.call(value.first.toString());
+                                    plugin.onSelect!
+                                        .call(value.first.toString());
                                   });
                             }
+                          }
+
+                          if (plugin is SummernoteCleaner) {
+                            summernoteCallbacks = summernoteCallbacks +
+                                """
+                              \nsummernoteCleaner: {
+                                getSuggestions: async function(value) {
+                                  var result = await window.flutter_inappwebview.callHandler('getSuggestions', value);
+                                  var resultList = result.split(',');
+                                  return resultList;
+                                },
+                                onSelect: (value) => {
+                                  window.flutter_inappwebview.callHandler('onSelectMention', value);
+                                },
+                              },
+                            """;
+                            summernoteCleanerOptions = '''
+                              cleaner: {
+                                action: '${plugin.action}',
+                                keepTagContents: ${plugin.keepTagContents?.map((element) => '\'$element\'').toList()},
+                                badTags: ${plugin.badTags?.map((element) => '\'$element\'').toList()},
+                                badAttributes: ${plugin.badAttributes?.map((element) => '\'$element\'').toList()},
+                              },
+                            ''';
+                            // controller.addJavaScriptHandler(
+                            //     handlerName: 'getSuggestions',
+                            //     callback: (value) {
+                            //       return p.getSuggestionsMobile!
+                            //           .call(value.first.toString())
+                            //           .toString()
+                            //           .replaceAll('[', '')
+                            //           .replaceAll(']', '');
+                            //     });
+                            // if (p.onSelect != null) {
+                            //   controller.addJavaScriptHandler(
+                            //       handlerName: 'onSelectMention',
+                            //       callback: (value) {
+                            //         p.onSelect!.call(value.first.toString());
+                            //       });
+                            // }
                           }
                         }
                       }
@@ -374,17 +415,18 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                               tabsize: 2,
                               height: ${widget.otherOptions.height - (toolbarKey.currentContext?.size?.height ?? 0)},
                               toolbar: $summernoteToolbar
+                              $summernoteCleanerOptions
                               disableGrammar: false,
                               spellCheck: ${widget.htmlEditorOptions.spellCheck},
                               maximumFileSize: $maximumFileSize,
                               ${widget.htmlEditorOptions.customOptions}
                               $summernoteCallbacks
                           });
-                          
+
                           \$('#summernote-2').on('summernote.change', function(_, contents, \$editable) {
                             window.flutter_inappwebview.callHandler('onChangeContent', contents);
                           });
-                      
+
                           function onSelectionChange() {
                             let {anchorNode, anchorOffset, focusNode, focusOffset} = document.getSelection();
                             var isBold = false;
@@ -526,8 +568,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       controller.addJavaScriptHandler(
                           handlerName: 'onChangeContent',
                           callback: (contents) {
-                            if (widget.htmlEditorOptions.shouldEnsureVisible &&
-                                Scrollable.of(context) != null) {
+                            if (widget.htmlEditorOptions.shouldEnsureVisible) {
                               Scrollable.of(context)!.position.ensureVisible(
                                     context.findRenderObject()!,
                                   );

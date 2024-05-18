@@ -44,37 +44,37 @@ Note that the API shown in this README.md file shows only a part of the document
   - [Methods Table](#methods)
 
   - [Callbacks Table](#callbacks)
-  
+
   - [Getters](#getters)
-  
+
   - [Toolbar](#toolbar)
-  
+
   - [Plugins](#plugins)
-  
+
   - [`HtmlEditorOptions` Parameters](#htmleditoroptions-parameters)
-    
+
     - [`autoAdjustHeight`](#autoadjustheight)
-  
+
     - [`adjustHeightForKeyboard`](#adjustheightforkeyboard)
-  
+
     - [`filePath`](#filepath)
-  
+
     - [`shouldEnsureVisible`](#shouldensurevisible)
-    
+
     - [`webInitialScripts`](#webinitialscripts)
-    
+
   - [`HtmlToolbarOptions` Parameters](#htmltoolbaroptions-parameters)
-  
+
     - [`customToolbarButtons` and `customToolbarButtonsInsertionIndices`](#customtoolbarbuttons-and-customtoolbarbuttonsinsertionindices)
-    
+
     - [`linkInsertInterceptor`, `mediaLinkInsertInterceptor`, `otherFileLinkInsert`, `mediaUploadInterceptor`, and `onOtherFileUpload`](#linkinsertinterceptor-medialinkinsertinterceptor-otherfilelinkinsert-mediauploadinterceptor-and-onotherfileupload)
-    
+
     - [`onButtonPressed` and `onDropdownChanged`](#onbuttonpressed-and-ondropdownchanged)
-    
+
     - [`toolbarPosition: ToolbarPosition.custom`](#custom-toolbar-position-using-toolbarpositioncustom)
-    
+
   - [`HtmlEditorController` Parameters](#htmleditorcontroller-parameters)
-  
+
     - [`processInputHtml`, `processOutputHtml`, and `processNewLineAsBr`](#processinputhtml-processoutputhtml-and-processnewlineasbr)
 
 - [Examples](#examples)
@@ -86,7 +86,7 @@ Note that the API shown in this README.md file shows only a part of the document
 - [License](#license)
 
 - [Contribution Guide](#contribution-guide)
- 
+
 ## In what ways is this package "enhanced"?
 
 1. It has official support for Flutter Web, with nearly all mobile features supported. Keyboard shortcuts like Ctrl+B for bold work as well!
@@ -117,7 +117,7 @@ Add `html_editor_enhanced: ^2.5.0` as dependency to your pubspec.yaml.
 
 Make sure to declare internet support inside `AndroidManifest.xml`: `<uses-permission android:name="android.permission.INTERNET"/>`
 
-Additional setup is required on iOS to allow the user to pick files from storage. See [here](https://github.com/miguelpruivo/flutter_file_picker/wiki/Setup#--ios) for more details. 
+Additional setup is required on iOS to allow the user to pick files from storage. See [here](https://github.com/miguelpruivo/flutter_file_picker/wiki/Setup#--ios) for more details.
 
 For images, the package uses `FileType.image`, for video `FileType.video`, for audio `FileType.audio`, and for any other file `FileType.any`. You can just complete setup for the specific buttons you plan to enable in the editor.
 
@@ -138,7 +138,7 @@ HtmlEditorController controller = HtmlEditorController();
         htmlEditorOptions: HtmlEditorOptions(
           hint: "Your text here...",
           //initalText: "text content initial, if any",
-        ),   
+        ),
         otherOptions: OtherOptions(
           height: 400,
         ),
@@ -241,29 +241,29 @@ Parameter | Type | Default | Description
 
 Parameter | Type | Default
 ------------ | ------------- | -------------
-**dropdownElevation** | `int` | `8` 
-**dropdownIcon** | `Widget` | `null` 
+**dropdownElevation** | `int` | `8`
+**dropdownIcon** | `Widget` | `null`
 **dropdownIconColor** | `Color` | `null`
 **dropdownIconSize** | `double` | `24`
 **dropdownItemHeight** | `double` | `kMinInteractiveDimension` (`48`)
-**dropdownFocusColor** | `Color` | `null` 
-**dropdownBackgroundColor** | `Color` | `null` 
+**dropdownFocusColor** | `Color` | `null`
+**dropdownBackgroundColor** | `Color` | `null`
 **dropdownMenuDirection** | `DropdownMenuDirection` | `null`
-**dropdownMenuMaxHeight** | `double` | `null` 
+**dropdownMenuMaxHeight** | `double` | `null`
 **dropdownBoxDecoration** | `BoxDecoration` | `null`
 
 #### Styling Options - applies to buttons only
 
 Parameter | Type | Default
 ------------ | ------------- | -------------
-**buttonColor** | `Color` | `null` 
-**buttonSelectedColor** | `Color` | `null` 
+**buttonColor** | `Color` | `null`
+**buttonSelectedColor** | `Color` | `null`
 **buttonFillColor** | `Color` | `null`
 **buttonFocusColor** | `Color` | `null`
 **buttonHighlightColor** | `Color` | `null`
-**buttonHoverColor** | `Color` | `null` 
-**buttonSplashColor** | `Color` | `null` 
-**buttonBorderColor** | `Color` | `null` 
+**buttonHoverColor** | `Color` | `null`
+**buttonSplashColor** | `Color` | `null`
+**buttonBorderColor** | `Color` | `null`
 **buttonSelectedBorderColor** | `Color` | `null`
 **buttonBorderRadius** | `BorderRadius` | `null`
 **buttonBorderWidth** | `double` | `null`
@@ -308,7 +308,7 @@ Method | Argument(s) | Returned Value(s) | Description
 ### Callbacks
 
 Every callback is defined as a `Function(<parameters in some cases>)`. See the [documentation](https://pub.dev/documentation/html_editor_enhanced/latest/) for more specific details on each callback.
- 
+
 Callback | Parameter(s) | Description
 ------------ | ------------- | -------------
 **onBeforeCommand** | `String` | Called before certain commands are called (like undo and redo), passes the HTML in the editor before the command is called
@@ -395,6 +395,8 @@ Shows a dropdown of available mentions when the '@' character is typed into the 
 5. [Summernote File](https://github.com/mathieu-coingt/summernote-file) -
 Support picture files (jpg, png, gif, wvg, webp), audio files (mp3, ogg, oga), and video files (mp4, ogv, webm) in base64. Supported via the image/audio/video/other file buttons in the toolbar in `InsertButtons`.
 
+6. [Summernote Cleaner](https://github.com/DiemenDesign/summernote-cleaner) - Removes the unnecessary and possibly layout breaking Crud that gets added by MSWord, Open Office, and Libre Office Documents.
+
 This list is not final, more can be added. If there's a specific plugin you'd like to see support for, please file a feature request!
 
 No plugins are activated activated by default. They can be activated by modifying the toolbar items, see [above](#toolbar) for details.
@@ -425,6 +427,23 @@ Widget htmlEditor = HtmlEditor(
 );
 ```
 
+To activate Summernote Cleaner:
+
+```dart
+HtmlEditorController controller = HtmlEditorController();
+Widget htmlEditor = HtmlEditor(
+  controller: controller, //required
+  //other options
+  plugins: [
+    ...
+    SummernoteCleaner.byDefault(),
+    ...
+  ]
+);
+```
+
+
+
 ### `HtmlEditorOptions` parameters
 
 This section contains longer descriptions for select parameters in `HtmlEditorOptions`. For parameters not mentioned here, see the parameters table [above](#parameters---htmleditoroptions) for a short description. If you have further questions, please file an issue.
@@ -433,7 +452,7 @@ This section contains longer descriptions for select parameters in `HtmlEditorOp
 
 Default value: true
 
-This option parameter sets the height of the editor automatically by getting the value returned by the JS `document.body.scrollHeight` and the toolbar `GlobalKey` (`toolbarKey.currentContext?.size?.height`). 
+This option parameter sets the height of the editor automatically by getting the value returned by the JS `document.body.scrollHeight` and the toolbar `GlobalKey` (`toolbarKey.currentContext?.size?.height`).
 
 This is useful because the toolbar could have either 1 - 5 rows depending on the widget's configuration, screen size, orientation, etc. There is no reliable way to tell how large the toolbar is going to be until after `build()` is executed, and thus simply hardcoding the height of the webview can induce either empty space at the bottom or a scrollable webview. By using the JS and a `GlobalKey` on the toolbar widget, the editor can get the exact height and update the widget to reflect that.
 
@@ -445,7 +464,7 @@ If this does not help your use case feel free to disable it, but the recommended
 
 Default value: true, only considered on mobile
 
-This option parameter changes the height of the editor if the keyboard is active and it overlaps with the editor. 
+This option parameter changes the height of the editor if the keyboard is active and it overlaps with the editor.
 
 This is useful because webviews do not shift their view when the keyboard is active on Flutter at the moment. This means that if your editor spans the height of the page, if the user types a long text they might not be able to see what they are typing because it is obscured by the keyboard.
 
@@ -469,7 +488,7 @@ On Web, you should include the following:
 
 2. `<!--headString-->` inside `<body>` and below your summernote `<div>` - this allows the JS and CSS files for any enabled plugins to be loaded
 
-3. `<!--summernoteScripts-->` inside `<body>` and below your summernote `<div>` - REQUIRED - this allows Dart and JS to communicate with each other. If you don't include this, then methods/callbacks will do nothing. 
+3. `<!--summernoteScripts-->` inside `<body>` and below your summernote `<div>` - REQUIRED - this allows Dart and JS to communicate with each other. If you don't include this, then methods/callbacks will do nothing.
 
 Notes:
 
@@ -492,11 +511,11 @@ See the example HTML file [below](#example-html-for-filepath) for an actual exam
 
 Default value: false
 
-This option parameter will scroll the editor container into view whenever the webview is focused or text is typed into the editor. 
+This option parameter will scroll the editor container into view whenever the webview is focused or text is typed into the editor.
 
 You can only use this parameter if your `HtmlEditor` is inside a `Scrollview`, otherwise it does nothing.
 
-This is useful in cases where the page is a `SingleChildScrollView` or something similar with multiple widgets (eg a form). When the user is going through the different fields, it will pop the webview into view, just like a `TextField` would scroll into in view if text is being typed inside it. 
+This is useful in cases where the page is a `SingleChildScrollView` or something similar with multiple widgets (eg a form). When the user is going through the different fields, it will pop the webview into view, just like a `TextField` would scroll into in view if text is being typed inside it.
 
 See [below](#example-for-shouldensurevisible) for an example with a good way to use this.
 
@@ -554,7 +573,7 @@ Widget htmlEditor = HtmlEditor(
 
 In the above example, we have defined two buttons to be inserted at indices 2 and 5. These buttons will *not* be inserted before `FontSettingButtons` and before `ListButtons`, respectively! Each default button group may have a few different sub-groups:
 
-Button Group | Number of Subgroups 
+Button Group | Number of Subgroups
 ------------ | -------------
 `StyleButtons` | 1
 `FontSettingButtons` | 3
@@ -569,10 +588,10 @@ If some of your buttons are deactivated, the number of subgroups could be reduce
 
 So with this in mind, `Button1` will be inserted between the first two subgroups in `FontSettingButtons`, and `Button2` will be inserted between the two subgroups in `FontButtons`.
 
-When creating an `onPressed`/`onTap`/`onChanged` method for your widget, you can use `controller.execCommand` or any of the other methods on the controller to perform actions in the editor. 
+When creating an `onPressed`/`onTap`/`onChanged` method for your widget, you can use `controller.execCommand` or any of the other methods on the controller to perform actions in the editor.
 
 Notes:
- 
+
 1. using `controller.editorController.<method>` will do nothing on Web!
 
 2. If you don't provide `customToolbarButtonsInsertionIndices`, the plugin will insert your buttons at the end of the default toolbar list
@@ -660,7 +679,7 @@ Default values: true, true, false, respectively
 
 `processInputHtml` replaces any occurrences of `"` with `\\"`, `'` with `\\'`, and `\r`, `\r\n`, `\n`, and `\n\n` with empty strings. This is necessary to prevent syntax exceptions when inserting HTML into the editor as quotes and other special characters will not be escaped. If you have already sanitized and escaped all relevant characters from your HTML input, it is recommended to set this parameter `false`. You may also want to set this parameter `false` on Web, as in testing it seems these characters are handled correctly by default, but that may not be the case for your HTML.
 
-`processOutputHtml` replaces the output HTML with `""` if: 
+`processOutputHtml` replaces the output HTML with `""` if:
 
 1. It is empty
 
@@ -801,7 +820,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
       onTap: () {
         if (!kIsWeb) {
           // this is extremely important to the example, as it allows the user to tap any blank space outside the webview,
-          // and the webview will lose focus and reset to the original height as expected. 
+          // and the webview will lose focus and reset to the original height as expected.
           controller.clearFocus();
         }
       },
@@ -876,7 +895,7 @@ class _ExampleState extends State<Example> {
                   //save profile details
                }
             ),
-          ]   
+          ]
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -923,7 +942,7 @@ class _ExampleState extends State<Example> {
                  icon: Icon(Icons.edit, size: 35),
                  tooltip: "Edit profile picture",
                  onPressed: () async {
-                    //open gallery and make api call to update profile picture   
+                    //open gallery and make api call to update profile picture
                  }
               ),
               //etc... just a basic form.
@@ -1079,29 +1098,29 @@ If you do find any issues, please report them in the Issues tab and I will see i
 * Clicking on the editor makes the cursor appear on the second line relative with the hint. Is there a workaround? - https://github.com/tneotia/html-editor-enhanced/issues/24
 
 * How can I give the editor box a custom background color on mobile? - https://github.com/tneotia/html-editor-enhanced/issues/27
-  
+
 * I see a file upload button in the top left of my application on Web. How can I remove it? - https://github.com/tneotia/html-editor-enhanced/issues/28
-  
+
 * I can't tap drawer items above the text editor on Web. How can I fix this? - https://github.com/tneotia/html-editor-enhanced/issues/30
-  
+
 * How can I remove the "dragbar" at the bottom of the editor? - https://github.com/tneotia/html-editor-enhanced/issues/42
-  
+
 * How can I detect if an image has been deleted from the editor? - https://github.com/tneotia/html-editor-enhanced/issues/43
-  
+
 * How can I handle editor focus? - https://github.com/tneotia/html-editor-enhanced/issues/47
-  
+
 * How can I set the default text direction for the editor content? - https://github.com/tneotia/html-editor-enhanced/issues/49
-  
+
 * How can I handle relative URLs for images in my initial text? - https://github.com/tneotia/html-editor-enhanced/issues/50
 
 * How can I give the editor box a custom background color on web? - https://github.com/tneotia/html-editor-enhanced/issues/57
-  
+
 * How can I create a toolbar dropdown for custom fonts? - https://github.com/tneotia/html-editor-enhanced/issues/59
-  
+
 * How can I translate things like dialog text? - https://github.com/tneotia/html-editor-enhanced/issues/69
-  
+
 * How can I disable copy/paste buttons from the toolbar? - https://github.com/tneotia/html-editor-enhanced/issues/71
-  
+
 * How can I extract image tag from the editor HTML? - https://github.com/tneotia/html-editor-enhanced/issues/72
 
 * How can I use LaTeX or math formulas in the editor? - https://github.com/tneotia/html-editor-enhanced/issues/74
@@ -1119,7 +1138,7 @@ If you do find any issues, please report them in the Issues tab and I will see i
 * How can I change background color of toolbar only? - https://github.com/tneotia/html-editor-enhanced/issues/94
 
 * How can I pick images from gallery directly without showing the dialog? - https://github.com/tneotia/html-editor-enhanced/issues/97
-  
+
 </details>
 
 ## License
