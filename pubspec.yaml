@@ -46,6 +46,7 @@ flutter:
   assets:
     - packages/html_editor_enhanced/assets/summernote.html
     - packages/html_editor_enhanced/assets/summernote-no-plugins.html
+    - packages/html_editor_enhanced/assets/summernote-no-plugins-bs.html
     - packages/html_editor_enhanced/assets/summernote-lite.min.css
     - packages/html_editor_enhanced/assets/summernote-lite-dark.css
     - packages/html_editor_enhanced/assets/summernote-lite.min.js
