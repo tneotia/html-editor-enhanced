@@ -2,7 +2,6 @@ import 'dart:convert';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
@@ -13,16 +12,17 @@ export 'dart:html';
 
 /// The HTML Editor widget itself, for web (uses IFrameElement)
 class HtmlEditorWidget extends StatefulWidget {
-  HtmlEditorWidget({
-    Key? key,
-    required this.controller,
-    this.callbacks,
-    required this.plugins,
-    required this.htmlEditorOptions,
-    required this.htmlToolbarOptions,
-    required this.otherOptions,
-    required this.initBC,
-  }) : super(key: key);
+  HtmlEditorWidget(
+      {Key? key,
+      required this.controller,
+      this.callbacks,
+      required this.plugins,
+      required this.htmlEditorOptions,
+      required this.htmlToolbarOptions,
+      required this.otherOptions,
+      required this.initBC,
+      this.summerNoteToolbarOptions = 'false'})
+      : super(key: key);
 
   final HtmlEditorController controller;
   final Callbacks? callbacks;
@@ -31,6 +31,7 @@ class HtmlEditorWidget extends StatefulWidget {
   final HtmlToolbarOptions htmlToolbarOptions;
   final OtherOptions otherOptions;
   final BuildContext initBC;
+  final String summerNoteToolbarOptions;
 
   @override
   _HtmlEditorWidgetWebState createState() => _HtmlEditorWidgetWebState();
@@ -99,7 +100,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     for (var p in widget.plugins) {
       headString = headString + p.getHeadString() + '\n';
       if (p is SummernoteCurlyBraceInsertion) {
-        debugPrint("adding SummernoteCurlyBraceInsertion");
+        debugPrint('adding SummernoteCurlyBraceInsertion');
         summernoteCallbacks = summernoteCallbacks +
             '''
             \nsummernoteCurlyBraceInsertion: {
@@ -127,7 +128,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         }
       }
       if (p is SummernoteAtMention) {
-        debugPrint("adding SummernoteAtMention");
+        debugPrint('adding SummernoteAtMention');
         summernoteCallbacks = summernoteCallbacks +
             '''
             \nsummernoteAtMention: {
@@ -239,23 +240,15 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         \$(document).ready(function () {
           \$('#summernote-2').summernote({
             placeholder: "${widget.htmlEditorOptions.hint}",
-            lineHeights: ['0.0', '0.2', '0.3', '0.4', '0.5', '0.6', '0.8', '1.0', '1.2', '1.4', '1.5', '2.0', '3.0'],
+            lineHeights: ['1.0', '1.1', '1.2', '1.3', '1.4', '1.5', '2.0', '3.0'],
             fontNames: [
               'Arial', 'Arial Black', 'Calibri', 'Comic Sans MS', 'Courier New',
               'Helvetica Neue', 'Helvetica', 'Impact', 'Lucida Grande',
               'Tahoma', 'Times New Roman', 'Verdana',
             ], 
+            fontSizes: [ '8', '9', '10', '11', '12', '13', '14' ],
             fontNamesIgnoreCheck: ['Calibri'],
-            toolbar: [
-              // [groupName, [list of button]]
-              ['style', ['bold', 'italic', 'underline', 'clear']],
-              ['font', ['strikethrough', 'superscript', 'subscript']],
-              ['fontname', ['fontname']],
-              ['fontsize', ['fontsize']],
-              ['color', ['color']],
-              ['para', ['ul', 'ol', 'paragraph']],
-              ['height', ['height']]
-            ],
+            toolbar: ${widget.summerNoteToolbarOptions},
             tabsize: 2,
             height: ${widget.otherOptions.height},
             disableGrammar: false,
@@ -287,7 +280,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                 window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: htmlHeight", "height": height}), "*");
               }
               if (data["type"].includes("setInputType")) {
-                document.getElementsByClassName('note-editable')[0].setAttribute('inputmode', '${describeEnum(widget.htmlEditorOptions.inputType)}');
+                document.getElementsByClassName('note-editable')[0].setAttribute('inputmode', '${widget.htmlEditorOptions.inputType.name}');
               }
               if (data["type"].includes("setText")) {
                 \$('#summernote-2').summernote('code', data["text"]);
@@ -493,7 +486,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
       </script>
     """;
     var filePath =
-        'packages/html_editor_enhanced/assets/summernote-no-plugins.html';
+        'packages/html_editor_enhanced/assets/summernote-no-plugins-bs.html';
     if (widget.htmlEditorOptions.filePath != null) {
       filePath = widget.htmlEditorOptions.filePath!;
     }
@@ -510,7 +503,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             '"assets/packages/html_editor_enhanced/assets/summernote-lite.min.css"')
         .replaceFirst('"summernote-lite.min.js"',
             '"assets/packages/html_editor_enhanced/assets/summernote-lite.min.js"');
-    print("htmlString = $htmlString");
+    print('htmlString = $htmlString');
     if (widget.callbacks != null) addJSListener(widget.callbacks!);
     final iframe = html.IFrameElement()
       ..width = MediaQuery.of(widget.initBC).size.width.toString() //'800'
@@ -562,9 +555,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                 widget.callbacks!.onChangeContent != null) {
               widget.callbacks!.onChangeContent!.call(data['contents']);
             }
-            if (widget.htmlEditorOptions.shouldEnsureVisible &&
-                Scrollable.of(context) != null) {
-              Scrollable.of(context)!.position.ensureVisible(
+            if (widget.htmlEditorOptions.shouldEnsureVisible) {
+              Scrollable.of(context).position.ensureVisible(
                   context.findRenderObject()!,
                   duration: const Duration(milliseconds: 100),
                   curve: Curves.easeIn);
@@ -595,6 +587,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           ? actualHeight
           : widget.otherOptions.height,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           widget.htmlToolbarOptions.toolbarPosition ==
                   ToolbarPosition.aboveEditor
