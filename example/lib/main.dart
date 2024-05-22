@@ -1,7 +1,7 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:file_picker/file_picker.dart';
 
 void main() => runApp(HtmlEditorExampleApp());
 
@@ -79,13 +79,12 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                   onButtonPressed:
                       (ButtonType type, bool? status, Function? updateStatus) {
                     print(
-                        "button '${describeEnum(type)}' pressed, the current selected status is $status");
+                        "button '${type.name}' pressed, the current selected status is $status");
                     return true;
                   },
                   onDropdownChanged: (DropdownType type, dynamic changed,
                       Function(dynamic)? updateSelectedItem) {
-                    print(
-                        "dropdown '${describeEnum(type)}' changed to $changed");
+                    print("dropdown '${type.name}' changed to $changed");
                     return true;
                   },
                   mediaLinkInsertInterceptor:
@@ -136,7 +135,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                   },*/
                     onImageUploadError: (FileUpload? file, String? base64Str,
                         UploadError error) {
-                  print(describeEnum(error));
+                  print(error.name);
                   print(base64Str ?? '');
                   if (file != null) {
                     print(file.name);
@@ -164,7 +163,12 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                 plugins: [
                   SummernoteAtMention(
                       getSuggestionsMobile: (String value) {
-                        var mentions = <String>['test1', 'test2', 'test3', 'taste1'];
+                        var mentions = <String>[
+                          'test1',
+                          'test2',
+                          'test3',
+                          'taste1'
+                        ];
                         return mentions
                             .where((element) => element.contains(value))
                             .toList();
@@ -180,7 +184,12 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                             .where((element) => element.contains(value))
                             .toList();
                       },
-                      variablesWeb: [' test1 }}', ' test2 }}', ' test3 }}', ' toast1 }}'],
+                      variablesWeb: [
+                        ' test1 }}',
+                        ' test2 }}',
+                        ' test3 }}',
+                        ' toast1 }}'
+                      ],
                       onSelect: (String value) {
                         print(value);
                       }),

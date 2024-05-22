@@ -224,7 +224,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   void addNotification(String html, NotificationType notificationType) async {
     await _evaluateJavascript(source: """
         \$('.note-status-output').html(
-          '<div class="alert alert-${describeEnum(notificationType)}">$html</div>'
+          '<div class="alert alert-${notificationType.name}">$html</div>'
         );
         """);
     recalculateHeight();

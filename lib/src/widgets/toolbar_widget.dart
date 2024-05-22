@@ -696,7 +696,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   void updateSelectedItem(dynamic changed) async {
                     if (changed is String) {
                       setState(mounted, this.setState, () {
-                        print("setting _fontNameSelectedItem to $changed");
+                        print('setting _fontNameSelectedItem to $changed');
                         _fontNameSelectedItem = changed;
                       });
                     }
@@ -2037,7 +2037,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                                 style: TextStyle(
                                                     color: Theme.of(context)
                                                         .textTheme
-                                                        .bodyText1
+                                                        .bodyLarge
                                                         ?.color)),
                                           ),
                                           suffixIcon: result != null
