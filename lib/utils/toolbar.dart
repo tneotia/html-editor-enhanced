@@ -153,16 +153,17 @@ class InsertButtons extends Toolbar {
   final bool otherFile;
   final bool table;
   final bool hr;
+  final bool pageBreak;
 
-  const InsertButtons({
-    this.link = true,
-    this.picture = true,
-    this.audio = true,
-    this.video = true,
-    this.otherFile = false,
-    this.table = true,
-    this.hr = true,
-  });
+  const InsertButtons(
+      {this.link = true,
+      this.picture = true,
+      this.audio = true,
+      this.video = true,
+      this.otherFile = false,
+      this.table = true,
+      this.hr = true,
+      this.pageBreak = false});
 
   List<Icon> getIcons() {
     var icons = <Icon>[];
@@ -173,6 +174,7 @@ class InsertButtons extends Toolbar {
     if (otherFile) icons.add(Icon(Icons.attach_file));
     if (table) icons.add(Icon(Icons.table_chart_outlined));
     if (hr) icons.add(Icon(Icons.horizontal_rule));
+    if (pageBreak) icons.add(Icon(Icons.insert_page_break_outlined));
     return icons;
   }
 }

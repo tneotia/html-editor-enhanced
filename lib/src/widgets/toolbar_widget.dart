@@ -1809,7 +1809,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               t.picture ||
               t.link ||
               t.hr ||
-              t.table)) {
+              t.table ||
+              t.pageBreak)) {
         toolbarChildren.add(ToggleButtons(
           constraints: BoxConstraints.tightFor(
             width: widget.htmlToolbarOptions.toolbarItemHeight - 2,
@@ -2641,6 +2642,15 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                         }),
                       );
                     });
+              }
+            }
+            if (t.getIcons()[index].icon == Icons.insert_page_break_outlined) {
+              var proceed = await widget.htmlToolbarOptions.onButtonPressed
+                      ?.call(ButtonType.pageBreak, null, null) ??
+                  true;
+              if (proceed) {
+                widget.controller
+                    .insertHtml('<p style="page-break-after:always;"></p>');
               }
             }
             if (t.getIcons()[index].icon == Icons.horizontal_rule) {

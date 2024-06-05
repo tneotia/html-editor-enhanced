@@ -317,6 +317,16 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                       width: 16,
                     ),
                     TextButton(
+                        style: TextButton.styleFrom(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.secondary),
+                        onPressed: () {
+                          controller.insertHtml(
+                              '''<p style="page-break-after:always;"></p>''');
+                        },
+                        child: Text('Insert Page Break',
+                            style: TextStyle(color: Colors.white))),
+                    TextButton(
                       style: TextButton.styleFrom(
                           backgroundColor:
                               Theme.of(context).colorScheme.secondary),
