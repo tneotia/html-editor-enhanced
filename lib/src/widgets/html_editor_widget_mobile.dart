@@ -150,7 +150,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                     useHybridComposition: widget.htmlEditorOptions
                         .androidUseHybridComposition,
                     loadWithOverviewMode: true,
-                    disableInputAccessoryView: true,
+                    disableInputAccessoryView: widget.htmlEditorOptions
+                        .disableInputAccessoryView,
                   ),
                   initialUserScripts:
                       widget.htmlEditorOptions.mobileInitialScripts
