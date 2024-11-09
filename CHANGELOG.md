@@ -1,3 +1,7 @@
+## [2.6.1] = 2024-09-11
+* Removed lint package from dependencies and delete it because unused.
+* Removed useless files from git
+
 ## [2.6.0] = 2024-05-18
 * Fix build issues on Flutter 3.22.0+ due to deprecations
 * Update dependencies
