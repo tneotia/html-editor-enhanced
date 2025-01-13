@@ -441,6 +441,10 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                             };
                             window.flutter_inappwebview.callHandler('FormatSettings', message);
                           }
+                          
+                          var style = document.createElement('style');
+                          style.innerHTML = '.note-editable { caret-color: red; }';
+                          document.head.appendChild(style);
                       """);
                       await controller.evaluateJavascript(
                           source:
