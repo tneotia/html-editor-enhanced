@@ -147,6 +147,7 @@ class HtmlToolbarOptions {
           hr: false,
           otherFile: false),
     ],
+
     this.otherFileExtensions,
     this.imageExtensions,
     this.initiallyExpanded = false,
