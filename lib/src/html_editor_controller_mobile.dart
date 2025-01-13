@@ -247,7 +247,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
           .replaceAll('\r\n', '');
     }
     if (processNewLineAsBr) {
-      html = html.replaceAll('\n', '<br/>').replaceAll('\n\n', '<br/>');
+      // html = html.replaceAll('\n', '<br/>').replaceAll('\n\n', '<br/>');
     } else {
       // html = html.replaceAll('\n', '').replaceAll('\n\n', '');
     }
