@@ -158,7 +158,7 @@ class HtmlToolbarOptions {
     this.onOtherFileLinkInsert,
     this.onOtherFileUpload,
     this.toolbarType = ToolbarType.nativeScrollable,
-    this.toolbarPosition = ToolbarPosition.aboveEditor,
+    this.toolbarPosition = ToolbarPosition.aboveEditor, //
     this.videoExtensions,
     this.dropdownElevation = 8,
     this.dropdownIcon,
