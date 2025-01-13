@@ -12,22 +12,22 @@ dependencies:
   flutter:
     sdk: flutter
   # webview plugin
-  flutter_inappwebview: ^6.0.0
+  flutter_inappwebview: ^6.1.5
   # plugin to get webview's visible fraction for keyboard height adjustment
   visibility_detector: ^0.4.0+2
   # plugin to get when the keyboard is hidden via back (Android)
   # or "done" (iOS) to reset the editor's height
   flutter_keyboard_visibility: ^6.0.0
   # plugin to show a color picker for foreground/highlight color
-  flex_color_picker: ^3.4.1
+  flex_color_picker: ^3.7.0
   # plugin to get files from filesystem
-  file_picker: ^8.0.3
+  file_picker: ^8.1.7
   # plugin to show a scrollable number picker for inserting tables
   numberpicker: ^2.1.2
   # plugin to allow dropdowns and dialogs to be interactable when displaying over the editor
   # related to https://github.com/flutter/flutter/issues/54027
   # pinned to 0.9.1 because of issues with CanvasKit in the latest versions
-  pointer_interceptor: ^0.10.1+1
+  pointer_interceptor: ^0.10.1+2
   # plugin to help maintain effective Dart standards
   lints: ^4.0.0
   # plugin for @internal annotation
