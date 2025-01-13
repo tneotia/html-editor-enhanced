@@ -545,8 +545,6 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           ? actualHeight
           : widget.otherOptions.height,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           widget.htmlToolbarOptions.toolbarPosition ==
                   ToolbarPosition.aboveEditor
