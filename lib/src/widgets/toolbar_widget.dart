@@ -2976,24 +2976,20 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           i++) {
         if (widget.htmlToolbarOptions.customToolbarInsertionIndices[i] >
             toolbarChildren.length) {
-          // toolbarChildren.insert(toolbarChildren.length, widget.htmlToolbarOptions.customToolbarButtons[i]);
-          toolbarChildren.insert(0, widget.htmlToolbarOptions.customToolbarButtons[i]);
-
-        }
-        else if (widget.htmlToolbarOptions.customToolbarInsertionIndices[i] <
+          toolbarChildren.insert(toolbarChildren.length,
+              widget.htmlToolbarOptions.customToolbarButtons[i]);
+        } else if (widget.htmlToolbarOptions.customToolbarInsertionIndices[i] <
             0) {
           toolbarChildren.insert(
               0, widget.htmlToolbarOptions.customToolbarButtons[i]);
-        }
-        else {
+        } else {
           toolbarChildren.insert(
               widget.htmlToolbarOptions.customToolbarInsertionIndices[i],
               widget.htmlToolbarOptions.customToolbarButtons[i]);
         }
       }
     } else {
-      toolbarChildren.insertAll(0, widget.htmlToolbarOptions.customToolbarButtons);
-      // toolbarChildren.addAll(widget.htmlToolbarOptions.customToolbarButtons);
+      toolbarChildren.addAll(widget.htmlToolbarOptions.customToolbarButtons);
     }
     if (widget.htmlToolbarOptions.renderSeparatorWidget) {
       toolbarChildren = intersperse(
