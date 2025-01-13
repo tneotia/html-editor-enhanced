@@ -119,6 +119,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
           height: docHeight + 10,
           decoration: widget.otherOptions.decoration,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               widget.htmlToolbarOptions.toolbarPosition ==
                       ToolbarPosition.aboveEditor
