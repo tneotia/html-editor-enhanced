@@ -137,9 +137,9 @@ HtmlEditorController controller = HtmlEditorController();
         controller: controller, //required
         htmlEditorOptions: HtmlEditorOptions(
           hint: "Your text here...",
-          //initalText: "text content initial, if any",
+          //initialText: "initial html text content, if any",
         ),   
-        otherOptions: OtherOptions(
+        otherOptions: const OtherOptions(
           height: 400,
         ),
     );
