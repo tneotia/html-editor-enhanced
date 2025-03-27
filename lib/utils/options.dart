@@ -25,6 +25,7 @@ class HtmlEditorOptions {
     this.webInitialScripts,
     this.shouldEnsureVisible = false,
     this.spellCheck = false,
+    this.disableInputAccessoryView = true,
   });
 
   /// The editor will automatically adjust its height when the keyboard is active
@@ -124,6 +125,12 @@ class HtmlEditorOptions {
   ///
   /// Default value is false.
   final bool spellCheck;
+
+  /// Set to `true` to disable the [inputAccessoryView](https://developer.apple.com/documentation/uikit/uiresponder/1621119-inputaccessoryview) above system keyboard.
+  /// This only works on iOS devices.
+  ///
+  /// Default value is `true`.
+  final bool disableInputAccessoryView;
 }
 
 /// Options that modify the toolbar and its behavior
