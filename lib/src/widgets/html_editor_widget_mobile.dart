@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:collection';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -147,15 +146,13 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                     javaScriptEnabled: true,
                     transparentBackground: true,
                     useShouldOverrideUrlLoading: true,
-                    useHybridComposition: widget.htmlEditorOptions
-                        .androidUseHybridComposition,
+                    useHybridComposition:
+                        widget.htmlEditorOptions.androidUseHybridComposition,
                     loadWithOverviewMode: true,
                   ),
                   initialUserScripts:
-                      widget.htmlEditorOptions.mobileInitialScripts
-                          as UnmodifiableListView<UserScript>?,
-                  contextMenu: widget.htmlEditorOptions.mobileContextMenu
-                      as ContextMenu?,
+                      widget.htmlEditorOptions.mobileInitialScripts,
+                  contextMenu: widget.htmlEditorOptions.mobileContextMenu,
                   gestureRecognizers: {
                     Factory<VerticalDragGestureRecognizer>(
                         () => VerticalDragGestureRecognizer()),
@@ -167,8 +164,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                   shouldOverrideUrlLoading: (controller, action) async {
                     if (!action.request.url.toString().contains(filePath)) {
                       return (await widget.callbacks?.onNavigationRequestMobile
-                                  ?.call(action.request.url.toString()))
-                              as NavigationActionPolicy? ??
+                              ?.call(action.request.url.toString())) ??
                           NavigationActionPolicy.ALLOW;
                     }
                     return NavigationActionPolicy.ALLOW;
@@ -213,7 +209,9 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                         });
                         await setHeightJS();
                       }
-                      var visibleDecimal = await visibleStream.stream.firstWhere((_) => !visibleStream.isClosed, orElse: () => 0);
+                      var visibleDecimal = await visibleStream.stream
+                          .firstWhere((_) => !visibleStream.isClosed,
+                              orElse: () => 0);
                       var newHeight = widget.otherOptions.height;
                       if (visibleDecimal > 0.1) {
                         this.setState(() {
@@ -376,11 +374,11 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                               ${widget.htmlEditorOptions.customOptions}
                               $summernoteCallbacks
                           });
-                          
+
                           \$('#summernote-2').on('summernote.change', function(_, contents, \$editable) {
                             window.flutter_inappwebview.callHandler('onChangeContent', contents);
                           });
-                      
+
                           function onSelectionChange() {
                             let {anchorNode, anchorOffset, focusNode, focusOffset} = document.getSelection();
                             var isBold = false;
