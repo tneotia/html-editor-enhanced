@@ -1,7 +1,7 @@
-import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:html_editor_enhanced/src/widgets/html_editor_widget_web.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:html_editor_enhanced/src/widgets/html_editor_widget_web.dart';
 
 /// HtmlEditor class for web
 class HtmlEditor extends StatelessWidget {

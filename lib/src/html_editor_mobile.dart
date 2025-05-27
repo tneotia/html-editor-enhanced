@@ -1,9 +1,9 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced/html_editor.dart'
     hide HtmlEditorController;
 import 'package:html_editor_enhanced/src/html_editor_controller_mobile.dart';
 import 'package:html_editor_enhanced/src/widgets/html_editor_widget_mobile.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 
 /// HtmlEditor class for mobile
 class HtmlEditor extends StatelessWidget {
