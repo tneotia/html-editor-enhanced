@@ -12,7 +12,7 @@ import 'package:html_editor_enhanced/html_editor.dart'
 import 'package:html_editor_enhanced/utils/utils.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-/// The HTML Editor widget itself, for mobile (uses InAppWebView)
+/// The HTML Editor widget itself (uses InAppWebView)
 class HtmlEditorWidget extends StatefulWidget {
   HtmlEditorWidget({
     Key? key,
@@ -32,13 +32,13 @@ class HtmlEditorWidget extends StatefulWidget {
   final OtherOptions otherOptions;
 
   @override
-  _HtmlEditorWidgetMobileState createState() => _HtmlEditorWidgetMobileState();
+  _HtmlEditorWidgetState createState() => _HtmlEditorWidgetState();
 }
 
-/// State for the mobile Html editor widget
+/// State for the desktop and mobile Html editor widget
 ///
 /// A stateful widget is necessary here to allow the height to dynamically adjust.
-class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
+class _HtmlEditorWidgetState extends State<HtmlEditorWidget> {
   /// Tracks whether the callbacks were initialized or not to prevent re-initializing them
   bool callbacksInitialized = false;
 

@@ -1,10 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart'
     as unsupported;
 
-/// Controller for mobile
+/// Controller for desktop and mobile
 class HtmlEditorController extends unsupported.HtmlEditorController {
   HtmlEditorController({
     this.processInputHtml = true,
@@ -57,100 +59,32 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// A function to quickly call a document.execCommand function in a readable format
   @override
   void execCommand(String command, {String? argument}) {
-    switch (command.toLowerCase()) {
-      case 'bold':
-        _evaluateJavascript(source: """
-
+    if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
+      _evaluateJavascript(source: """
+        try {
           var editor = \$('#summernote-2');
-          if (editor.length == 0) {
-            throw new Error('Editor not found');
-          }
+          var context = editor.data('summernote');
 
-          try {
-            // Get the current range from Summernote
-            var context = editor.data('summernote');
-            if (context && context.invoke) {
-              var range = context.invoke('editor.getLastRange');
-
-              if (range && range.sc && range.ec) {
-                try {
-                  // Get the selected text
-                  var rangeText = range.toString();
-                  console.log('Range text:', rangeText);
-
-                  // Create a DOM range from the Summernote range
-                  var domRange = document.createRange();
-                  domRange.setStart(range.sc, range.so); // sc = start container, so = start offset
-                  domRange.setEnd(range.ec, range.eo); // ec = end container, eo = end offset
-
-                  // If we didn't get text from toString, try DOM range
-                  if (!rangeText) {
-                    rangeText = domRange.toString();
-                  }
-
-                  // If we have text, apply bold manually
-                  if (rangeText.length > 0) {
-                    // Extract and wrap in bold
-                    var contents = domRange.extractContents();
-                    var boldElement = document.createElement('strong');
-                    boldElement.appendChild(contents);
-                    domRange.insertNode(boldElement);
-
-                    // Update the selection to the new bold element
-                    // var newRange = document.createRange();
-                    // newRange.selectNode(boldElement);
-                    // var selection = window.getSelection();
-                    // selection.removeAllRanges();
-                    // selection.addRange(newRange);
-
-                    // Trigger Summernote change event
-                    editor.trigger('summernote.change', [editor.summernote('code'), editor]);
-                  } else {
-                    // Just toggle bold state for next typing
-                    editor.summernote('bold');
-                  }
-                } catch (rangeError) {
-                  // Fallback to Summernote API
-                  editor.summernote('bold');
-                }
-              } else {
-                // Try standard selection
-                var selection = window.getSelection();
-                if (selection.rangeCount > 0) {
-                  var domRange = selection.getRangeAt(0);
-                  var selectedText = domRange.toString();
-
-                  if (selectedText.length > 0) {
-                    var contents = domRange.extractContents();
-                    var boldElement = document.createElement('strong');
-                    boldElement.appendChild(contents);
-                    domRange.insertNode(boldElement);
-
-                    var newRange = document.createRange();
-                    newRange.selectNode(boldElement);
-                    selection.removeAllRanges();
-                    selection.addRange(newRange);
-
-                    // Trigger change event
-                    editor.trigger('summernote.change', [editor.summernote('code'), editor]);
-                  } else {
-                    editor.summernote('bold');
-                  }
-                } else {
-                  editor.summernote('bold');
-                }
-              }
+          if (context && context.invoke) {
+            // Try to restore the saved range first
+            try {
+              context.invoke('editor.restoreRange');
+            } catch (e) {
+              console.log('No saved range to restore');
             }
-          } catch (error) {
-            editor.summernote('bold');
           }
-        """);
-        break;
-      default:
-        _evaluateJavascript(source: """
+
+          // Apply bold formatting
           document.execCommand('$command', false${argument == null ? "" : ", '$argument'"});
-        """);
-        break;
+        } catch (error) {
+          // Fallback to document.execCommand
+          document.execCommand('$command', false${argument == null ? "" : ", '$argument'"});
+        }
+    """);
+    } else {
+      _evaluateJavascript(source: """
+          document.execCommand('$command', false${argument == null ? "" : ", '$argument'"});
+      """);
     }
   }
 
@@ -379,29 +313,4 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Internal function to insert table on Web
   @override
   void insertTable(String dimensions) {}
-
-  /// Test method to verify execCommand behavior
-  void testExecCommand() {
-    // print('Testing execCommand with document.execCommand...');
-
-    // Test with some debug output
-    _evaluateJavascript(source: """
-      console.log('=== TESTING EXECCOMMAND ===');
-      console.log('About to call document.execCommand("bold", false)');
-
-      var selection = window.getSelection();
-      console.log('Selection exists:', selection.toString().length > 0);
-      console.log('Selected text:', selection.toString());
-
-      // Call the command
-      var result = document.execCommand('bold', false);
-      console.log('execCommand result:', result);
-
-      // Check if anything changed
-      setTimeout(function() {
-        console.log('After execCommand - Selected text:', window.getSelection().toString());
-        console.log('=== END TEST ===');
-      }, 100);
-    """);
-  }
 }
