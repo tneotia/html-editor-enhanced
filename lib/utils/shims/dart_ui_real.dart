@@ -3,3 +3,4 @@
 // found in the LICENSE file.
 
 export 'dart:ui';
+export 'dart:ui_web';

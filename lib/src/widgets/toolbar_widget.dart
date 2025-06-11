@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
@@ -890,73 +891,94 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       }
       if (t is FontButtons) {
         if (t.bold || t.italic || t.underline || t.clearAll) {
-          toolbarChildren.add(ToggleButtons(
-            constraints: BoxConstraints.tightFor(
-              width: widget.htmlToolbarOptions.toolbarItemHeight - 2,
-              height: widget.htmlToolbarOptions.toolbarItemHeight - 2,
-            ),
-            color: widget.htmlToolbarOptions.buttonColor,
-            selectedColor: widget.htmlToolbarOptions.buttonSelectedColor,
-            fillColor: widget.htmlToolbarOptions.buttonFillColor,
-            focusColor: widget.htmlToolbarOptions.buttonFocusColor,
-            highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
-            hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
-            splashColor: widget.htmlToolbarOptions.buttonSplashColor,
-            selectedBorderColor:
-                widget.htmlToolbarOptions.buttonSelectedBorderColor,
-            borderColor: widget.htmlToolbarOptions.buttonBorderColor,
-            borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
-            borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
-            renderBorder: widget.htmlToolbarOptions.renderBorder,
-            textStyle: widget.htmlToolbarOptions.textStyle,
-            onPressed: (int index) async {
-              void updateStatus() {
-                setState(mounted, this.setState, () {
-                  _fontSelected[index] = !_fontSelected[index];
-                });
-              }
-
-              if (t.getIcons1()[index].icon == Icons.format_bold) {
-                var proceed = await widget.htmlToolbarOptions.onButtonPressed
-                        ?.call(ButtonType.bold, _fontSelected[index],
-                            updateStatus) ??
-                    true;
-                if (proceed) {
-                  widget.controller.execCommand('bold');
-                  updateStatus();
-                }
-              }
-              if (t.getIcons1()[index].icon == Icons.format_italic) {
-                var proceed = await widget.htmlToolbarOptions.onButtonPressed
-                        ?.call(ButtonType.italic, _fontSelected[index],
-                            updateStatus) ??
-                    true;
-                if (proceed) {
-                  widget.controller.execCommand('italic');
-                  updateStatus();
-                }
-              }
-              if (t.getIcons1()[index].icon == Icons.format_underline) {
-                var proceed = await widget.htmlToolbarOptions.onButtonPressed
-                        ?.call(ButtonType.underline, _fontSelected[index],
-                            updateStatus) ??
-                    true;
-                if (proceed) {
-                  widget.controller.execCommand('underline');
-                  updateStatus();
-                }
-              }
-              if (t.getIcons1()[index].icon == Icons.format_clear) {
-                var proceed = await widget.htmlToolbarOptions.onButtonPressed
-                        ?.call(ButtonType.clearFormatting, null, null) ??
-                    true;
-                if (proceed) {
-                  widget.controller.execCommand('removeFormat');
-                }
+          toolbarChildren.add(Listener(
+            onPointerDown: (PointerDownEvent event) async {
+              if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
+                // Save selection immediately when pointer goes down, before focus changes
+                await widget.controller.editorController
+                    ?.evaluateJavascript(source: """
+                  try {
+                    var editor = \$('#summernote-2');
+                    var context = editor.data('summernote');
+                    if (context && context.invoke) {
+                      // Save current selection to Summernote's internal storage
+                      context.invoke('editor.saveRange');
+                      console.log('Range saved on pointer down');
+                    }
+                  } catch (e) {
+                    console.log('Error saving range on pointer down:', e);
+                  }
+                """);
               }
             },
-            isSelected: _fontSelected,
-            children: t.getIcons1(),
+            child: ToggleButtons(
+              constraints: BoxConstraints.tightFor(
+                width: widget.htmlToolbarOptions.toolbarItemHeight - 2,
+                height: widget.htmlToolbarOptions.toolbarItemHeight - 2,
+              ),
+              color: widget.htmlToolbarOptions.buttonColor,
+              selectedColor: widget.htmlToolbarOptions.buttonSelectedColor,
+              fillColor: widget.htmlToolbarOptions.buttonFillColor,
+              focusColor: widget.htmlToolbarOptions.buttonFocusColor,
+              highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
+              hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
+              splashColor: widget.htmlToolbarOptions.buttonSplashColor,
+              selectedBorderColor:
+                  widget.htmlToolbarOptions.buttonSelectedBorderColor,
+              borderColor: widget.htmlToolbarOptions.buttonBorderColor,
+              borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
+              borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
+              renderBorder: widget.htmlToolbarOptions.renderBorder,
+              textStyle: widget.htmlToolbarOptions.textStyle,
+              onPressed: (int index) async {
+                void updateStatus() {
+                  setState(mounted, this.setState, () {
+                    _fontSelected[index] = !_fontSelected[index];
+                  });
+                }
+
+                if (t.getIcons1()[index].icon == Icons.format_bold) {
+                  var proceed = await widget.htmlToolbarOptions.onButtonPressed
+                          ?.call(ButtonType.bold, _fontSelected[index],
+                              updateStatus) ??
+                      true;
+                  if (proceed) {
+                    widget.controller.execCommand('bold');
+                    updateStatus();
+                  }
+                }
+                if (t.getIcons1()[index].icon == Icons.format_italic) {
+                  var proceed = await widget.htmlToolbarOptions.onButtonPressed
+                          ?.call(ButtonType.italic, _fontSelected[index],
+                              updateStatus) ??
+                      true;
+                  if (proceed) {
+                    widget.controller.execCommand('italic');
+                    updateStatus();
+                  }
+                }
+                if (t.getIcons1()[index].icon == Icons.format_underline) {
+                  var proceed = await widget.htmlToolbarOptions.onButtonPressed
+                          ?.call(ButtonType.underline, _fontSelected[index],
+                              updateStatus) ??
+                      true;
+                  if (proceed) {
+                    widget.controller.execCommand('underline');
+                    updateStatus();
+                  }
+                }
+                if (t.getIcons1()[index].icon == Icons.format_clear) {
+                  var proceed = await widget.htmlToolbarOptions.onButtonPressed
+                          ?.call(ButtonType.clearFormatting, null, null) ??
+                      true;
+                  if (proceed) {
+                    widget.controller.execCommand('removeFormat');
+                  }
+                }
+              },
+              isSelected: _fontSelected,
+              children: t.getIcons1(),
+            ),
           ));
         }
         if (t.strikethrough || t.superscript || t.subscript) {
@@ -1120,7 +1142,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                               newColor = color;
                             },
                             title: Text('Choose a Color',
-                                style: Theme.of(context).textTheme.headlineSmall),
+                                style:
+                                    Theme.of(context).textTheme.headlineSmall),
                             width: 40,
                             height: 40,
                             spacing: 0,
@@ -1631,7 +1654,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 } else {
                   await widget.controller.editorController!
                       .evaluateJavascript(source: """
-                  var s=document.getSelection();			
+                  var s=document.getSelection();
                   if(s==''){
                       document.execCommand("insertHTML", false, "<p dir='${index == 0 ? "ltr" : "rtl"}'></p>");
                   }else{

@@ -1,11 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/src/html_editor_controller_unsupported.dart'
     as unsupported;
 
-/// Controller for mobile
+/// Controller for desktop and mobile
 class HtmlEditorController extends unsupported.HtmlEditorController {
   HtmlEditorController({
     this.processInputHtml = true,
@@ -58,9 +59,33 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// A function to quickly call a document.execCommand function in a readable format
   @override
   void execCommand(String command, {String? argument}) {
-    _evaluateJavascript(
-        source:
-            "document.execCommand('$command', false${argument == null ? "" : ", '$argument'"});");
+    if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
+      _evaluateJavascript(source: """
+        try {
+          var editor = \$('#summernote-2');
+          var context = editor.data('summernote');
+
+          if (context && context.invoke) {
+            // Try to restore the saved range first
+            try {
+              context.invoke('editor.restoreRange');
+            } catch (e) {
+              console.log('No saved range to restore');
+            }
+          }
+
+          // Apply bold formatting
+          document.execCommand('$command', false${argument == null ? "" : ", '$argument'"});
+        } catch (error) {
+          // Fallback to document.execCommand
+          document.execCommand('$command', false${argument == null ? "" : ", '$argument'"});
+        }
+    """);
+    } else {
+      _evaluateJavascript(source: """
+          document.execCommand('$command', false${argument == null ? "" : ", '$argument'"});
+      """);
+    }
   }
 
   /// Gets the text from the editor and returns it as a [String].
