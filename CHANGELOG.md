@@ -1,3 +1,6 @@
+## [2.7.1] = 2025-07-12
+* Update dependencies
+
 ## [2.7.0] = 2025-06-14
 * Fix deprecations in latest Flutter versions
 * Update dependencies
