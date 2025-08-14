@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 
@@ -25,6 +27,7 @@ class HtmlEditorOptions {
     this.webInitialScripts,
     this.shouldEnsureVisible = false,
     this.spellCheck = false,
+    this.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
   });
 
   /// The editor will automatically adjust its height when the keyboard is active
@@ -124,6 +127,17 @@ class HtmlEditorOptions {
   ///
   /// Default value is false.
   final bool spellCheck;
+
+  /// Specifies the set of additional gesture recognizers that the HTML editor's underlying
+  /// platform view should respond to.
+  ///
+  /// This option only has an effect on **mobile platforms** (Android & iOS),
+  /// where the editor is rendered inside a `WebView`.
+  /// It has no effect on web builds.
+  ///
+  /// Useful when the editor is placed inside widgets that also detect gestures
+  /// (e.g., scroll views, swipe detectors).
+  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers;
 }
 
 /// Options that modify the toolbar and its behavior

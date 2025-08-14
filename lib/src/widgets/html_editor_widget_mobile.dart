@@ -163,6 +163,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                         LongPressGestureRecognizer(
                             duration: widget
                                 .htmlEditorOptions.mobileLongPressDuration)),
+                    ...widget.htmlEditorOptions.gestureRecognizers,
                   },
                   shouldOverrideUrlLoading: (controller, action) async {
                     if (!action.request.url.toString().contains(filePath)) {
