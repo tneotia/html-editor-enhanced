@@ -357,17 +357,21 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               height: widget.htmlToolbarOptions.toolbarItemHeight + 15,
               child: Padding(
                 padding: const EdgeInsets.all(5.0),
-                child: CustomScrollView(
-                  scrollDirection: Axis.horizontal,
-                  slivers: [
-                    SliverFillRemaining(
-                      hasScrollBody: false,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: _buildChildren(),
+                child: ScrollConfiguration(
+                  behavior: ScrollConfiguration.of(context)
+                      .copyWith(scrollbars: false),
+                  child: CustomScrollView(
+                    scrollDirection: Axis.horizontal,
+                    slivers: [
+                      SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: _buildChildren(),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -429,37 +433,43 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                     )
                   : Padding(
                       padding: const EdgeInsets.all(5.0),
-                      child: CustomScrollView(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        slivers: [
-                          SliverPersistentHeader(
-                            pinned: true,
-                            delegate: ExpandIconDelegate(
-                                widget.htmlToolbarOptions.toolbarItemHeight,
-                                _isExpanded, () async {
-                              setState(mounted, this.setState, () {
-                                _isExpanded = !_isExpanded;
-                              });
-                              await Future.delayed(Duration(milliseconds: 100));
-                              if (kIsWeb) {
-                                widget.controller.recalculateHeight();
-                              } else {
-                                await widget.controller.editorController!
-                                    .evaluateJavascript(
-                                        source:
-                                            "var height = \$('div.note-editable').outerHeight(true); window.flutter_inappwebview.callHandler('setHeight', height);");
-                              }
-                            }),
-                          ),
-                          SliverFillRemaining(
-                            hasScrollBody: false,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: _buildChildren(),
+                      child: ScrollConfiguration(
+                        behavior: ScrollConfiguration.of(context)
+                            .copyWith(scrollbars: false),
+                        child: CustomScrollView(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          slivers: [
+                            SliverPersistentHeader(
+                              pinned: true,
+                              delegate: ExpandIconDelegate(
+                                  widget.htmlToolbarOptions.toolbarItemHeight,
+                                  _isExpanded, () async {
+                                setState(mounted, this.setState, () {
+                                  _isExpanded = !_isExpanded;
+                                });
+                                await Future.delayed(
+                                    Duration(milliseconds: 100));
+                                if (kIsWeb) {
+                                  widget.controller.recalculateHeight();
+                                } else {
+                                  await widget.controller.editorController!
+                                      .evaluateJavascript(
+                                          source:
+                                              "var height = \$('div.note-editable').outerHeight(true); window.flutter_inappwebview.callHandler('setHeight', height);");
+                                }
+                              }),
                             ),
-                          ),
-                        ],
+                            SliverFillRemaining(
+                              hasScrollBody: false,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: _buildChildren(),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
             ),

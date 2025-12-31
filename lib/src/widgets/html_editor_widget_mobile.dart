@@ -150,6 +150,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                     useHybridComposition: widget.htmlEditorOptions
                         .androidUseHybridComposition,
                     loadWithOverviewMode: true,
+                    overScrollMode: OverScrollMode.NEVER,
                   ),
                   initialUserScripts:
                       widget.htmlEditorOptions.mobileInitialScripts
@@ -362,20 +363,23 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                             """;
                         }
                       }
-                      summernoteToolbar = summernoteToolbar + '],';
+                      summernoteToolbar = summernoteToolbar + ']';
                       summernoteCallbacks = summernoteCallbacks + '}';
                       await controller.evaluateJavascript(source: """
                           \$('#summernote-2').summernote({
                               placeholder: "${widget.htmlEditorOptions.hint ?? ""}",
                               tabsize: 2,
                               height: ${widget.otherOptions.height - (toolbarKey.currentContext?.size?.height ?? 0)},
-                              toolbar: $summernoteToolbar
+                              disableResizeEditor: ${widget.htmlEditorOptions.disableResizeEditor},
+                              toolbar: $summernoteToolbar,
                               disableGrammar: false,
                               spellCheck: ${widget.htmlEditorOptions.spellCheck},
                               maximumFileSize: $maximumFileSize,
                               ${widget.htmlEditorOptions.customOptions}
                               $summernoteCallbacks
                           });
+                          
+                          \$('.note-statusbar').css('display', ${widget.htmlEditorOptions.disableResizeEditor} ? 'none' : 'block');
                           
                           \$('#summernote-2').on('summernote.change', function(_, contents, \$editable) {
                             window.flutter_inappwebview.callHandler('onChangeContent', contents);

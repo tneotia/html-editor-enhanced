@@ -14,6 +14,7 @@ class HtmlEditorOptions {
     this.characterLimit,
     this.customOptions = '',
     this.darkMode,
+    this.disableResizeEditor = true,
     this.disabled = false,
     this.filePath,
     this.hint,
@@ -68,6 +69,12 @@ class HtmlEditorOptions {
   ///
   /// The default value is null (switches with system).
   final bool? darkMode;
+
+  /// Disable the Summernote resize handle at the bottom of the editor.
+  ///
+  /// When true (default) the resize/status bar is hidden. Set to false to allow
+  /// manual resizing inside the webview.
+  final bool disableResizeEditor;
 
   /// Disable the editor immediately after startup. You can re-enable the editor
   /// by calling [controller.enable()].
