@@ -113,7 +113,9 @@ More is on the way! File a feature request or contribute to the project if you'd
 
 ## Setup
 
-Add `html_editor_enhanced: ^2.5.0` as dependency to your pubspec.yaml.
+Add `html_editor_enhanced: ^3.0.0` as dependency to your pubspec.yaml.
+
+v3.0.0+ requires Flutter 3.47.9+ and is built on the standalone [`material_ui`](https://pub.dev/packages/material_ui) package instead of `package:flutter/material.dart`. Your app must use `material_ui` too: the editor reads `Theme` and `MaterialLocalizations` from `material_ui`, which an app built on `package:flutter/material.dart`'s `MaterialApp` doesn't provide. Run `dart fix --apply --code=migrate_design_widgets` in your app to migrate. Stay on 2.x if you can't migrate yet.
 
 Make sure to declare internet support inside `AndroidManifest.xml`: `<uses-permission android:name="android.permission.INTERNET"/>`
 
@@ -844,10 +846,9 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
 <details><summary>Example code</summary>
 
 ```dart
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 
 class _ExampleState extends State<Example> {

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Abstract class that all the toolbar classes extend
 abstract class Toolbar {
