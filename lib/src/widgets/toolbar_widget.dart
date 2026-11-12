@@ -3,9 +3,10 @@ import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:html_editor_enhanced/src/widgets/legacy_material_bridge.dart';
 import 'package:html_editor_enhanced/utils/utils.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
@@ -1114,7 +1115,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                       return PointerInterceptor(
                         child: AlertDialog(
                           scrollable: true,
-                          content: ColorPicker(
+                          content: LegacyMaterialBridge(
+                              child: ColorPicker(
                             color: newColor,
                             onColorChanged: (color) {
                               newColor = color;
@@ -1141,7 +1143,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                             actionButtons: const ColorPickerActionButtons(
                               dialogActionButtons: true,
                             ),
-                          ),
+                          )),
                           actions: <Widget>[
                             TextButton(
                               onPressed: () {
@@ -2538,11 +2540,12 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                           return AlertDialog(
                             title: Text('Insert Table'),
                             scrollable: true,
-                            content: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
+                            content: LegacyMaterialBridge(
+                                child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
                                   NumberPicker(
                                     value: currentRows,
                                     minValue: 1,
@@ -2558,7 +2561,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     onChanged: (value) =>
                                         setState(() => currentCols = value),
                                   ),
-                                ]),
+                                ])),
                             actions: [
                               TextButton(
                                 onPressed: () {

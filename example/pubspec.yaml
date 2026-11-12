@@ -6,11 +6,13 @@ description: Demonstrates how to use the html_editor_enhanced plugin.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: '>=3.13.0 <4.0.0'
+  flutter: ">=3.47.9"
 
 dependencies:
   flutter:
     sdk: flutter
+  material_ui: ^1.11.0
 
   html_editor_enhanced:
     # When depending on this package from a real application you should use:
