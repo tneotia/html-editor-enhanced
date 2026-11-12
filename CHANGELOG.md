@@ -1,3 +1,9 @@
+## [3.0.0] = 2026-11-12
+* **Breaking:** migrate from `package:flutter/material.dart` to the standalone `material_ui` package. Host apps must also use `material_ui`.
+* **Breaking:** minimum SDK raised to Flutter 3.47.9 / Dart 3.13.0 (required by `material_ui`)
+* Bridge `flex_color_picker` and `numberpicker` (still on `package:flutter/material.dart`) via `MaterialUiCompatibilityBridge` in the colour and table dialogs
+* Example app migrated to `material_ui`
+
 ## [2.7.1] = 2025-07-12
 * Update dependencies
 
