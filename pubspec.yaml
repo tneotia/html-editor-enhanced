@@ -5,29 +5,33 @@ version: 2.7.1
 homepage: https://github.com/tneotia/html-editor-enhanced
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
-  flutter: ">=3.0.0"
+  sdk: '>=3.10.0 <4.0.0'
+  flutter: ">=3.38.0"
 
 dependencies:
   flutter:
     sdk: flutter
+  # Material widgets, now a standalone package outside the Flutter SDK
+  material_ui: ^1.5.0
   # webview plugin
-  flutter_inappwebview: ^6.1.5
+  flutter_inappwebview: ^6.2.0-beta.3
+  # browser APIs for the Web implementation (replaces dart:html)
+  web: ^1.1.0
   # plugin to get webview's visible fraction for keyboard height adjustment
   visibility_detector: ^0.4.0+2
   # plugin to get when the keyboard is hidden via back (Android)
   # or "done" (iOS) to reset the editor's height
-  flutter_keyboard_visibility: ^6.0.0
+  flutter_keyboard_visibility: ^7.0.1
   # plugin to show a color picker for foreground/highlight color
-  flex_color_picker: ^3.7.0
+  flex_color_picker: ^4.0.0
   # plugin to get files from filesystem
-  file_picker: ^10.2.0
+  file_picker: ^13.0.0
   # plugin to show a scrollable number picker for inserting tables
   numberpicker: ^2.1.2
   # plugin to allow dropdowns and dialogs to be interactable when displaying over the editor
   # related to https://github.com/flutter/flutter/issues/54027
   # pinned to 0.9.1 because of issues with CanvasKit in the latest versions
-  pointer_interceptor: ^0.10.1+1
+  pointer_interceptor: ^0.10.1+2
   # plugin for @internal annotation
   meta: '>=1.0.0 <2.0.0'
 
@@ -35,7 +39,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   # plugin to help maintain effective Dart standards
-  lints: ^5.1.1
+  lints: ^6.1.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

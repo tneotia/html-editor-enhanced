@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 
 /// Fallback HtmlEditor class (should never be called)

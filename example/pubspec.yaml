@@ -6,11 +6,14 @@ description: Demonstrates how to use the html_editor_enhanced plugin.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: '>=3.10.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
+
+  # Material widgets, now a standalone package outside the Flutter SDK
+  material_ui: ^1.5.0
 
   html_editor_enhanced:
     # When depending on this package from a real application you should use:
@@ -22,7 +25,7 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.8
+  cupertino_icons: ^1.0.9
 
 dev_dependencies:
   flutter_test:

@@ -117,7 +117,9 @@ Add `html_editor_enhanced: ^2.5.0` as dependency to your pubspec.yaml.
 
 Make sure to declare internet support inside `AndroidManifest.xml`: `<uses-permission android:name="android.permission.INTERNET"/>`
 
-Additional setup is required on iOS to allow the user to pick files from storage. See [here](https://github.com/miguelpruivo/flutter_file_picker/wiki/Setup#--ios) for more details. 
+Additional setup is required on iOS to allow the user to pick files from storage. See [here](https://github.com/miguelpruivo/flutter_file_picker/wiki/Setup#--ios) for more details. Note that `file_picker` 13 requires a minimum iOS deployment target of `14.0`.
+
+The package is built on [`package:material_ui`](https://pub.dev/packages/material_ui), the standalone Material package, which requires Flutter `3.47` / Dart `3.13` or later. The editor looks up `Theme`, its `Material` ancestor and `MaterialLocalizations` through `material_ui`, so your app's `MaterialApp` (and the `Scaffold` or `Material` around the editor) must come from `material_ui` too (see its [migration guide](https://github.com/flutter/packages/tree/main/packages/material_ui#migrating-existing-code-to-this-package)). If other dependencies of your app still use `package:flutter/material.dart`, `material_ui` provides `MaterialUiCompatibilityBridge`, a temporary (deprecated) migration utility, to bridge the two while they are migrated.
 
 For images, the package uses `FileType.image`, for video `FileType.video`, for audio `FileType.audio`, and for any other file `FileType.any`. You can just complete setup for the specific buttons you plan to enable in the editor.
 
@@ -215,7 +217,7 @@ Parameter | Type | Default | Description
 **initiallyExpanded** | `bool` | `false` | Sets whether the toolbar is initially expanded or not when using `ToolbarType.nativeExpandable`
 **linkInsertInterceptor** | `FutureOr<bool> Function(String, String, bool)` | `null` | Intercept any links inserted into the editor. The function passes the display text, the URL, and whether it opens a new tab.
 **mediaLinkInsertInterceptor** | `FutureOr<bool> Function(String, InsertFileType)` | `null` | Intercept any media links inserted into the editor. The function passes the URL and `InsertFileType` which indicates which file type was inserted
-**mediaUploadInterceptor** | `FutureOr<bool> Function(PlatformFile, InsertFileType)` | `null` | Intercept any media files inserted into the editor. The function passes `PlatformFile` which holds all relevant file data, and `InsertFileType` which indicates which file type was inserted.
+**mediaUploadInterceptor** | `FutureOr<bool> Function(PlatformFile, InsertFileType)` | `null` | Intercept any media files inserted into the editor. The function passes `PlatformFile` (read its content with `readAsBytes()`), and `InsertFileType` which indicates which file type was inserted.
 **onButtonPressed** | `FutureOr<bool> Function(ButtonType, bool?, void Function()?)` | `null` | Intercept any button presses. The function passes the enum for the pressed button, the current selected status of the button (if applicable) and a function to update the status (if applicable).
 **onDropdownChanged** | `FutureOr<bool> Function(DropdownType, dynamic, void Function(dynamic)?)` | `null` | Intercept any dropdown changes. The function passes the enum for the changed dropdown, the changed value, and a function to update the changed value (if applicable).
 **onOtherFileLinkInsert** | `Function(String)` | `null` | Intercept file link inserts other than image/audio/video. This handler is required when using the other file button, as the package has no built-in handlers
@@ -587,9 +589,9 @@ Parameter | Type | Description
 ------------ | ------------- | -------------
 **linkInsertInterceptor** | `FutureOr<bool> Function(String, String, bool)` | Intercept any links inserted into the editor. The function passes the display text (`String`), the URL (`String`), and whether it opens a new tab (`bool`).
 **mediaLinkInsertInterceptor** | `FutureOr<bool> Function(String, InsertFileType)` | Intercept any media links inserted into the editor. The function passes the URL (`String`).
-**mediaUploadInterceptor** | `FutureOr<bool> Function(PlatformFile, InsertFileType)` | Intercept any media files inserted into the editor. The function passes `PlatformFile` which holds all relevant file data. You can use this to upload into your server, to extract base64 data, perform file validation, etc. It also passes the file type (image/audio/video).
+**mediaUploadInterceptor** | `FutureOr<bool> Function(PlatformFile, InsertFileType)` | Intercept any media files inserted into the editor. The function passes `PlatformFile`; read its content with `readAsBytes()`. You can use this to upload into your server, to extract base64 data, perform file validation, etc. It also passes the file type (image/audio/video).
 **onOtherFileLinkInsert** | `Function(String)` | Intercept file link inserts other than image/audio/video. This handler is required when using the other file button, as the package has no built-in handlers. The function passes the URL (`String`). It also passes the file type (image/audio/video)
-**onOtherFileUpload** | `Function(PlatformFile)` | Intercept file uploads other than image/audio/video. This handler is required when using the other file button, as the package has no built-in handlers. The function passes `PlatformFile` which holds all relevant file data. You can use this to upload into your server, to extract base64 data, perform file validation, etc.
+**onOtherFileUpload** | `Function(PlatformFile)` | Intercept file uploads other than image/audio/video. This handler is required when using the other file button, as the package has no built-in handlers. The function passes `PlatformFile`; read its content with `readAsBytes()`. You can use this to upload into your server, to extract base64 data, perform file validation, etc.
 
 For `linkInsertInterceptor`, `mediaLinkInsertInterceptor`, and `mediaUploadInterceptor`, you must return a `bool` to tell the plugin what it should do. When you return false, it assumes that you have handled the user request and taken action. When you return true, the plugin will use the default handlers to handle the user request.
 
@@ -687,6 +689,8 @@ This section will be updated later with more specialized and specific examples a
 Note: This example uses the [http](https://pub.dev/packages/http) package.
 
 ```dart
+import 'dart:typed_data';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 
@@ -703,52 +707,28 @@ import 'package:http/http.dart' as http;
       },
       mediaUploadInterceptor: (PlatformFile file, InsertFileType type) async {
         print(file.name); //filename
-        print(file.size); //size in bytes
-        print(file.extension); //MIME type (e.g. image/jpg)
+        print(await file.length()); //size in bytes
+        print(file.extension); //file extension (e.g. jpg)
+        //file_picker 12 no longer loads the content eagerly, so read it on demand:
+        final Uint8List bytes = await file.readAsBytes();
         //either upload to server:
-        if (file.bytes != null && file.name != null) {
-          final request = http.MultipartRequest('POST', Uri.parse("your_server_url"));
-          request.files.add(http.MultipartFile.fromBytes("file", file.bytes, filename: file.name)); //your server may require a different key than "file"
-          final response = await request.send();
-          //try to insert as network image, but if it fails, then try to insert as base64:
-          if (response.statusCode == 200) {
-            controller.insertNetworkImage(response.body["url"], filename: file.name!); //where "url" is the url of the uploaded image returned in the body JSON
-          } else {
-            if (type == InsertFileType.image) {
-              String base64Data = base64.encode(file.bytes!);
-              String base64Image =
-              """<img src="data:image/${file.extension};base64,$base64Data" data-filename="${file.name}"/>""";
-              controller.insertHtml(base64Image);
-            } else if (type == InsertFileType.video) {
-              String base64Data = base64.encode(file.bytes!);
-              String base64Image =
-              """<video src="data:video/${file.extension};base64,$base64Data" data-filename="${file.name}"/>""";
-              controller.insertHtml(base64Image);
-            } else if (type == InsertFileType.audio) {
-              String base64Data = base64.encode(file.bytes!);
-              String base64Image =
-              """<audio src="data:audio/${file.extension};base64,$base64Data" data-filename="${file.name}"/>""";
-              controller.insertHtml(base64Image);
-            }
-          }
-        }
-        //or insert as base64:
-        if (file.bytes != null) {
+        final request = http.MultipartRequest('POST', Uri.parse("your_server_url"));
+        request.files.add(http.MultipartFile.fromBytes("file", bytes, filename: file.name)); //your server may require a different key than "file"
+        final response = await request.send();
+        //try to insert as network image, but if it fails, then try to insert as base64:
+        if (response.statusCode == 200) {
+          controller.insertNetworkImage(response.body["url"], filename: file.name); //where "url" is the url of the uploaded image returned in the body JSON
+        } else {
+          String base64Data = base64.encode(bytes);
           if (type == InsertFileType.image) {
-            String base64Data = base64.encode(file.bytes!);
-            String base64Image =
-            """<img src="data:image/${file.extension};base64,$base64Data" data-filename="${file.name}"/>""";
-            controller.insertHtml(base64Image);
+            controller.insertHtml(
+              """<img src="data:image/${file.extension};base64,$base64Data" data-filename="${file.name}"/>""");
           } else if (type == InsertFileType.video) {
-            String base64Data = base64.encode(file.bytes!);
-            String base64Image =
-            """<video src="data:video/${file.extension};base64,$base64Data" data-filename="${file.name}"/>""";
-            controller.insertHtml(base64Image);
+            controller.insertHtml(
+              """<video src="data:video/${file.extension};base64,$base64Data" data-filename="${file.name}"/>""");
           } else if (type == InsertFileType.audio) {
-            String base64Data = base64.encode(file.bytes!);
-            String base64Image =
-            """<audio src="data:audio/${file.extension};base64,$base64Data" data-filename="${file.name}"/>""";
-            controller.insertHtml(base64Image);
+            controller.insertHtml(
+              """<audio src="data:audio/${file.extension};base64,$base64Data" data-filename="${file.name}"/>""");
           }
         }
         return false;
@@ -844,11 +824,10 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
 <details><summary>Example code</summary>
 
 ```dart
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:material_ui/material_ui.dart';
 
 class _ExampleState extends State<Example> {
   final HtmlEditorController controller = HtmlEditorController();
