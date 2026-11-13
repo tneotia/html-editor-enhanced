@@ -14,7 +14,7 @@ dependencies:
   # Material widgets, now a standalone package outside the Flutter SDK
   material_ui: ^1.5.0
   # webview plugin
-  flutter_inappwebview: ^6.1.5
+  flutter_inappwebview: ^6.2.0-beta.3
   # browser APIs for the Web implementation (replaces dart:html)
   web: ^1.1.0
   # plugin to get webview's visible fraction for keyboard height adjustment
